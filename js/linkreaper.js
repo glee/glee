@@ -97,12 +97,14 @@ var LinkReaper = {
 		{
 			return null;
 		}
-		else if(this.traversePosition <= this.selectedLinks.length)
+		else if(this.traversePosition < this.selectedLinks.length - 1)
 		{
-			return this.selectedLinks[this.traversePosition++];
+
+			return this.selectedLinks[++this.traversePosition];
 		}
 		else
 		{
+			this.traversePosition = 0;
 			return this.selectedLinks[0];
 		}
 		

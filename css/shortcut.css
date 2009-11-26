@@ -25,7 +25,13 @@
 }
 
 #gleeSubText{
-	border-top:1px solid #fff;
 	padding:5px;
 	color:#fff;
+	float:left;
+}
+
+#gleeSubURL{
+	padding:5px;
+	display:inline;
+	float:right;
 }

@@ -51,7 +51,6 @@ jQuery(document).ready(function(){
 		{
 			//reseting value of searchField					
 			LinkReaper.reapLinks(jQuery(this).attr('value'));
-				Glee.setSubText(LinkReaper.getNextLink());			
 		} 
 		else if(Glee.searchField.attr('value') == "")
 		{
@@ -66,23 +65,33 @@ var Glee = {
 	initBox: function(){
 		//creating the div to be displayed
 		var searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		var subText = jQuery("<div id=\"gleeSubText\">No links selected</div>");
+		var subText = jQuery("<div id=\"gleeSubText\">No Links selected</div>");
+		var subURL = jQuery("<div id=\"gleeSubURL\"></div>")
 		var searchBox = jQuery("<div id=\"gleeBox\"></div>");
+		var sub = jQuery("<div id=\"gleeSub\"></div>");
+		sub.append(subText);
+		sub.append(subURL);
 		searchBox.append(searchField);
-		searchBox.append(subText);
+		searchBox.append(sub);
 		this.searchBox = searchBox;
 		this.searchField = searchField;
 		this.subText = subText;
+		this.subURL = subURL;
 		jQuery(document.body).append(searchBox);
 	},
 	setSubText: function(el){
 		if(!el)
 		{
 			this.subText.html("No links selected");
+			this.subURL.html('');
 		}
 		else if(typeof(el)!= "undefined")
 		{
 			this.subText.html(el.text());
+			this.subURL.html(el.attr('href'));
 		}
+	},
+	scrollToLink: function(el){
+		
 	}
 }
