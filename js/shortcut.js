@@ -40,17 +40,31 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 		}
 	});
-	Glee.searchField.bind('keyup',function(e){			
+	Glee.searchField.bind('keyup',function(e){		
 		if(e.keyCode == 9)
 		{
 			e.preventDefault();
 			if(Glee.searchField.attr('value') != "")
-				Glee.setSubText(LinkReaper.getNextLink());
+			{
+				var el = LinkReaper.getNextLink();
+				Glee.setSubText(el);
+				Glee.scrollToLink(el);
+			}
+		}
+		else if(e.keyCode == 13 && Glee.subURL.text()!="")
+		{
+			e.preventDefault();
+			{
+				window.location = Glee.subURL.text();
+			}
 		}
 		else if(Glee.searchField.attr('value') != "")
 		{
-			//reseting value of searchField					
+			//reseting value of searchField			
 			LinkReaper.reapLinks(jQuery(this).attr('value'));
+			var el = LinkReaper.getNextLink();
+			Glee.setSubText(el);
+			Glee.scrollToLink(el);			
 		} 
 		else if(Glee.searchField.attr('value') == "")
 		{
@@ -92,6 +106,12 @@ var Glee = {
 		}
 	},
 	scrollToLink: function(el){
-		
+		var target = el;
+		if(target.length && target)
+		{
+			var targetOffset = target.offset().top;
+			jQuery('html,body').animate({scrollTop:targetOffset},1000);
+			return false;
+		}
 	}
 }
