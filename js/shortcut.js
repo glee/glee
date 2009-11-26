@@ -1,21 +1,25 @@
-window.addEvent('domready',function(){
+jQuery(document).ready(function(){
+	//activating the noConflict mode of jQuery
+	jQuery.noConflict();
 	
 	/* initialize the searchBox */
 	Glee.initBox();
 	
-	$(document).addEvent('keydown',function(e){
+	jQuery(document).bind('keypress',function(e){
+		e.stopPropagation();
 		//Press control+g to activate searchBox
 		// if(e.key == 'g' && e.control)
-		if(e.key == 'g')
+		if(e.which == 103)
 		{
-			if(Glee.searchBox.getStyle('display') == "none")
+			if(jQuery("#gleeBox").css('display') == "none")
 			{
-				Glee.searchBox.setStyle('display','block');
+				jQuery("#gleeBox").css('display','block');
 			}
 			else
 			{
-				Glee.searchBox.setStyle('display','none');
+				jQuery("#gleeBox").css('display','none');
 			}
+			
 		}
 	});
 })
@@ -23,15 +27,9 @@ window.addEvent('domready',function(){
 var Glee = { 
 	initBox: function(){
 		//creating the div to be displayed
-		var inputField = new Element('input', {
-			'class':'gleeSearchField'
-		});	
-		var searchBox = new Element('div', {
-			'id':'gleeBox',
-			'html':'checking'
-		});
-		this.searchBox = searchBox;
+		var inputField = "<input class='gleeSearchField' value='' />";
+		var searchBox = "<div id=\"gleeBox\">checking</div>";
 		// searchBox.adopt(inputField);	
-		$(document.body).adopt(searchBox);
+		jQuery(document.body).append(searchBox);
 	}
 }
