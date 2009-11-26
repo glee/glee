@@ -14,12 +14,16 @@ jQuery(document).ready(function(){
 			if(jQuery("#gleeBox").css('display') == "none")
 			{
 				jQuery("#gleeBox").css('display','block');
+				jQuery(".gleeSearchField").focus();
 			}
 			else
 			{
 				jQuery("#gleeBox").css('display','none');
 			}
-			
+		}
+		if(e.keyCode == 27)
+		{
+			jQuery("#gleeBox").css('display','none');
 		}
 	});
 })
@@ -27,9 +31,9 @@ jQuery(document).ready(function(){
 var Glee = { 
 	initBox: function(){
 		//creating the div to be displayed
-		var inputField = "<input class='gleeSearchField' value='' />";
-		var searchBox = "<div id=\"gleeBox\">checking</div>";
-		// searchBox.adopt(inputField);	
+		var inputField = jQuery("<input type=\"text\" class='gleeSearchField' value='' />");
+		var searchBox = jQuery("<div id=\"gleeBox\"></div>");
+		searchBox.append(inputField);
 		jQuery(document.body).append(searchBox);
 	}
 }

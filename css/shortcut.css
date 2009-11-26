@@ -9,7 +9,15 @@
 	background-color:#333;
 	opacity:0.6;
 	color:#fff;
+}
+
+#gleeBox .gleeSearchField{
+	width:90%;
+	color:#fff;
+	background-color:#333;
+	border:none;
 	font-size:100px;
 	padding:10px;
 	font-family:Calibri,"Times New Roman",Arial,serif;
+	
 }
