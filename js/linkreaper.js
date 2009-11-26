@@ -63,9 +63,10 @@ var LinkReaper = {
 	reapALink: function(el, term) {
 		var index = el.html().toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1) {
-			el.html("<span name='_Reaped' class='GleeReaped'>" 
-			+ el.html() 
-			+ "</span>");
+			el.addClass('GleeReaped');
+// > 			el.html("<span name='_Reaped' class='GleeReaped'>" 
+// > 			+ el.html() 
+// > 			+ "</span>");
 			return true;
 		}
 		else {
@@ -74,8 +75,9 @@ var LinkReaper = {
 	},
 	
 	unreapLink: function(el) {
-		el.html(
-			// TODO: Kill this ugly code.
-			el.html().substring(40, el.html().length - 7));
+		el.removeClass('GleeReaped');
+		// el.html(
+		// 			// TODO: Kill this ugly code.
+		// 			el.html().substring(40, el.html().length - 7));
 	}
 }
