@@ -1,19 +1,11 @@
 jQuery(document).ready(function(){
 	jQuery.noConflict();
-	//LinkReaper.reapLinks('WINDO');
-	//LinkReaper.reapAllLinks();
 });
 
 var LinkReaper = {
 	
 	searchTerm: "",
 	selectedLinks: [],
-	
-	reapAllLinks: function() {
-		jQuery('a').each(function() {
-			this.html("<span name='_Reaped' class='GleeReaped'>"+this.html()+"</span>");
-		});
-	},
 	
 	reapLinks: function(term) {
 		if((LinkReaper.term != "") && (LinkReaper.searchTerm != term))
@@ -67,9 +59,6 @@ var LinkReaper = {
 		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1) {
 			el.addClass('GleeReaped');
-// > 			el.html("<span name='_Reaped' class='GleeReaped'>" 
-// > 			+ el.html() 
-// > 			+ "</span>");
 			return true;
 		}
 		else {
@@ -79,9 +68,6 @@ var LinkReaper = {
 	
 	unreapLink: function(el) {
 		el.removeClass('GleeReaped');
-		// el.html(
-		// 			// TODO: Kill this ugly code.
-		// 			el.html().substring(40, el.html().length - 7));
 	},
 	
 	unreapAllLinks: function() {
@@ -89,5 +75,6 @@ var LinkReaper = {
 			unreapLink(jQuery(this));
 		});
 		LinkReaper.selectedLinks = new Array();
+		LinkReaper.searchTerm = "";
 	}
 }

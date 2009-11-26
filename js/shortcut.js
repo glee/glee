@@ -17,12 +17,14 @@ jQuery(document).ready(function(){
 					//reseting value of searchField
 					Glee.searchField.attr('value','');
 					
-					Glee.searchBox.css('display','block');
+					// Glee.searchBox.css('display','block');
+					Glee.searchBox.fadeIn('medium');
 					Glee.searchField.focus();					
 				}
 				else
 				{
-					Glee.searchBox.css('display','none');
+					// Glee.searchBox.css('display','none');
+					Glee.searchBox.fadeOut('medium');					
 				}
 				
 			}
@@ -32,7 +34,8 @@ jQuery(document).ready(function(){
 		if(e.keyCode == 27)
 		{
 			e.preventDefault();			
-			Glee.searchBox.css('display','none');
+			// LinkReaper.unreapAllLinks();
+			Glee.searchBox.fadeOut('medium');					
 		}
 		Glee.searchField.bind('keyup',function(){	
 			e.preventDefault();
