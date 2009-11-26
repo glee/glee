@@ -20,15 +20,33 @@ var LinkReaper = {
 		if(this.searchTerm.indexOf(term) == 0)
 		{
 			jQuery(selectedLinks).each(function(){
-				reapALink(jQuery(this), term);
+				if(!LinkReaper.reapALink(jQuery(this), term))
+				{
+					LinkReaper.unreapLink(jQuery(this));
+					LinkReaper.selectedLinks = jQuery.grep(
+						LinkReaper.selectedLinks, 
+						function(val) {
+							return val != this;
+						});
+				}
 			});
 		}
 		// Else search the whole page
 		else
 		{
 			jQuery('a').each(function(){
-				var el = jQuery(this);	
-				LinkReaper.reapALink(jQuery(el), term);
+				if(!LinkReaper.reapALink(jQuery(this), term))
+				{
+					if(jQuery.inArray(this, LinkReaper.selectedLinks) > -1)
+					{
+						LinkReaper.unreapLink(jQuery(this));
+						LinkReaper.selectedLinks = jQuery.grep(
+							LinkReaper.selectedLinks, 
+							function(val) {
+								return val != this;
+							});
+					}
+				}
 			});
 		}
 	},
@@ -39,6 +57,16 @@ var LinkReaper = {
 			el.html("<span name='_Reaped' class='GleeReaped'>" 
 			+ el.html() 
 			+ "</span>");
+			return true;
 		}
+		else {
+			return false;
+		}
+	},
+	
+	unreapLink: function(el) {
+		el.html(
+			// TODO: Kill this ugly code.
+			el.html().substring(40, el.html().length - 7));
 	}
 }
