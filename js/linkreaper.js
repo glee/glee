@@ -69,6 +69,17 @@ var LinkReaper = {
 	},
 	
 	unreapLink: function(el) {
+		var isNotEqual = function(element){
+			if(element.attr('href') == el.attr('href'))
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		};		
+		this.selectedLinks = this.selectedLinks.filter(isNotEqual);
 		el.removeClass('GleeReaped');
 	},
 	

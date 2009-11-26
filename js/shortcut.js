@@ -52,7 +52,7 @@ jQuery(document).ready(function(){
 			//reseting value of searchField					
 			LinkReaper.reapLinks(jQuery(this).attr('value'));
 				Glee.setSubText(LinkReaper.getNextLink());			
-		}
+		} 
 		else if(Glee.searchField.attr('value') == "")
 		{
 			e.preventDefault();						
