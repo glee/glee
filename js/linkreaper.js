@@ -17,16 +17,17 @@ var LinkReaper = {
 	
 	reapLinks: function(term) {
 		// If this term is a specialization of the last term
-		if(term.indexOf(this.searchTerm) == 0)
+		if((LinkReaper.searchTerm != "") 
+			&& (term.indexOf(LinkReaper.searchTerm) == 0))
 		{
-			jQuery(this.selectedLinks).each(function(){
+			jQuery(LinkReaper.selectedLinks).each(function(){
 				if(!LinkReaper.reapALink(jQuery(this), term))
 				{
 					LinkReaper.unreapLink(jQuery(this));
 					LinkReaper.selectedLinks = jQuery.grep(
 						LinkReaper.selectedLinks, 
 						function(val) {
-							return val != this;
+							return val != jQuery(this);
 						});
 				}
 			});
@@ -34,23 +35,29 @@ var LinkReaper = {
 		// Else search the whole page
 		else
 		{
+			newList = [];
 			jQuery('a').each(function(){
 				if(!LinkReaper.reapALink(jQuery(this), term))
 				{
-					if(jQuery.inArray(this, LinkReaper.selectedLinks) > -1)
+					if(jQuery.inArray(jQuery(this), LinkReaper.selectedLinks) > -1)
 					{
 						LinkReaper.unreapLink(jQuery(this));
 						LinkReaper.selectedLinks = jQuery.grep(
 							LinkReaper.selectedLinks, 
 							function(val) {
-								return val != this;
+								return val != jQuery(this);
 							});
 					}
 				}
+				else
+				{
+					newList.push(jQuery(this));
+				}
 			});
+			LinkReaper.selectedLinks = newList;
 		}
 		
-		searchTerm = term;
+		LinkReaper.searchTerm = term;
 	},
 	
 	reapALink: function(el, term) {
