@@ -7,26 +7,19 @@ jQuery(document).ready(function(){
 	
 	jQuery(document).bind('keydown',function(e){
 		//pressing 'g' toggles the gleeBox
-		if(e.keyCode == 71)
+		if(e.keyCode == 71 && jQuery(e.target).attr('id') != 'gleeSearchField')
 		{
-			if(jQuery(e.target).attr('id') != 'gleeSearchField')
+			e.preventDefault();				
+			if(Glee.searchBox.css('display') == "none")
+			{					
+				//reseting value of searchField
+				Glee.searchField.attr('value','');	
+				Glee.searchBox.fadeIn('fast');
+				Glee.searchField.focus();					
+			}
+			else
 			{
-				e.preventDefault();				
-				if(Glee.searchBox.css('display') == "none")
-				{					
-					//reseting value of searchField
-					Glee.searchField.attr('value','');
-					
-					// Glee.searchBox.css('display','block');
-					Glee.searchBox.fadeIn('fast');
-					Glee.searchField.focus();					
-				}
-				else
-				{
-					// Glee.searchBox.css('display','none');
-					Glee.searchBox.fadeOut('fast');					
-				}
-				
+				Glee.searchBox.fadeOut('fast');					
 			}
 		}
 
@@ -37,7 +30,7 @@ jQuery(document).ready(function(){
 			LinkReaper.unreapAllLinks();
 			Glee.searchBox.fadeOut('fast');					
 		}
-		Glee.searchField.bind('keyup',function(e){	
+		Glee.searchField.bind('keyup',function(){	
 			if(e.keyCode !=27 )
 			{
 				e.preventDefault();
