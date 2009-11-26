@@ -96,8 +96,17 @@ var Glee = {
 	setSubText: function(el){
 		if(!el)
 		{
-			this.subText.html("No links selected");
-			this.subURL.html('');
+			var value = Glee.searchField.attr('value');
+			if(value !="")
+			{
+				this.subText.html("Google "+value);
+				this.subURL.html("http://www.google.com/search?q="+value);
+			}
+			else
+			{
+				this.subText.html("No links selected");
+				this.subURL.html('');
+			}
 		}
 		else if(typeof(el)!= "undefined")
 		{
@@ -107,11 +116,14 @@ var Glee = {
 	},
 	scrollToLink: function(el){
 		var target = el;
-		if(target.length && target)
+		if(target)
 		{
-			var targetOffset = target.offset().top;
-			jQuery('html,body').animate({scrollTop:targetOffset},1000);
-			return false;
+			if(target.length)
+			{
+				var targetOffset = target.offset().top;
+				jQuery('html,body').animate({scrollTop:targetOffset},1000);
+				return false;
+			}
 		}
 	}
 }
