@@ -16,9 +16,11 @@ var LinkReaper = {
 	},
 	
 	reapLinks: function(term) {
+		if((LinkReaper.term != "") && (LinkReaper.searchTerm != term))
+		{
 		// If this term is a specialization of the last term
-		if((LinkReaper.searchTerm != "") 
-			&& (term.indexOf(LinkReaper.searchTerm) == 0))
+		if((term.indexOf(LinkReaper.searchTerm) == 0) &&
+			(LinkReaper.searchTerm != ""))
 		{
 			jQuery(LinkReaper.selectedLinks).each(function(){
 				if(!LinkReaper.reapALink(jQuery(this), term))
@@ -58,6 +60,7 @@ var LinkReaper = {
 		}
 		
 		LinkReaper.searchTerm = term;
+	}
 	},
 	
 	reapALink: function(el, term) {
