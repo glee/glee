@@ -47,13 +47,13 @@ jQuery(document).ready(function(){
 			if(Glee.searchField.attr('value') != "")
 				Glee.setSubText(LinkReaper.getNextLink());
 		}
-		else if(Glee.searchField.attr('value')!="")
+		else if(Glee.searchField.attr('value') != "")
 		{
 			//reseting value of searchField					
 			LinkReaper.reapLinks(jQuery(this).attr('value'));
 				Glee.setSubText(LinkReaper.getNextLink());			
 		}
-		else
+		else if(Glee.searchField.attr('value') == "")
 		{
 			e.preventDefault();						
 			LinkReaper.unreapAllLinks();
