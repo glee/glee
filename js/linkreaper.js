@@ -10,49 +10,48 @@ var LinkReaper = {
 	reapLinks: function(term) {
 		if((LinkReaper.term != "") && (LinkReaper.searchTerm != term))
 		{
-		// If this term is a specialization of the last term
-		if((term.indexOf(LinkReaper.searchTerm) == 0) &&
+			// If this term is a specialization of the last term
+			if((term.indexOf(LinkReaper.searchTerm) == 0) &&
 			(LinkReaper.searchTerm != ""))
-		{
-			jQuery(LinkReaper.selectedLinks).each(function(){
-				if(!LinkReaper.reapALink(jQuery(this), term))
-				{
-					LinkReaper.unreapLink(jQuery(this));
-					LinkReaper.selectedLinks = jQuery.grep(
+			{
+				jQuery(LinkReaper.selectedLinks).each(function(){
+					if(!LinkReaper.reapALink(jQuery(this), term))
+					{
+						LinkReaper.unreapLink(jQuery(this));
+						LinkReaper.selectedLinks = jQuery.grep(
 						LinkReaper.selectedLinks, 
 						function(val) {
 							return val != jQuery(this);
 						});
-				}
-			});
-		}
-		// Else search the whole page
-		else
-		{
-			newList = [];
-			jQuery('a').each(function(){
-				if(!LinkReaper.reapALink(jQuery(this), term))
-				{
-					LinkReaper.unreapLink(jQuery(this));
-					if(jQuery.inArray(jQuery(this), LinkReaper.selectedLinks) > -1)
-					{
-						LinkReaper.selectedLinks = jQuery.grep(
-							LinkReaper.selectedLinks, 
-							function(val) {
-								return val != jQuery(this);
-							});
 					}
-				}
-				else
-				{
-					newList.push(jQuery(this));
-				}
-			});
-			LinkReaper.selectedLinks = newList;
+				});
+			}
+			// Else search the whole page
+			else
+			{
+				newList = [];
+				jQuery('a').each(function(){
+					if(!LinkReaper.reapALink(jQuery(this), term))
+					{
+						LinkReaper.unreapLink(jQuery(this));
+						if(jQuery.inArray(jQuery(this), LinkReaper.selectedLinks) > -1)
+						{
+							LinkReaper.selectedLinks = jQuery.grep(
+								LinkReaper.selectedLinks, 
+								function(val) {
+									return val != jQuery(this);
+								});
+						}
+					}
+					else
+					{
+						newList.push(jQuery(this));
+					}
+				});
+				LinkReaper.selectedLinks = newList;
+			}
+			LinkReaper.searchTerm = term;
 		}
-		
-		LinkReaper.searchTerm = term;
-	}
 	},
 	
 	reapALink: function(el, term) {
