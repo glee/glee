@@ -1,0 +1,5 @@
+try{woopraTracker.verify();}catch(e){};
+
+setTimeout(function(){woopraTracker.ping();},24 * 1000);
+
+woopraTracker.createcookie('wooMeta','NDcxJjEyJjQ2JjU2NDk0NDgmMTI1ODg2NDc1NTk3MSYxMjU5MjIwMjgxNDk3JiYxMDAmJjMwMDMzMCYmJiZhdmF0YXI9aHR0cCUyNTNBJTI1MkYlMjUyRnd3dy5ncmF2YXRhci5jb20lMjUyRmF2YXRhciUyNTJGMDE3ZWMwOTY2NTIzYjVmYjViMTBlOWZlNDNjZTQ5NzMlMjUyNmFtcCUyNTNCc2l6ZSUyNTNENjAlMjUyNmFtcCUyNTNCZGVmYXVsdCUyNTNEaHR0cCUyNTNBJTI1MkYlMjUyRnN0YXRpYy53b29wcmEuY29tJTI1MkZpbWFnZXMlMjUyRmF2YXRhci5wbmcmbmFtZT1zYW1lZXImZW1haWw9c2FtZWVyJTQwc2FtZWVyYWh1amEuY29tJg==',9000);
