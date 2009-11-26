@@ -4,20 +4,28 @@
 	top:35%;
 	display:none;
 	overflow:auto;
-	height:150px;
+	height:165px;
 	width:90%;
 	background-color:#333;
-	opacity:0.6;
+	opacity:0.65;
 	color:#fff;
+	margin:0;
+	font-family:Calibri,"Times New Roman",Arial,serif;	
 }
 
 #gleeSearchField{
 	width:90%;
 	color:#fff;
 	background-color:#333;
+	margin:0;
+	padding:5px;
 	border:none;
 	font-size:100px;
-	padding:10px;
 	font-family:Calibri,"Times New Roman",Arial,serif;
-	
+}
+
+#gleeSubText{
+	border-top:1px solid #fff;
+	padding:5px;
+	color:#fff;
 }

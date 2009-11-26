@@ -6,6 +6,7 @@ var LinkReaper = {
 	
 	searchTerm: "",
 	selectedLinks: [],
+	traversePosition: 0,
 	
 	reapLinks: function(term) {
 		if((LinkReaper.term != "") && (LinkReaper.searchTerm != term))
@@ -51,6 +52,7 @@ var LinkReaper = {
 				LinkReaper.selectedLinks = newList;
 			}
 			LinkReaper.searchTerm = term;
+			this.traversePosition = 0;
 		}
 	},
 	
@@ -58,6 +60,7 @@ var LinkReaper = {
 		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1) {
 			el.addClass('GleeReaped');
+			Glee.setSubText(el);
 			return true;
 		}
 		else {
@@ -75,5 +78,22 @@ var LinkReaper = {
 		});
 		LinkReaper.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
 		LinkReaper.searchTerm = "";
+		this.traversePosition = 0;
+	},
+	
+	getNextLink: function(){
+		if(this.selectedLinks.length == 0)
+		{
+			return null;
+		}
+		else if(this.traversePosition <= this.selectedLinks.length)
+		{
+			return this.selectedLinks[this.traversePosition++];
+		}
+		else
+		{
+			return this.selectedLinks[0];
+		}
+		
 	}
 }
