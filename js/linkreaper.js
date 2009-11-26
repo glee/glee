@@ -82,5 +82,12 @@ var LinkReaper = {
 		// el.html(
 		// 			// TODO: Kill this ugly code.
 		// 			el.html().substring(40, el.html().length - 7));
+	},
+	
+	unreapAllLinks: function() {
+		jQuery(LinkReaper.selectedLinks).each(function(){
+			unreapLink(jQuery(this));
+		}
+		LinkReaper.selectedLinks = [];
 	}
 }
