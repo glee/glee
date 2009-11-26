@@ -6,11 +6,10 @@ jQuery(document).ready(function(){
 	Glee.initBox();
 	
 	jQuery(document).bind('keypress',function(e){
-		e.preventDefault();
-		
 		//pressing 'g' toggles the gleeBox
 		if(e.which == 103)
 		{
+			e.preventDefault();
 			if(jQuery(e.target).attr('id') != 'gleeSearchField')
 			{
 				if(Glee.searchBox.css('display') == "none")
@@ -32,6 +31,7 @@ jQuery(document).ready(function(){
 		//pressing 'esc' also hides the gleeBox
 		if(e.keyCode == 27)
 		{
+			e.preventDefault();			
 			Glee.searchBox.css('display','none');
 		}
 	});
