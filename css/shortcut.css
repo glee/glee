@@ -1,0 +1,15 @@
+#gleeBox{
+	position:fixed;
+	left:5%;
+	top:35%;
+	display:none;
+	overflow:auto;
+	height:150px;
+	width:90%;
+	background-color:#333;
+	opacity:0.6;
+	color:#fff;
+	font-size:100px;
+	padding:10px;
+	font-family:Calibri,"Times New Roman",Arial,serif;
+}
