@@ -41,9 +41,9 @@ var LinkReaper = {
 			jQuery('a').each(function(){
 				if(!LinkReaper.reapALink(jQuery(this), term))
 				{
+					LinkReaper.unreapLink(jQuery(this));
 					if(jQuery.inArray(jQuery(this), LinkReaper.selectedLinks) > -1)
 					{
-						LinkReaper.unreapLink(jQuery(this));
 						LinkReaper.selectedLinks = jQuery.grep(
 							LinkReaper.selectedLinks, 
 							function(val) {
@@ -64,7 +64,7 @@ var LinkReaper = {
 	},
 	
 	reapALink: function(el, term) {
-		var index = el.html().toLowerCase().indexOf(term.toLowerCase());
+		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1) {
 			el.addClass('GleeReaped');
 // > 			el.html("<span name='_Reaped' class='GleeReaped'>" 
