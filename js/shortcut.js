@@ -27,16 +27,24 @@ jQuery(document).ready(function(){
 		if(e.keyCode == 27)
 		{
 			e.preventDefault();			
-			LinkReaper.unreapAllLinks();
-			Glee.searchBox.fadeOut('fast');					
+			LinkReaper.unreapAllLinks();			
+			//reseting value of searchField
+			Glee.searchField.attr('value','');				
+			Glee.searchBox.fadeOut('fast');		
+			Glee.searchField.blur();			
 		}
-		Glee.searchField.bind('keyup',function(){	
-			if(e.keyCode !=27 )
-			{
-				e.preventDefault();
-				LinkReaper.reapLinks(jQuery(this).attr('value'));
-			}
-		});		
+	});
+	Glee.searchField.bind('keyup',function(e){	
+		e.preventDefault();		
+		if(Glee.searchField.attr('value')!="")
+		{
+			//reseting value of searchField			
+			LinkReaper.reapLinks(jQuery(this).attr('value'));
+		}
+		else
+		{
+			LinkReaper.unreapAllLinks();
+		}
 	});
 	
 });
