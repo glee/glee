@@ -34,7 +34,7 @@ jQuery(document).ready(function(){
 		if(e.keyCode == 27)
 		{
 			e.preventDefault();			
-			// LinkReaper.unreapAllLinks();
+			LinkReaper.unreapAllLinks();
 			Glee.searchBox.fadeOut('medium');					
 		}
 		Glee.searchField.bind('keyup',function(){	

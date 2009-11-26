@@ -72,9 +72,9 @@ var LinkReaper = {
 	
 	unreapAllLinks: function() {
 		jQuery(LinkReaper.selectedLinks).each(function(){
-			unreapLink(jQuery(this));
+			LinkReaper.unreapLink(jQuery(this));
 		});
-		LinkReaper.selectedLinks = new Array();
+		LinkReaper.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
 		LinkReaper.searchTerm = "";
 	}
 }
