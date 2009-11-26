@@ -87,7 +87,7 @@ var LinkReaper = {
 	unreapAllLinks: function() {
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			unreapLink(jQuery(this));
-		}
-		LinkReaper.selectedLinks = [];
+		});
+		LinkReaper.selectedLinks = new Array();
 	}
 }
