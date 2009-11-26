@@ -6,24 +6,33 @@ jQuery(document).ready(function(){
 	Glee.initBox();
 	
 	jQuery(document).bind('keypress',function(e){
-		e.stopPropagation();
-		//Press control+g to activate searchBox
-		// if(e.key == 'g' && e.control)
+		e.preventDefault();
+		
+		//pressing 'g' toggles the gleeBox
 		if(e.which == 103)
 		{
-			if(jQuery("#gleeBox").css('display') == "none")
+			if(jQuery(e.target).attr('id') != 'gleeSearchField')
 			{
-				jQuery("#gleeBox").css('display','block');
-				jQuery(".gleeSearchField").focus();
-			}
-			else
-			{
-				jQuery("#gleeBox").css('display','none');
+				if(Glee.searchBox.css('display') == "none")
+				{					
+					//reseting value of searchField
+					Glee.searchField.attr('value','');
+					
+					Glee.searchBox.css('display','block');
+					Glee.searchField.focus();					
+				}
+				else
+				{
+					Glee.searchBox.css('display','none');
+				}
+				
 			}
 		}
+
+		//pressing 'esc' also hides the gleeBox
 		if(e.keyCode == 27)
 		{
-			jQuery("#gleeBox").css('display','none');
+			Glee.searchBox.css('display','none');
 		}
 	});
 })
@@ -31,9 +40,11 @@ jQuery(document).ready(function(){
 var Glee = { 
 	initBox: function(){
 		//creating the div to be displayed
-		var inputField = jQuery("<input type=\"text\" class='gleeSearchField' value='' />");
+		var inputField = jQuery("<input type=\"text\" id='gleeSearchField' value='' />");
 		var searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		searchBox.append(inputField);
+		this.searchBox = searchBox;
+		this.searchField = inputField;
 		jQuery(document.body).append(searchBox);
 	}
 }
