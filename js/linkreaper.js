@@ -1,19 +1,21 @@
+jQuery(document).ready(function(){
+	jQuery.noConflict();
+	LinkReaper.reapLinks('WINDO')
+});
+
 var LinkReaper = {
 	reapAllLinks: function() {
-		$$('a').each(function(el) {
-			el.innerHTML = "<span name='_Reaped' class='GleeReaped'>" 
-							+ el.innerHTML 
-							+ "</span>";
+		jQuery('a').each(function() {
+			this.html("<span name='_Reaped' class='GleeReaped'>"+this.html()+"</span>");
 		});
 	},
 	
 	reapLinks: function(term) {
-		$$('a').each(function(el) {
-			var index = el.innerHTML.toLowerCase().indexOf(term.toLowerCase());
+		jQuery('a').each(function() {
+			var el = jQuery(this);
+			var index = el.html().toLowerCase().indexOf(term.toLowerCase());
 			if(index != -1) {
-				el.innerHTML = "<span name='_Reaped' class='GleeReaped'>" 
-								+ el.innerHTML 
-								+ "</span>";
+				el.html("<span name='_Reaped' class='GleeReaped'>"+el.html()+"</span>");
 			}
 		});
 	}	
