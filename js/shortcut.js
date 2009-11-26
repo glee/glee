@@ -41,6 +41,7 @@ jQuery(document).ready(function(){
 		}
 	});
 	Glee.searchField.bind('keyup',function(e){		
+		var value = Glee.searchField.attr('value');
 		if(e.keyCode == 9)
 		{
 			e.preventDefault();
@@ -57,6 +58,10 @@ jQuery(document).ready(function(){
 			{
 				window.location = Glee.subURL.text();
 			}
+		}
+		else if(value.indexOf('.com') != -1)
+		{
+			Glee.setSubText(null);
 		}
 		else if(Glee.searchField.attr('value') != "")
 		{
@@ -99,8 +104,16 @@ var Glee = {
 			var value = Glee.searchField.attr('value');
 			if(value !="")
 			{
-				this.subText.html("Google "+value);
-				this.subURL.html("http://www.google.com/search?q="+value);
+				if(value.indexOf('.com') != -1)
+				{
+					this.subText.html("Go to "+value);
+					this.subURL.html("http://"+value);
+				}
+				else
+				{
+					this.subText.html("Google "+value);
+					this.subURL.html("http://www.google.com/search?q="+value);
+				}
 			}
 			else
 			{
