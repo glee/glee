@@ -111,6 +111,10 @@ var Glee = {
 		else if(typeof(el)!= "undefined")
 		{
 			this.subText.html(el.text());
+			if(el.attr('title')!="" && el.attr('title')!=el.text())
+			{
+				this.subText.html(this.subText.html()+" -- "+el.attr('title'));
+			}
 			this.subURL.html(el.attr('href'));
 		}
 	},
