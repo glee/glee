@@ -6,8 +6,8 @@ jQuery(document).ready(function(){
 
 var LinkReaper = {
 	
-	var searchTerm = "";
-	var selectedLinks = [];
+	searchTerm: "",
+	selectedLinks: [],
 	
 	reapAllLinks: function() {
 		jQuery('a').each(function() {
@@ -17,7 +17,7 @@ var LinkReaper = {
 	
 	reapLinks: function(term) {
 		// If this term is a specialization of the last term
-		if(searchTerm.indexOf(term) == 0)
+		if(this.searchTerm.indexOf(term) == 0)
 		{
 			jQuery(selectedLinks).each(function(){
 				reapALink(jQuery(this), term);
@@ -27,16 +27,16 @@ var LinkReaper = {
 		else
 		{
 			jQuery('a').each(function(){
-				reapALink(jQuery(this), term);
+				var el = jQuery(this);	
+				LinkReaper.reapALink(jQuery(el), term);
 			});
 		}
 	},
 	
 	reapALink: function(el, term) {
-		//var el = jQuery(this);
 		var index = el.html().toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1) {
-			el.html("<span name='_Reaped' class='GleeReaped'>" \
+			el.html("<span name='_Reaped' class='GleeReaped'>" 
 			+ el.html() 
 			+ "</span>");
 		}
