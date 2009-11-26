@@ -1,6 +1,6 @@
 jQuery(document).ready(function(){
 	jQuery.noConflict();
-	LinkReaper.reapLinks('WINDO');
+	//LinkReaper.reapLinks('WINDO');
 	//LinkReaper.reapAllLinks();
 });
 
@@ -19,7 +19,7 @@ var LinkReaper = {
 		// If this term is a specialization of the last term
 		if(this.searchTerm.indexOf(term) == 0)
 		{
-			jQuery(selectedLinks).each(function(){
+			jQuery(this.selectedLinks).each(function(){
 				if(!LinkReaper.reapALink(jQuery(this), term))
 				{
 					LinkReaper.unreapLink(jQuery(this));

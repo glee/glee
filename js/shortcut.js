@@ -34,13 +34,18 @@ jQuery(document).ready(function(){
 			e.preventDefault();			
 			Glee.searchBox.css('display','none');
 		}
+		Glee.searchField.bind('keyup',function(){	
+			e.preventDefault();
+			LinkReaper.reapLinks(jQuery(this).attr('value'));
+		});		
 	});
-})
+	
+});
 
 var Glee = { 
 	initBox: function(){
 		//creating the div to be displayed
-		var inputField = jQuery("<input type=\"text\" id='gleeSearchField' value='' />");
+		var inputField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
 		var searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		searchBox.append(inputField);
 		this.searchBox = searchBox;
