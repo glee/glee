@@ -5,13 +5,13 @@ jQuery(document).ready(function(){
 	/* initialize the searchBox */
 	Glee.initBox();
 	
-	jQuery(document).bind('keypress',function(e){
+	jQuery(document).bind('keydown',function(e){
 		//pressing 'g' toggles the gleeBox
-		if(e.which == 103)
+		if(e.keyCode == 71)
 		{
-			e.preventDefault();
 			if(jQuery(e.target).attr('id') != 'gleeSearchField')
 			{
+				e.preventDefault();				
 				if(Glee.searchBox.css('display') == "none")
 				{					
 					//reseting value of searchField
