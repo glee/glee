@@ -17,7 +17,7 @@ var LinkReaper = {
 	
 	reapLinks: function(term) {
 		// If this term is a specialization of the last term
-		if(this.searchTerm.indexOf(term) == 0)
+		if(term.indexOf(this.searchTerm) == 0)
 		{
 			jQuery(this.selectedLinks).each(function(){
 				if(!LinkReaper.reapALink(jQuery(this), term))
@@ -49,6 +49,8 @@ var LinkReaper = {
 				}
 			});
 		}
+		
+		searchTerm = term;
 	},
 	
 	reapALink: function(el, term) {
