@@ -232,6 +232,7 @@ var Glee = {
 			window.scrollTo(window.pageXOffset,window.pageYOffset+15);
 		else if(val == 0)
 			window.scrollTo(window.pageXOffset,window.pageYOffset-15);	
+		Glee.userPosBeforeGlee = window.pageYOffset;
 	}
 }
 
