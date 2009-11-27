@@ -57,10 +57,47 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 		}
 	});
+
 	Glee.searchField.bind('keyup',function(e){
-		var value = Glee.searchField.attr('value');
-		
-		if(e.keyCode == 9)
+		var value = Glee.searchField.attr('value');	
+		//check if the content of the text field has changed
+		if(Glee.searchText != value)
+		{
+			e.preventDefault();
+			if(value != "")
+			{
+				//if a timer exists, reset it
+				if(typeof(Glee.timer) != "undefined")
+				{			
+					clearTimeout(Glee.timer);
+				}
+				// start the timer
+				Glee.timer = setTimeout(function(){
+					LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+					var el = LinkReaper.getFirstLink();
+					Glee.setSubText(el);
+					Glee.scrollToLink(el);
+				},400);
+			}
+			else if(value.indexOf('.com') != -1)
+			{
+				Glee.setSubText(null);
+			}
+			else
+			{
+				if(typeof(Glee.timer) != "undefined")
+				{
+					clearTimeout(Glee.timer);
+				}
+				// start the timer
+				Glee.timer = setTimeout(function(){
+					LinkReaper.unreapAllLinks();
+					Glee.setSubText(null);				
+				},400);
+			}
+			Glee.searchText = value;
+		}
+		else if(e.keyCode == 9)
 		{
 			e.preventDefault();
 			if(value != "")
@@ -80,47 +117,13 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 13 && Glee.subURL.text()!="")
 		{
 			e.preventDefault();
-			{
-				window.location = Glee.subURL.text();
-			}
-		}
-		else if(value.indexOf('.com') != -1)
-		{
-			Glee.setSubText(null);
-		}
-		else if(Glee.searchField.attr('value') != "" && e.keyCode != 13 && !e.keyCode != 16 && e.keyCode!=27 )
-		{
-			e.preventDefault();
-			//if a timer exists, reset it
-			if(typeof(Glee.timer) != "undefined")
-			{			
-				clearTimeout(Glee.timer);
-			}
-			// start the timer
-			Glee.timer = setTimeout(function(){
-				LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-				var el = LinkReaper.getFirstLink();
-				Glee.setSubText(el);
-				Glee.scrollToLink(el);
-			},300);
-		} 
-		else if(Glee.searchField.attr('value') == "")
-		{
-			e.preventDefault();
-			if(typeof(Glee.timer) != "undefined")
-			{
-				clearTimeout(Glee.timer);
-			}
-			// start the timer
-			Glee.timer = setTimeout(function(){
-				LinkReaper.unreapAllLinks();
-				Glee.setSubText(null);				
-			},300);
+			window.location = Glee.subURL.text();
 		}
 	});
 });
 
 var Glee = { 
+	searchText:"",
 	initBox: function(){
 		// Creating the div to be displayed
 		var searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
