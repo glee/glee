@@ -74,9 +74,9 @@ jQuery(document).ready(function(){
 				// start the timer
 				Glee.timer = setTimeout(function(){
 					LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-					var el = LinkReaper.getFirstLink();
-					Glee.setSubText(el);
-					Glee.scrollToLink(el);
+					Glee.selectedElement = LinkReaper.getFirstLink();
+					Glee.setSubText(Glee.selectedElement);
+					Glee.scrollToLink(Glee.selectedElement);
 				},400);
 			}
 			else if(value.indexOf('.com') != -1)
@@ -104,19 +104,20 @@ jQuery(document).ready(function(){
 			{
 				if(e.shiftKey)
 				{
-					var el = LinkReaper.getPrevLink();
+					Glee.selectedElement = LinkReaper.getPrevLink();
 				}
 				else
 				{
-					var el = LinkReaper.getNextLink();
+					Glee.selectedElement = LinkReaper.getNextLink();
 				}
-				Glee.setSubText(el);
-				Glee.scrollToLink(el);
+				Glee.setSubText(Glee.selectedElement);
+				Glee.scrollToLink(Glee.selectedElement);
 			}
 		}
 		else if(e.keyCode == 13 && Glee.subURL.text()!="")
 		{
 			e.preventDefault();
+			//Glee.selectedElement.click();
 			window.location = Glee.subURL.text();
 		}
 	});
