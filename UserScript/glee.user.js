@@ -22,8 +22,9 @@ jQuery(document).ready(function(){
 		
 	// Bind Keys
 	jQuery(document).bind('keydown',function(e){
+		var target = e.target || e.srcElement;
 		//pressing 'g' toggles the gleeBox
-		if(jQuery(e.target).attr('id') != 'gleeSearchField' && e.keyCode == 71)
+		if(target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && e.keyCode == 71)
 		{
 			e.preventDefault();
 			if(Glee.searchBox.css('display') == "none")

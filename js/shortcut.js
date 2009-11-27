@@ -34,10 +34,22 @@ jQuery(document).ready(function(){
 			Glee.searchBox.fadeOut('fast');		
 			Glee.searchField.blur();
 		}
+		//on TAB press, stop from propagating so that keyup event can occur
 		else if(e.keyCode == 9)
 		{
 			e.stopPropagation();
 			e.preventDefault();
+		}
+		//UP Arrow
+		else if(e.keyCode == 38)
+		{
+			jQuery('html,body').animate({scrollTop:Glee.searchBox.offset().top},500);			
+		}
+		//DOWN arrow
+		else if(e.keyCode == 40)
+		{
+			// alert('ankit');
+			jQuery('html,body').animate({scrollTop:Glee.searchBox.offset().top},500);			
 		}
 	});
 	Glee.searchField.bind('keyup',function(e){		
