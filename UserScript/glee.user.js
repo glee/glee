@@ -16,7 +16,7 @@ jQuery(document).ready(function(){
 	/* Setup CSS Styles */
 	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;} .GleeHL{background-color: #d7fe65 !important;-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;padding: 3px !important;color: #1c3249 !important;border: 1px solid #818181 !important;}';
 	
-	var gleeCSS = '#gleeBox{ z-index:100000;position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; padding:0;text-align:left;}#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Helvetica Neue",Arial,Helvetica,serif; }#gleeSub{font: 15px Calibri, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important;}#gleeSubText{ padding:5px; color:#fff; float:left; }#gleeSubURL{ padding:5px; display:inline; float:right; font-weight: normal; font-style:normal;}';
+	var gleeCSS = '#gleeBox{ z-index:100000;position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; padding:0;text-align:left;}#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Helvetica Neue",Arial,Helvetica,serif; }#gleeSub{font: 15px Calibri, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important;}#gleeSubText{ padding:5px; color:#fff; float:left; }#gleeSubURL{ padding:5px; display:inline; float:right; font-weight: normal; font-style:normal;}#gleeSubActivity{padding:5px;color:#ccc;height:10px;display:inline;float:left;}';
 	
 	GM_addStyle(reaperCSS + gleeCSS);
 		
@@ -66,22 +66,25 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			if(value != "")
 			{
+				Glee.toggleActivity(1);	
 				//if a timer exists, reset it
 				if(typeof(Glee.timer) != "undefined")
 				{			
-					clearTimeout(Glee.timer);
+					clearTimeout(Glee.timer);					
 				}
-				// start the timer
+				// start the timer	
 				Glee.timer = setTimeout(function(){
 					LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 					Glee.selectedElement = LinkReaper.getFirstLink();
 					Glee.setSubText(Glee.selectedElement);
 					Glee.scrollToLink(Glee.selectedElement);
+					Glee.toggleActivity(0);					
 				},400);
 			}
 			else if(value.indexOf('.com') != -1)
 			{
 				Glee.setSubText(null);
+				Glee.toggleActivity(0);									
 			}
 			else
 			{
@@ -93,6 +96,7 @@ jQuery(document).ready(function(){
 				Glee.timer = setTimeout(function(){
 					LinkReaper.unreapAllLinks();
 					Glee.setSubText(null);				
+					Glee.toggleActivity(0);																		
 				},400);
 			}
 			Glee.searchText = value;
@@ -117,7 +121,7 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 13 && Glee.subURL.text()!="")
 		{
 			e.preventDefault();
-			//Glee.selectedElement.click();
+			// jQuery(Glee.selectedElement).trigger('click');
 			window.location = Glee.subURL.text();
 		}
 	});
@@ -130,9 +134,10 @@ var Glee = {
 		var searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
 		var subText = jQuery("<div id=\"gleeSubText\">No Links selected</div>");
 		var subURL = jQuery("<div id=\"gleeSubURL\"></div>")
-		var searchBox = jQuery("<div id=\"gleeBox\"></div>");
+		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
 		var sub = jQuery("<div id=\"gleeSub\"></div>");
-		sub.append(subText).append(subURL);
+		var searchBox = jQuery("<div id=\"gleeBox\"></div>");	
+		sub.append(subText).append(subActivity).append(subURL);
 		searchBox.append(searchField).append(sub);
 		this.searchBox = searchBox;
 		this.searchField = searchField;
@@ -185,6 +190,18 @@ var Glee = {
 				jQuery('html,body').animate({scrollTop:targetOffset},750);
 				return false;
 			}
+		}
+	},
+	toggleActivity: function(toggle){
+		if(toggle == 1)
+		{
+		//	jQuery("#gleeSubActivity").fadeIn('slow');
+			jQuery("#gleeSubActivity").html("searching");
+		}
+		else
+		{
+			// jQuery("#gleeSubActivity").fadeOut('slow');
+			jQuery("#gleeSubActivity").html("");			
 		}
 	}
 }
