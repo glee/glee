@@ -31,12 +31,12 @@ jQuery(document).ready(function(){
 			{
 				//reseting value of searchField
 				Glee.searchField.attr('value','');	
-				Glee.searchBox.fadeIn('fast');
+				Glee.searchBox.fadeIn(150);
 				Glee.searchField.focus();
 			}
 			else
 			{
-				Glee.searchBox.fadeOut('fast');
+				Glee.searchBox.fadeOut(150);
 			}
 		}
 	});
@@ -48,7 +48,7 @@ jQuery(document).ready(function(){
 			LinkReaper.unreapAllLinks();
 			//reseting value of searchField
 			Glee.searchField.attr('value','');
-			Glee.searchBox.fadeOut('fast');
+			Glee.searchBox.fadeOut(150);
 			Glee.searchField.blur();
 		}
 		else if(e.keyCode == 9)
