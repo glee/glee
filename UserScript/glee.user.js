@@ -274,9 +274,9 @@ var LinkReaper = {
 	},
 	
 	unreapAllLinks: function() {
-		// TODO: Some links seem to stay behind. Should we force clean all links of our styles?
 		jQuery(LinkReaper.selectedLinks).each(function(){
-			LinkReaper.unreapLink(jQuery(this));
+			this.removeClass('GleeReaped');
+			this.removeClass('GleeHL');
 		});
 		LinkReaper.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
 		LinkReaper.searchTerm = "";
