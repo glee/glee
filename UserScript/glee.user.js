@@ -27,16 +27,18 @@ jQuery(document).ready(function(){
 		if(target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && e.keyCode == 71)
 		{
 			e.preventDefault();
+			Glee.userPosBeforeGlee = window.pageYOffset;
 			if(Glee.searchBox.css('display') == "none")
 			{
 				//reseting value of searchField
 				Glee.searchField.attr('value','');	
 				Glee.searchBox.fadeIn(150);
-				Glee.searchField.focus();
+				Glee.searchField.focus();			
 			}
 			else
 			{
 				Glee.searchBox.fadeOut(150);
+				Glee.setInitialState();
 			}
 		}
 	});
@@ -46,7 +48,8 @@ jQuery(document).ready(function(){
 		{
 			e.preventDefault();
 			LinkReaper.unreapAllLinks();
-			//reseting value of searchField
+			//resetting value of searchField
+			Glee.setInitialState();						
 			Glee.searchField.attr('value','');
 			Glee.searchBox.fadeOut(150);
 			Glee.searchField.blur();
@@ -203,6 +206,9 @@ var Glee = {
 			// jQuery("#gleeSubActivity").fadeOut('slow');
 			jQuery("#gleeSubActivity").html("");			
 		}
+	},
+	setInitialState: function(){
+		jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
 	}
 }
 
