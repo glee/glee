@@ -44,11 +44,11 @@ jQuery(document).ready(function(){
 		//pressing 'esc' hides the gleeBox
 		if(e.keyCode == 27)
 		{
-			e.preventDefault();			
-			LinkReaper.unreapAllLinks();			
+			e.preventDefault();
+			LinkReaper.unreapAllLinks();
 			//reseting value of searchField
-			Glee.searchField.attr('value','');				
-			Glee.searchBox.fadeOut('fast');		
+			Glee.searchField.attr('value','');
+			Glee.searchBox.fadeOut('fast');
 			Glee.searchField.blur();
 		}
 		else if(e.keyCode == 9)
@@ -57,14 +57,21 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 		}
 	});
-	Glee.searchField.bind('keyup',function(e){		
+	Glee.searchField.bind('keyup',function(e){
 		var value = Glee.searchField.attr('value');
 		if(e.keyCode == 9)
 		{
 			e.preventDefault();
 			if(Glee.searchField.attr('value') != "")
 			{
-				var el = LinkReaper.getNextLink();
+				if(!e.shiftKey)
+				{
+					var el = LinkReaper.getNextLink();
+				}
+				else
+				{
+					var el = LinkReaper.getPrevLink();
+				}
 				Glee.setSubText(el);
 				Glee.scrollToLink(el);
 			}
