@@ -98,7 +98,7 @@ jQuery(document).ready(function(){
 			// start the timer
 			Glee.timer = setTimeout(function(){
 				LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-				var el = LinkReaper.getNextLink();
+				var el = LinkReaper.getFirstLink();
 				Glee.setSubText(el);
 				Glee.scrollToLink(el);
 			},300);
@@ -318,12 +318,18 @@ var LinkReaper = {
 		else
 		{
 			//Un-highlight the first item. This might be a reverse loopback.
-			LinkReaper.unHighlightLink(0);
+			LinkReaper.unHighlightLink(this.selectedLinks[0]);
 			this.traversePosition = this.selectedLinks.length - 1;
 			LinkReaper.highlightLink(this.selectedLinks[this.selectedLinks.length - 1]);
 			return this.selectedLinks[this.selectedLinks.length - 1];
 		}
 		
+	},
+	
+	getFirstLink: function(){
+		LinkReaper.highlightLink(this.selectedLinks[0]);
+		this.traversePosition = 0;
+		return this.selectedLinks[0];
 	},
 	
 	highlightLink: function(el){
