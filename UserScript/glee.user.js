@@ -14,9 +14,9 @@ jQuery(document).ready(function(){
 	Glee.initBox();
 	
 	/* Setup CSS Styles */
-	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;} .GleeHL{background-color: #d7fe65;-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px;-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px;margin: 4px;}';
+	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;} .GleeHL{background-color: #d7fe65 !important;-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;padding: 4px !important;color: #1c3249 !important;border: 1px solid #3a3a3a !important;}';
 	
-	var gleeCSS = '#gleeBox{ position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; }#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Times New Roman",Arial,serif; }#gleeSubText{ padding:5px; color:#fff; float:left; }#gleeSubURL{ padding:5px; display:inline; float:right; }';
+	var gleeCSS = '#gleeBox{ position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; }#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Times New Roman",Arial,serif; }#gleeSubText{ padding:5px; color:#fff; float:left; }#gleeSubURL{ padding:5px; display:inline; float:right;}';
 	
 	GM_addStyle(reaperCSS + gleeCSS);
 		
@@ -268,6 +268,8 @@ var LinkReaper = {
 		}
 		else
 		{
+			//Un-highlight the last item. This might be a loopback.
+			LinkReaper.unHighlightLink(this.selectedLinks[this.selectedLinks.length - 1]);
 			this.traversePosition = 0;
 			LinkReaper.highlightLink(this.selectedLinks[0]);
 			return this.selectedLinks[0];
