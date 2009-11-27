@@ -14,7 +14,7 @@ jQuery(document).ready(function(){
 	Glee.initBox();
 	
 	/* Setup CSS Styles */
-	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;}';
+	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;} .GleeHL{background-color: #d7fe65;-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px;-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px;margin: 4px;}';
 	
 	var gleeCSS = '#gleeBox{ position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; }#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Times New Roman",Arial,serif; }#gleeSubText{ padding:5px; color:#fff; float:left; }#gleeSubURL{ padding:5px; display:inline; float:right; }';
 	
@@ -228,6 +228,7 @@ var LinkReaper = {
 	},
 	
 	unreapLink: function(el) {
+		// TODO: What if there are multiple links with different names and same URL?
 		var isNotEqual = function(element){
 			if(element.attr('href') == el.attr('href'))
 			{
@@ -240,9 +241,11 @@ var LinkReaper = {
 		};		
 		this.selectedLinks = this.selectedLinks.filter(isNotEqual);
 		el.removeClass('GleeReaped');
+		el.removeClass('GleeHL');
 	},
 	
 	unreapAllLinks: function() {
+		// TODO: Some links seem to stay behind. Should we force clean all links of our styles?
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			LinkReaper.unreapLink(jQuery(this));
 		});
@@ -258,14 +261,28 @@ var LinkReaper = {
 		}
 		else if(this.traversePosition < this.selectedLinks.length - 1)
 		{
-
-			return this.selectedLinks[++this.traversePosition];
+			LinkReaper.unHighlightLink(this.selectedLinks[this.traversePosition]);
+			var hlItem = this.selectedLinks[++this.traversePosition];
+			LinkReaper.highlightLink(hlItem);
+			return hlItem;
 		}
 		else
 		{
 			this.traversePosition = 0;
+			LinkReaper.highlightLink(this.selectedLinks[0]);
 			return this.selectedLinks[0];
+			
 		}
 		
+	},
+	
+	highlightLink: function(el){
+		jQuery(el).removeClass("GleeReaped");
+		jQuery(el).addClass("GleeHL");
+	},
+	
+	unHighlightLink: function(el){
+		jQuery(el).removeClass("GleeHL");
+		jQuery(el).addClass("GleeReaped");
 	}
 }
