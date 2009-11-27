@@ -80,19 +80,34 @@ jQuery(document).ready(function(){
 		{
 			Glee.setSubText(null);
 		}
-		else if(Glee.searchField.attr('value') != "")
+		else if(Glee.searchField.attr('value') != "" && e.keyCode != 13 && e.keyCode != 9)
 		{
-			// Reset value of searchField
-			LinkReaper.reapLinks(jQuery(this).attr('value'));
-			var el = LinkReaper.getNextLink();
-			Glee.setSubText(el);
-			Glee.scrollToLink(el);
+			e.preventDefault();
+			//if a time exists, reset it
+			if(typeof(Glee.timer) != undefined)
+			{
+				clearTimeout(Glee.timer);
+			}
+			// start the timer
+			setTimeout(function(){
+				LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+				var el = LinkReaper.getNextLink();
+				Glee.setSubText(el);
+				Glee.scrollToLink(el);
+			},500);
 		} 
 		else if(Glee.searchField.attr('value') == "")
 		{
 			e.preventDefault();
-			LinkReaper.unreapAllLinks();
-			Glee.setSubText(null);
+			if(typeof(Glee.timer) != undefined)
+			{
+				clearTimeout(Glee.timer);
+			}
+			// start the timer
+			setTimeout(function(){
+				LinkReaper.unreapAllLinks();
+				Glee.setSubText(null);				
+			},500);
 		}
 	});
 });
@@ -159,6 +174,12 @@ var Glee = {
 				return false;
 			}
 		}
+	},
+	onTimeOut:function(el){
+		LinkReaper.reapLinks(jQuery(Glee.searchField.attr('value')));
+		var el = LinkReaper.getNextLink();
+		Glee.setSubText(el);
+		Glee.scrollToLink(el);
 	}
 }
 
