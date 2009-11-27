@@ -59,6 +59,11 @@ jQuery(document).ready(function(){
 			e.stopPropagation();
 			e.preventDefault();
 		}
+		else if(e.keyCode == 40 || e.keyCode == 38){
+			Glee.scrollTimer = setInterval(function(){
+			  Glee.simulateScroll((e.keyCode == 40 ? 1:0));
+			},1);
+		}
 	});
 
 	Glee.searchField.bind('keyup',function(e){
@@ -121,7 +126,7 @@ jQuery(document).ready(function(){
 				Glee.scrollToLink(Glee.selectedElement);
 			}
 		}
-		else if(e.keyCode == 13 && Glee.subURL.text()!="")
+		else if(e.keyCode == 13 && Glee.subURL.text() != "")
 		{
 			e.preventDefault();			
 			if(e.shiftKey)
@@ -134,6 +139,10 @@ jQuery(document).ready(function(){
 			{
 				window.location = Glee.subURL.text();
 			}
+		}
+		else if(e.keyCode == 40 || e.keyCode == 38)
+		{
+			clearInterval(Glee.scrollTimer);
 		}
 	});
 });
@@ -217,6 +226,12 @@ var Glee = {
 	},
 	getBackInitialState: function(){
 		jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
+	},
+	simulateScroll: function(val){
+		if(val == 1)
+			window.scrollTo(window.pageXOffset,window.pageYOffset+15);
+		else if(val == 0)
+			window.scrollTo(window.pageXOffset,window.pageYOffset-15);	
 	}
 }
 
