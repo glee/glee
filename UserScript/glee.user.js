@@ -38,7 +38,7 @@ jQuery(document).ready(function(){
 			else
 			{
 				Glee.searchBox.fadeOut(150);
-				Glee.setInitialState();
+				Glee.getBackInitialState();
 			}
 		}
 	});
@@ -49,7 +49,7 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			LinkReaper.unreapAllLinks();
 			//resetting value of searchField
-			Glee.setInitialState();						
+			Glee.getBackInitialState();						
 			Glee.searchField.attr('value','');
 			Glee.searchBox.fadeOut(150);
 			Glee.searchField.blur();
@@ -207,7 +207,7 @@ var Glee = {
 			jQuery("#gleeSubActivity").html("");			
 		}
 	},
-	setInitialState: function(){
+	getBackInitialState: function(){
 		jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
 	}
 }
