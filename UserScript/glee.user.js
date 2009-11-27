@@ -132,10 +132,8 @@ var Glee = {
 		var subURL = jQuery("<div id=\"gleeSubURL\"></div>")
 		var searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		var sub = jQuery("<div id=\"gleeSub\"></div>");
-		sub.append(subText);
-		sub.append(subURL);
-		searchBox.append(searchField);
-		searchBox.append(sub);
+		sub.append(subText).append(subURL);
+		searchBox.append(searchField).append(sub);
 		this.searchBox = searchBox;
 		this.searchField = searchField;
 		this.subText = subText;
@@ -270,17 +268,15 @@ var LinkReaper = {
 			}
 		};		
 		this.selectedLinks = this.selectedLinks.filter(isNotEqual);
-		el.removeClass('GleeReaped');
-		el.removeClass('GleeHL');
+		el.removeClass('GleeReaped').removeClass('GleeHL');
 	},
 	
 	unreapAllLinks: function() {
-		jQuery(LinkReaper.selectedLinks).each(function(){
-			this.removeClass('GleeReaped');
-			this.removeClass('GleeHL');
+		jQuery(this.selectedLinks).each(function(){
+			this.removeClass('GleeReaped').removeClass('GleeHL');
 		});
-		LinkReaper.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
-		LinkReaper.searchTerm = "";
+		this.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
+		this.searchTerm = "";
 		this.traversePosition = 0;
 	},
 	
@@ -291,17 +287,17 @@ var LinkReaper = {
 		}
 		else if(this.traversePosition < this.selectedLinks.length - 1)
 		{
-			LinkReaper.unHighlightLink(this.selectedLinks[this.traversePosition]);
+			this.unHighlightLink(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[++this.traversePosition];
-			LinkReaper.highlightLink(hlItem);
+			this.highlightLink(jQuery(hlItem));
 			return hlItem;
 		}
 		else
 		{
 			//Un-highlight the last item. This might be a loopback.
-			LinkReaper.unHighlightLink(this.selectedLinks[this.selectedLinks.length - 1]);
+			this.unHighlightLink(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			this.traversePosition = 0;
-			LinkReaper.highlightLink(this.selectedLinks[0]);
+			this.highlightLink(jQuery(this.selectedLinks[0]));
 			return this.selectedLinks[0];
 			
 		}
@@ -315,35 +311,35 @@ var LinkReaper = {
 		}
 		else if(this.traversePosition > 0)
 		{
-			LinkReaper.unHighlightLink(this.selectedLinks[this.traversePosition]);
+			this.unHighlightLink(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[--this.traversePosition];
-			LinkReaper.highlightLink(hlItem);
+			this.highlightLink(jQuery(hlItem));
 			return hlItem;
 		}
 		else
 		{
 			//Un-highlight the first item. This might be a reverse loopback.
-			LinkReaper.unHighlightLink(this.selectedLinks[0]);
+			this.unHighlightLink(jQuery(this.selectedLinks[0]));
 			this.traversePosition = this.selectedLinks.length - 1;
-			LinkReaper.highlightLink(this.selectedLinks[this.selectedLinks.length - 1]);
+			this.highlightLink(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			return this.selectedLinks[this.selectedLinks.length - 1];
 		}
 		
 	},
 	
 	getFirstLink: function(){
-		LinkReaper.highlightLink(this.selectedLinks[0]);
+		this.highlightLink(jQuery(this.selectedLinks[0]));
 		this.traversePosition = 0;
 		return this.selectedLinks[0];
 	},
 	
 	highlightLink: function(el){
-		jQuery(el).removeClass("GleeReaped");
-		jQuery(el).addClass("GleeHL");
+		el.removeClass("GleeReaped");
+		el.addClass("GleeHL");
 	},
 	
 	unHighlightLink: function(el){
-		jQuery(el).removeClass("GleeHL");
-		jQuery(el).addClass("GleeReaped");
+		el.removeClass("GleeHL");
+		el.addClass("GleeReaped");
 	}
 }
