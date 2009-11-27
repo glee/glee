@@ -83,13 +83,13 @@ jQuery(document).ready(function(){
 		else if(Glee.searchField.attr('value') != "" && e.keyCode != 13 && e.keyCode != 9)
 		{
 			e.preventDefault();
-			//if a time exists, reset it
-			if(typeof(Glee.timer) != undefined)
-			{
+			//if a timer exists, reset it
+			if(typeof(Glee.timer) != "undefined")
+			{			
 				clearTimeout(Glee.timer);
 			}
 			// start the timer
-			setTimeout(function(){
+			Glee.timer = setTimeout(function(){
 				LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 				var el = LinkReaper.getNextLink();
 				Glee.setSubText(el);
@@ -99,12 +99,12 @@ jQuery(document).ready(function(){
 		else if(Glee.searchField.attr('value') == "")
 		{
 			e.preventDefault();
-			if(typeof(Glee.timer) != undefined)
+			if(typeof(Glee.timer) != "undefined")
 			{
 				clearTimeout(Glee.timer);
 			}
 			// start the timer
-			setTimeout(function(){
+			Glee.timer = setTimeout(function(){
 				LinkReaper.unreapAllLinks();
 				Glee.setSubText(null);				
 			},500);
@@ -176,12 +176,6 @@ var Glee = {
 				return false;
 			}
 		}
-	},
-	onTimeOut:function(el){
-		LinkReaper.reapLinks(jQuery(Glee.searchField.attr('value')));
-		var el = LinkReaper.getNextLink();
-		Glee.setSubText(el);
-		Glee.scrollToLink(el);
 	}
 }
 
