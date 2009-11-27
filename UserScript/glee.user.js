@@ -94,7 +94,7 @@ jQuery(document).ready(function(){
 				var el = LinkReaper.getNextLink();
 				Glee.setSubText(el);
 				Glee.scrollToLink(el);
-			},500);
+			},300);
 		} 
 		else if(Glee.searchField.attr('value') == "")
 		{
@@ -107,7 +107,7 @@ jQuery(document).ready(function(){
 			Glee.timer = setTimeout(function(){
 				LinkReaper.unreapAllLinks();
 				Glee.setSubText(null);				
-			},500);
+			},300);
 		}
 	});
 });
@@ -172,7 +172,7 @@ var Glee = {
 				// We keep the scroll such that the element stays a little away from
 				// the top.
 				var targetOffset = target.offset().top - 60;
-				jQuery('html,body').animate({scrollTop:targetOffset},1000);
+				jQuery('html,body').animate({scrollTop:targetOffset},750);
 				return false;
 			}
 		}
@@ -292,6 +292,29 @@ var LinkReaper = {
 			LinkReaper.highlightLink(this.selectedLinks[0]);
 			return this.selectedLinks[0];
 			
+		}
+		
+	},
+	
+	getPrevLink: function(){
+		if(this.selectedLinks.length == 0)
+		{
+			return null;
+		}
+		else if(this.traversePosition > 0)
+		{
+			LinkReaper.unHighlightLink(this.selectedLinks[this.traversePosition]);
+			var hlItem = this.selectedLinks[--this.traversePosition];
+			LinkReaper.highlightLink(hlItem);
+			return hlItem;
+		}
+		else
+		{
+			//Un-highlight the first item. This might be a reverse loopback.
+			LinkReaper.unHighlightLink(0);
+			this.traversePosition = this.selectedLinks.length - 1;
+			LinkReaper.highlightLink(this.selectedLinks[this.selectedLinks.length - 1]);
+			return this.selectedLinks[this.selectedLinks.length - 1];
 		}
 		
 	},
