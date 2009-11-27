@@ -123,9 +123,17 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 13 && Glee.subURL.text()!="")
 		{
-			e.preventDefault();
-			// jQuery(Glee.selectedElement).trigger('click');
-			window.location = Glee.subURL.text();
+			e.preventDefault();			
+			if(e.shiftKey)
+			{
+				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
+				window.open(Glee.subURL.text());
+				return false;
+			}
+			else
+			{
+				window.location = Glee.subURL.text();
+			}
 		}
 	});
 });
