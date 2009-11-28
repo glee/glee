@@ -88,8 +88,20 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"a");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
+					else if(value == "*input") //command to get all input fields
+					{
+						
+					}
+					else if(value == "*a") //command to get all links
+					{
+						LinkReaper.reapAllLinks();
+						Glee.selectedElement = LinkReaper.getFirst();
+						Glee.setSubText(Glee.selectedElement,"a");
+						Glee.scrollToElement(Glee.selectedElement);
+					}
 					else
 					{
+						LinkReaper.unreapAllLinks();
 						Glee.setSubText("Command not found", "command");
 					}
 				}				
@@ -102,8 +114,7 @@ jQuery(document).ready(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"a");
-						Glee.scrollToElement(Glee.selectedElement);
-						Glee.toggleActivity(0);					
+						Glee.scrollToElement(Glee.selectedElement);	
 					},400);
 				}	
 			}
@@ -182,7 +193,7 @@ var Glee = {
 			if(val && typeof val!= "undefined")
 			{
 				//checking if it a linked image
-				if(jQuery(val).find("img"))
+				if(jQuery(val).find("img").length != 0)
 				{
 					var href = jQuery(val).attr("href");
 					if(href.length > 80)
@@ -199,7 +210,7 @@ var Glee = {
 					{
 						this.subText.html("All Linked Images");
 					}
-				}
+				}	
 				else
 				{
 					var title = jQuery(val).attr('title');
@@ -297,6 +308,14 @@ var LinkReaper = {
 	searchTerm: "",
 	selectedLinks: [],
 	traversePosition: 0,
+	
+	reapAllLinks:function(){
+		this.selectedLinks = jQuery("a");
+		this.selectedLinks.each(function(){
+			jQuery(this).addClass('GleeReaped');
+		});
+		this.traversePosition = 0;
+	},
 	
 	reapLinks: function(term) {
 		if((LinkReaper.term != "") && (LinkReaper.searchTerm != term))
