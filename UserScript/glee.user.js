@@ -83,12 +83,12 @@ jQuery(document).ready(function(){
 					Glee.resetTimer();
 					if(value == "*img")
 					{
-
+						Glee.reapImages();
+						
 					}
 					else
 					{
-						Glee.setSubText(null, "command");
-
+						Glee.setSubText("Command not found", "command");
 					}
 				}				
 				else{
@@ -98,7 +98,7 @@ jQuery(document).ready(function(){
 					// start the timer	
 					Glee.timer = setTimeout(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-						Glee.selectedElement = LinkReaper.getFirstLink();
+						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"a");
 						Glee.scrollToLink(Glee.selectedElement);
 						Glee.toggleActivity(0);					
@@ -125,11 +125,11 @@ jQuery(document).ready(function(){
 			{
 				if(e.shiftKey)
 				{
-					Glee.selectedElement = LinkReaper.getPrevLink();
+					Glee.selectedElement = LinkReaper.getPrev();
 				}
 				else
 				{
-					Glee.selectedElement = LinkReaper.getNextLink();
+					Glee.selectedElement = LinkReaper.getNext();
 				}
 				Glee.setSubText(Glee.selectedElement,"a");
 				Glee.scrollToLink(Glee.selectedElement);
@@ -207,7 +207,7 @@ var Glee = {
 		}
 		else if(type == "command")
 		{
-			this.subText.html("command not found");
+			this.subText.html(val);
 			this.subURL.html('');
 		}
 		else
@@ -351,65 +351,65 @@ var LinkReaper = {
 		this.traversePosition = 0;
 	},
 	
-	getNextLink: function(){
+	getNext: function(){
 		if(this.selectedLinks.length == 0)
 		{
 			return null;
 		}
 		else if(this.traversePosition < this.selectedLinks.length - 1)
 		{
-			this.unHighlightLink(jQuery(this.selectedLinks[this.traversePosition]));
+			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[++this.traversePosition];
-			this.highlightLink(jQuery(hlItem));
+			this.highlight(jQuery(hlItem));
 			return hlItem;
 		}
 		else
 		{
 			//Un-highlight the last item. This might be a loopback.
-			this.unHighlightLink(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
+			this.unHighlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			this.traversePosition = 0;
-			this.highlightLink(jQuery(this.selectedLinks[0]));
+			this.highlight(jQuery(this.selectedLinks[0]));
 			return this.selectedLinks[0];
 			
 		}
 		
 	},
 	
-	getPrevLink: function(){
+	getPrev: function(){
 		if(this.selectedLinks.length == 0)
 		{
 			return null;
 		}
 		else if(this.traversePosition > 0)
 		{
-			this.unHighlightLink(jQuery(this.selectedLinks[this.traversePosition]));
+			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[--this.traversePosition];
-			this.highlightLink(jQuery(hlItem));
+			this.highlight(jQuery(hlItem));
 			return hlItem;
 		}
 		else
 		{
 			//Un-highlight the first item. This might be a reverse loopback.
-			this.unHighlightLink(jQuery(this.selectedLinks[0]));
+			this.unHighlight(jQuery(this.selectedLinks[0]));
 			this.traversePosition = this.selectedLinks.length - 1;
-			this.highlightLink(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
+			this.highlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			return this.selectedLinks[this.selectedLinks.length - 1];
 		}
 		
 	},
 	
-	getFirstLink: function(){
-		this.highlightLink(jQuery(this.selectedLinks[0]));
+	getFirst: function(){
+		this.highlight(jQuery(this.selectedLinks[0]));
 		this.traversePosition = 0;
 		return this.selectedLinks[0];
 	},
 	
-	highlightLink: function(el){
+	highlight: function(el){
 		el.removeClass("GleeReaped");
 		el.addClass("GleeHL");
 	},
 	
-	unHighlightLink: function(el){
+	unHighlight: function(el){
 		el.removeClass("GleeHL");
 		el.addClass("GleeReaped");
 	}
