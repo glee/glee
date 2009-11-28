@@ -115,6 +115,7 @@ jQuery(document).ready(function(){
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"a");
 						Glee.scrollToElement(Glee.selectedElement);	
+						Glee.toggleActivity(0);							
 					},400);
 				}	
 			}
@@ -310,7 +311,7 @@ var LinkReaper = {
 	traversePosition: 0,
 	
 	reapAllLinks:function(){
-		this.selectedLinks = jQuery("a");
+		this.selectedLinks = jQuery("a:visible");
 		this.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
