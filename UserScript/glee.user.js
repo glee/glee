@@ -76,7 +76,7 @@ jQuery(document).ready(function(){
 			{
 				Glee.toggleActivity(1);	
 				//check if it is the command mode
-				if(value[0] == "*")
+				if(value[0] == "*" || value[0] == "!")
 				{
 					Glee.resetTimer();
 					Glee.toggleActivity(0);							
@@ -98,6 +98,11 @@ jQuery(document).ready(function(){
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"a");
 						Glee.scrollToElement(Glee.selectedElement);
+					}
+					else if (value == "!read")
+					{
+						Glee.makeReadable();
+						Glee.setSubText("wait till Glee+Readability work up the magic","command");
 					}
 					else
 					{
@@ -330,7 +335,13 @@ var Glee = {
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);		
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";	
+	},
+	
+	makeReadable: function(){
+		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
+	 	location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
 	}
+
 }
 
 var LinkReaper = {
