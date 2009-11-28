@@ -102,12 +102,12 @@ jQuery(document).ready(function(){
 					else if (value == "!read")
 					{
 						Glee.makeReadable();
-						Glee.setSubText("wait till Glee+Readability work up the magic","command");
+						Glee.setSubText("wait till Glee+Readability work up the magic","msg");
 					}
 					else
 					{
 						LinkReaper.unreapAllLinks();
-						Glee.setSubText("Command not found", "command");
+						Glee.setSubText("Command not found", "msg");
 					}
 				}				
 				else{
@@ -262,7 +262,7 @@ var Glee = {
 				}
 			}
 		}
-		else if(type == "command")
+		else if(type == "msg")
 		{
 			this.subText.html(val);
 			this.subURL.html('');
