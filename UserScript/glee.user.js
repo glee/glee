@@ -79,12 +79,14 @@ jQuery(document).ready(function(){
 				if(value[0] == "*")
 				{
 					// alert("you are in the command mode!");
-					Glee.toggleActivity(1);
 					Glee.resetTimer();
+					//command to get all images on the page. 
 					if(value == "*img")
 					{
 						Glee.reapImages();
-						
+						Glee.selectElement = LinkReaper.getFirst();
+						Glee.setSubText(Glee.selectedElement,"image");
+						Glee.scrollToElement(Glee.selectedElement);
 					}
 					else
 					{
@@ -100,7 +102,7 @@ jQuery(document).ready(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"a");
-						Glee.scrollToLink(Glee.selectedElement);
+						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);					
 					},400);
 				}	
@@ -132,7 +134,7 @@ jQuery(document).ready(function(){
 					Glee.selectedElement = LinkReaper.getNext();
 				}
 				Glee.setSubText(Glee.selectedElement,"a");
-				Glee.scrollToLink(Glee.selectedElement);
+				Glee.scrollToElement(Glee.selectedElement);
 			}
 		}
 		else if(e.keyCode == 13 && Glee.subURL.text() != "") //if ENTER is pressed
@@ -179,15 +181,15 @@ var Glee = {
 		{
 			if(val && typeof val!= "undefined")
 			{
-				var title = val.attr('title');
-				var text = val.text();
+				var title = jQuery(val).attr('title');
+				var text = jQuery(val).text();
 
 				this.subText.html(text);
 				if(title !="" && title != text)
 				{
 					this.subText.html(this.subText.html()+" -- "+title);
 				}
-				this.subURL.html(val.attr('href'));
+				this.subURL.html(jQuery(val).attr('href'));
 			}
 			else
 			{
@@ -216,7 +218,7 @@ var Glee = {
 			this.subURL.html('');
 		}
 	},
-	scrollToLink: function(el){
+	scrollToElement: function(el){
 		var target = el;
 		if(target)
 		{
@@ -257,6 +259,11 @@ var Glee = {
 		{			
 			clearTimeout(Glee.timer);					
 		}
+	},
+	reapImages: function(){
+		//only returning linked images...
+		LinkReaper.selectedLinks = jQuery("a:has(img)");
+		this.traversePosition = 0;
 	}
 }
 
@@ -344,7 +351,7 @@ var LinkReaper = {
 	
 	unreapAllLinks: function() {
 		jQuery(this.selectedLinks).each(function(){
-			this.removeClass('GleeReaped').removeClass('GleeHL');
+			jQuery(this).removeClass('GleeReaped').removeClass('GleeHL');
 		});
 		this.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
 		this.searchTerm = "";
