@@ -16,7 +16,7 @@ jQuery(document).ready(function(){
 	/* Setup CSS Styles */ 
 	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;} .GleeHL{background-color: #d7fe65 !important;-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;padding: 3px !important;color: #1c3249 !important;border: 1px solid #818181 !important;}';
 	
-	var gleeCSS = '#gleeBox{ z-index:100000;position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; padding:0;text-align:left;}#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Helvetica Neue",Arial,Helvetica,serif; }#gleeSub{font: 15px Calibri, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important;}#gleeSubText{ padding:5px; color:#fff; float:left; }#gleeSubURL{ padding:5px; display:inline; float:right; font-weight: normal; font-style:normal;}#gleeSubActivity{padding:5px;color:#ccc;height:10px;display:inline;float:left;}';
+	var gleeCSS = '#gleeBox{ z-index:100000;position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; padding:0;text-align:left;}#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Helvetica Neue",Arial,Helvetica,serif; }#gleeSubText, #gleeSubURL, #gleeSubActivity{font-size:15px;font-family:Calibri,Arial,Helvetica,serif;color:#fff; font-weight: normal;}#gleeSubText{ padding:5px;float:left;}#gleeSubURL{ padding:5px; display:inline; float:right;}#gleeSubActivity{padding:5px;color:#ccc;height:10px;display:inline;float:left;}';
 	
 	GM_addStyle(reaperCSS + gleeCSS);
 		
@@ -185,7 +185,11 @@ var Glee = {
 				if(jQuery(val).find("img"))
 				{
 					var href = jQuery(val).attr("href");
-					// this.subURL.html(href);
+					if(href.length > 80)
+					{
+						href = Glee.truncateURL(href);
+					}
+					this.subURL.html(href);
 					var title = jQuery(val).attr("title") || jQuery(val).find('img').attr('title');
 					if(title!= "")
 					{
@@ -277,6 +281,9 @@ var Glee = {
 		{			
 			clearTimeout(Glee.timer);					
 		}
+	},
+	truncateURL:function(url){
+		return url.substr(0,78)+"...";
 	},
 	reapImages: function(){
 		//only returning linked images...
