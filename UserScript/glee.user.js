@@ -109,6 +109,7 @@ jQuery(document).ready(function(){
 					//default behavior in non-command mode, i.e. search for links
 					//if a timer exists, reset it
 					Glee.resetTimer();
+
 					// start the timer	
 					Glee.timer = setTimeout(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
@@ -155,12 +156,26 @@ jQuery(document).ready(function(){
 			if(e.shiftKey)
 			{
 				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
-				window.open(Glee.selectedElement.attr("href"));
+				if(Glee.selectedElement)
+				{
+					window.open(Glee.selectedElement.attr("href"));
+				}
+				else
+				{
+					window.open(Glee.subURL.text());
+				}
 				return false;
 			}
 			else
 			{
-				window.location = Glee.selectedElement.attr("href");
+				if(Glee.selectedElement)
+				{
+					window.location = Glee.selectedElement.attr("href");
+				}
+				else
+				{
+					window.location = Glee.subURL.text();
+				}
 			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //if UP/DOWN arrow keys are pressed
@@ -209,7 +224,7 @@ var Glee = {
 					}
 					else
 					{
-						this.subText.html("All Linked Images");
+						this.subText.html("Linked Image");
 					}
 				}	
 				else
@@ -231,6 +246,7 @@ var Glee = {
 				//if it is a URL
 				if(text.indexOf('.com') != -1)
 				{
+					Glee.selectedElement = null;
 					this.subText.html("Go to "+text);
 					this.subURL.html("http://"+text);
 				}
@@ -313,6 +329,7 @@ var Glee = {
 		});
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);		
 		this.traversePosition = 0;
+		LinkReaper.searchTerm = "";	
 	}
 }
 
@@ -329,10 +346,12 @@ var LinkReaper = {
 			jQuery(this).addClass('GleeReaped');
 		});
 		this.traversePosition = 0;
+		//can't figure out what value to set of searchTerm here
+		LinkReaper.searchTerm = "";
 	},
 	
 	reapLinks: function(term) {
-		if((LinkReaper.term != "") && (LinkReaper.searchTerm != term))
+		if((term != "") && (LinkReaper.searchTerm != term))
 		{
 			// If this term is a specialization of the last term
 			if((term.indexOf(LinkReaper.searchTerm) == 0) &&
@@ -341,12 +360,7 @@ var LinkReaper = {
 				jQuery(LinkReaper.selectedLinks).each(function(){
 					if(!LinkReaper.reapALink(jQuery(this), term))
 					{
-						LinkReaper.unreapLink(jQuery(this));
-						LinkReaper.selectedLinks = jQuery.grep(
-						LinkReaper.selectedLinks, 
-						function(val) {
-							return val != jQuery(this);
-						});
+						LinkReaper.unreapLink(jQuery(this));						
 					}
 				});
 			}
@@ -358,14 +372,6 @@ var LinkReaper = {
 					if(!LinkReaper.reapALink(jQuery(this), term))
 					{
 						LinkReaper.unreapLink(jQuery(this));
-						if(jQuery.inArray(jQuery(this), LinkReaper.selectedLinks) > -1)
-						{
-							LinkReaper.selectedLinks = jQuery.grep(
-								LinkReaper.selectedLinks, 
-								function(val) {
-									return val != jQuery(this);
-								});
-						}
 					}
 					else
 					{
@@ -396,6 +402,7 @@ var LinkReaper = {
 	unreapLink: function(el) {
 		// TODO: What if there are multiple links with different names and same URL?
 		var isNotEqual = function(element){
+			element = jQuery(element);
 			if(element.attr('href') == el.attr('href') )
 			{
 				return false;
