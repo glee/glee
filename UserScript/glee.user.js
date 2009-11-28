@@ -86,7 +86,7 @@ jQuery(document).ready(function(){
 						Glee.reapImages();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"a");
-						Glee.scrollToElement(jQuery(Glee.selectedElement));
+						Glee.scrollToElement(Glee.selectedElement);
 					}
 					else
 					{
@@ -134,7 +134,7 @@ jQuery(document).ready(function(){
 					Glee.selectedElement = LinkReaper.getNext();
 				}
 				Glee.setSubText(Glee.selectedElement,"a");
-				Glee.scrollToElement(jQuery(Glee.selectedElement));
+				Glee.scrollToElement(Glee.selectedElement);
 			}
 		}
 		else if(e.keyCode == 13 && Glee.subURL.text() != "") //if ENTER is pressed
@@ -143,12 +143,12 @@ jQuery(document).ready(function(){
 			if(e.shiftKey)
 			{
 				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
-				window.open(jQuery(Glee.selectedElement).attr("href"));
+				window.open(Glee.selectedElement.attr("href"));
 				return false;
 			}
 			else
 			{
-				window.location = jQuery(Glee.selectedElement).attr("href");
+				window.location = Glee.selectedElement.attr("href");
 			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //if UP/DOWN arrow keys are pressed
@@ -393,7 +393,7 @@ var LinkReaper = {
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[++this.traversePosition];
 			this.highlight(jQuery(hlItem));
-			return hlItem;
+			return jQuery(hlItem);
 		}
 		else
 		{
@@ -401,7 +401,7 @@ var LinkReaper = {
 			this.unHighlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			this.traversePosition = 0;
 			this.highlight(jQuery(this.selectedLinks[0]));
-			return this.selectedLinks[0];	
+			return jQuery(this.selectedLinks[0]);	
 		}
 		
 	},
@@ -416,7 +416,7 @@ var LinkReaper = {
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[--this.traversePosition];
 			this.highlight(jQuery(hlItem));
-			return hlItem;
+			return jQuery(hlItem);
 		}
 		else
 		{
@@ -424,7 +424,7 @@ var LinkReaper = {
 			this.unHighlight(jQuery(this.selectedLinks[0]));
 			this.traversePosition = this.selectedLinks.length - 1;
 			this.highlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
-			return this.selectedLinks[this.selectedLinks.length - 1];
+			return jQuery(this.selectedLinks[this.selectedLinks.length - 1]);
 		}
 		
 	},
