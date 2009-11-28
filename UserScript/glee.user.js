@@ -297,9 +297,21 @@ var Glee = {
 	truncateURL:function(url){
 		return url.substr(0,78)+"...";
 	},
+	isVisible:function(el){
+		el = jQuery(el);
+		if(el.css('display') == "none" || el.css('visibility') == "hidden")
+		{
+			return false;
+		}
+		return true;
+	},
 	reapImages: function(){
 		//only returning linked images...
 		LinkReaper.selectedLinks = jQuery("a:has(img)");
+		LinkReaper.selectedLinks.each(function(){
+			jQuery(this).addClass('GleeReaped');
+		});
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);		
 		this.traversePosition = 0;
 	}
 }
@@ -311,7 +323,8 @@ var LinkReaper = {
 	traversePosition: 0,
 	
 	reapAllLinks:function(){
-		this.selectedLinks = jQuery("a:visible");
+		this.selectedLinks = jQuery("a");
+		this.selectedLinks = jQuery(jQuery.grep(this.selectedLinks, Glee.isVisible));
 		this.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
@@ -363,6 +376,8 @@ var LinkReaper = {
 			}
 			LinkReaper.searchTerm = term;
 			this.traversePosition = 0;
+			//Filtering links to get only the ones visible
+			this.selectedLinks = jQuery.grep(this.selectedLinks, Glee.isVisible);
 		}
 	},
 	
@@ -381,7 +396,7 @@ var LinkReaper = {
 	unreapLink: function(el) {
 		// TODO: What if there are multiple links with different names and same URL?
 		var isNotEqual = function(element){
-			if(element.attr('href') == el.attr('href'))
+			if(element.attr('href') == el.attr('href') )
 			{
 				return false;
 			}
