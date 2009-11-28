@@ -78,15 +78,15 @@ jQuery(document).ready(function(){
 				//check if it is the command mode
 				if(value[0] == "*")
 				{
-					// alert("you are in the command mode!");
 					Glee.resetTimer();
+					Glee.toggleActivity(0);							
 					//command to get all images on the page. 
 					if(value == "*img")
-					{
+					{				
 						Glee.reapImages();
-						Glee.selectElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"image");
-						Glee.scrollToElement(Glee.selectedElement);
+						Glee.selectedElement = LinkReaper.getFirst();
+						Glee.setSubText(Glee.selectedElement,"a");
+						Glee.scrollToElement(jQuery(Glee.selectedElement));
 					}
 					else
 					{
@@ -134,7 +134,7 @@ jQuery(document).ready(function(){
 					Glee.selectedElement = LinkReaper.getNext();
 				}
 				Glee.setSubText(Glee.selectedElement,"a");
-				Glee.scrollToElement(Glee.selectedElement);
+				Glee.scrollToElement(jQuery(Glee.selectedElement));
 			}
 		}
 		else if(e.keyCode == 13 && Glee.subURL.text() != "") //if ENTER is pressed
@@ -181,15 +181,33 @@ var Glee = {
 		{
 			if(val && typeof val!= "undefined")
 			{
-				var title = jQuery(val).attr('title');
-				var text = jQuery(val).text();
-
-				this.subText.html(text);
-				if(title !="" && title != text)
+				//checking if it a linked image
+				if(jQuery(val).find("img"))
 				{
-					this.subText.html(this.subText.html()+" -- "+title);
+					var href = jQuery(val).attr("href");
+					// this.subURL.html(href);
+					var title = jQuery(val).attr("title") || jQuery(val).find('img').attr('title');
+					if(title!= "")
+					{
+						this.subText.html(title);
+					}
+					else
+					{
+						this.subText.html("All Linked Images");
+					}
 				}
-				this.subURL.html(jQuery(val).attr('href'));
+				else
+				{
+					var title = jQuery(val).attr('title');
+					var text = jQuery(val).text();
+
+					this.subText.html(text);
+					if(title !="" && title != text)
+					{
+						this.subText.html(this.subText.html()+" -- "+title);
+					}
+					this.subURL.html(jQuery(val).attr('href'));		
+				}
 			}
 			else
 			{
@@ -376,8 +394,7 @@ var LinkReaper = {
 			this.unHighlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			this.traversePosition = 0;
 			this.highlight(jQuery(this.selectedLinks[0]));
-			return this.selectedLinks[0];
-			
+			return this.selectedLinks[0];	
 		}
 		
 	},
