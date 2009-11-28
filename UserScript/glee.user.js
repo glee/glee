@@ -352,7 +352,13 @@ var LinkReaper = {
 	
 	reapAllLinks:function(){
 		this.selectedLinks = jQuery("a");
-		this.selectedLinks = jQuery(jQuery.grep(this.selectedLinks, Glee.isVisible));
+		//get rid of the hidden links
+		this.selectedLinks = jQuery.grep(this.selectedLinks, Glee.isVisible);
+		//get rid of the linked images. we only want textual links
+		var hasImage = function(el){
+			return (jQuery(el).find('img').length == 0);
+		};
+		this.selectedLinks = jQuery(jQuery.grep(this.selectedLinks,hasImage));
 		this.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
