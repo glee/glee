@@ -143,12 +143,12 @@ jQuery(document).ready(function(){
 			if(e.shiftKey)
 			{
 				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
-				window.open(Glee.subURL.text());
+				window.open(jQuery(Glee.selectedElement).attr("href"));
 				return false;
 			}
 			else
 			{
-				window.location = Glee.subURL.text();
+				window.location = jQuery(Glee.selectedElement).attr("href");
 			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //if UP/DOWN arrow keys are pressed
