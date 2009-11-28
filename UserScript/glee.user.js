@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
 	/* initialize the searchBox */
 	Glee.initBox();
 	
-	/* Setup CSS Styles */
+	/* Setup CSS Styles */ 
 	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;} .GleeHL{background-color: #d7fe65 !important;-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;padding: 3px !important;color: #1c3249 !important;border: 1px solid #818181 !important;}';
 	
 	var gleeCSS = '#gleeBox{ z-index:100000;position:fixed; left:5%; top:35%; display:none; overflow:auto; height:165px;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,"Times New Roman",Arial,serif; padding:0;text-align:left;}#gleeSearchField{ width:90%; color:#fff; background-color:#333; margin:0; padding:5px;border:none; font-size:100px; font-family:Calibri,"Helvetica Neue",Arial,Helvetica,serif; }#gleeSub{font: 15px Calibri, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important;}#gleeSubText{ padding:5px; color:#fff; float:left; }#gleeSubURL{ padding:5px; display:inline; float:right; font-weight: normal; font-style:normal;}#gleeSubActivity{padding:5px;color:#ccc;height:10px;display:inline;float:left;}';
@@ -75,31 +75,40 @@ jQuery(document).ready(function(){
 			if(value != "")
 			{
 				Glee.toggleActivity(1);	
-				//if a timer exists, reset it
-				if(typeof(Glee.timer) != "undefined")
-				{			
-					clearTimeout(Glee.timer);					
-				}
-				// start the timer	
-				Glee.timer = setTimeout(function(){
-					LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-					Glee.selectedElement = LinkReaper.getFirstLink();
-					Glee.setSubText(Glee.selectedElement);
-					Glee.scrollToLink(Glee.selectedElement);
-					Glee.toggleActivity(0);					
-				},400);
-			}
-			else if(value.indexOf('.com') != -1)
-			{
-				Glee.setSubText(null);
-				Glee.toggleActivity(0);									
+				//check if it is the command mode
+				if(value[0] == "*")
+				{
+					// alert("you are in the command mode!");
+					Glee.toggleActivity(1);
+					Glee.resetTimer();
+					if(value == "*img")
+					{
+
+					}
+					else
+					{
+						Glee.setSubText(null, "command");
+
+					}
+				}				
+				else{
+					//default behavior in non-command mode, i.e. search for links
+					//if a timer exists, reset it
+					Glee.resetTimer();
+					// start the timer	
+					Glee.timer = setTimeout(function(){
+						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+						Glee.selectedElement = LinkReaper.getFirstLink();
+						Glee.setSubText(Glee.selectedElement,"a");
+						Glee.scrollToLink(Glee.selectedElement);
+						Glee.toggleActivity(0);					
+					},400);
+				}	
 			}
 			else
 			{
-				if(typeof(Glee.timer) != "undefined")
-				{
-					clearTimeout(Glee.timer);
-				}
+				//when searchField is empty
+				Glee.resetTimer();
 				// start the timer
 				Glee.timer = setTimeout(function(){
 					LinkReaper.unreapAllLinks();
@@ -109,7 +118,7 @@ jQuery(document).ready(function(){
 			}
 			Glee.searchText = value;
 		}
-		else if(e.keyCode == 9)
+		else if(e.keyCode == 9)  //if TAB is pressed
 		{
 			e.preventDefault();
 			if(value != "")
@@ -122,11 +131,11 @@ jQuery(document).ready(function(){
 				{
 					Glee.selectedElement = LinkReaper.getNextLink();
 				}
-				Glee.setSubText(Glee.selectedElement);
+				Glee.setSubText(Glee.selectedElement,"a");
 				Glee.scrollToLink(Glee.selectedElement);
 			}
 		}
-		else if(e.keyCode == 13 && Glee.subURL.text() != "")
+		else if(e.keyCode == 13 && Glee.subURL.text() != "") //if ENTER is pressed
 		{
 			e.preventDefault();			
 			if(e.shiftKey)
@@ -140,7 +149,7 @@ jQuery(document).ready(function(){
 				window.location = Glee.subURL.text();
 			}
 		}
-		else if(e.keyCode == 40 || e.keyCode == 38)
+		else if(e.keyCode == 40 || e.keyCode == 38) //if UP/DOWN arrow keys are pressed
 		{
 			clearInterval(Glee.scrollTimer);
 		}
@@ -165,37 +174,46 @@ var Glee = {
 		this.subURL = subURL;
 		jQuery(document.body).append(searchBox);
 		},
-	setSubText: function(el){
-		if(!el)
+	setSubText: function(val,type){
+		if(type == "a")
 		{
-			var value = Glee.searchField.attr('value');
-			if(value !="")
+			if(val && typeof val!= "undefined")
 			{
-				if(value.indexOf('.com') != -1)
+				var title = val.attr('title');
+				var text = val.text();
+
+				this.subText.html(text);
+				if(title !="" && title != text)
 				{
-					this.subText.html("Go to "+value);
-					this.subURL.html("http://"+value);
+					this.subText.html(this.subText.html()+" -- "+title);
 				}
-				else
-				{
-					this.subText.html("Google "+value);
-					this.subURL.html("http://www.google.com/search?q="+value);
-				}
+				this.subURL.html(val.attr('href'));
 			}
 			else
 			{
-				this.subText.html("No links selected");
-				this.subURL.html('');
+				var text = Glee.searchField.attr("value");
+				//if it is a URL
+				if(text.indexOf('.com') != -1)
+				{
+					this.subText.html("Go to "+text);
+					this.subURL.html("http://"+text);
+				}
+				else
+				{
+					this.subText.html("Google "+text);
+					this.subURL.html("http://www.google.com/search?q="+text);
+				}
 			}
 		}
-		else if(typeof(el)!= "undefined")
+		else if(type == "command")
 		{
-			this.subText.html(el.text());
-			if(el.attr('title')!="" && el.attr('title')!=el.text())
-			{
-				this.subText.html(this.subText.html()+" -- "+el.attr('title'));
-			}
-			this.subURL.html(el.attr('href'));
+			this.subText.html("command not found");
+			this.subURL.html('');
+		}
+		else
+		{
+			this.subText.html("Nothing selected");
+			this.subURL.html('');
 		}
 	},
 	scrollToLink: function(el){
@@ -233,6 +251,12 @@ var Glee = {
 		else if(val == 0)
 			window.scrollTo(window.pageXOffset,window.pageYOffset-15);	
 		Glee.userPosBeforeGlee = window.pageYOffset;
+	},
+	resetTimer: function(){
+		if(typeof(Glee.timer) != "undefined")
+		{			
+			clearTimeout(Glee.timer);					
+		}
 	}
 }
 
@@ -294,7 +318,7 @@ var LinkReaper = {
 		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1) {
 			el.addClass('GleeReaped');
-			Glee.setSubText(el);
+			Glee.setSubText(el,"a");
 			return true;
 		}
 		else {
