@@ -167,18 +167,17 @@ jQuery(document).ready(function(){
 		{
 			e.preventDefault();	
 			var destURL;		
-			if(Glee.selectedElement)
+			if(Glee.selectedElement) //if the element exists
 			{
-				if(Glee.selectedElement.tagName == "a")
+				if(Glee.selectedElement.tagName == "a") //if the element is a link
 					destURL = Glee.selectedElement.attr("href");
 				else
 					destURL = Glee.subURL.text();
 			}
 			else
 			{
-				window.open(Glee.subURL.text());
+				destURL = Glee.subURL.text();
 			}
-			
 			if(e.shiftKey)
 			{
 				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
