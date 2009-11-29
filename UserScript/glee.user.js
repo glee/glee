@@ -1,3 +1,13 @@
+/**
+ * Glee: Reinventing the way you browse the web
+ * 
+ * Copyright (c) 2009 Sameer Ahuja
+ * Copyright (c) 2009 Ankit Ahuja
+ * 
+ * Licensed under the GPL license (http://www.gnu.org/licenses/gpl)
+ * 
+ **/
+
 // ==UserScript==
 // @name          Glee
 // @namespace     http://colloki.org/
