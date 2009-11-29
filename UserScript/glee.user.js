@@ -346,6 +346,18 @@ var Glee = {
 		{
 			return false;
 		}
+		else
+		{
+			//a more efficient way needed, but is there one?
+			var parents = el.parents();
+			for(var i=0;i<parents.length;i++)
+			{
+				if(jQuery(parents[i]).css("display") == "none")
+				{
+					return false;
+				}
+			}
+		}
 		return true;
 	},
 	reapImages: function(){
