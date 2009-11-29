@@ -100,27 +100,11 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"a");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					// now parsing the through the commands declared in Glee.commands
+					// now searching through the commands declared inside Glee.commands
 					else if(value.substr(1,value.length) in Glee.commands)
 					{
 						Glee.execCommand(value);
 					}
-					// else if (value == "!read") //command to launch Readability
-					// {
-					// 	Glee.makeReadable();
-					// }
-					// else if(value == "!shorten") //command to shorten the URL
-					// {
-					// 	Glee.shortenURL();
-					// }
-					// else if(value == "!tweet") //command to tweet this page ( URL is automagically shortened using bitly)
-					// {
-					// 	Glee.sendTweet();
-					// }
-					// else if(value == "!later") //command to save this page to read later (instapaper)
-					// {
-					// 	Glee.readLater();
-					// }
 					else
 					{
 						LinkReaper.unreapAllLinks();
