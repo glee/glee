@@ -100,22 +100,27 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"a");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if (value == "!read") //command to launch Readability
+					// now parsing the through the commands declared in Glee.commands
+					else if(value.substr(1,value.length) in Glee.commands)
 					{
-						Glee.makeReadable();
+						Glee.execCommand(value);
 					}
-					else if(value == "!shorten") //command to shorten the URL
-					{
-						Glee.shortenURL();
-					}
-					else if(value == "!tweet") //command to tweet this page ( URL is automagically shortened using bitly)
-					{
-						Glee.sendTweet();
-					}
-					else if(value == "!later") //command to save this page to read later (instapaper)
-					{
-						Glee.readLater();
-					}
+					// else if (value == "!read") //command to launch Readability
+					// {
+					// 	Glee.makeReadable();
+					// }
+					// else if(value == "!shorten") //command to shorten the URL
+					// {
+					// 	Glee.shortenURL();
+					// }
+					// else if(value == "!tweet") //command to tweet this page ( URL is automagically shortened using bitly)
+					// {
+					// 	Glee.sendTweet();
+					// }
+					// else if(value == "!later") //command to save this page to read later (instapaper)
+					// {
+					// 	Glee.readLater();
+					// }
 					else
 					{
 						LinkReaper.unreapAllLinks();
@@ -204,6 +209,13 @@ jQuery(document).ready(function(){
 
 var Glee = { 
 	searchText:"",
+	commands:{
+		"later"			: "Glee.readLater",
+		"tweet" 		: "Glee.sendTweet",
+		"shorten"		: "Glee.shortenURL",
+		"read"			: "Glee.makeReadable"
+	},
+	
 	initBox: function(){
 		// Creating the div to be displayed
 		var searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -219,7 +231,7 @@ var Glee = {
 		this.subText = subText;
 		this.subURL = subURL;
 		jQuery(document.body).append(searchBox);
-		},
+	},	
 	setSubText: function(val,type){
 		if(type == "a")
 		{
@@ -349,6 +361,10 @@ var Glee = {
 		LinkReaper.searchTerm = "";	
 	},
 	sendRequest: function(url,method,callback){
+		//dependent upon Greasemonkey to send this cross-domain XMLHTTPRequest :|
+		//doing a setTimeout workaround (http://www.neaveru.com/wordpress/index.php/2008/05/09/greasemonkey-bug-domnodeinserted-event-doesnt-allow-gm_xmlhttprequest/)
+		// yet to explore the problem fully
+		setTimeout(function(){
 		GM_xmlhttpRequest({
 			method: "GET",
 			url:"http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=bitlyapidemo&apiKey=R_0da49e0a9118ff35f52f629d2d71bf07",
@@ -358,6 +374,17 @@ var Glee = {
 		    },
 		onload:callback		
 		});
+		},0);
+		
+	},
+	
+	execCommand: function(value){
+		//get the command
+		var cmd = value.substr(1,value.length);
+		//call the method
+		//not sure if eval is the way to go here
+		var method = Glee.commands[cmd]+"()";
+		eval(method);
 	},
 	
 	makeReadable: function(){
@@ -369,7 +396,7 @@ var Glee = {
 	shortenURL: function(){
 		Glee.setSubText("Shortening URL via bit.ly...","msg");
 		//creating an XMLHTTPRequest to bit.ly using GM_xmlhttpRequest
-		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=bitlyapidemo&apiKey=R_0da49e0a9118ff35f52f629d2d71bf07","GET",
+		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
 			var json = JSON.parse("["+data.responseText+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
