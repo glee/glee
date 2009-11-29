@@ -100,7 +100,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if(value == "*h") //command to get h1,h2 elements
+					else if(value == "*h") //command to get h1 elements
 					{
 						Glee.reapHeadings();
 						Glee.selectedElement = LinkReaper.getFirst();
@@ -161,6 +161,10 @@ jQuery(document).ready(function(){
 				}
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
+				//this shouldn't really be here. try to find a better way to make this happen
+				//fixing the page position if tabbing through headings
+				if(Glee.searchField.attr("value") == "*h")
+					Glee.userPosBeforeGlee = window.pageYOffset;
 			}
 		}
 		else if(e.keyCode == 13 && Glee.subURL.text() != "") //if ENTER is pressed
@@ -189,7 +193,7 @@ jQuery(document).ready(function(){
 				window.location = destURL;
 			}
 		}
-		else if(e.keyCode == 40 || e.keyCode == 38) //if UP/DOWN arrow keys are pressed
+		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
 			clearInterval(Glee.scrollTimer);
 		}
@@ -377,7 +381,7 @@ var Glee = {
 		});
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);				
 		this.traversePosition = 0;
-		LinkReaper.searchTerm = "";			
+		LinkReaper.searchTerm = "";
 	},
 	sendRequest: function(url,method,callback){
 		//dependent upon Greasemonkey to send this cross-domain XMLHTTPRequest :|
