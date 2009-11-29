@@ -5,7 +5,7 @@
  * Copyright (c) 2009 Ankit Ahuja
  * 
  * Licensed under the GPL license (http://www.gnu.org/licenses/gpl)
- * 
+ *
  **/
 
 // ==UserScript==
@@ -309,7 +309,7 @@ var Glee = {
 		}
 	},
 	scrollToElement: function(el){
-		var target = el;
+		var target = jQuery(el);
 		if(target)
 		{
 			if(target.length)
