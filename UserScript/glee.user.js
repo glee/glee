@@ -108,6 +108,10 @@ jQuery(document).ready(function(){
 					{
 						Glee.shortenURL();
 					}
+					else if(value == "!tweet") //command to tweet this page ( URL is automagically shortened using bitly)
+					{
+						Glee.sendTweet();
+					}
 					else
 					{
 						LinkReaper.unreapAllLinks();
@@ -368,6 +372,29 @@ var Glee = {
 			Glee.searchField.attr("value",shortenedURL);
 			Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
 		});
+	},
+	
+	sendTweet: function(){
+		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
+		var url = location.href;
+		Glee.setSubText("Redirecting to twitter homepage...","msg");		
+		if(url.length > 30)
+		{
+			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=bitlyapidemo&apiKey=R_0da49e0a9118ff35f52f629d2d71bf07","GET",
+			function(data){
+				var json = JSON.parse("["+data.responseText+"]");
+				var shortenedURL = json[0].results[location.href].shortUrl;
+				var encodedURL = escape(shortenedURL);
+				//redirect to twitter homepage
+				location.href = "http://twitter.com/?status="+encodedURL;
+			});
+		}
+		else
+		{
+			//redirect to twitter without shortening the URL
+			var encodedURL = escape(location.href);
+			location.href =  "http://twitter.com/?status="+encodedURL;
+		}
 	}
 
 }
