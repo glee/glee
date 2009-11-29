@@ -86,7 +86,7 @@ jQuery(document).ready(function(){
 					{				
 						Glee.reapImages();
 						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"a");
+						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
 					else if(value == "*input") //command to get all input fields
@@ -97,8 +97,15 @@ jQuery(document).ready(function(){
 					{
 						LinkReaper.reapAllLinks();
 						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"a");
+						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
+					}
+					else if(value == "*h") //command to get h1,h2 elements
+					{
+						Glee.reapHeadings();
+						Glee.selectedElement = LinkReaper.getFirst();
+						Glee.setSubText(Glee.selectedElement,"el");
+						Glee.scrollToElement(Glee.selectedElement);						
 					}
 					// now searching through the commands declared inside Glee.commands
 					else if(value.substr(1,value.length) in Glee.commands)
@@ -120,7 +127,7 @@ jQuery(document).ready(function(){
 					Glee.timer = setTimeout(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"a");
+						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);	
 						Glee.toggleActivity(0);							
 					},400);
@@ -152,36 +159,35 @@ jQuery(document).ready(function(){
 				{
 					Glee.selectedElement = LinkReaper.getNext();
 				}
-				Glee.setSubText(Glee.selectedElement,"a");
+				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 			}
 		}
 		else if(e.keyCode == 13 && Glee.subURL.text() != "") //if ENTER is pressed
 		{
-			e.preventDefault();			
-			if(e.shiftKey)
+			e.preventDefault();	
+			var destURL;		
+			if(Glee.selectedElement)
 			{
-				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
-				if(Glee.selectedElement)
-				{
-					window.open(Glee.selectedElement.attr("href"));
-				}
+				if(Glee.selectedElement.tagName == "a")
+					destURL = Glee.selectedElement.attr("href");
 				else
-				{
-					window.open(Glee.subURL.text());
-				}
-				return false;
+					destURL = Glee.subURL.text();
 			}
 			else
 			{
-				if(Glee.selectedElement)
-				{
-					window.location = Glee.selectedElement.attr("href");
-				}
-				else
-				{
-					window.location = Glee.subURL.text();
-				}
+				window.open(Glee.subURL.text());
+			}
+			
+			if(e.shiftKey)
+			{
+				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
+				window.open(destURL);
+				return false;
+			}
+			else
+			{				
+				window.location = destURL;
 			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //if UP/DOWN arrow keys are pressed
@@ -217,12 +223,11 @@ var Glee = {
 		jQuery(document.body).append(searchBox);
 	},	
 	setSubText: function(val,type){
-		if(type == "a")
+		if(type == "el")
 		{
 			if(val && typeof val!= "undefined")
 			{
-				//checking if it a linked image
-				if(jQuery(val).find("img").length != 0)
+				if(jQuery(val).find("img").length != 0) //it is a linked image
 				{
 					var href = jQuery(val).attr("href");
 					if(href.length > 80)
@@ -240,7 +245,16 @@ var Glee = {
 						this.subText.html("Linked Image");
 					}
 				}	
-				else
+				else if(jQuery(val)[0].tagName == "H1") //it is a heading
+				{
+					this.subText.html(jQuery(val).text());
+					var a_el = jQuery(jQuery(val).find('a'));
+					if(a_el.length != 0)
+					{
+						this.subURL.html(a_el.attr("href"));
+					}
+				}
+				else //it is a link
 				{
 					var title = jQuery(val).attr('title');
 					var text = jQuery(val).text();
@@ -253,7 +267,7 @@ var Glee = {
 					this.subURL.html(jQuery(val).attr('href'));		
 				}
 			}
-			else
+			else //google or go to URL
 			{
 				var text = Glee.searchField.attr("value");
 				//if it is a URL
@@ -343,6 +357,16 @@ var Glee = {
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);		
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";	
+	},
+	reapHeadings: function(){
+		//only returns h1 elements at the moment
+		LinkReaper.selectedLinks = jQuery("h1");
+		LinkReaper.selectedLinks.each(function(){
+			jQuery(this).addClass('GleeReaped');
+		});
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);				
+		this.traversePosition = 0;
+		LinkReaper.searchTerm = "";			
 	},
 	sendRequest: function(url,method,callback){
 		//dependent upon Greasemonkey to send this cross-domain XMLHTTPRequest :|
@@ -483,7 +507,7 @@ var LinkReaper = {
 		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1) {
 			el.addClass('GleeReaped');
-			Glee.setSubText(el,"a");
+			Glee.setSubText(el,"el");
 			return true;
 		}
 		else {
