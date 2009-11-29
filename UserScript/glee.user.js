@@ -180,8 +180,8 @@ jQuery(document).ready(function(){
 			}
 			if(e.shiftKey)
 			{
-				//opens a popup. susceptible to being blocked by a popup blocker. need a better way
-				window.open(destURL);
+				//another method from the GM API
+				GM_openInTab(destURL);
 				return false;
 			}
 			else
