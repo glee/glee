@@ -1,17 +1,17 @@
 /**
- * Glee: Reinventing the way you browse the web
- * 
- * Copyright (c) 2009 Sameer Ahuja
- * Copyright (c) 2009 Ankit Ahuja
+ * Glee: Keyboard goodness for your web.
  * 
  * Licensed under the GPL license (http://www.gnu.org/licenses/gpl)
+ * Copyright (c) 2009 Ankit Ahuja
+ * Copyright (c) 2009 Sameer Ahuja
+ * 
  *
  **/
 
 // ==UserScript==
 // @name          Glee
 // @namespace     http://colloki.org/
-// @description   Keyboard Glee for your web
+// @description   Keyboard goodness for your web
 // @include       *
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js
 // @require 	  http://json.org/json2.js
@@ -44,7 +44,7 @@ jQuery(document).ready(function(){
 				//reseting value of searchField
 				Glee.searchField.attr('value','');	
 				Glee.searchBox.fadeIn(150);
-				Glee.searchField.focus();			
+				Glee.searchField.focus();
 			}
 			else
 			{
@@ -60,7 +60,7 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			LinkReaper.unreapAllLinks();
 			//resetting value of searchField
-			Glee.getBackInitialState();						
+			Glee.getBackInitialState();
 			Glee.searchField.attr('value','');
 			Glee.searchBox.fadeOut(150);
 			Glee.searchField.blur();
@@ -85,37 +85,43 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			if(value != "")
 			{
-				Glee.toggleActivity(1);	
+				Glee.toggleActivity(1);
 				//check if it is the command mode
-				if(value[0] == "*" || value[0] == "!")
+				if(value[0] == "?" || value[0] == "!" || value[0] == ":")
 				{
 					Glee.resetTimer();
-					Glee.toggleActivity(0);							
+					Glee.toggleActivity(0);
 					//command to get all images on the page. 
-					if(value == "*img")
+					if(value == "?img")
 					{				
 						Glee.reapImages();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if(value == "*input") //command to get all input fields
+					else if(value == "?input") //command to get all input fields
 					{
 						
 					}
-					else if(value == "*a") //command to get all links
+					else if(value == "?a") //command to get all links
 					{
 						LinkReaper.reapAllLinks();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if(value == "*h") //command to get h1 elements
+					else if(value == "?h") //command to get h1 elements
 					{
 						Glee.reapHeadings();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);						
+						Glee.scrollToElement(Glee.selectedElement);
+					}
+					else if(value.indexOf(":") == 0)
+					{
+						c = value.substring(1);
+						Glee.subText.html("Run yubnub command: " + c);
+						Glee.subURL.html("http://yubnub.org/parser/parse?command=" + escape(c));
 					}
 					// now searching through the commands declared inside Glee.commands
 					else if(value.substr(1,value.length) in Glee.commands)
@@ -127,7 +133,7 @@ jQuery(document).ready(function(){
 						LinkReaper.unreapAllLinks();
 						Glee.setSubText("Command not found", "msg");
 					}
-				}				
+				}
 				else{
 					//default behavior in non-command mode, i.e. search for links
 					//if a timer exists, reset it
@@ -139,7 +145,7 @@ jQuery(document).ready(function(){
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);	
-						Glee.toggleActivity(0);							
+						Glee.toggleActivity(0);
 					},400);
 				}	
 			}
@@ -150,8 +156,8 @@ jQuery(document).ready(function(){
 				// start the timer
 				Glee.timer = setTimeout(function(){
 					LinkReaper.unreapAllLinks();
-					Glee.setSubText(null);				
-					Glee.toggleActivity(0);																		
+					Glee.setSubText(null);
+					Glee.toggleActivity(0);
 				},400);
 			}
 			Glee.searchText = value;
@@ -177,7 +183,8 @@ jQuery(document).ready(function(){
 					Glee.userPosBeforeGlee = window.pageYOffset;
 			}
 		}
-		else if(e.keyCode == 13 && Glee.subURL.text() != "") //if ENTER is pressed
+		//if ENTER is pressed
+		else if(e.keyCode == 13 && Glee.subURL.text() != "")
 		{
 			e.preventDefault();	
 			var destURL;		
@@ -199,7 +206,7 @@ jQuery(document).ready(function(){
 				return false;
 			}
 			else
-			{				
+			{
 				window.location = destURL;
 			}
 		}
