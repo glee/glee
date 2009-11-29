@@ -4,6 +4,7 @@
 // @description   Keyboard Glee for your web
 // @include       *
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js
+// @require 	  http://json.org/json2.js
 // ==/UserScript==
 
 jQuery(document).ready(function(){
@@ -99,10 +100,15 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"a");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if (value == "!read")
+					else if (value == "!read") //command to launch Readability
 					{
 						Glee.makeReadable();
 						Glee.setSubText("wait till Glee+Readability work up the magic","msg");
+					}
+					else if(value == "!shorten") //command to shorten the URL and paste it to the clipboard
+					{
+						Glee.shortenURL();
+						
 					}
 					else
 					{
@@ -336,10 +342,33 @@ var Glee = {
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";	
 	},
+	sendRequest: function(url,method,callback){
+		GM_xmlhttpRequest({
+			method: "GET",
+			url:"http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=bitlyapidemo&apiKey=R_0da49e0a9118ff35f52f629d2d71bf07",
+			headers:{
+		    "User-Agent":"monkeyagent",
+		    "Accept":"text/monkey,text/xml",
+		    },
+		onload:callback		
+		});
+	},
 	
 	makeReadable: function(){
 		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
 	 	location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
+	},
+	
+	shortenURL: function(){
+		Glee.setSubText("Shortening URL via bit.ly...","msg");
+		//creating an XMLHTTPRequest to bit.ly using GM_xmlhttpRequest
+		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=bitlyapidemo&apiKey=R_0da49e0a9118ff35f52f629d2d71bf07","GET",
+		function(data){
+			var json = JSON.parse("["+data.responseText+"]");
+			var shortenedURL = json[0].results[location.href].shortUrl;
+			Glee.searchField.attr("value",shortenedURL);
+			Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
+		});
 	}
 
 }
@@ -504,3 +533,6 @@ var LinkReaper = {
 		el.addClass("GleeReaped");
 	}
 }
+
+
+
