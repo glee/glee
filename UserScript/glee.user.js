@@ -58,12 +58,7 @@ jQuery(document).ready(function(){
 		if(e.keyCode == 27)
 		{
 			e.preventDefault();
-			LinkReaper.unreapAllLinks();
-			//resetting value of searchField
-			Glee.getBackInitialState();
-			Glee.searchField.attr('value','');
-			Glee.searchBox.fadeOut(150);
-			Glee.searchField.blur();
+			Glee.closeBox();
 		}
 		else if(e.keyCode == 9)
 		{
@@ -209,6 +204,7 @@ jQuery(document).ready(function(){
 			{
 				window.location = destURL;
 			}
+			Glee.closeBox();
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
@@ -241,7 +237,15 @@ var Glee = {
 		this.subText = subText;
 		this.subURL = subURL;
 		jQuery(document.body).append(searchBox);
-	},	
+	},
+	closeBox: function(){
+		LinkReaper.unreapAllLinks();
+		//resetting value of searchField
+		Glee.getBackInitialState();
+		Glee.searchField.attr('value','');
+		Glee.searchBox.fadeOut(150);
+		Glee.searchField.blur();
+	},
 	setSubText: function(val,type){
 		if(type == "el")
 		{
