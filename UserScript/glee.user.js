@@ -431,7 +431,7 @@ var Glee = {
 		Glee.setSubText("Redirecting to twitter homepage...","msg");		
 		if(url.length > 30)
 		{
-			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=bitlyapidemo&apiKey=R_0da49e0a9118ff35f52f629d2d71bf07","GET",
+			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 			function(data){
 				var json = JSON.parse("["+data.responseText+"]");
 				var shortenedURL = json[0].results[location.href].shortUrl;
