@@ -1,0 +1,31 @@
+<html>
+<head>
+<script>
+var status = 1;
+function toggleStatus(tab){
+	if(status == 0)
+	{
+		status = 1;
+	}
+	else
+	{
+		status = 0;
+	}
+		
+	chrome.tabs.sendRequest(tab.id, {statuscode:1},function(response){
+		var text = response.statustext;
+		chrome.browserAction.setBadgeText({text:text});
+	});
+	
+}
+
+//React when a browser action's icon is clicked 
+chrome.browserAction.onClicked.addListener(function(tab) {
+	toggleStatus(tab);
+});
+
+</script>
+</head>
+<body>
+</body>
+</html>

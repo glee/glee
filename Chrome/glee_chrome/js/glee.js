@@ -375,3 +375,12 @@ var LinkReaper = {
 		el.addClass("GleeReaped");
 	}
 }
+
+chrome.extension.onRequest.addListener(
+	function(request,sender,sendResponse){
+		alert("ankit");
+		if(request.status == 1)
+			sendResponse({statustext:"ON"});
+		else
+			sendResponse({statustext:"OFF"});
+});
