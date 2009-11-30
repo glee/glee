@@ -112,14 +112,14 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if(value.indexOf(":") == 0)
+					else if(value[0] == ':') //Run a yubnub command
 					{
 						c = value.substring(1);
 						Glee.subText.html("Run yubnub command: " + c);
 						Glee.subURL.html("http://yubnub.org/parser/parse?command=" + escape(c));
 					}
 					// now searching through the commands declared inside Glee.commands
-					else if(value.substr(1,value.length) in Glee.commands)
+					else if(value.substr(1) in Glee.commands)
 					{
 						Glee.execCommand(value);
 					}
@@ -424,7 +424,7 @@ var Glee = {
 	
 	execCommand: function(value){
 		//get the command
-		var cmd = value.substr(1,value.length);
+		var cmd = value.substr(1);
 		//call the method
 		//not sure if eval is the way to go here
 		var method = Glee.commands[cmd]+"()";
