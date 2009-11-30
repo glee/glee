@@ -90,7 +90,7 @@ jQuery(document).ready(function(){
 					//if a timer exists, reset it
 					Glee.resetTimer();
 
-					// start the timer	
+					// start the timer
 					Glee.timer = setTimeout(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 						Glee.selectedElement = LinkReaper.getFirst();
@@ -139,7 +139,7 @@ jQuery(document).ready(function(){
 					else if(value[0] == ':') //Run a yubnub command
 					{
 						c = value.substring(1);
-						Glee.subText.html("Run yubnub command: " + c);
+						Glee.subText.html("Run yubnub command (press enter to execute): " + c);
 						Glee.subURL.html("http://yubnub.org/parser/parse?command=" + escape(c));
 					}
 					else if(value[0] == '*')// Any jQuery selector
@@ -232,12 +232,12 @@ jQuery(document).ready(function(){
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 			}
-			else
+			else if(value == "?inp")
 			{
 				c = Glee.selectedElement;
-				// TODO: This isn't really working yet. If you close the box, 
-				// Nothing happens. We either need a way to get back to GleeBox or close it. 
-				// Glee.closeBox();
+				//fix the page position
+				Glee.userPosBeforeGlee = window.pageYOffset;
+				Glee.closeBoxWithoutBlur();
 				c.focus();
 			}
 		}
@@ -277,6 +277,13 @@ var Glee = {
 		Glee.searchField.attr('value','');
 		Glee.searchBox.fadeOut(150);
 		Glee.searchField.blur();
+	},
+	closeBoxWithoutBlur: function(){
+		LinkReaper.unreapAllLinks();
+		//resetting value of searchField
+		Glee.getBackInitialState();
+		Glee.searchField.attr('value','');
+		Glee.searchBox.fadeOut(150);
 	},
 	setSubText: function(val,type){
 		if(type == "el")
@@ -322,7 +329,7 @@ var Glee = {
 					{
 						this.subText.html(this.subText.html()+" -- "+title);
 					}
-					this.subURL.html(jQueryVal.attr('href'));		
+					this.subURL.html(jQueryVal.attr('href'));
 				}
 			}
 			else if(Glee.commandMode == true)
@@ -396,7 +403,7 @@ var Glee = {
 	resetTimer: function(){
 		if(typeof(Glee.timer) != "undefined")
 		{			
-			clearTimeout(Glee.timer);					
+			clearTimeout(Glee.timer);
 		}
 	},
 	truncateURL:function(url){
@@ -438,7 +445,7 @@ var Glee = {
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);				
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
@@ -447,7 +454,7 @@ var Glee = {
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);				
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
@@ -457,7 +464,7 @@ var Glee = {
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);				
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},	
@@ -473,7 +480,7 @@ var Glee = {
 		    "User-Agent":"monkeyagent",
 		    "Accept":"text/monkey,text/xml",
 		    },
-		onload:callback		
+		onload:callback
 		});
 		},0);
 		
@@ -489,9 +496,9 @@ var Glee = {
 	},
 	
 	makeReadable: function(){
-		Glee.setSubText("wait till Glee+Readability work up the magic","msg");		
+		Glee.setSubText("wait till Glee+Readability work up the magic","msg");
 		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
-	 	location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
+		location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
 	},
 	
 	shortenURL: function(){
@@ -509,7 +516,7 @@ var Glee = {
 	sendTweet: function(){
 		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 		var url = location.href;
-		Glee.setSubText("Redirecting to twitter homepage...","msg");		
+		Glee.setSubText("Redirecting to twitter homepage...","msg");
 		if(url.length > 30)
 		{
 			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
@@ -571,7 +578,7 @@ var LinkReaper = {
 				jQuery(LinkReaper.selectedLinks).each(function(){
 					if(!LinkReaper.reapALink(jQuery(this), term))
 					{
-						LinkReaper.unreapLink(jQuery(this));						
+						LinkReaper.unreapLink(jQuery(this));
 					}
 				});
 			}
