@@ -260,19 +260,15 @@ var Glee = {
 	
 	initBox: function(){
 		// Creating the div to be displayed
-		var searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		var subText = jQuery("<div id=\"gleeSubText\">No Links selected</div>");
-		var subURL = jQuery("<div id=\"gleeSubURL\"></div>")
+		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
+		this.subText = jQuery("<div id=\"gleeSubText\">No Links selected</div>");
+		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
+		this.searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
 		var sub = jQuery("<div id=\"gleeSub\"></div>");
-		var searchBox = jQuery("<div id=\"gleeBox\"></div>");	
-		sub.append(subText).append(subActivity).append(subURL);
-		searchBox.append(searchField).append(sub);
-		this.searchBox = searchBox;
-		this.searchField = searchField;
-		this.subText = subText;
-		this.subURL = subURL;
-		jQuery(document.body).append(searchBox);
+		sub.append(this.subText).append(subActivity).append(this.subURL);
+		this.searchBox.append(this.searchField).append(sub);
+		jQuery(document.body).append(this.searchBox);
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
