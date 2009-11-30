@@ -210,12 +210,14 @@ jQuery(document).ready(function(){
 			}
 			else if(value[0] == "*")
 			{
+				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
+					jQuery(Glee.selectedElement).removeClass('GleeHL');
 				Glee.reapWhatever(value.substring(1));
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 			}
-			else if(Glee.selectedElement != null)
+			else if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 			{
 				c = Glee.selectedElement;
 				Glee.closeBoxWithoutBlur();
@@ -304,17 +306,23 @@ var Glee = {
 			if(val && typeof val!= "undefined")
 			{
 				jQueryVal = jQuery(val); 
-				var isHeading = (jQueryVal[0].tagName == "H1" || jQueryVal[0].tagName == "H2" || jQueryVal[0].tagName == "H3");
-				if(isHeading) //if it is a heading
+				var isHeading = jQueryVal[0].tagName[0] == "H";
+				var isNotLink = (jQueryVal[0].tagName != "A");
+				if(isNotLink) //if it is not a link
 				{
 					this.subText.html(jQueryVal.text());
-					var a_el = jQuery(jQueryVal.find('a'));
-					if(a_el.length != 0)
+					if(isHeading)
 					{
-						this.subURL.html(a_el.attr("href"));
+						var a_el = jQuery(jQueryVal.find('a'));
+						if(a_el.length != 0)
+							this.subURL.html(a_el.attr("href"));
+						else
+							this.subURL.html("");
 					}
+					else
+						this.subURL.html("");
 				}
-				else if(jQueryVal.find("img").length != 0 && !isHeading) //it is a linked image
+				else if(jQueryVal.find("img").length != 0) //it is a linked image
 				{
 					var href = jQueryVal.attr("href");
 					if(href.length > 80)
@@ -323,7 +331,7 @@ var Glee = {
 					}
 					this.subURL.html(href);
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
-					if(title!= "")
+					if(title != "")
 					{
 						this.subText.html(title);
 					}
