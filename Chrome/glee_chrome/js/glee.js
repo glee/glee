@@ -7,25 +7,28 @@ jQuery(document).ready(function(){
 		
 	// Bind Keys
 	jQuery(document).bind('keydown',function(e){
-		var target = e.target || e.srcElement;
-		//pressing 'g' toggles the gleeBox
-		if(target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && e.keyCode == 71)
+		if(Glee.status == 1)
 		{
-			e.preventDefault();
-			Glee.userPosBeforeGlee = window.pageYOffset;
-			if(Glee.searchBox.css('display') == "none")
+			var target = e.target || e.srcElement;
+			//pressing 'g' toggles the gleeBox
+			if(target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && e.keyCode == 71)
 			{
-				//reseting value of searchField
-				Glee.searchField.attr('value','');	
-				Glee.searchBox.fadeIn(150);
-				Glee.searchField.focus();			
+				e.preventDefault();
+				Glee.userPosBeforeGlee = window.pageYOffset;
+				if(Glee.searchBox.css('display') == "none")
+				{
+					//reseting value of searchField
+					Glee.searchField.attr('value','');	
+					Glee.searchBox.fadeIn(150);
+					Glee.searchField.focus();			
+				}
+				else
+				{
+					Glee.searchBox.fadeOut(150);
+					Glee.getBackInitialState();
+				}
 			}
-			else
-			{
-				Glee.searchBox.fadeOut(150);
-				Glee.getBackInitialState();
-			}
-		}
+		}	
 	});
 	Glee.searchField.bind('keydown',function(e){
 		//pressing 'esc' hides the gleeBox
@@ -134,6 +137,7 @@ jQuery(document).ready(function(){
 
 var Glee = { 
 	searchText:"",
+	status:1,
 	initBox: function(){
 		// Creating the div to be displayed
 		var searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -149,7 +153,13 @@ var Glee = {
 		this.subText = subText;
 		this.subURL = subURL;
 		jQuery(document.body).append(searchBox);
+		this.initStatus();
 		},
+	initStatus: function(){
+		chrome.extension.sendRequest({value:"getStatus"},function(response){
+			Glee.status = response.status;			
+		});
+	},
 	setSubText: function(el){
 		if(!el)
 		{
@@ -378,7 +388,7 @@ var LinkReaper = {
 
 chrome.extension.onRequest.addListener(
 	function(request,sender,sendResponse){
-		alert("ankit");
+		Glee.status = request.status;
 		if(request.status == 1)
 			sendResponse({statustext:"ON"});
 		else

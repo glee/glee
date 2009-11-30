@@ -2,6 +2,9 @@
 	"name":"Glee",
 	"version":"1.0",
 	"description":"Keyboard Glee for your web",
+	"icons":{
+		"128": "images/icon_128.png"
+	},
 	"background_page":"background.html",
 	"content_scripts":[
 	{
@@ -15,7 +18,7 @@
 		"http://api.bit.ly/"
 	],
 	"browser_action":{
-		"default_icon":"images/icon.png",
+		"default_icon":"images/icon_19.png",
 		"default_title":"Glee"
 	}
 }

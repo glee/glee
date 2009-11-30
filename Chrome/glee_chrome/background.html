@@ -1,18 +1,39 @@
 <html>
 <head>
 <script>
-var status = 1;
-function toggleStatus(tab){
-	if(status == 0)
+var status;
+
+function initStatus(){
+	if(typeof(localStorage['glee_status']) != "undefined")
 	{
-		status = 1;
+		status = localStorage['glee_status'];
 	}
 	else
+		status = 1;
+	if(status == 1)	
+		chrome.browserAction.setBadgeText({text:"ON"});	
+	else
+		chrome.browserAction.setBadgeText({text:"OFF"});	
+}
+
+function toggleStatus(tab){
+	if(typeof(localStorage['glee_status']) != undefined)
 	{
-		status = 0;
+		status = localStorage['glee_status'];
 	}
-		
-	chrome.tabs.sendRequest(tab.id, {statuscode:1},function(response){
+	else
+		status = 1;
+	if(status == 1)
+	{
+		status = 0;	
+	}
+	else
+	{		
+		status = 1;
+	}
+	localStorage['glee_status'] = status;	
+
+	chrome.tabs.sendRequest(tab.id, {status:status},function(response){
 		var text = response.statustext;
 		chrome.browserAction.setBadgeText({text:text});
 	});
@@ -24,8 +45,15 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 	toggleStatus(tab);
 });
 
+chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
+	if(request.value == "getStatus")
+	{
+		sendResponse({status:status});
+	}
+});
+
 </script>
 </head>
-<body>
+<body onload="initStatus();">
 </body>
 </html>
