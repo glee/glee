@@ -279,7 +279,6 @@ var Glee = {
 		Glee.searchField.blur();
 	},
 	initReaper: function(reaper){
-		GM_log("hello");
 		Glee.nullMessage = reaper.nullMessage;
 		LinkReaper.selectedLinks = jQuery(reaper.selector);
 		Glee.selectedElement = LinkReaper.getFirst();
@@ -431,7 +430,7 @@ var Glee = {
 		}
 		else
 		{
-			//a more efficient way needed, but is there one?
+			// TODO: A more efficient way needed, but is there one?
 			var parents = el.parents();
 			for(var i=0;i<parents.length;i++)
 			{
@@ -488,7 +487,7 @@ var Glee = {
 	shortenURL: function(){
 		Glee.setSubText("Shortening URL via bit.ly...","msg");
 		//creating an XMLHTTPRequest to bit.ly using GM_xmlhttpRequest
-		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
 			var json = JSON.parse("["+data.responseText+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
@@ -503,7 +502,7 @@ var Glee = {
 		Glee.setSubText("Redirecting to twitter homepage...","msg");
 		if(url.length > 30)
 		{
-			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 			function(data){
 				var json = JSON.parse("["+data.responseText+"]");
 				var shortenedURL = json[0].results[location.href].shortUrl;
