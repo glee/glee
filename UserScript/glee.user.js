@@ -112,6 +112,13 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
+					else if(value == "?inp") // command to get input items
+					{
+						Glee.reapInputs();
+						Glee.selectedElement = LinkReaper.getFirst();
+						Glee.setSubText(Glee.selectedElement,"el");
+						Glee.scrollToElement(Glee.selectedElement);
+					}
 					else if(value[0] == ':') //Run a yubnub command
 					{
 						c = value.substring(1);
@@ -179,9 +186,11 @@ jQuery(document).ready(function(){
 			}
 		}
 		//if ENTER is pressed
-		else if(e.keyCode == 13 && Glee.subURL.text() != "")
+		else if(e.keyCode == 13)
 		{
 			e.preventDefault();	
+			if(Glee.subURL.text() != "")
+			{
 			var destURL;		
 			if(Glee.selectedElement) //if the element exists
 			{
@@ -204,7 +213,16 @@ jQuery(document).ready(function(){
 			{
 				window.location = destURL;
 			}
-			Glee.closeBox();
+				Glee.closeBox();
+			}
+			else
+			{
+				c = Glee.selectedElement;
+				// TODO: This isn't really working yet. If you close the box, 
+				// Nothing happens. We either need a way to get back to GleeBox or close it. 
+				// Glee.closeBox();
+				c.focus();
+			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
@@ -404,6 +422,16 @@ var Glee = {
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
+	reapInputs: function(){
+		//only returns h1 elements at the moment
+		LinkReaper.selectedLinks = jQuery("input:enabled:not(#gleeSearchField)");
+		LinkReaper.selectedLinks.each(function(){
+			jQuery(this).addClass('GleeReaped');
+		});
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);				
+		this.traversePosition = 0;
+		LinkReaper.searchTerm = "";
+	},	
 	sendRequest: function(url,method,callback){
 		//dependent upon Greasemonkey to send this cross-domain XMLHTTPRequest :|
 		//doing a setTimeout workaround (http://www.neaveru.com/wordpress/index.php/2008/05/09/greasemonkey-bug-domnodeinserted-event-doesnt-allow-gm_xmlhttprequest/)
