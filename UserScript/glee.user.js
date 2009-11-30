@@ -159,7 +159,6 @@ jQuery(document).ready(function(){
 						Glee.setSubText("Command not found", "msg");
 					}
 				}
-
 			}
 			else
 			{
@@ -255,7 +254,6 @@ var Glee = {
 		"shorten"		: "Glee.shortenURL",
 		"read"			: "Glee.makeReadable"
 	},
-	
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -457,7 +455,7 @@ var Glee = {
 	},
 	reapInputs: function(){
 		//only returns h1 elements at the moment
-		LinkReaper.selectedLinks = jQuery("input:enabled:not(#gleeSearchField)");
+		LinkReaper.selectedLinks = jQuery("input:enabled:not(#gleeSearchField),textarea");
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
