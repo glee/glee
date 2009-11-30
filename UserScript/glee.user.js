@@ -82,9 +82,24 @@ jQuery(document).ready(function(){
 			if(value != "")
 			{
 				Glee.toggleActivity(1);
-				//check if it is the command mode
-				if(value[0] == "?" || value[0] == "!" || value[0] == ":")
+				
+				if(value[0] != "?" && value[0] != "!" && value[0] != ":")
 				{
+					//default behavior in non-command mode, i.e. search for links
+					//if a timer exists, reset it
+					Glee.resetTimer();
+
+					// start the timer	
+					Glee.timer = setTimeout(function(){
+						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+						Glee.selectedElement = LinkReaper.getFirst();
+						Glee.setSubText(Glee.selectedElement,"el");
+						Glee.scrollToElement(Glee.selectedElement);	
+						Glee.toggleActivity(0);
+					},400);
+				}
+				//else command mode
+				else {
 					Glee.resetTimer();
 					Glee.toggleActivity(0);
 					//command to get all images on the page. 
@@ -137,20 +152,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText("Command not found", "msg");
 					}
 				}
-				else{
-					//default behavior in non-command mode, i.e. search for links
-					//if a timer exists, reset it
-					Glee.resetTimer();
 
-					// start the timer	
-					Glee.timer = setTimeout(function(){
-						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);	
-						Glee.toggleActivity(0);
-					},400);
-				}	
 			}
 			else
 			{
