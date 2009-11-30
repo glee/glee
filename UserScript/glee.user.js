@@ -122,6 +122,7 @@ jQuery(document).ready(function(){
 					else if(value[0] == ':') //Run a yubnub command
 					{
 						c = value.substring(1);
+						c = c.replace("$", location.href);
 						Glee.subText.html("Run yubnub command (press enter to execute): " + c);
 						Glee.subURL.html("http://yubnub.org/parser/parse?command=" + escape(c));
 					}
