@@ -249,7 +249,6 @@ var Glee = {
 	searchText:"",
 	commandMode: false,
 	commands:{
-		"later"			: "Glee.readLater",
 		"tweet" 		: "Glee.sendTweet",
 		"shorten"		: "Glee.shortenURL",
 		"read"			: "Glee.makeReadable"
@@ -530,15 +529,7 @@ var Glee = {
 			var encodedURL = escape(location.href);
 			location.href =  "http://twitter.com/?status="+encodedURL;
 		}
-	},
-	readLater:function(){
-		//code via instapaper bookmarklet
-		// TODO: This is not working for other users. Seems the URL encodes the user - we should
-		// get rid of this in that case.
-		Glee.setSubText("Saving to Instapaper...","msg");
-		location.href = "javascript:function%20iprl5(){var%20d=document,z=d.createElement('scr'+'ipt'),b=d.body;try{if(!b)throw(0);d.title='(Saving...)%20'+d.title;z.setAttribute('src','http://www.instapaper.com/j/3UK7xXDlnSJm?u='+encodeURIComponent(d.location.href)+'&t='+(new%20Date().getTime()));b.appendChild(z);}catch(e){alert('Please%20wait%20until%20the%20page%20has%20loaded.');}}iprl5();void(0)";
 	}
-
 }
 
 var LinkReaper = {
