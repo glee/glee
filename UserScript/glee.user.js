@@ -128,7 +128,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if(value == "?inp") // command to get input items
+					else if(value == "??") // command to get input items
 					{
 						Glee.nullMessage = "Could not find any input elements on the page.";
 						Glee.reapInputs();
@@ -231,7 +231,7 @@ jQuery(document).ready(function(){
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 			}
-			else if(value == "?inp")
+			else if(Glee.selectedElement != null)
 			{
 				c = Glee.selectedElement;
 				Glee.closeBoxWithoutBlur();
