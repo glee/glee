@@ -85,6 +85,7 @@ jQuery(document).ready(function(){
 				 
 				if(value[0] != "?" && value[0] != "!" && value[0] != ":" && value[0] != '*')
 				{
+					Glee.commandMode = false;
 					//default behavior in non-command mode, i.e. search for links
 					//if a timer exists, reset it
 					Glee.resetTimer();
@@ -100,6 +101,7 @@ jQuery(document).ready(function(){
 				}
 				//else command mode
 				else {
+					Glee.commandMode = true;
 					Glee.resetTimer();
 					Glee.toggleActivity(0);
 					//command to get all images on the page. 
@@ -112,13 +114,15 @@ jQuery(document).ready(function(){
 					}
 					else if(value == "?a") //command to get all links
 					{
+						Glee.nullMessage = "Could not find any text links on the page.";
 						LinkReaper.reapAllLinks();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if(value == "?h") //command to get h1 elements
+					else if(value == "?h") //command to get heading elements
 					{
+						Glee.nullMessage = "Could not find any headings on the page.";
 						Glee.reapHeadings();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
@@ -126,6 +130,7 @@ jQuery(document).ready(function(){
 					}
 					else if(value == "?inp") // command to get input items
 					{
+						Glee.nullMessage = "Could not find any input elements on the page.";
 						Glee.reapInputs();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
@@ -244,6 +249,7 @@ jQuery(document).ready(function(){
 
 var Glee = { 
 	searchText:"",
+	commandMode: false,
 	commands:{
 		"later"			: "Glee.readLater",
 		"tweet" 		: "Glee.sendTweet",
@@ -321,6 +327,10 @@ var Glee = {
 					}
 					this.subURL.html(jQueryVal.attr('href'));		
 				}
+			}
+			else if(Glee.commandMode == true)
+			{
+				this.subText.html(Glee.nullMessage);
 			}
 			else //google or go to URL
 			{
