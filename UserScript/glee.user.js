@@ -379,7 +379,7 @@ var Glee = {
 	},
 	scrollToElement: function(el){
 		var target;
-		if(typeof(el) != "undefined")
+		if(typeof(el) != "undefined" && el)
 		{
 			target = jQuery(el);
 			if(target.length != 0)
