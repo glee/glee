@@ -32,6 +32,7 @@ jQuery(document).ready(function(){
 	GM_addStyle(reaperCSS + gleeCSS);
 		
 	// Bind Keys
+	// TODO: Unfortunately, none of these are relevant when the focus is on an input or text.
 	jQuery(document).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
 		//pressing 'g' toggles the gleeBox
@@ -269,15 +270,16 @@ var Glee = {
 		{
 			if(val && typeof val!= "undefined")
 			{
-				if(jQuery(val).find("img").length != 0) //it is a linked image
+				jQueryVal = jQuery(val); 
+				if(jQueryVal.find("img").length != 0) //it is a linked image
 				{
-					var href = jQuery(val).attr("href");
+					var href = jQueryVal.attr("href");
 					if(href.length > 80)
 					{
 						href = Glee.truncateURL(href);
 					}
 					this.subURL.html(href);
-					var title = jQuery(val).attr("title") || jQuery(val).find('img').attr('title');
+					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title!= "")
 					{
 						this.subText.html(title);
@@ -287,10 +289,10 @@ var Glee = {
 						this.subText.html("Linked Image");
 					}
 				}	
-				else if(jQuery(val)[0].tagName == "H1") //it is a heading
+				else if(jQueryVal[0].tagName == "H1") //it is a heading
 				{
-					this.subText.html(jQuery(val).text());
-					var a_el = jQuery(jQuery(val).find('a'));
+					this.subText.html(jQueryVal.text());
+					var a_el = jQuery(jQueryVal.find('a'));
 					if(a_el.length != 0)
 					{
 						this.subURL.html(a_el.attr("href"));
@@ -298,15 +300,15 @@ var Glee = {
 				}
 				else //it is a link
 				{
-					var title = jQuery(val).attr('title');
-					var text = jQuery(val).text();
+					var title = jQueryVal.attr('title');
+					var text = jQueryVal.text();
 
 					this.subText.html(text);
 					if(title !="" && title != text)
 					{
 						this.subText.html(this.subText.html()+" -- "+title);
 					}
-					this.subURL.html(jQuery(val).attr('href'));		
+					this.subURL.html(jQueryVal.attr('href'));		
 				}
 			}
 			else //google or go to URL
@@ -414,7 +416,7 @@ var Glee = {
 	},
 	reapHeadings: function(){
 		//only returns h1 elements at the moment
-		LinkReaper.selectedLinks = jQuery("h1");
+		LinkReaper.selectedLinks = jQuery("h1,h2,h3");
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
@@ -501,6 +503,8 @@ var Glee = {
 	},
 	readLater:function(){
 		//code via instapaper bookmarklet
+		// TODO: This is not working for other users. Seems the URL encodes the user - we should
+		// get rid of this in that case.
 		Glee.setSubText("Saving to Instapaper...","msg");
 		location.href = "javascript:function%20iprl5(){var%20d=document,z=d.createElement('scr'+'ipt'),b=d.body;try{if(!b)throw(0);d.title='(Saving...)%20'+d.title;z.setAttribute('src','http://www.instapaper.com/j/3UK7xXDlnSJm?u='+encodeURIComponent(d.location.href)+'&t='+(new%20Date().getTime()));b.appendChild(z);}catch(e){alert('Please%20wait%20until%20the%20page%20has%20loaded.');}}iprl5();void(0)";
 	}
@@ -667,6 +671,3 @@ var LinkReaper = {
 		el.addClass("GleeReaped");
 	}
 }
-
-
-
