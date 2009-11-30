@@ -95,7 +95,7 @@ jQuery(document).ready(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);	
+						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
 					},400);
 				}
@@ -360,10 +360,11 @@ var Glee = {
 		}
 	},
 	scrollToElement: function(el){
-		var target = jQuery(el);
-		if(target)
+		var target;
+		if(typeof(el) != "undefined")
 		{
-			if(target.length)
+			target = jQuery(el);
+			if(target.length != 0)
 			{
 				// We keep the scroll such that the element stays a little away from
 				// the top.
@@ -382,7 +383,7 @@ var Glee = {
 		else
 		{
 			// jQuery("#gleeSubActivity").fadeOut('slow');
-			jQuery("#gleeSubActivity").html("");			
+			jQuery("#gleeSubActivity").html("");
 		}
 	},
 	getBackInitialState: function(){
@@ -430,7 +431,7 @@ var Glee = {
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
 		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);		
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";	
 	},
