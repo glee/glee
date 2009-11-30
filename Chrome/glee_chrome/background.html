@@ -3,17 +3,28 @@
 <script>
 var status;
 
+function setStatus(value)
+{
+	status = value;
+	if(status == 1)
+	{
+		chrome.browserAction.setBadgeText({text:"ON"});	
+		chrome.browserAction.setBadgeBackgroundColor({color:[103,163,82,255]});
+	}
+	else
+	{
+		chrome.browserAction.setBadgeText({text:"OFF"});	
+		chrome.browserAction.setBadgeBackgroundColor({color:[185,188,193,255]});		
+	}
+}
+
 function initStatus(){
 	if(typeof(localStorage['glee_status']) != "undefined")
 	{
-		status = localStorage['glee_status'];
+		setStatus(localStorage['glee_status']);
 	}
 	else
-		status = 1;
-	if(status == 1)	
-		chrome.browserAction.setBadgeText({text:"ON"});	
-	else
-		chrome.browserAction.setBadgeText({text:"OFF"});	
+		setStatus(1);
 }
 
 function toggleStatus(tab){
@@ -24,18 +35,12 @@ function toggleStatus(tab){
 	else
 		status = 1;
 	if(status == 1)
-	{
-		status = 0;	
-	}
+		setStatus(0);
 	else
-	{		
-		status = 1;
-	}
-	localStorage['glee_status'] = status;	
-
+		setStatus(1);
+	localStorage['glee_status'] = status;
+	
 	chrome.tabs.sendRequest(tab.id, {status:status},function(response){
-		var text = response.statustext;
-		chrome.browserAction.setBadgeText({text:text});
 	});
 	
 }
@@ -48,7 +53,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	if(request.value == "getStatus")
 	{
-		sendResponse({status:status});
+		sendResponse({status:(status?1:0)});
 	}
 	else if(request.value == "createTab")
 	{

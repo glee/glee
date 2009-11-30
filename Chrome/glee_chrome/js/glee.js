@@ -680,8 +680,5 @@ var LinkReaper = {
 chrome.extension.onRequest.addListener(
 	function(request,sender,sendResponse){
 		Glee.status = request.status;
-		if(request.status == 1)
-			sendResponse({statustext:"ON"});
-		else
-			sendResponse({statustext:"OFF"});
+		sendResponse({});
 });

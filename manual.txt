@@ -36,7 +36,7 @@ These are examples of how additional plugins can be built into Glee. You only ne
 
 Advanced Commands:
 
-:command - Here command is a yubtub command. List of yubtub commands is available at yubtub.org. While using this command, $ can be used to point to the URL of the current page. A few cool examples are:
+:command - Here command is a yubnub command. List of yubnub commands is available at yubnub.org. While using this command, $ can be used to point to the URL of the current page. A few cool examples are:
 
 :fbshare $ - Share the current page as link on Facebook
 :wp - Search wikipedia
