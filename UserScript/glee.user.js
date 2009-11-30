@@ -110,10 +110,6 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 					}
-					else if(value == "?input") //command to get all input fields
-					{
-						
-					}
 					else if(value == "?a") //command to get all links
 					{
 						LinkReaper.reapAllLinks();
@@ -189,7 +185,7 @@ jQuery(document).ready(function(){
 				Glee.scrollToElement(Glee.selectedElement);
 				//this shouldn't really be here. try to find a better way to make this happen
 				//fixing the page position if tabbing through headings
-				if(value == "*h")
+				if(value == "?h")
 					Glee.userPosBeforeGlee = window.pageYOffset;
 			}
 		}
@@ -199,28 +195,28 @@ jQuery(document).ready(function(){
 			e.preventDefault();	
 			if(Glee.subURL.text() != "")
 			{
-			var destURL;		
-			if(Glee.selectedElement) //if the element exists
-			{
-				if(Glee.selectedElement.tagName == "a") //if the element is a link
-					destURL = Glee.selectedElement.attr("href");
+				var destURL;		
+				if(Glee.selectedElement) //if the element exists
+				{
+					if(Glee.selectedElement.tagName == "a") //if the element is a link
+						destURL = Glee.selectedElement.attr("href");
+					else
+						destURL = Glee.subURL.text();
+				}
 				else
+				{
 					destURL = Glee.subURL.text();
-			}
-			else
-			{
-				destURL = Glee.subURL.text();
-			}
-			if(e.shiftKey)
-			{
-				//another method from the GM API
-				GM_openInTab(destURL);
-				return false;
-			}
-			else
-			{
-				window.location = destURL;
-			}
+				}
+				if(e.shiftKey)
+				{
+					//another method from the GM API
+					GM_openInTab(destURL);
+					return false;
+				}
+				else
+				{
+					window.location = destURL;
+				}
 				Glee.closeBox();
 			}
 			else if(value[0] == "*")
@@ -285,7 +281,17 @@ var Glee = {
 			if(val && typeof val!= "undefined")
 			{
 				jQueryVal = jQuery(val); 
-				if(jQueryVal.find("img").length != 0) //it is a linked image
+				var isHeading = (jQueryVal[0].tagName == "H1" || jQueryVal[0].tagName == "H2" || jQueryVal[0].tagName == "H3");
+				if(isHeading) //if it is a heading
+				{
+					this.subText.html(jQueryVal.text());
+					var a_el = jQuery(jQueryVal.find('a'));
+					if(a_el.length != 0)
+					{
+						this.subURL.html(a_el.attr("href"));
+					}
+				}
+				else if(jQueryVal.find("img").length != 0 && !isHeading) //it is a linked image
 				{
 					var href = jQueryVal.attr("href");
 					if(href.length > 80)
@@ -303,15 +309,6 @@ var Glee = {
 						this.subText.html("Linked Image");
 					}
 				}	
-				else if(jQueryVal[0].tagName == "H1") //it is a heading
-				{
-					this.subText.html(jQueryVal.text());
-					var a_el = jQuery(jQueryVal.find('a'));
-					if(a_el.length != 0)
-					{
-						this.subURL.html(a_el.attr("href"));
-					}
-				}
 				else //it is a link
 				{
 					var title = jQueryVal.attr('title');
@@ -429,7 +426,7 @@ var Glee = {
 		LinkReaper.searchTerm = "";	
 	},
 	reapHeadings: function(){
-		//only returns h1 elements at the moment
+		//returns h1, h2 & h3 elements
 		LinkReaper.selectedLinks = jQuery("h1,h2,h3");
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
