@@ -50,6 +50,23 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	{
 		sendResponse({status:status});
 	}
+	else if(request.value == "createTab")
+	{
+		chrome.tabs.create({url:request.url},null);
+		sendResponse({});
+	}
+	else if(request.value == "sendRequest")
+	{
+		var req = new XMLHttpRequest();
+		req.open(request.method,request.url, true);
+		req.onreadystatechange = function(){
+			if(req.readyState == 4)
+			{
+				sendResponse({data:req.responseText});
+			}
+		}
+		req.send();
+	}
 });
 
 </script>
