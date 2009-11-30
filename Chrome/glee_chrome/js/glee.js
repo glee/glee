@@ -489,8 +489,7 @@ var Glee = {
 		{
 			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 			function(data){
-				alert("we were hre");
-				var json = JSON.parse("["+data.responseText+"]");
+				var json = JSON.parse("["+data+"]");
 				var shortenedURL = json[0].results[location.href].shortUrl;
 				var encodedURL = escape(shortenedURL);
 				//redirect to twitter homepage
