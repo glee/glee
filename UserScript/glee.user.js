@@ -82,8 +82,8 @@ jQuery(document).ready(function(){
 			if(value != "")
 			{
 				Glee.toggleActivity(1);
-				
-				if(value[0] != "?" && value[0] != "!" && value[0] != ":")
+				 
+				if(value[0] != "?" && value[0] != "!" && value[0] != ":" && value[0] != '*')
 				{
 					//default behavior in non-command mode, i.e. search for links
 					//if a timer exists, reset it
@@ -141,6 +141,11 @@ jQuery(document).ready(function(){
 						Glee.subText.html("Run yubnub command: " + c);
 						Glee.subURL.html("http://yubnub.org/parser/parse?command=" + escape(c));
 					}
+					else if(value[0] == '*')// Any jQuery selector
+					{
+							Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
+							LinkReaper.unreapAllLinks();
+					}
 					// now searching through the commands declared inside Glee.commands
 					else if(value.substr(1) in Glee.commands)
 					{
@@ -184,7 +189,7 @@ jQuery(document).ready(function(){
 				Glee.scrollToElement(Glee.selectedElement);
 				//this shouldn't really be here. try to find a better way to make this happen
 				//fixing the page position if tabbing through headings
-				if(Glee.searchField.attr("value") == "*h")
+				if(value == "*h")
 					Glee.userPosBeforeGlee = window.pageYOffset;
 			}
 		}
@@ -217,6 +222,13 @@ jQuery(document).ready(function(){
 				window.location = destURL;
 			}
 				Glee.closeBox();
+			}
+			else if(value[0] == "*")
+			{
+				Glee.reapWhatever(value.substring(1));
+				Glee.selectedElement = LinkReaper.getFirst();
+				Glee.setSubText(Glee.selectedElement,"el");
+				Glee.scrollToElement(Glee.selectedElement);
 			}
 			else
 			{
@@ -426,6 +438,15 @@ var Glee = {
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
+	reapWhatever: function(selector){
+		LinkReaper.selectedLinks = jQuery(selector);
+		LinkReaper.selectedLinks.each(function(){
+			jQuery(this).addClass('GleeReaped');
+		});
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);				
+		this.traversePosition = 0;
+		LinkReaper.searchTerm = "";
+	},
 	reapInputs: function(){
 		//only returns h1 elements at the moment
 		LinkReaper.selectedLinks = jQuery("input:enabled:not(#gleeSearchField)");
@@ -606,6 +627,8 @@ var LinkReaper = {
 		jQuery(this.selectedLinks).each(function(){
 			jQuery(this).removeClass('GleeReaped').removeClass('GleeHL');
 		});
+		
+		// TODO: Isn't there a better way to empty an array?
 		this.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
 		this.searchTerm = "";
 		this.traversePosition = 0;
