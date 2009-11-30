@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
 			if(Glee.searchBox.css('display') == "none")
 			{
 				//reseting value of searchField
-				Glee.searchField.attr('value','');	
+				Glee.searchField.attr('value','');
 				Glee.searchBox.fadeIn(150);
 				Glee.searchField.focus();
 			}
@@ -82,7 +82,7 @@ jQuery(document).ready(function(){
 			if(value != "")
 			{
 				Glee.toggleActivity(1);
-				 
+
 				if(value[0] != "?" && value[0] != "!" && value[0] != ":" && value[0] != '*')
 				{
 					Glee.commandMode = false;
@@ -104,9 +104,9 @@ jQuery(document).ready(function(){
 					Glee.commandMode = true;
 					Glee.resetTimer();
 					Glee.toggleActivity(0);
-					//command to get all images on the page. 
+					//command to get all images on the page.
 					if(value == "?img")
-					{				
+					{
 						Glee.reapImages();
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
@@ -144,6 +144,7 @@ jQuery(document).ready(function(){
 					}
 					else if(value[0] == '*')// Any jQuery selector
 					{
+							Glee.nullMessage = "Nothing found for your selector.";
 							Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
 							LinkReaper.unreapAllLinks();
 					}
