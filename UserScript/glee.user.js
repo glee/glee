@@ -83,7 +83,10 @@ jQuery(document).ready(function(){
 			{
 				Glee.toggleActivity(1);
 
-				if(value[0] != "?" && value[0] != "!" && value[0] != ":" && value[0] != '*')
+				if(value[0] != "?" 
+					&& value[0] != "!" 
+					&& value[0] != ":" 
+					&& value[0] != '*')
 				{
 					Glee.commandMode = false;
 					//default behavior in non-command mode, i.e. search for links
@@ -104,37 +107,17 @@ jQuery(document).ready(function(){
 					Glee.commandMode = true;
 					Glee.resetTimer();
 					Glee.toggleActivity(0);
-					//command to get all images on the page.
-					if(value == "?img")
+					if(value[0]=='?' && value.length > 1)
 					{
-						Glee.reapImages();
-						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);
-					}
-					else if(value == "?a") //command to get all links
-					{
-						Glee.nullMessage = "Could not find any text links on the page.";
-						LinkReaper.reapAllLinks();
-						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);
-					}
-					else if(value == "?h") //command to get heading elements
-					{
-						Glee.nullMessage = "Could not find any headings on the page.";
-						Glee.reapHeadings();
-						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);
-					}
-					else if(value == "??") // command to get input items
-					{
-						Glee.nullMessage = "Could not find any input elements on the page.";
-						Glee.reapInputs();
-						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);
+						trimVal = value.substr(1);
+						for(var i=0; i<Glee.reapers.length; i++)
+						{
+							if(Glee.reapers[i].command == trimVal)
+							{
+								Glee.initReaper(Glee.reapers[i]);
+								break;
+							}
+						}
 					}
 					else if(value[0] == ':') //Run a yubnub command
 					{
@@ -253,6 +236,28 @@ var Glee = {
 		"shorten"		: "Glee.shortenURL",
 		"read"			: "Glee.makeReadable"
 	},
+	//We can add methods to the associative array below to support custom actions.
+	//It works, I've tried it. Haven't moved ?a yet.
+	reapers : [
+		{
+			command : "?",
+			nullMessage : "Could not find any input elements on the page.",
+			selector : "input:enabled:not(#gleeSearchField),textarea",
+			cssStyle : "GleeReaped",
+		},
+		{
+			command : "img",
+			nullMessage : "Could not find any linked images on the page.",
+			selector : "a:has(img)",
+			cssStyle : "GleeReaped"
+		},
+		{
+			command : "h",
+			nullMessage : "Could not find any headings images on the page.",
+			selector : "h1,h2,h3",
+			cssStyle : "GleeReaped"
+		}
+		],
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -272,6 +277,20 @@ var Glee = {
 		Glee.searchField.attr('value','');
 		Glee.searchBox.fadeOut(150);
 		Glee.searchField.blur();
+	},
+	initReaper: function(reaper){
+		GM_log("hello");
+		Glee.nullMessage = reaper.nullMessage;
+		LinkReaper.selectedLinks = jQuery(reaper.selector);
+		Glee.selectedElement = LinkReaper.getFirst();
+		Glee.setSubText(Glee.selectedElement,"el");
+		Glee.scrollToElement(Glee.selectedElement);
+		LinkReaper.selectedLinks.each(function(){
+			jQuery(this).addClass(reaper.cssStyle);
+		});
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
+		LinkReaper.traversePosition = 0;
+		LinkReaper.searchTerm = "";	
 	},
 	closeBoxWithoutBlur: function(){
 		LinkReaper.unreapAllLinks();
@@ -424,26 +443,6 @@ var Glee = {
 		}
 		return true;
 	},
-	reapImages: function(){
-		//only returning linked images...
-		LinkReaper.selectedLinks = jQuery("a:has(img)");
-		LinkReaper.selectedLinks.each(function(){
-			jQuery(this).addClass('GleeReaped');
-		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		this.traversePosition = 0;
-		LinkReaper.searchTerm = "";	
-	},
-	reapHeadings: function(){
-		//returns h1, h2 & h3 elements
-		LinkReaper.selectedLinks = jQuery("h1,h2,h3");
-		LinkReaper.selectedLinks.each(function(){
-			jQuery(this).addClass('GleeReaped');
-		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		this.traversePosition = 0;
-		LinkReaper.searchTerm = "";
-	},
 	reapWhatever: function(selector){
 		LinkReaper.selectedLinks = jQuery(selector);
 		LinkReaper.selectedLinks.each(function(){
@@ -453,16 +452,6 @@ var Glee = {
 		this.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
-	reapInputs: function(){
-		//only returns h1 elements at the moment
-		LinkReaper.selectedLinks = jQuery("input:enabled:not(#gleeSearchField),textarea");
-		LinkReaper.selectedLinks.each(function(){
-			jQuery(this).addClass('GleeReaped');
-		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		this.traversePosition = 0;
-		LinkReaper.searchTerm = "";
-	},	
 	sendRequest: function(url,method,callback){
 		//dependent upon Greasemonkey to send this cross-domain XMLHTTPRequest :|
 		//doing a setTimeout workaround (http://www.neaveru.com/wordpress/index.php/2008/05/09/greasemonkey-bug-domnodeinserted-event-doesnt-allow-gm_xmlhttprequest/)
