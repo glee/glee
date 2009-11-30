@@ -38,7 +38,7 @@ Advanced Commands:
 
 :command - Here command is a yubtub command. List of yubtub commands is available at yubtub.org. While using this command, $ can be used to point to the URL of the current page. A few cool examples are:
 
-:fbshare $ - Share the current page as link of Facebook
+:fbshare $ - Share the current page as link on Facebook
 :wp - Search wikipedia
 :tube - Search YouTube
 :imdb - Search IMDB
