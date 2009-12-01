@@ -1,10 +1,10 @@
-Glee: Instruction manual
+Glee
 
-Glee is a purely experimental project and is meant for a very niché audience (hackers mostly). So, it is very possible, that at first you find it hard to conceive the utility of Glee.
+Glee is an experimental project and is meant for a very niché audience (hackers mostly). So, it is very possible, that at first you find it hard to conceive the utility of Glee.
 
 General Keys:
 
-g - Launch Glee
+g - Launch Glee (If you are currently focused on a text field or an input field, glee won't launch. Press tab a few times to move focus away and then press g). Also, Glee currently doesn't work when on gmail, google reader, google docs, and of course, google wave. 
 
 TAB Key - Move to the next selected element
 
@@ -22,25 +22,32 @@ When you enter any text, Glee will search for links on the current page whose te
 
 In case Glee doesn't find any links, when you press ENTER, it will either search the text on Google or will directly go to a URL if you entered a URL like twitter.com.
 
-Simple Commands:
+Scraping Commands:
 
-?h - Highlight all the main headings (h1,h2 & h3 only) on the current page
-?img - Highlight all the images on the page
-?? - Highlight all the input fields on the page
+?h - Navigate through all the main headings (h1,h2 & h3 only) on the current page. 
+?img - Navigate through all the images on the page
+?? - Navigate through all the input fields on the page. Press enter to focus on the current field.
 
-These are examples of how additional plugins can be built into Glee. You only need to know a bit of JavaScript in order to spin up your own plugin:
+Page commands:
+
+These let you do things to the page. We're thinking of making this a pluggable and domain specific thing. In the meanwhile, here are a few examples:
 
 !read - Transform the page for a better reading experience using Readability
 !shorten - Shorten the URL of the current page 
-!tweet - Redirect to twitter with the URL of the current page in the textfield
+!tweet - Redirect to twitter with the URL of the current page in the text field
 
-Advanced Commands:
+YubNub Commands:
 
-:command - Here command is a yubnub command. List of yubnub commands is available at yubnub.org. While using this command, $ can be used to point to the URL of the current page. A few cool examples are:
+:command <params> - Here command is a yubnub command. List of yubnub commands is available at yubnub.org. While using this command, $ can be used to point to represent the URL of the current page. A few examples are:
 
 :fbshare $ - Share the current page as link on Facebook
-:wp - Search wikipedia
-:tube - Search YouTube
-:imdb - Search IMDB
+:wp cricket - Search wikipedia for cricket
+:tube elvis - Search YouTube for elvis
+:site2pdf $ - Get a PDF for the current page.
 
-*selector - Here selector is a jQuery selector.
+jQuery mode:
+
+*selector (And then press ENTER) - Here selector is a jQuery selector. This will navigate across all elements that match the jQuery selector specified. Examples:
+*a - All links
+*h3,h4,h5 - h3,h4 and h5 headers
+*textarea - textareas on the page.
