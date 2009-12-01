@@ -2,6 +2,16 @@ Glee
 
 Glee is an experimental project and is meant for a very niché audience (hackers mostly). So, it is very possible, that at first you find it hard to conceive the utility of Glee.
 
+=== Installation
+
+Right now, Glee is available as a Greasmonkey script for Firefox and a Chrome extension. 
+
+To install the Greasemonkey script, you'll need to have Greasemonkey installed in FIrefox. Download "UserScript/glee.user.js" and drag it to Firefox and Greasemonkey should ask for your permission to install it. 
+
+To install as a Chrome extension, you'll need to have the dev build of Google Chrome installed. Download "Chrome/glee_chrome.crx" and drag it to Chrome to install it. 
+
+=== Usage
+
 General Keys:
 
 g - Launch Glee (If you are currently focused on a text field or an input field, glee won't launch. Press tab a few times to move focus away and then press g). Also, Glee currently doesn't work when on gmail, google reader, google docs, and of course, google wave. 
