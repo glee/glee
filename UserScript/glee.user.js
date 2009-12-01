@@ -35,8 +35,8 @@ jQuery(document).ready(function(){
 	// TODO: Unfortunately, none of these are relevant when the focus is on an input or text.
 	jQuery(document).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
-		//pressing 'g' toggles the gleeBox
-		if(target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && e.keyCode == 71)
+		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
+		if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea') || e.altKey))
 		{
 			e.preventDefault();
 			Glee.userPosBeforeGlee = window.pageYOffset;
