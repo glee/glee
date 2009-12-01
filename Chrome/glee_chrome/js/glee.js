@@ -22,7 +22,8 @@ jQuery(document).ready(function(){
 		//pressing 'g' toggles the gleeBox
 		if(Glee.status == 1)
 		{
-			if(target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && e.keyCode == 71)
+			//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
+			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea') || e.altKey))
 			{
 				e.preventDefault();
 				Glee.userPosBeforeGlee = window.pageYOffset;
