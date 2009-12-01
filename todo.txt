@@ -1,7 +1,0 @@
-to do:
-
-- a way to traverse through selected links using TAB/arrow keys
-- a subview that displays the text and URL of the selected link
-- by default, display the text+URL of first link
-- if no links found, give option to google it
-- if something is entered with a '.com', give option to open the URL
