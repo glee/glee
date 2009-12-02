@@ -68,10 +68,9 @@ jQuery(document).ready(function(){
 			e.stopPropagation();
 			e.preventDefault();
 		}
-		else if(e.keyCode == 40 || e.keyCode == 38){
-			Glee.scrollTimer = setInterval(function(){
-			  Glee.simulateScroll((e.keyCode == 40 ? 1:0));
-			},1);
+		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
+		{
+			Glee.simulateScroll((e.keyCode == 40 ? 1:0));
 		}
 	});
 
@@ -236,7 +235,7 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
-			clearInterval(Glee.scrollTimer);
+			jQuery('html,body').stop(true);	
 		}
 	});
 });
@@ -462,11 +461,19 @@ var Glee = {
 			Glee.searchField.blur();		
 	},
 	simulateScroll: function(val){
+		jQuery('html,body').stop(true);
 		if(val == 1)
-			window.scrollTo(window.pageXOffset,window.pageYOffset+15);
-		else if(val == 0)
-			window.scrollTo(window.pageXOffset,window.pageYOffset-15);	
-		Glee.userPosBeforeGlee = window.pageYOffset;
+		{
+			jQuery('html,body').animate({scrollTop:window.pageYOffset+200},100,function(){
+				Glee.userPosBeforeGlee = window.pageYOffset;
+			});			
+		}	
+		else if(val == 0)	
+		{
+			jQuery('html,body').animate({scrollTop:window.pageYOffset-200},100,function(){
+				Glee.userPosBeforeGlee = window.pageYOffset;
+			});						
+		}
 	},
 	resetTimer: function(){
 		if(typeof(Glee.timer) != "undefined")
