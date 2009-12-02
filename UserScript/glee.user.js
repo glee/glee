@@ -181,10 +181,6 @@ jQuery(document).ready(function(){
 				}
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
-				//this shouldn't really be here. try to find a better way to make this happen
-				//fixing the page position if tabbing through headings
-				if(value == "?h")
-					Glee.userPosBeforeGlee = window.pageYOffset;
 			}
 		}
 		//if ENTER is pressed
@@ -433,10 +429,16 @@ var Glee = {
 				var targetOffset = target.offset().top - 60;
 				//stop any previous scrolling to prevent queueing
 				jQuery('html,body').stop(true);
-				jQuery('html,body').animate({scrollTop:targetOffset},750);
-				// scrollTo(window.pageXOffset,targetOffset);
+				jQuery('html,body').animate({scrollTop:targetOffset},750,"linear",Glee.updateUserPosition);
 				return false;
 			}
+		}
+	},
+	updateUserPosition:function(){
+		var value = Glee.searchField.attr("value");
+		if(value == "?h")
+		{
+			Glee.userPosBeforeGlee = window.pageYOffset;
 		}
 	},
 	toggleActivity: function(toggle){
@@ -452,13 +454,14 @@ var Glee = {
 		}
 	},
 	getBackInitialState: function(){
+		jQuery('html,body').stop(true);
 		jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
 		if(Glee.userFocusBeforeGlee != null)
 		{
 			Glee.userFocusBeforeGlee.focus();
 		}
 		else
-			Glee.searchField.blur();		
+			Glee.searchField.blur();
 	},
 	simulateScroll: function(val){
 		jQuery('html,body').stop(true);
@@ -466,13 +469,13 @@ var Glee = {
 		{
 			jQuery('html,body').animate({scrollTop:window.pageYOffset+200},100,function(){
 				Glee.userPosBeforeGlee = window.pageYOffset;
-			});			
+			});	
 		}	
-		else if(val == 0)	
+		else if(val == 0)
 		{
 			jQuery('html,body').animate({scrollTop:window.pageYOffset-200},100,function(){
 				Glee.userPosBeforeGlee = window.pageYOffset;
-			});						
+			});		
 		}
 	},
 	resetTimer: function(){
