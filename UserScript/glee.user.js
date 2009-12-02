@@ -32,7 +32,6 @@ jQuery(document).ready(function(){
 	GM_addStyle(reaperCSS + gleeCSS);
 		
 	// Bind Keys
-	// TODO: Unfortunately, none of these are relevant when the focus is on an input or text.
 	jQuery(document).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
@@ -40,6 +39,7 @@ jQuery(document).ready(function(){
 		{
 			e.preventDefault();
 			Glee.userPosBeforeGlee = window.pageYOffset;
+			Glee.userFocusBeforeGlee = target;
 			if(Glee.searchBox.css('display') == "none")
 			{
 				//reseting value of searchField
@@ -49,8 +49,7 @@ jQuery(document).ready(function(){
 			}
 			else
 			{
-				Glee.searchBox.fadeOut(150);
-				Glee.getBackInitialState();
+				Glee.closeBoxWithoutBlur();
 			}
 		}
 	});
@@ -279,7 +278,6 @@ var Glee = {
 		Glee.getBackInitialState();
 		Glee.searchField.attr('value','');
 		Glee.searchBox.fadeOut(150);
-		Glee.searchField.blur();
 	},
 	initReaper: function(reaper){
 		Glee.nullMessage = reaper.nullMessage;
@@ -414,6 +412,12 @@ var Glee = {
 	},
 	getBackInitialState: function(){
 		jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
+		if(Glee.userFocusBeforeGlee != null)
+		{
+			Glee.userFocusBeforeGlee.focus();
+		}
+		else
+			Glee.searchField.blur();		
 	},
 	simulateScroll: function(val){
 		if(val == 1)
