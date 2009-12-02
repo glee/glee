@@ -231,14 +231,19 @@ jQuery(document).ready(function(){
 	});
 });
 
-var Glee = { 
+var Glee = { 	
 	searchText:"",
 	commandMode: false,
+	// Currently selected element.
+	selectedElement: null,
+	// !commands
 	commands:{
 		"tweet" 		: "Glee.sendTweet",
 		"shorten"		: "Glee.shortenURL",
 		"read"			: "Glee.makeReadable"
 	},
+	
+	// Reaper Commands
 	//We can add methods to the associative array below to support custom actions.
 	//It works, I've tried it. Haven't moved ?a yet.
 	reapers : [
@@ -251,7 +256,7 @@ var Glee = {
 		{
 			command : "img",
 			nullMessage : "Could not find any linked images on the page.",
-			selector : "a:has(img)",
+			selector : "a > img",
 			cssStyle : "GleeReaped"
 		},
 		{
