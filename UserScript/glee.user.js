@@ -132,9 +132,17 @@ jQuery(document).ready(function(){
 							LinkReaper.unreapAllLinks();
 					}
 					// now searching through the commands declared inside Glee.commands
-					else if(value.substr(1) in Glee.commands)
+					else if(value[0] == "!")
 					{
-						Glee.execCommand(value);
+						trimVal = value.substr(1);
+						for(var i=0; i<Glee.commands.length; i++)
+						{
+							if(Glee.commands[i].name == trimVal)
+							{
+								Glee.execCommand(Glee.commands[i]);
+								break;
+							}
+						}
 					}
 					else
 					{
@@ -233,11 +241,26 @@ jQuery(document).ready(function(){
 var Glee = { 
 	searchText:"",
 	commandMode: false,
-	commands:{
-		"tweet" 		: "Glee.sendTweet",
-		"shorten"		: "Glee.shortenURL",
-		"read"			: "Glee.makeReadable"
-	},
+	commands:[
+		{
+			name: "tweet",
+			method:"Glee.sendTweet",
+			domain:"*",
+			statusText:""
+		},
+		{
+			name: "shorten",
+			method:"Glee.shortenURL",
+			domain:"*",
+			statusText:""
+		},
+		{
+			name: "read",
+			method:"Glee.makeReadable",
+			domain:"*",
+			statusText:""
+		}
+	],
 	//We can add methods to the associative array below to support custom actions.
 	//It works, I've tried it. Haven't moved ?a yet.
 	reapers : [
@@ -245,7 +268,7 @@ var Glee = {
 			command : "?",
 			nullMessage : "Could not find any input elements on the page.",
 			selector : "input:enabled:not(#gleeSearchField),textarea",
-			cssStyle : "GleeReaped",
+			cssStyle : "GleeReaped"
 		},
 		{
 			command : "img",
@@ -482,12 +505,10 @@ var Glee = {
 		
 	},
 	
-	execCommand: function(value){
-		//get the command
-		var cmd = value.substr(1);
+	execCommand: function(command){
 		//call the method
 		//not sure if eval is the way to go here
-		var method = Glee.commands[cmd]+"()";
+		var method = command.method+"()";
 		eval(method);
 	},
 	
