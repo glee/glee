@@ -70,7 +70,7 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	}
 	if(request.value == "createTab")
 	{
-		chrome.tabs.create({url:request.url},null);
+		chrome.tabs.create({url:request.url,selected:false},null);
 		sendResponse({});
 	}
 	else if(request.value == "sendRequest")
