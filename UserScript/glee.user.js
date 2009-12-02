@@ -35,23 +35,26 @@ jQuery(document).ready(function(){
 	jQuery(document).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
-		if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea') || e.altKey))
-		{
-			e.preventDefault();
-			Glee.userPosBeforeGlee = window.pageYOffset;
-			Glee.userFocusBeforeGlee = target;
-			if(Glee.searchBox.css('display') == "none")
+		if(Glee.status)
+		{	
+			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea') || e.altKey))
 			{
-				//reseting value of searchField
-				Glee.searchField.attr('value','');
-				Glee.searchBox.fadeIn(150);
-				Glee.searchField.focus();
+				e.preventDefault();
+				Glee.userPosBeforeGlee = window.pageYOffset;
+				Glee.userFocusBeforeGlee = target;
+				if(Glee.searchBox.css('display') == "none")
+				{
+					//reseting value of searchField
+					Glee.searchField.attr('value','');
+					Glee.searchBox.fadeIn(150);
+					Glee.searchField.focus();
+				}
+				else
+				{
+					Glee.closeBoxWithoutBlur();
+				}
 			}
-			else
-			{
-				Glee.closeBoxWithoutBlur();
-			}
-		}
+		}	
 	});
 	Glee.searchField.bind('keydown',function(e){
 		//pressing 'esc' hides the gleeBox
@@ -132,7 +135,7 @@ jQuery(document).ready(function(){
 							LinkReaper.unreapAllLinks();
 					}
 					// now searching through the commands declared inside Glee.commands
-					else if(value[0] == "!")
+					else if(value[0] == "!" && value.length > 1)
 					{
 						trimVal = value.substr(1);
 						for(var i=0; i<Glee.commands.length; i++)
@@ -241,6 +244,8 @@ jQuery(document).ready(function(){
 var Glee = { 	
 	searchText:"",
 	commandMode: false,
+	//used to enable/disable gleeBox
+	status:1, 
 	//Currently selected element
 	selectedElement:null,
 	// !commands
@@ -289,6 +294,10 @@ var Glee = {
 			cssStyle : "GleeReaped"
 		}
 		],
+	//Domains which are not supported at the moment. 	
+	domainsToBlock:[
+		"mail.google.com"
+	],	
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -300,6 +309,7 @@ var Glee = {
 		sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(sub);
 		jQuery(document.body).append(this.searchBox);
+		this.checkDomain();
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
@@ -463,6 +473,16 @@ var Glee = {
 	},
 	truncateURL:function(url){
 		return url.substr(0,78)+"...";
+	},
+	checkDomain:function(){
+		for(var i=0; i<Glee.domainsToBlock.length; i++)
+		{
+			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
+			{
+				Glee.status = 0;
+				break;
+			}
+		}
 	},
 	isVisible:function(el){
 		el = jQuery(el);
