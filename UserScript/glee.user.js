@@ -249,19 +249,19 @@ var Glee = {
 			name: "tweet",
 			method:"Glee.sendTweet",
 			domain:"*",
-			statusText:""
+			statusText:"Redirecting to twitter homepage..."
 		},
 		{
 			name: "shorten",
 			method:"Glee.shortenURL",
 			domain:"*",
-			statusText:""
+			statusText:"Shortening URL via bit.ly..."
 		},
 		{
 			name: "read",
 			method:"Glee.makeReadable",
 			domain:"*",
-			statusText:""
+			statusText:"wait till Glee+Readability work up the magic"
 		}
 	],
 	
@@ -515,17 +515,17 @@ var Glee = {
 		//call the method
 		//not sure if eval is the way to go here
 		var method = command.method+"()";
+		//setting the status
+		Glee.setSubText(command.statusText,"msg");
 		eval(method);
 	},
 	
 	makeReadable: function(){
-		Glee.setSubText("wait till Glee+Readability work up the magic","msg");
 		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
 		location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
 	},
 	
 	shortenURL: function(){
-		Glee.setSubText("Shortening URL via bit.ly...","msg");
 		//creating an XMLHTTPRequest to bit.ly using GM_xmlhttpRequest
 		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
@@ -539,7 +539,6 @@ var Glee = {
 	sendTweet: function(){
 		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 		var url = location.href;
-		Glee.setSubText("Redirecting to twitter homepage...","msg");
 		if(url.length > 30)
 		{
 			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
