@@ -263,11 +263,10 @@ var Glee = {
 		this.searchBox.append(this.searchField).append(sub);
 		jQuery(document.body).append(this.searchBox);
 		this.initStatus();
-	},
-	initStatus: function(){
-		//send request to get the value of status from Chrome's localStorage
+	},	
+	initStatus:function(){
 		chrome.extension.sendRequest({value:"getStatus"},function(response){
-			Glee.status = response.status;			
+			Glee.status = response.status;
 		});
 	},
 	closeBox: function(){
@@ -677,7 +676,7 @@ var LinkReaper = {
 	}
 }
 
-//adding a listener to respond to requests from background.html
+//adding a listener to respond to requests from background.html to update the status 
 chrome.extension.onRequest.addListener(
 	function(request,sender,sendResponse){
 		Glee.status = request.status;

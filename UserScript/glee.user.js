@@ -433,6 +433,7 @@ var Glee = {
 				// the top.
 				var targetOffset = target.offset().top - 60;
 				jQuery('html,body').animate({scrollTop:targetOffset},750);
+				// scrollTo(window.pageXOffset,targetOffset);
 				return false;
 			}
 		}

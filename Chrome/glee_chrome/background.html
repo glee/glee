@@ -3,6 +3,7 @@
 <script>
 var status;
 
+//set the status value and update the browser action
 function setStatus(value)
 {
 	status = value;
@@ -18,6 +19,7 @@ function setStatus(value)
 	}
 }
 
+//initialize the status value on load of background.html
 function initStatus(){
 	if(typeof(localStorage['glee_status']) != "undefined")
 	{
@@ -27,6 +29,7 @@ function initStatus(){
 		setStatus(1);
 }
 
+//Toggle status value and store it in local storage
 function toggleStatus(tab){
 	if(typeof(localStorage['glee_status']) != "undefined")
 	{
@@ -40,9 +43,18 @@ function toggleStatus(tab){
 		setStatus(1);
 	localStorage['glee_status'] = status;
 	
-	chrome.tabs.sendRequest(tab.id, {status:status},function(response){
+	//get all the windows and their tabs to propagate the change in status
+	chrome.windows.getAll({populate:true}, function(windows){
+		for( i=0; i<windows.length; i++)
+		{
+			//set the status in all the tabs open in the window
+			for(j=0;j<windows[i].tabs.length;j++)
+			{
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {status:status},function(response){
+				});
+			}
+		}
 	});
-	
 }
 
 //React when a browser action's icon is clicked 
@@ -50,12 +62,13 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 	toggleStatus(tab);
 });
 
+//Add listener to respond to requests from content script
 chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	if(request.value == "getStatus")
 	{
-		sendResponse({status:(status?1:0)});
+		sendResponse({status:status});
 	}
-	else if(request.value == "createTab")
+	if(request.value == "createTab")
 	{
 		chrome.tabs.create({url:request.url},null);
 		sendResponse({});
