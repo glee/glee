@@ -432,6 +432,8 @@ var Glee = {
 				// We keep the scroll such that the element stays a little away from
 				// the top.
 				var targetOffset = target.offset().top - 60;
+				//stop any previous scrolling to prevent queueing
+				jQuery('html,body').stop(true);
 				jQuery('html,body').animate({scrollTop:targetOffset},750);
 				// scrollTo(window.pageXOffset,targetOffset);
 				return false;
