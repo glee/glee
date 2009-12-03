@@ -32,7 +32,7 @@ jQuery(document).ready(function(){
 	GM_addStyle(reaperCSS + gleeCSS);
 		
 	// Bind Keys
-	jQuery(document).bind('keydown',function(e){
+	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
 		if(Glee.status)
@@ -271,7 +271,7 @@ var Glee = {
 	// Reaper Commands
 
 	//We can add methods to the associative array below to support custom actions.
-	//It works, I've tried it. Haven't moved ?a yet.
+	//It works, I've tried it.
 	reapers : [
 		{
 			command : "?",
@@ -287,9 +287,21 @@ var Glee = {
 		},
 		{
 			command : "h",
-			nullMessage : "Could not find any headings images on the page.",
+			nullMessage : "Could not find any headings on the page.",
 			selector : "h1,h2,h3",
 			cssStyle : "GleeReaped"
+		},
+		{
+			command : "p",
+			nullMessage : "Could not find any paragraphs on the page.",
+			selector: "p",
+			cssStyle : "GleeReaped"
+		},
+		{
+			command : "a",
+			nullMessage : "No links found on the page",
+			selector: "a",
+			cssStyle: "GleeReaped"
 		}
 		],
 	//Domains which are not supported at the moment. 	
@@ -439,7 +451,8 @@ var Glee = {
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
-		if(value == "?h")
+		//Only update the user position if it is a scraping command 
+		if(value[0] == "?" && value.length > 1)
 		{
 			Glee.userPosBeforeGlee = window.pageYOffset;
 		}

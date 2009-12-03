@@ -35,8 +35,10 @@ In case Glee doesn't find any links, when you press ENTER, it will either search
 Scraping Commands:
 
 ?h - Navigate through all the main headings (h1,h2 & h3 only) on the current page. 
-?img - Navigate through all the images on the page
+?img - Navigate through all the linked images on the page
 ?? - Navigate through all the input fields on the page. Press enter to focus on the current field.
+?p - Navigate through all the paragraphs on the page
+?a - Navigate through all the links on the page
 
 Page commands:
 
