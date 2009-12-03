@@ -337,13 +337,13 @@ var Glee = {
 	initReaper: function(reaper){
 		Glee.nullMessage = reaper.nullMessage;
 		LinkReaper.selectedLinks = jQuery(reaper.selector);
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		Glee.selectedElement = LinkReaper.getFirst();
 		Glee.setSubText(Glee.selectedElement,"el");
-		Glee.scrollToElement(Glee.selectedElement);
-		LinkReaper.selectedLinks.each(function(){
+		Glee.scrollToElement(Glee.selectedElement);	
+		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(reaper.cssStyle);
 		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";	
 	},
@@ -556,8 +556,8 @@ var Glee = {
 		// yet to explore the problem fully
 		setTimeout(function(){
 		GM_xmlhttpRequest({
-			method: "GET",
-			url:"http://api.bit.ly/shorten?version=2.0.1&longUrl="+location.href+"&login=bitlyapidemo&apiKey=R_0da49e0a9118ff35f52f629d2d71bf07",
+			method:method,
+			url:url,
 			headers:{
 		    "User-Agent":"monkeyagent",
 		    "Accept":"text/monkey,text/xml",
