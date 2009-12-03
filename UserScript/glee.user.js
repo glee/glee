@@ -320,7 +320,7 @@ var Glee = {
 	//Domains which are not supported at the moment. 	
 	domainsToBlock:[
 		"mail.google.com",
-		"reader.google.com",
+		"google.com/reader",
 		"wave.google.com"
 	],	
 	initBox: function(){
