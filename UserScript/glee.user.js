@@ -41,7 +41,10 @@ jQuery(document).ready(function(){
 			{
 				e.preventDefault();
 				Glee.userPosBeforeGlee = window.pageYOffset;
-				Glee.userFocusBeforeGlee = target;
+				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea')
+					Glee.userFocusBeforeGlee = target;
+				else
+					Glee.userFocusBeforeGlee = null;
 				if(Glee.searchBox.css('display') == "none")
 				{
 					//reseting value of searchField
@@ -51,13 +54,12 @@ jQuery(document).ready(function(){
 				}
 				else
 				{
-					Glee.closeBoxWithoutBlur();
+					Glee.closeBox();
 				}
 			}
 		}	
 	});
 	Glee.searchField.bind('keydown',function(e){
-		//pressing 'esc' hides the gleeBox
 		if(e.keyCode == 27)
 		{
 			e.preventDefault();
@@ -243,6 +245,7 @@ var Glee = {
 	status:1, 
 	//Currently selected element
 	selectedElement:null,
+	userFocusBeforeGlee:null,
 	// !commands
 	commands:[
 		{
@@ -308,10 +311,16 @@ var Glee = {
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
-		//resetting value of searchField
 		Glee.getBackInitialState();
-		Glee.searchField.attr('value','');
+		//resetting value of searchField
 		Glee.searchBox.fadeOut(150);
+		Glee.searchField.attr('value','');
+	},
+	closeBoxWithoutBlur: function(){
+		LinkReaper.unreapAllLinks();
+		//resetting value of searchField
+		Glee.searchBox.fadeOut(150);
+		Glee.searchField.attr('value','');
 	},
 	initReaper: function(reaper){
 		Glee.nullMessage = reaper.nullMessage;
@@ -325,12 +334,6 @@ var Glee = {
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";	
-	},
-	closeBoxWithoutBlur: function(){
-		LinkReaper.unreapAllLinks();
-		//resetting value of searchField
-		Glee.searchField.attr('value','');
-		Glee.searchBox.fadeOut(150);
 	},
 	setSubText: function(val,type){
 		if(type == "el")
@@ -455,28 +458,36 @@ var Glee = {
 	},
 	getBackInitialState: function(){
 		jQuery('html,body').stop(true);
-		jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
+		if(Glee.userPosBeforeGlee != window.pageYOffset)
+			jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
 		if(Glee.userFocusBeforeGlee != null)
-		{
 			Glee.userFocusBeforeGlee.focus();
-		}
 		else
-			Glee.searchField.blur();
+		{
+			//wait till the thread is free
+			setTimeout(function(){
+				Glee.searchField.blur();
+			},0);
+		}
+			
 	},
-	simulateScroll: function(val){
-		jQuery('html,body').stop(true);
+	simulateScroll: function(val){		
+		jQuery('html,body').stop(true, true);
 		if(val == 1)
 		{
-			jQuery('html,body').animate({scrollTop:window.pageYOffset+200},100,function(){
-				Glee.userPosBeforeGlee = window.pageYOffset;
-			});	
-		}	
+			// jQuery('html,body').animate({scrollTop:window.pageYOffset+300},150,"linear",function(){
+			// 	Glee.userPosBeforeGlee = window.pageYOffset;
+			// });			
+			window.scrollTo(window.pageXOffset,window.pageYOffset+200);
+		}
 		else if(val == 0)
 		{
-			jQuery('html,body').animate({scrollTop:window.pageYOffset-200},100,function(){
-				Glee.userPosBeforeGlee = window.pageYOffset;
-			});		
+			// jQuery('html,body').animate({scrollTop:window.pageYOffset-300},150,"linear",function(){
+			// 	Glee.userPosBeforeGlee = window.pageYOffset;
+			// });			
+			window.scrollTo(window.pageXOffset,window.pageYOffset-200);
 		}
+		Glee.userPosBeforeGlee = window.pageYOffset;		
 	},
 	resetTimer: function(){
 		if(typeof(Glee.timer) != "undefined")
