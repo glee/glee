@@ -505,7 +505,9 @@ var Glee = {
 		Glee.userPosBeforeGlee = window.pageYOffset;
 	},
 	simulateClick: function(el){
-		return true;
+		var evt = document.createEvent("MouseEvents");
+		evt.initMouseEvent("click",true,true,window,0,0,0,0,0,false,false,false,false,0,null);
+		return el[0].dispatchEvent(evt);
 	},
 	resetTimer: function(){
 		if(typeof(Glee.timer) != "undefined")
