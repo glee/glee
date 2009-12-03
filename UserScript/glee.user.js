@@ -189,7 +189,8 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 13)
 		{
 			e.preventDefault();	
-			if(Glee.subURL.text() != "")
+			//if it is a link or subURL is present
+			if(jQuery(Glee.selectedElement)[0].tagName == "A" || Glee.subURL.text() != "")
 			{
 				var destURL;		
 				if(Glee.selectedElement && typeof(Glee.selectedElement) != "undefined") //if the element exists
@@ -205,18 +206,26 @@ jQuery(document).ready(function(){
 				{
 					destURL = Glee.subURL.text();
 				}
-				//if destURL is relative, make it absolute
-				destURL = Glee.makeURLAbsolute(destURL,location.href);
-				if(e.shiftKey)
+				//if destURL exists and is relative, make it absolute
+				if(destURL)
+					destURL = Glee.makeURLAbsolute(destURL,location.href);
+				
+				//simulating a click in Firefox ;)
+				anythingOnClick = Glee.simulateClick(Glee.selectedElement);
+				//check if preventDefault() was called and the href attribute exists
+				if(anythingOnClick && destURL)
 				{
-					//another method from the GM API
-					GM_openInTab(destURL);
-					return false;
-				}
-				else
-				{
-					window.location = destURL;
-				}
+					if(e.shiftKey)
+					{
+						//another method from the GM API
+						GM_openInTab(destURL);
+						return false;
+					}
+					else
+					{
+						window.location = destURL;
+					}
+				}	
 				Glee.closeBoxWithoutBlur();
 			}
 			else if(value[0] == "*")
@@ -505,6 +514,11 @@ var Glee = {
 			window.scrollTo(window.pageXOffset,window.pageYOffset-200);
 		}
 		Glee.userPosBeforeGlee = window.pageYOffset;		
+	},
+	simulateClick: function(el){
+		var evt = document.createEvent("MouseEvents");
+		evt.initMouseEvent("click",true,true,window,0,0,0,0,0,false,false,false,false,0,null);
+		return el[0].dispatchEvent(evt);
 	},
 	resetTimer: function(){
 		if(typeof(Glee.timer) != "undefined")
