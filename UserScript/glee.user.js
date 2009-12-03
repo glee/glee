@@ -319,7 +319,9 @@ var Glee = {
 		],
 	//Domains which are not supported at the moment. 	
 	domainsToBlock:[
-		"mail.google.com"
+		"mail.google.com",
+		"reader.google.com",
+		"wave.google.com"
 	],	
 	initBox: function(){
 		// Creating the div to be displayed
@@ -501,16 +503,10 @@ var Glee = {
 		jQuery('html,body').stop(true, true);
 		if(val == 1)
 		{
-			// jQuery('html,body').animate({scrollTop:window.pageYOffset+300},150,"linear",function(){
-			// 	Glee.userPosBeforeGlee = window.pageYOffset;
-			// });			
 			window.scrollTo(window.pageXOffset,window.pageYOffset+200);
 		}
 		else if(val == 0)
 		{
-			// jQuery('html,body').animate({scrollTop:window.pageYOffset-300},150,"linear",function(){
-			// 	Glee.userPosBeforeGlee = window.pageYOffset;
-			// });			
 			window.scrollTo(window.pageXOffset,window.pageYOffset-200);
 		}
 		Glee.userPosBeforeGlee = window.pageYOffset;		
@@ -614,7 +610,6 @@ var Glee = {
 		LinkReaper.searchTerm = "";
 	},
 	sendRequest: function(url,method,callback){
-		//dependent upon Greasemonkey to send this cross-domain XMLHTTPRequest :|
 		//doing a setTimeout workaround (http://www.neaveru.com/wordpress/index.php/2008/05/09/greasemonkey-bug-domnodeinserted-event-doesnt-allow-gm_xmlhttprequest/)
 		// yet to explore the problem fully
 		setTimeout(function(){
