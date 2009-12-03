@@ -1,5 +1,5 @@
 /**
- * Glee: Keyboard goodness for your web.
+ * gleeBox: Keyboard goodness for your web.
  * 
  * Licensed under the GPL license (http://www.gnu.org/licenses/gpl)
  * Copyright (c) 2009 Ankit Ahuja
@@ -9,7 +9,7 @@
  **/
 
 // ==UserScript==
-// @name          Glee
+// @name          gleeBox
 // @namespace     http://colloki.org/
 // @description   Keyboard goodness for your web
 // @include       *
@@ -189,15 +189,26 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 13)
 		{
 			e.preventDefault();	
-			//if it is a link or subURL is present
-			if(jQuery(Glee.selectedElement)[0].tagName == "A" || Glee.subURL.text() != "")
+			if(value[0] == "*")
 			{
-				var destURL;		
-				if(Glee.selectedElement && typeof(Glee.selectedElement) != "undefined") //if the element exists
+				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
+					jQuery(Glee.selectedElement).removeClass('GleeHL');
+				Glee.reapWhatever(value.substring(1));
+				Glee.selectedElement = LinkReaper.getFirst();
+				Glee.setSubText(Glee.selectedElement,"el");
+				Glee.scrollToElement(Glee.selectedElement);
+			}
+			else
+			{
+				var destURL;
+				var anythingOnClick = true;		
+				if(Glee.selectedElement != null && typeof(Glee.selectedElement) != "undefined") //if the element exists
 				{
 					if(jQuery(Glee.selectedElement)[0].tagName == "A") //if the element is a link
 					{
 						destURL = jQuery(Glee.selectedElement).attr("href");
+						//simulating a click on the link in Firefox ;)
+						anythingOnClick = Glee.simulateClick(Glee.selectedElement);						
 					}
 					else
 						destURL = Glee.subURL.text();
@@ -206,14 +217,11 @@ jQuery(document).ready(function(){
 				{
 					destURL = Glee.subURL.text();
 				}
-				//if destURL exists and is relative, make it absolute
+				//if destURL exists, check if it is relative. if it is, make it absolute
 				if(destURL)
 					destURL = Glee.makeURLAbsolute(destURL,location.href);
-				
-				//simulating a click in Firefox ;)
-				anythingOnClick = Glee.simulateClick(Glee.selectedElement);
-				//check if preventDefault() was called and the href attribute exists
-				if(anythingOnClick && destURL)
+				//check that preventDefault() is not called and destURL exists
+				if(destURL && anythingOnClick)
 				{
 					if(e.shiftKey)
 					{
@@ -225,23 +233,13 @@ jQuery(document).ready(function(){
 					{
 						window.location = destURL;
 					}
-				}	
+				}
+				else
+				{
+					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
+						Glee.selectedElement.focus();
+				}
 				Glee.closeBoxWithoutBlur();
-			}
-			else if(value[0] == "*")
-			{
-				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
-					jQuery(Glee.selectedElement).removeClass('GleeHL');
-				Glee.reapWhatever(value.substring(1));
-				Glee.selectedElement = LinkReaper.getFirst();
-				Glee.setSubText(Glee.selectedElement,"el");
-				Glee.scrollToElement(Glee.selectedElement);
-			}
-			else if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
-			{
-				c = Glee.selectedElement;
-				Glee.closeBoxWithoutBlur();
-				c.focus();
 			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
@@ -423,11 +421,14 @@ var Glee = {
 			{
 				var text = Glee.searchField.attr("value");
 				//if it is a URL
-				if(text.indexOf('.com') != -1)
+				if(Glee.isURL(text))
 				{
 					Glee.selectedElement = null;
 					this.subText.html("Go to "+text);
-					this.subURL.html("http://"+text);
+					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
+					if(!text.match(regex))
+						text = "http://"+text;
+					this.subURL.html(text);
 				}
 				else
 				{
@@ -569,6 +570,10 @@ var Glee = {
 	},
 	truncateURL:function(url){
 		return url.substr(0,78)+"...";
+	},
+	isURL:function(url){
+		var regex = new RegExp(".(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)");
+		return url.match(regex);
 	},
 	checkDomain:function(){
 		for(var i=0; i<Glee.domainsToBlock.length; i++)
