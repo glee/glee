@@ -131,9 +131,9 @@ jQuery(document).ready(function(){
 					}
 					else if(value[0] == '*')// Any jQuery selector
 					{
-							Glee.nullMessage = "Nothing found for your selector.";
-							Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
-							LinkReaper.unreapAllLinks();
+						Glee.nullMessage = "Nothing found for your selector.";
+						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
+						LinkReaper.unreapAllLinks();
 					}
 					// now searching through the commands declared inside Glee.commands
 					else if(value[0] == "!" && value.length > 1)
@@ -192,10 +192,12 @@ jQuery(document).ready(function(){
 			if(Glee.subURL.text() != "")
 			{
 				var destURL;		
-				if(Glee.selectedElement) //if the element exists
+				if(Glee.selectedElement && typeof(Glee.selectedElement) != "undefined") //if the element exists
 				{
-					if(Glee.selectedElement.tagName == "a") //if the element is a link
-						destURL = Glee.selectedElement.attr("href");
+					if(jQuery(Glee.selectedElement)[0].tagName == "A") //if the element is a link
+					{
+						destURL = jQuery(Glee.selectedElement).attr("href");
+					}
 					else
 						destURL = Glee.subURL.text();
 				}
@@ -203,6 +205,8 @@ jQuery(document).ready(function(){
 				{
 					destURL = Glee.subURL.text();
 				}
+				//if destURL is relative, make it absolute
+				destURL = Glee.makeURLAbsolute(destURL,location.href);
 				if(e.shiftKey)
 				{
 					//another method from the GM API
@@ -329,9 +333,9 @@ var Glee = {
 		Glee.searchField.attr('value','');
 	},
 	closeBoxWithoutBlur: function(){
+		Glee.searchBox.fadeOut(150);		
 		LinkReaper.unreapAllLinks();
 		//resetting value of searchField
-		Glee.searchBox.fadeOut(150);
 		Glee.searchField.attr('value','');
 	},
 	initReaper: function(reaper){
@@ -507,6 +511,51 @@ var Glee = {
 		{			
 			clearTimeout(Glee.timer);
 		}
+	},
+	makeURLAbsolute: function(link,host){
+		//code from http://github.com/stoyan/etc/blob/master/toAbs/absolute.html
+		var lparts = link.split('/');
+		if (/http:|https:|ftp:/.test(lparts[0])) {
+			// already abs, return
+			return link;
+		}
+
+		var i, hparts = host.split('/');
+		if (hparts.length > 3) {
+			hparts.pop(); // strip trailing thingie, either scriptname or blank 
+		}
+
+		if (lparts[0] === '') { // like "/here/dude.png"
+			host = hparts[0] + '//' + hparts[2];
+			hparts = host.split('/'); // re-split host parts from scheme and domain only
+	        delete lparts[0];
+		}
+
+		for(i = 0; i < lparts.length; i++) {
+			if (lparts[i] === '..') {
+				// remove the previous dir level, if exists
+				if (typeof lparts[i - 1] !== 'undefined') { 
+					delete lparts[i - 1];
+				} 
+				else if (hparts.length > 3) { // at least leave scheme and domain
+					hparts.pop(); // stip one dir off the host for each /../
+				}
+				delete lparts[i];
+			}
+			if(lparts[i] === '.') {
+				delete lparts[i];
+			}
+		}
+
+		// remove deleted
+		var newlinkparts = [];
+		for (i = 0; i < lparts.length; i++) {
+			if (typeof lparts[i] !== 'undefined') {
+				newlinkparts[newlinkparts.length] = lparts[i];
+			}
+		}
+
+		return hparts.join('/') + '/' + newlinkparts.join('/');
 	},
 	truncateURL:function(url){
 		return url.substr(0,78)+"...";
