@@ -1,10 +1,10 @@
-Glee
+gleeBox
 
-Glee is an experimental project and is meant for a very niché audience (hackers mostly). So, it is very possible, that at first you find it hard to conceive the utility of Glee.
+gleeBox is an experimental project and is meant for a very niché audience (hackers mostly). So, it is very possible, that at first you find it hard to conceive the utility of gleeBox.
 
 === Installation
 
-Right now, Glee is available as a Greasmonkey script for Firefox and a Chrome extension. 
+Right now, gleeBox is available as a Greasmonkey script for Firefox and a Chrome extension. 
 
 To install the Greasemonkey script, you'll need to have Greasemonkey installed in Firefox. Download the repository as a zip/tar and drag "UserScript/glee.user.js" to Firefox and Greasemonkey should ask for your permission to install it. 
 
@@ -14,7 +14,7 @@ To install as a Chrome extension, you'll need to have the dev build of Google Ch
 
 General Keys:
 
-g - Launch Glee (If you're focussed on an input field, press Alt+g (Option + g on Mac)) Glee currently doesn't work when on gmail, google reader, google docs, and of course, google wave. 
+g - Launch gleeBox (If you're focussed on an input field, press Alt+g (Option + g on Mac)) gleeBox currently doesn't work when on gmail, google reader, google docs, and of course, google wave. 
 
 TAB Key - Move to the next selected element
 
@@ -24,13 +24,13 @@ ENTER - Launch a link or execute a command
 
 Shift+ENTER - Open a link in a new tab
 
-ESC - Quit Glee when it is focussed. In case it isn't, press 'g' to quit Glee
+ESC - Quit gleeBox when it is focussed. In case it isn't, press 'g' to quit gleeBox
 
 Default behavior:
 
-When you enter any text, Glee will search for links on the current page whose text matches your query. If it finds any links, it will highlight them and you can scroll through them by pressing the TAB key. You can open a particular link by pressing ENTER. 
+When you enter any text, gleeBox will search for links on the current page whose text matches your query. If it finds any links, it will highlight them and you can scroll through them by pressing the TAB key. You can open a particular link by pressing ENTER. 
 
-In case Glee doesn't find any links, when you press ENTER, it will either search the text on Google or will directly go to a URL if you entered a URL like twitter.com.
+In case gleeBox doesn't find any links, when you press ENTER, it will either search the text on Google or will directly go to a URL if you entered a URL like twitter.com.
 
 Scraping Commands:
 
