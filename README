@@ -6,9 +6,9 @@ Glee is an experimental project and is meant for a very niché audience (hackers
 
 Right now, Glee is available as a Greasmonkey script for Firefox and a Chrome extension. 
 
-To install the Greasemonkey script, you'll need to have Greasemonkey installed in Firefox. Download "UserScript/glee.user.js" and drag it to Firefox and Greasemonkey should ask for your permission to install it. 
+To install the Greasemonkey script, you'll need to have Greasemonkey installed in Firefox. Download the repository as a zip/tar and drag "UserScript/glee.user.js" to Firefox and Greasemonkey should ask for your permission to install it. 
 
-To install as a Chrome extension, you'll need to have the dev build of Google Chrome installed. Download "Chrome/glee_chrome.crx" and drag it to Chrome to install it. 
+To install as a Chrome extension, you'll need to have the dev build of Google Chrome installed. Download the repository as zip/tar and drag "Chrome/glee_chrome.crx" to Chrome to install it.
 
 === Usage
 
