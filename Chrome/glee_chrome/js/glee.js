@@ -215,8 +215,8 @@ jQuery(document).ready(function(){
 					{
 						//sending request to background.html to create a new tab
 						chrome.extension.sendRequest({value:"createTab",url:destURL},function(response){
-							return false;
 						});
+						return false;
 					}
 					else
 					{
