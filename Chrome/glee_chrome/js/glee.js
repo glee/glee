@@ -209,18 +209,18 @@ jQuery(document).ready(function(){
 				if(destURL)
 					destURL = Glee.makeURLAbsolute(destURL,location.href);
 				//check that preventDefault() is not called and destURL exists
-				if(destURL && anythingOnClick)
+				if(destURL && anythingOnClick && jQuery(Glee.selectedElement)[0].tagName != "A")
 				{
 					if(e.shiftKey)
 					{
 						//sending request to background.html to create a new tab
-						// chrome.extension.sendRequest({value:"createTab",url:destURL},function(response){
-						// 	alert("why?");
-						// });
+						chrome.extension.sendRequest({value:"createTab",url:destURL},function(response){
+							return false;
+						});
 					}
 					else
 					{
-						// window.location = destURL;
+						window.location = destURL;
 					}
 				}
 				else
