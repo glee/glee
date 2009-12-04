@@ -224,6 +224,12 @@ jQuery(document).ready(function(){
 				{
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 						Glee.selectedElement.focus();
+					else
+					{
+						setTimeout(function(){
+							Glee.searchField.blur();
+						},0)
+					}
 				}
 				Glee.closeBoxWithoutBlur();
 			}

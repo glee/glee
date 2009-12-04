@@ -238,6 +238,12 @@ jQuery(document).ready(function(){
 				{
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 						Glee.selectedElement.focus();
+					else
+					{
+						setTimeout(function(){
+							Glee.searchField.blur();
+						},0);
+					}
 				}
 				Glee.closeBoxWithoutBlur();
 			}
@@ -345,7 +351,7 @@ var Glee = {
 		Glee.searchBox.fadeOut(150);		
 		LinkReaper.unreapAllLinks();
 		//resetting value of searchField
-		Glee.searchField.attr('value','');
+		Glee.searchField.attr('value','');		
 	},
 	initReaper: function(reaper){
 		Glee.nullMessage = reaper.nullMessage;
