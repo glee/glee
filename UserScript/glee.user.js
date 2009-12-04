@@ -1,20 +1,24 @@
 /**
  * gleeBox: Keyboard goodness for your web.
  * 
- * Licensed under the GPL license (http://www.gnu.org/licenses/gpl)
+ * Licensed under the GPL license (http://www.gnu.org/licenses/gpl.html)
  * Copyright (c) 2009 Ankit Ahuja
  * Copyright (c) 2009 Sameer Ahuja
- * 
+ *
  *
  **/
 
 // ==UserScript==
 // @name          gleeBox
 // @namespace     http://colloki.org/
+// @version		  0.5
 // @description   Keyboard goodness for your web
 // @include       *
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js
 // @require 	  http://json.org/json2.js
+// @copyright	  2009+, Ankit Ahuja and Sameer Ahuja (http://thegleebox.com)
+// @license	      GPL v3 or later; http://www.gnu.org/licenses/gpl.html
+
 // ==/UserScript==
 
 jQuery(document).ready(function(){
