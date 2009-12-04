@@ -756,14 +756,12 @@ var LinkReaper = {
 			}
 			LinkReaper.searchTerm = term;
 			this.traversePosition = 0;
-			//Filtering links to get only the ones visible
-			this.selectedLinks = jQuery.grep(this.selectedLinks, Glee.isVisible);
 		}
 	},
 	
 	reapALink: function(el, term) {
 		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
-		if(index != -1) {
+		if(index != -1 && Glee.isVisible(el)) {
 			el.addClass('GleeReaped');
 			Glee.setSubText(el,"el");
 			return true;
