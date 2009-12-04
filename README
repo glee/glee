@@ -22,7 +22,7 @@ Shift+TAB - Move to the previous selected element
 
 ENTER - Launch a link or execute a command
 
-Shift+ENTER - Open a link in a new tab (only in Firefox at the moment. In Chrome, it depends upon the 'target' attribute of link)
+Shift+ENTER - Open a link in a new tab 
 
 ESC - Quit gleeBox when it is focussed. In case it isn't, press 'g' to quit gleeBox
 

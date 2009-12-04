@@ -185,15 +185,36 @@ jQuery(document).ready(function(){
 			}
 			else
 			{
-				var destURL;
+				var destURL = null;
 				var anythingOnClick = true;		
 				if(Glee.selectedElement != null && typeof(Glee.selectedElement) != "undefined") //if the element exists
 				{
 					if(jQuery(Glee.selectedElement)[0].tagName == "A") //if the element is a link
 					{
 						destURL = jQuery(Glee.selectedElement).attr("href");
+						//setting the target value of element depending upon if shift key was pressed
+						if(e.shiftKey)
+						{
+							jQuery(Glee.selectedElement).attr("target","_blank");
+							target = 1;
+						}
+						else
+						{
+							jQuery(Glee.selectedElement).attr("target","_self");
+							target = 0;
+						}
+							
 						//simulating a click on the link
 						anythingOnClick = Glee.simulateClick(Glee.selectedElement);
+						
+						if(!target)
+						{
+							setTimeout(function(){
+								Glee.searchField.blur();
+							},0);
+							Glee.closeBoxWithoutBlur();
+						}
+						return false;
 					}
 					else
 						destURL = Glee.subURL.text();
@@ -220,6 +241,7 @@ jQuery(document).ready(function(){
 					}
 					else
 					{
+						Glee.closeBoxWithoutBlur();	
 						window.location = destURL;
 					}
 				}
