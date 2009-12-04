@@ -192,7 +192,7 @@ jQuery(document).ready(function(){
 					if(jQuery(Glee.selectedElement)[0].tagName == "A") //if the element is a link
 					{
 						destURL = jQuery(Glee.selectedElement).attr("href");
-						//simulating a click on the link in Firefox ;)
+						//simulating a click on the link
 						anythingOnClick = Glee.simulateClick(Glee.selectedElement);
 					}
 					else
@@ -202,6 +202,9 @@ jQuery(document).ready(function(){
 				{
 					destURL = Glee.subURL.text();
 				}
+				//# in URL is same as null
+				if(destURL == "#")
+					destURL = null;
 				//if destURL exists, check if it is relative. if it is, make it absolute
 				if(destURL)
 					destURL = Glee.makeURLAbsolute(destURL,location.href);
@@ -223,7 +226,20 @@ jQuery(document).ready(function(){
 				else
 				{
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
-						Glee.selectedElement.focus();
+					{
+						if(jQuery(Glee.selectedElement)[0].tagName == "INPUT" || jQuery(Glee.selectedElement)[0].tagName == "TEXTAREA")
+						{
+							setTimeout(function(){
+								Glee.selectedElement.focus();
+							},0);
+						}
+						else
+						{
+							setTimeout(function(){
+								Glee.searchField.blur();
+							},0);
+						}
+					}
 					else
 					{
 						setTimeout(function(){
