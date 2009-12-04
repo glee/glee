@@ -319,11 +319,11 @@ var Glee = {
 		this.searchBox.append(this.searchField).append(sub);
 		jQuery(document.body).append(this.searchBox);
 		this.initStatus();
-		this.checkDomain();
-	},	
+	},
 	initStatus:function(){
 		chrome.extension.sendRequest({value:"getStatus"},function(response){
 			Glee.status = response.status;
+			Glee.checkDomain();
 		});
 	},
 	closeBox: function(){
