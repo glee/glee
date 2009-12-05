@@ -19,7 +19,7 @@ jQuery(document).ready(function(){
 	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
-		if(Glee.status)
+		if(Glee.status != 0)
 		{	
 			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea') || e.altKey))
 			{
