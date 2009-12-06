@@ -228,7 +228,7 @@ jQuery(document).ready(function(){
 					destURL = null;
 				//if destURL exists, check if it is relative. if it is, make it absolute
 				if(destURL)
-					destURL = Glee.makeURLAbsolute(destURL,location.href);
+					destURL = Glee.makeURLAbsolute(destURL,location.protocol+"//"+location.host);
 				//check that preventDefault() is not called and destURL exists
 				if(destURL && anythingOnClick && jQuery(Glee.selectedElement)[0].tagName != "A")
 				{
