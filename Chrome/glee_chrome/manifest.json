@@ -8,7 +8,7 @@
 	"background_page":"background.html",
 	"content_scripts":[
 	{
-		"matches":["http://*/*","https://*/*","file://*/*"],
+		"matches":["http://*/*","https://*/*"],
 		"css":["css/glee.css"],
 		"js":["js/jquery.js","js/glee.js"],
 		"run_at":"document_start"
