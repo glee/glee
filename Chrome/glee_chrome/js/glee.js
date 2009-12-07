@@ -456,7 +456,7 @@ var Glee = {
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //go to URL or google
+			else //go to URL , search for bookmark or google
 			{
 				var text = Glee.searchField.attr("value");
 				//if it is a URL
@@ -468,6 +468,10 @@ var Glee = {
 					if(!text.match(regex))
 						text = "http://"+text;
 					this.subURL.html(text);
+				}
+				else if(Glee.isBookmark(text)) //check if the text matches a bookmark
+				{
+					
 				}
 				else
 				{
@@ -613,6 +617,9 @@ var Glee = {
 	isURL:function(url){
 		var regex = new RegExp(".(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)");
 		return url.match(regex);
+	},
+	isBookmark:function(text){
+		//send request to search the bookmark tree for the bookmark whose title matches text
 	},
 	checkDomain:function(){
 		for(var i=0; i<Glee.domainsToBlock.length; i++)

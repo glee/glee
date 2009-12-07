@@ -15,7 +15,8 @@
 	}],
 	"permissions":[
 		"tabs",
-		"http://api.bit.ly/"
+		"http://api.bit.ly/",
+		"bookmarks"
 	],
 	"browser_action":{
 		"default_icon":"images/icon_19.png",
