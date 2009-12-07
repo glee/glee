@@ -85,18 +85,18 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		}
 		req.send();
 	}
-	else if(request.value == "getBookmark")
+	else if(request.value == "searchBookmarks")
 	{
+		var bookmarks = [];
 		chrome.bookmarks.search(request.text,function(results){
 			for(i=0;i<results.length;i++)
 			{
 				if(results[i].url)
 				{
-					sendResponse({bookmark:results[i]});
-					break;
+					bookmarks[bookmarks.length] = results[i];
 				}
 			}
-			sendResponse({bookmark:null});
+			sendResponse({bookmarks:bookmarks});
 		});
 	}
 });

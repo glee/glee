@@ -156,7 +156,7 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 9)  //if TAB is pressed
 		{
 			e.preventDefault();
-			if(value != "")
+			if(value != "" && Glee.selectedElement)
 			{
 				if(e.shiftKey)
 				{
@@ -168,6 +168,13 @@ jQuery(document).ready(function(){
 				}
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
+			}
+			else
+			{
+				if(e.shiftKey)
+					Glee.getPrevResult();
+				else
+					Glee.getNextResult();
 			}
 		}
 		//if ENTER is pressed
@@ -290,6 +297,8 @@ var Glee = {
 	//Currently selected element
 	selectedElement:null,
 	userFocusBeforeGlee:null,
+	//array to store search results
+	results:[],
 	// !commands
 	commands:[
 		{
@@ -459,10 +468,10 @@ var Glee = {
 			else //go to URL , search for bookmark or google
 			{
 				var text = Glee.searchField.attr("value");
+				Glee.selectedElement = null;
 				//if it is a URL
 				if(Glee.isURL(text))
 				{
-					Glee.selectedElement = null;
 					this.subText.html("Go to "+text);
 					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
 					if(!text.match(regex))
@@ -485,6 +494,32 @@ var Glee = {
 			this.subText.html("Nothing selected");
 			this.subURL.html('');
 		}
+	},
+	getNextResult:function(){
+		if(this.results.length > 1)
+		{
+			if(this.currentResultIndex == this.results.length-1)
+				this.currentResultIndex = 0;
+			else
+				this.currentResultIndex++;
+			this.subText.html(this.results[this.currentResultIndex].title);
+			this.subURL.html(this.results[this.currentResultIndex].url);
+		}
+		else
+			return null;	
+	},
+	getPrevResult:function(){
+		if(this.results.length > 1)
+		{
+			if(this.currentResultIndex == 0)
+				this.currentResultIndex = this.results.length-1;
+			else
+				this.currentResultIndex --;
+			this.subText.html("Open bookmark: "+this.results[this.currentResultIndex].title);
+			this.subURL.html(this.results[this.currentResultIndex].url);
+		}
+		else
+			return null;
 	},
 	scrollToElement: function(el){
 		var target;
@@ -615,11 +650,20 @@ var Glee = {
 	},
 	isBookmark:function(text){
 		//send request to search the bookmark tree for the bookmark whose title matches text
-		chrome.extension.sendRequest({value:"getBookmark",text:text},function(response){
-			if(response.bookmark != null) 
+		chrome.extension.sendRequest({value:"searchBookmarks",text:text},function(response){
+			var bookmarks = response.bookmarks;
+			if(bookmarks.length != 0) 
 			{
-				Glee.subText.html("Open bookmark: "+response.bookmark.title);
-				Glee.subURL.html(response.bookmark.url);
+				if(Glee.results.length != 0)
+					Glee.results.splice(0,Glee.results.length);
+					
+				for(i=0;i<bookmarks.length;i++)
+					Glee.results[i] = {title:"Open bookmark: " + bookmarks[i].title, url:bookmarks[i].url};
+					
+				Glee.results[Glee.results.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
+				Glee.currentResultIndex = 0;
+				Glee.subText.html("Open bookmark: "+bookmarks[0].title);
+				Glee.subURL.html(bookmarks[0].url);
 			}
 			else //google it
 			{
