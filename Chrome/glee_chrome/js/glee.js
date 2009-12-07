@@ -156,25 +156,28 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 9)  //if TAB is pressed
 		{
 			e.preventDefault();
-			if(value != "" && Glee.selectedElement)
+			if(value != "")
 			{
-				if(e.shiftKey)
-				{
-					Glee.selectedElement = LinkReaper.getPrev();
+				if(Glee.selectedElement)
+				{	
+					if(e.shiftKey)
+					{
+						Glee.selectedElement = LinkReaper.getPrev();
+					}
+					else
+					{
+						Glee.selectedElement = LinkReaper.getNext();
+					}
+					Glee.setSubText(Glee.selectedElement,"el");
+					Glee.scrollToElement(Glee.selectedElement);
 				}
-				else
+				else if(Glee.bookmarks)
 				{
-					Glee.selectedElement = LinkReaper.getNext();
+					if(e.shiftKey)
+						Glee.getPrevBookmark();
+					else
+						Glee.getNextBookmark();
 				}
-				Glee.setSubText(Glee.selectedElement,"el");
-				Glee.scrollToElement(Glee.selectedElement);
-			}
-			else
-			{
-				if(e.shiftKey)
-					Glee.getPrevResult();
-				else
-					Glee.getNextResult();
 			}
 		}
 		//if ENTER is pressed
@@ -296,9 +299,10 @@ var Glee = {
 	status:1, 
 	//Currently selected element
 	selectedElement:null,
+	//element on which the user was focussed before a search
 	userFocusBeforeGlee:null,
-	//array to store search results
-	results:[],
+	//array to store bookmarks, if found for a search
+	bookmarks:[],
 	// !commands
 	commands:[
 		{
@@ -480,6 +484,8 @@ var Glee = {
 				}
 				else 
 				{
+					//emptying the bookmarks array
+					Glee.bookmarks.splice(0,Glee.bookmarks.length);
 					Glee.isBookmark(text); //check if the text matches a bookmark
 				}
 			}
@@ -495,28 +501,28 @@ var Glee = {
 			this.subURL.html('');
 		}
 	},
-	getNextResult:function(){
-		if(this.results.length > 1)
+	getNextBookmark:function(){
+		if(this.bookmarks.length > 1)
 		{
-			if(this.currentResultIndex == this.results.length-1)
+			if(this.currentResultIndex == this.bookmarks.length-1)
 				this.currentResultIndex = 0;
 			else
 				this.currentResultIndex++;
-			this.subText.html(this.results[this.currentResultIndex].title);
-			this.subURL.html(this.results[this.currentResultIndex].url);
+			this.subText.html(this.bookmarks[this.currentResultIndex].title);
+			this.subURL.html(this.bookmarks[this.currentResultIndex].url);
 		}
 		else
 			return null;	
 	},
-	getPrevResult:function(){
-		if(this.results.length > 1)
+	getPrevBookmark:function(){
+		if(this.bookmarks.length > 1)
 		{
 			if(this.currentResultIndex == 0)
-				this.currentResultIndex = this.results.length-1;
+				this.currentResultIndex = this.bookmarks.length-1;
 			else
 				this.currentResultIndex --;
-			this.subText.html("Open bookmark: "+this.results[this.currentResultIndex].title);
-			this.subURL.html(this.results[this.currentResultIndex].url);
+			this.subText.html("Open bookmark: "+this.bookmarks[this.currentResultIndex].title);
+			this.subURL.html(this.bookmarks[this.currentResultIndex].url);
 		}
 		else
 			return null;
@@ -654,13 +660,10 @@ var Glee = {
 			var bookmarks = response.bookmarks;
 			if(bookmarks.length != 0) 
 			{
-				if(Glee.results.length != 0)
-					Glee.results.splice(0,Glee.results.length);
-					
 				for(i=0;i<bookmarks.length;i++)
-					Glee.results[i] = {title:"Open bookmark: " + bookmarks[i].title, url:bookmarks[i].url};
+					Glee.bookmarks[i] = {title:"Open bookmark: " + bookmarks[i].title, url:bookmarks[i].url};
 					
-				Glee.results[Glee.results.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
+				Glee.bookmarks[Glee.bookmarks.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
 				Glee.currentResultIndex = 0;
 				Glee.subText.html("Open bookmark: "+bookmarks[0].title);
 				Glee.subURL.html(bookmarks[0].url);
