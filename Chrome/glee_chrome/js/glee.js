@@ -469,14 +469,9 @@ var Glee = {
 						text = "http://"+text;
 					this.subURL.html(text);
 				}
-				else if(Glee.isBookmark(text)) //check if the text matches a bookmark
+				else 
 				{
-					
-				}
-				else
-				{
-					this.subText.html("Google "+text);
-					this.subURL.html("http://www.google.com/search?q="+text);
+					Glee.isBookmark(text); //check if the text matches a bookmark
 				}
 			}
 		}
@@ -620,6 +615,18 @@ var Glee = {
 	},
 	isBookmark:function(text){
 		//send request to search the bookmark tree for the bookmark whose title matches text
+		chrome.extension.sendRequest({value:"getBookmark",text:text},function(response){
+			if(response.bookmark != null) 
+			{
+				Glee.subText.html("Open bookmark: "+response.bookmark.title);
+				Glee.subURL.html(response.bookmark.url);
+			}
+			else //google it
+			{
+				Glee.subText.html("Google "+text);
+				Glee.subURL.html("http://www.google.com/search?q="+text);
+			}
+		});
 	},
 	checkDomain:function(){
 		for(var i=0; i<Glee.domainsToBlock.length; i++)
