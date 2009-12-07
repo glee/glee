@@ -76,6 +76,8 @@ jQuery(document).ready(function(){
 					&& value[0] != ":" 
 					&& value[0] != '*')
 				{
+					if(Glee.commandMode)
+						LinkReaper.unreapAllLinks();
 					Glee.commandMode = false;
 					//default behavior in non-command mode, i.e. search for links
 					//if a timer exists, reset it
@@ -92,6 +94,7 @@ jQuery(document).ready(function(){
 				}
 				//else command mode
 				else {
+					LinkReaper.unreapAllLinks();
 					Glee.commandMode = true;
 					Glee.resetTimer();
 					Glee.toggleActivity(0);
@@ -118,7 +121,6 @@ jQuery(document).ready(function(){
 					{
 						Glee.nullMessage = "Nothing found for your selector.";
 						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
-						LinkReaper.unreapAllLinks();
 					}
 					// now searching through the commands declared inside Glee.commands
 					else if(value[0] == "!" && value.length > 1)
@@ -135,7 +137,6 @@ jQuery(document).ready(function(){
 					}
 					else
 					{
-						LinkReaper.unreapAllLinks();
 						Glee.setSubText("Command not found", "msg");
 					}
 				}
