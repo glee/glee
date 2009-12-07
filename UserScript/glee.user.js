@@ -227,7 +227,8 @@ jQuery(document).ready(function(){
 				//if destURL exists, check if it is relative. if it is, make it absolute
 				if(destURL)
 				{
-					destURL = Glee.makeURLAbsolute(destURL,location.protocol+"//"+location.host);
+					// destURL = Glee.makeURLAbsolute(destURL,location.protocol+"//"+location.host);
+					destURL = Glee.makeURLAbsolute(destURL, location.href);
 				}
 					
 				//check that preventDefault() is not called and destURL exists

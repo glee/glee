@@ -228,7 +228,10 @@ jQuery(document).ready(function(){
 					destURL = null;
 				//if destURL exists, check if it is relative. if it is, make it absolute
 				if(destURL)
-					destURL = Glee.makeURLAbsolute(destURL,location.protocol+"//"+location.host);
+				{
+					// destURL = Glee.makeURLAbsolute(destURL,location.protocol+"//"+location.host);
+					destURL = Glee.makeURLAbsolute(destURL, location.href);
+				}
 				//check that preventDefault() is not called and destURL exists
 				if(destURL && anythingOnClick && jQuery(Glee.selectedElement)[0].tagName != "A")
 				{
@@ -453,7 +456,7 @@ var Glee = {
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //google or go to URL
+			else //go to URL or google
 			{
 				var text = Glee.searchField.attr("value");
 				//if it is a URL
