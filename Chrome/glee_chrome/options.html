@@ -1,0 +1,113 @@
+<html>
+<head>
+	<title>gleeBox Options</title>
+	<style>
+	h2{
+		text-align:center;
+		color:#333;
+		margin:30px 0px;
+		font-size:40px;
+		font-weight:normal;
+		font-family:Garamond,"Times New Roman",serif;
+	}
+	ul{
+		list-style-type:none;
+		margin:0;
+		padding:0;
+	}
+	ul#options{
+		width:650px;
+	}
+	li{
+		margin:5px 0;
+		padding:0;
+	}
+	.option-label{
+		float:left;
+		width:200px;
+	}
+	.option-field{
+		float:left;
+	}
+	ul li ul{
+		margin:0;
+		padding:0;
+	}
+	.button{
+		float:right;
+		margin-right:50px;
+	}
+	</style>
+</head>
+<script type="text/javascript">
+
+// Saves options to localStorage.
+function save_options() {
+  var restrictedDomains = [];
+  //getting the domains
+  var domainList = document.getElementById("domains");
+  for(var i=0;i<domainList.children.length;i++)
+  {
+	if(domainList.children[i].className == "rdomain")
+	{
+		restrictedDomains[restrictedDomains.length] = domainList.children[i].innerHTML;
+	}
+  }
+  //currently using , (automatically added when saving an array in localStorage) as the end marker. need a better way to implement this
+  localStorage["glee_domains"] = restrictedDomains;
+}
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+  var domainBuffer = localStorage["glee_domains"];
+  if(!domainBuffer)
+	return;
+  //parsing domainBuffer to get the domains
+  var restrictedDomains = domainBuffer.split(",");
+  var domainList = document.getElementById("domains");
+  //TODO: use lastChild property here
+  var lastChild = document.getElementById("addDomainLI");
+  //displaying the domains in the restricted list
+  for (var i=0; i<restrictedDomains.length; i++)
+  {
+	var newLI = document.createElement('li');
+	newLI.className = "rdomain";
+	newLI.innerHTML = restrictedDomains[i];
+	domainList.insertBefore(newLI,lastChild);
+  }
+}
+
+//Adds a domain to the restricted domain list
+function addDomain() {
+	var newDomain = document.getElementById("add_domain").value;
+	var lastChild = document.getElementById("addDomainLI");
+	//TODO: create a validate() method with more strict validation
+	if(newDomain != "")
+	{
+		var domainList = document.getElementById("domains");
+		var newLI = document.createElement('li');
+		newLI.className = "rdomain";
+		newLI.innerHTML = newDomain;
+		domainList.insertBefore(newLI,lastChild);
+		return 0;
+	}
+	return 1;
+}
+</script>
+
+<body onload="restore_options()">
+<h2>gleeBox Options</h2><br/>
+<!--Specifying different options available -->
+<ul id="options">
+	<li><label class="option-label">Domains on which gleeBox should be disabled:</label>
+		<ul id="domains" class="option-field">
+			<li>mail.google.com (disabled by default)</li>
+			<li>reader.google.com (disabled by default)</li>
+			<li id="addDomainLI"><input id="add_domain" type="text" value="" size=50 /><input type="button" value="Add" onclick="addDomain()"/></li>
+		</ul>
+	</li>
+<div style="clear:both"></div><br/><br/>
+<button class="button" onclick="save_options()">Save</button>
+</ul>
+</body>
+</html>
