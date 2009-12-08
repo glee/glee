@@ -677,14 +677,25 @@ var Glee = {
 		});
 	},
 	checkDomain:function(){
-		for(var i=0; i<Glee.domainsToBlock.length; i++)
-		{
-			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
+		//send request to get the domains disabled by the user in options
+		chrome.extension.sendRequest({value:"getDisabledDomains"},function(response){
+			if(response.domains)
 			{
-				Glee.status = 0;
-				break;
+
+				for(var i=0;i<response.domains.length;i++)
+				{
+					Glee.domainsToBlock[Glee.domainsToBlock.length] = response.domains[i];
+				}
 			}
-		}
+			for(var i=0; i<Glee.domainsToBlock.length; i++)
+			{
+				if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
+				{
+					Glee.status = 0;
+					break;
+				}
+			}
+		});
 	},
 	isVisible:function(el){
 		el = jQuery(el);

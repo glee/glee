@@ -99,6 +99,15 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 			sendResponse({bookmarks:bookmarks});
 		});
 	}
+	else if(request.value == "getDisabledDomains")
+	{
+		if(localStorage["glee_domains"])
+		{
+			sendResponse({domains:localStorage["glee_domains"].split(",")});
+		}
+		else
+			sendResponse({domains:null});
+	}
 });
 
 </script>
