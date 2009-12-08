@@ -20,12 +20,12 @@ jQuery(document).ready(function(){
 		var target = e.target || e.srcElement;
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
 		if(Glee.status != 0)
-		{	
-			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea') || e.altKey))
+		{
+			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey))
 			{
 				e.preventDefault();
 				Glee.userPosBeforeGlee = window.pageYOffset;
-				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea')
+				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
 					Glee.userFocusBeforeGlee = target;
 				else
 					Glee.userFocusBeforeGlee = null;
@@ -41,7 +41,7 @@ jQuery(document).ready(function(){
 					Glee.closeBox();
 				}
 			}
-		}	
+		}
 	});
 	Glee.searchField.bind('keydown',function(e){
 		//pressing 'esc' hides the gleeBox
@@ -71,9 +71,9 @@ jQuery(document).ready(function(){
 			{
 				Glee.toggleActivity(1);
 
-				if(value[0] != "?" 
-					&& value[0] != "!" 
-					&& value[0] != ":" 
+				if(value[0] != "?"
+					&& value[0] != "!"
+					&& value[0] != ":"
 					&& value[0] != '*')
 				{
 					if(Glee.commandMode)
