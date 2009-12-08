@@ -41,11 +41,13 @@ jQuery(document).ready(function(){
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
 		if(Glee.status)
 		{	
-			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea') || e.altKey))
+			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey))
 			{
 				e.preventDefault();
+				//set default subtext
+				Glee.subText.html("Nothing selected");				
 				Glee.userPosBeforeGlee = window.pageYOffset;
-				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea')
+				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
 					Glee.userFocusBeforeGlee = target;
 				else
 					Glee.userFocusBeforeGlee = null;
@@ -164,12 +166,10 @@ jQuery(document).ready(function(){
 			{
 				//when searchField is empty
 				Glee.resetTimer();
-				// start the timer
-				Glee.timer = setTimeout(function(){
-					LinkReaper.unreapAllLinks();
-					Glee.setSubText(null);
-					Glee.toggleActivity(0);
-				},400);
+				LinkReaper.unreapAllLinks();
+				Glee.setSubText(null);
+				Glee.selectedElement = null;
+				Glee.toggleActivity(0);
 			}
 			Glee.searchText = value;
 		}
@@ -361,7 +361,7 @@ var Glee = {
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		this.subText = jQuery("<div id=\"gleeSubText\">No Links selected</div>");
+		this.subText = jQuery("<div id=\"gleeSubText\">Nothing selected</div>");
 		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
 		this.searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
@@ -377,12 +377,18 @@ var Glee = {
 		//resetting value of searchField
 		Glee.searchBox.fadeOut(150);
 		Glee.searchField.attr('value','');
+		this.subText.html("");
+		this.subURL.html("");
+		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
 		Glee.searchBox.fadeOut(150);
 		LinkReaper.unreapAllLinks();
 		//resetting value of searchField
 		Glee.searchField.attr('value','');
+		this.subText.html("");
+		this.subURL.html("");
+		this.selectedElement = null;
 	},
 	initReaper: function(reaper){
 		Glee.nullMessage = reaper.nullMessage;

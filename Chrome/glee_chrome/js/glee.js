@@ -25,6 +25,8 @@ jQuery(document).ready(function(){
 			{
 				e.preventDefault();
 				Glee.userPosBeforeGlee = window.pageYOffset;
+				//set default subtext
+				Glee.subText.html("Nothing selected");
 				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
 					Glee.userFocusBeforeGlee = target;
 				else
@@ -145,12 +147,10 @@ jQuery(document).ready(function(){
 			{
 				//when searchField is empty
 				Glee.resetTimer();
-				// start the timer
-				Glee.timer = setTimeout(function(){
-					LinkReaper.unreapAllLinks();
-					Glee.setSubText(null);
-					Glee.toggleActivity(0);
-				},400);
+				LinkReaper.unreapAllLinks();
+				Glee.setSubText(null);
+				Glee.selectedElement = null;
+				Glee.toggleActivity(0);
 			}
 			Glee.searchText = value;
 		}
@@ -371,7 +371,7 @@ var Glee = {
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		this.subText = jQuery("<div id=\"gleeSubText\">No Links selected</div>");
+		this.subText = jQuery("<div id=\"gleeSubText\">Nothing selected</div>");
 		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
 		this.searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
@@ -389,16 +389,22 @@ var Glee = {
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
-		Glee.getBackInitialState();
+		this.getBackInitialState();
 		//resetting value of searchField
-		Glee.searchBox.fadeOut(150);
-		Glee.searchField.attr('value','');
+		this.searchBox.fadeOut(150);
+		this.searchField.attr('value','');
+		this.subText.html("");
+		this.subURL.html("");
+		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
 		Glee.searchBox.fadeOut(150);
 		LinkReaper.unreapAllLinks();
 		//resetting value of searchField
 		Glee.searchField.attr('value','');
+		this.subText.html("");
+		this.subURL.html("");
+		this.selectedElement = null;
 	},
 	initReaper: function(reaper){
 		Glee.nullMessage = reaper.nullMessage;
