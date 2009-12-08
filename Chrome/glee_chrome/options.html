@@ -37,6 +37,13 @@
 		float:right;
 		margin-right:50px;
 	}
+	.inline_button{
+		padding-left:20px;
+		float:right;
+	}
+	#addDomainLi{
+		margin-top:10px;
+	}
 	</style>
 </head>
 <script type="text/javascript">
@@ -50,7 +57,7 @@ function save_options() {
   {
 	if(domainList.children[i].className == "rdomain")
 	{
-		restrictedDomains[restrictedDomains.length] = domainList.children[i].innerHTML;
+		restrictedDomains[restrictedDomains.length] = domainList.children[i].innerText;
 	}
   }
   //currently using , (automatically added when saving an array in localStorage) as the end marker. need a better way to implement this
@@ -71,8 +78,9 @@ function restore_options() {
   for (var i=0; i<restrictedDomains.length; i++)
   {
 	var newLI = document.createElement('li');
+	var inputBt = "<input class='inline_button' type='button' value='remove' onclick='removeDomain("+i+")'/>";
 	newLI.className = "rdomain";
-	newLI.innerHTML = restrictedDomains[i];
+	newLI.innerHTML = restrictedDomains[i] + inputBt;
 	domainList.insertBefore(newLI,lastChild);
   }
 }
@@ -86,12 +94,20 @@ function addDomain() {
 	{
 		var domainList = document.getElementById("domains");
 		var newLI = document.createElement('li');
+		var no = domainList.children.length - 1;
+		var inputBt = "<input class='inline_button' type='button' value='remove' onclick='removeDomain("+no+")'/>";		
 		newLI.className = "rdomain";
-		newLI.innerHTML = newDomain;
+		newLI.innerHTML = newDomain + inputBt;
 		domainList.insertBefore(newLI,lastChild);
 		return 0;
 	}
 	return 1;
+}
+
+function removeDomain(i){
+	//remove the domain from the list
+	var domainList = document.getElementById("domains");
+	domainList.removeChild(domainList.children[i+2]);
 }
 </script>
 
