@@ -6,6 +6,7 @@
 		"128": "images/icon_128.png"
 	},
 	"background_page":"background.html",
+	"options_page":"options.html",	
 	"content_scripts":[
 	{
 		"matches":["http://*/*","https://*/*"],
@@ -22,5 +23,5 @@
 		"default_icon":"images/icon_19.png",
 		"default_title":"gleeBox:Switch state"
 	},
-	"update_url": "http://thegleebox.com/chrome/updates.xml"	
+	"update_url": "http://thegleebox.com/chrome/updates.xml"
 }
