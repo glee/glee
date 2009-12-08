@@ -159,16 +159,26 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			if(value != "")
 			{
-				if(e.shiftKey)
-				{
-					Glee.selectedElement = LinkReaper.getPrev();
+				if(Glee.selectedElement)
+				{	
+					if(e.shiftKey)
+					{
+						Glee.selectedElement = LinkReaper.getPrev();
+					}
+					else
+					{
+						Glee.selectedElement = LinkReaper.getNext();
+					}
+					Glee.setSubText(Glee.selectedElement,"el");
+					Glee.scrollToElement(Glee.selectedElement);
 				}
-				else
+				else if(Glee.bookmarks)
 				{
-					Glee.selectedElement = LinkReaper.getNext();
+					if(e.shiftKey)
+						Glee.getPrevBookmark();
+					else
+						Glee.getNextBookmark();
 				}
-				Glee.setSubText(Glee.selectedElement,"el");
-				Glee.scrollToElement(Glee.selectedElement);
 			}
 		}
 		//if ENTER is pressed
@@ -290,7 +300,10 @@ var Glee = {
 	status:1, 
 	//Currently selected element
 	selectedElement:null,
+	//element on which the user was focussed before a search
 	userFocusBeforeGlee:null,
+	//array to store bookmarks, if found for a search
+	bookmarks:[],
 	// !commands
 	commands:[
 		{
@@ -457,23 +470,24 @@ var Glee = {
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //go to URL or google
+			else //go to URL , search for bookmark or google
 			{
 				var text = Glee.searchField.attr("value");
+				Glee.selectedElement = null;
 				//if it is a URL
 				if(Glee.isURL(text))
 				{
-					Glee.selectedElement = null;
 					this.subText.html("Go to "+text);
 					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
 					this.subURL.html(text);
 				}
-				else
+				else 
 				{
-					this.subText.html("Google "+text);
-					this.subURL.html("http://www.google.com/search?q="+text);
+					//emptying the bookmarks array
+					Glee.bookmarks.splice(0,Glee.bookmarks.length);
+					Glee.isBookmark(text); //check if the text matches a bookmark
 				}
 			}
 		}
@@ -487,6 +501,32 @@ var Glee = {
 			this.subText.html("Nothing selected");
 			this.subURL.html('');
 		}
+	},
+	getNextBookmark:function(){
+		if(this.bookmarks.length > 1)
+		{
+			if(this.currentResultIndex == this.bookmarks.length-1)
+				this.currentResultIndex = 0;
+			else
+				this.currentResultIndex++;
+			this.subText.html(this.bookmarks[this.currentResultIndex].title);
+			this.subURL.html(this.bookmarks[this.currentResultIndex].url);
+		}
+		else
+			return null;	
+	},
+	getPrevBookmark:function(){
+		if(this.bookmarks.length > 1)
+		{
+			if(this.currentResultIndex == 0)
+				this.currentResultIndex = this.bookmarks.length-1;
+			else
+				this.currentResultIndex --;
+			this.subText.html("Open bookmark: "+this.bookmarks[this.currentResultIndex].title);
+			this.subURL.html(this.bookmarks[this.currentResultIndex].url);
+		}
+		else
+			return null;
 	},
 	scrollToElement: function(el){
 		var target;
@@ -614,6 +654,27 @@ var Glee = {
 	isURL:function(url){
 		var regex = new RegExp(".(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)");
 		return url.match(regex);
+	},
+	isBookmark:function(text){
+		//send request to search the bookmark tree for the bookmark whose title matches text
+		chrome.extension.sendRequest({value:"searchBookmarks",text:text},function(response){
+			var bookmarks = response.bookmarks;
+			if(bookmarks.length != 0) 
+			{
+				for(i=0;i<bookmarks.length;i++)
+					Glee.bookmarks[i] = {title:"Open bookmark: " + bookmarks[i].title, url:bookmarks[i].url};
+					
+				Glee.bookmarks[Glee.bookmarks.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
+				Glee.currentResultIndex = 0;
+				Glee.subText.html("Open bookmark: "+bookmarks[0].title);
+				Glee.subURL.html(bookmarks[0].url);
+			}
+			else //google it
+			{
+				Glee.subText.html("Google "+text);
+				Glee.subURL.html("http://www.google.com/search?q="+text);
+			}
+		});
 	},
 	checkDomain:function(){
 		for(var i=0; i<Glee.domainsToBlock.length; i++)
