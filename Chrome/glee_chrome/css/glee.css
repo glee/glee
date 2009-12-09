@@ -18,16 +18,15 @@
 	top:35%;
 	display:none;
 	overflow:auto;
-	height:165px;
 	width:90%;
 	background-color:#333;
 	opacity:0.65;
 	color:#fff;
 	margin:0;
-	font-family:Calibri,"Times New Roman",Arial,serif;
-	padding:0;
+	font-family:Calibri,Helvetica,serif;
+	padding:5px;
 	text-align:left;
-	}
+}
 #gleeSearchField{
 	outline:none;
 	width:90%;
@@ -36,28 +35,29 @@
 	margin:0;
 	padding:5px;
 	border:none;
-	font-size:100px;font-family:Calibri,"Helvetica Neue",Arial,Helvetica,serif;
+	font-size:100px;
+	font-family:Calibri,Helvetica,serif;
 }
 #gleeSubText, #gleeSubURL, #gleeSubActivity{
 	font-size:15px;
-	font-family:Calibri,Arial,Helvetica,serif;
+	font-family:Calibri,Helvetica,serif;
 	color:#fff;
 	width:auto;
 	font-weight: normal;
 }
 #gleeSubText{
-	padding:5px;
 	float:left;
+	padding-left:5px;
 }
 #gleeSubURL{
-	padding:5px;
 	display:inline;
 	float:right;
+	padding-right:5px;
 }
 #gleeSubActivity{
-	padding:5px;
 	color:#ccc;
 	height:10px;
 	display:inline;
 	float:left;
+	padding-left:5px;
 }
