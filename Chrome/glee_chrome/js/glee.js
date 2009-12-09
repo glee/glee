@@ -323,7 +323,13 @@ var Glee = {
 			method:"Glee.makeReadable",
 			domain:"*",
 			statusText:"wait till Glee+Readability work up the magic"
-		}
+		},
+		{
+			name: "help",
+			method:"Glee.help",
+			domain:"*",
+			statusText:"Loading help page..."
+		}		
 	],
 	
 	// Reaper Commands
@@ -783,6 +789,12 @@ var Glee = {
 			var encodedURL = escape(location.href);
 			location.href =  "http://twitter.com/?status="+encodedURL;
 		}
+	},
+	help: function(){
+		// TODO: When we make commands scalable, maybe we can make this load as a div
+		// on the page. In case we do that, should find a way to not make the content
+		// redundant.
+		window.location = "http://thegleebox.com/manual.html";
 	}
 }
 
