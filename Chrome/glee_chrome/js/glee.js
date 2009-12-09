@@ -283,7 +283,9 @@ jQuery(document).ready(function(){
 						},0)
 					}
 				}
-				Glee.closeBoxWithoutBlur();
+				setTimeout(function(){
+					Glee.closeBoxWithoutBlur();
+				},0);
 			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released

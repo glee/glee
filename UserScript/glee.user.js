@@ -45,7 +45,7 @@ jQuery(document).ready(function(){
 			{
 				e.preventDefault();
 				//set default subtext
-				Glee.subText.html("Nothing selected");				
+				Glee.subText.html("Nothing selected");
 				Glee.userPosBeforeGlee = window.pageYOffset;
 				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
 					Glee.userFocusBeforeGlee = target;
@@ -270,7 +270,9 @@ jQuery(document).ready(function(){
 						},0);
 					}
 				}
-				Glee.closeBoxWithoutBlur();
+				setTimeout(function(){
+					Glee.closeBoxWithoutBlur();
+				},0);
 			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
