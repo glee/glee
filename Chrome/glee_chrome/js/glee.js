@@ -658,7 +658,7 @@ var Glee = {
 		return url.substr(0,78)+"...";
 	},
 	isURL:function(url){
-		var regex = new RegExp(".(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)");
+		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in))");
 		return url.match(regex);
 	},
 	isBookmark:function(text){
