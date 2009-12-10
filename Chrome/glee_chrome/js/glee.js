@@ -412,7 +412,6 @@ var Glee = {
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
 		this.getBackInitialState();
-		//resetting value of searchField
 		this.searchBox.fadeOut(150);
 		this.searchField.attr('value','');
 		this.subText.html("");
@@ -420,21 +419,21 @@ var Glee = {
 		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
-		Glee.searchBox.fadeOut(150);
+		this.searchBox.fadeOut(150);
 		LinkReaper.unreapAllLinks();
 		//resetting value of searchField
-		Glee.searchField.attr('value','');
+		this.searchField.attr('value','');
 		this.subText.html("");
 		this.subURL.html("");
 		this.selectedElement = null;
 	},
 	initReaper: function(reaper){
-		Glee.nullMessage = reaper.nullMessage;
+		this.nullMessage = reaper.nullMessage;
 		LinkReaper.selectedLinks = jQuery(reaper.selector);
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		Glee.selectedElement = LinkReaper.getFirst();
-		Glee.setSubText(Glee.selectedElement,"el");
-		Glee.scrollToElement(Glee.selectedElement);	
+		this.selectedElement = LinkReaper.getFirst();
+		this.setSubText(Glee.selectedElement,"el");
+		this.scrollToElement(Glee.selectedElement);	
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(reaper.cssStyle);
 		});
@@ -456,7 +455,7 @@ var Glee = {
 					{
 						var a_el = jQuery(jQueryVal.find('a'));
 						if(a_el.length != 0)
-							this.subURL.html(a_el.attr("href"));
+							this.subURL.html(this.truncateURL(a_el.attr("href")));
 						else
 							this.subURL.html("");
 					}
@@ -465,12 +464,7 @@ var Glee = {
 				}
 				else if(jQueryVal.find("img").length != 0) //it is a linked image
 				{
-					var href = jQueryVal.attr("href");
-					if(href.length > 80)
-					{
-						href = Glee.truncateURL(href);
-					}
-					this.subURL.html(href);
+					this.subURL.html(this.truncateURL(jQueryVal.attr("href")));
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title != "")
 					{
@@ -491,7 +485,7 @@ var Glee = {
 					{
 						this.subText.html(this.subText.html()+" -- "+title);
 					}
-					this.subURL.html(jQueryVal.attr('href'));
+					this.subURL.html(this.truncateURL(jQueryVal.attr('href')));
 				}
 			}
 			else if(Glee.commandMode == true)
@@ -509,7 +503,7 @@ var Glee = {
 					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
-					this.subURL.html(text);
+					this.subURL.html(Glee.truncateURL(text));
 				}
 				else 
 				{
@@ -584,21 +578,19 @@ var Glee = {
 	toggleActivity: function(toggle){
 		if(toggle == 1)
 		{
-		//	jQuery("#gleeSubActivity").fadeIn('slow');
 			jQuery("#gleeSubActivity").html("searching");
 		}
 		else
 		{
-			// jQuery("#gleeSubActivity").fadeOut('slow');
 			jQuery("#gleeSubActivity").html("");
 		}
 	},
 	getBackInitialState: function(){
 		jQuery('html,body').stop(true);
-		if(Glee.userPosBeforeGlee != window.pageYOffset)
+		if(this.userPosBeforeGlee != window.pageYOffset)
 			jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
-		if(Glee.userFocusBeforeGlee != null)
-			Glee.userFocusBeforeGlee.focus();
+		if(this.userFocusBeforeGlee != null)
+			this.userFocusBeforeGlee.focus();
 		else
 		{
 			//wait till the thread is free
@@ -618,7 +610,7 @@ var Glee = {
 		{
 			window.scrollTo(window.pageXOffset,window.pageYOffset-200);
 		}
-		Glee.userPosBeforeGlee = window.pageYOffset;
+		this.userPosBeforeGlee = window.pageYOffset;
 	},
 	simulateClick: function(el){
 		var evt = document.createEvent("MouseEvents");
@@ -626,9 +618,9 @@ var Glee = {
 		return el[0].dispatchEvent(evt);
 	},
 	resetTimer: function(){
-		if(typeof(Glee.timer) != "undefined")
+		if(typeof(this.timer) != "undefined")
 		{			
-			clearTimeout(Glee.timer);
+			clearTimeout(this.timer);
 		}
 	},
 	makeURLAbsolute: function(link,host){
@@ -677,7 +669,10 @@ var Glee = {
 		return hparts.join('/') + '/' + newlinkparts.join('/');
 	},
 	truncateURL:function(url){
-		return url.substr(0,78)+"...";
+		if(url.length > 80)
+			return url.substr(0,78)+"...";
+		else
+			return url;
 	},
 	isURL:function(url){
 		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in))");
@@ -695,12 +690,12 @@ var Glee = {
 				Glee.bookmarks[Glee.bookmarks.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
 				Glee.currentResultIndex = 0;
 				Glee.subText.html("Open bookmark: "+bookmarks[0].title);
-				Glee.subURL.html(bookmarks[0].url);
+				Glee.subURL.html(Glee.truncateURL(bookmarks[0].url));
 			}
 			else //google it
 			{
 				Glee.subText.html("Google "+text);
-				Glee.subURL.html("http://www.google.com/search?q="+text);
+				Glee.subURL.html(Glee.truncateURL("http://www.google.com/search?q="+text));
 			}
 		});
 	},
@@ -766,7 +761,7 @@ var Glee = {
 		//not sure if eval is the way to go here
 		var method = command.method+"()";
 		//setting the status
-		Glee.setSubText(command.statusText,"msg");
+		this.setSubText(command.statusText,"msg");
 		eval(method);
 	},
 	
@@ -776,7 +771,7 @@ var Glee = {
 	},
 	
 	shortenURL: function(){
-		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+		this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
 			var json = JSON.parse("["+data+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
@@ -790,7 +785,7 @@ var Glee = {
 		var url = location.href;
 		if(url.length > 30)
 		{
-			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+			this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 			function(data){
 				var json = JSON.parse("["+data+"]");
 				var shortenedURL = json[0].results[location.href].shortUrl;
