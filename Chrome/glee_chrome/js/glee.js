@@ -327,11 +327,17 @@ var Glee = {
 			statusText:"wait till Glee+Readability work up the magic"
 		},
 		{
+			name: "rss",
+			method:"Glee.getRSSLink",
+			domain:"*",
+			statusText:"Opening feed in Google Reader..."
+		},
+		{
 			name: "help",
 			method:"Glee.help",
 			domain:"*",
 			statusText:"Loading help page..."
-		}		
+		}
 	],
 	
 	// Reaper Commands
@@ -802,6 +808,10 @@ var Glee = {
 			var encodedURL = escape(location.href);
 			location.href =  "http://twitter.com/?status="+encodedURL;
 		}
+	},
+	getRSSLink:function(){
+		//code via bookmark for google reader
+ 		 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 	},
 	help: function(){
 		// TODO: When we make commands scalable, maybe we can make this load as a div
