@@ -544,7 +544,7 @@ var Glee = {
 				this.currentResultIndex = this.bookmarks.length-1;
 			else
 				this.currentResultIndex --;
-			this.subText.html("Open bookmark: "+this.bookmarks[this.currentResultIndex].title);
+			this.subText.html(this.bookmarks[this.currentResultIndex].title);
 			this.subURL.html(this.bookmarks[this.currentResultIndex].url);
 		}
 		else
@@ -685,11 +685,13 @@ var Glee = {
 			if(bookmarks.length != 0) 
 			{
 				for(i=0;i<bookmarks.length;i++)
-					Glee.bookmarks[i] = {title:"Open bookmark: " + bookmarks[i].title, url:bookmarks[i].url};
-					
+				{
+					no = i + 1;
+					Glee.bookmarks[i] = {title:"Open bookmark ("+no+" of "+bookmarks.length+"): " + bookmarks[i].title, url:bookmarks[i].url};
+				}
 				Glee.bookmarks[Glee.bookmarks.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
 				Glee.currentResultIndex = 0;
-				Glee.subText.html("Open bookmark: "+bookmarks[0].title);
+				Glee.subText.html("Open bookmark (1 of "+bookmarks.length+"): "+bookmarks[0].title);
 				Glee.subURL.html(Glee.truncateURL(bookmarks[0].url));
 			}
 			else //google it
