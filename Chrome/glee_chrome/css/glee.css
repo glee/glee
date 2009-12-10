@@ -26,6 +26,8 @@
 	font-family:Calibri,Helvetica,serif;
 	padding:4px 6px;
 	text-align:left;
+	/*rounded borders*/
+	border-radius:7px;
 }
 #gleeSearchField{
 	outline:none;
