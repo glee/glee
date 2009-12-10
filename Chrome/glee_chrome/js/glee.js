@@ -255,7 +255,7 @@ jQuery(document).ready(function(){
 					}
 					else
 					{
-						Glee.closeBoxWithoutBlur();	
+						Glee.closeBoxWithoutBlur();
 						window.location = destURL;
 					}
 				}
@@ -461,7 +461,7 @@ var Glee = {
 					{
 						var a_el = jQuery(jQueryVal.find('a'));
 						if(a_el.length != 0)
-							this.subURL.html(this.truncateURL(a_el.attr("href")));
+							this.subURL.html(a_el.attr("href"));
 						else
 							this.subURL.html("");
 					}
@@ -470,7 +470,7 @@ var Glee = {
 				}
 				else if(jQueryVal.find("img").length != 0) //it is a linked image
 				{
-					this.subURL.html(this.truncateURL(jQueryVal.attr("href")));
+					this.subURL.html(jQueryVal.attr("href"));
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title != "")
 					{
@@ -491,7 +491,7 @@ var Glee = {
 					{
 						this.subText.html(this.subText.html()+" -- "+title);
 					}
-					this.subURL.html(this.truncateURL(jQueryVal.attr('href')));
+					this.subURL.html(jQueryVal.attr('href'));
 				}
 			}
 			else if(Glee.commandMode == true)
@@ -509,7 +509,7 @@ var Glee = {
 					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
-					this.subURL.html(Glee.truncateURL(text));
+					this.subURL.html(text);
 				}
 				else 
 				{
@@ -630,6 +630,9 @@ var Glee = {
 		}
 	},
 	makeURLAbsolute: function(link,host){
+		//check if its a bookmarklet meant to execute JS
+		if(link.indexOf("javascript:") == 0)
+			return link;
 		//code from http://github.com/stoyan/etc/blob/master/toAbs/absolute.html
 		var lparts = link.split('/');
 		if (/http:|https:|ftp:/.test(lparts[0])) {
@@ -698,12 +701,12 @@ var Glee = {
 				Glee.bookmarks[Glee.bookmarks.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
 				Glee.currentResultIndex = 0;
 				Glee.subText.html("Open bookmark (1 of "+bookmarks.length+"): "+bookmarks[0].title);
-				Glee.subURL.html(Glee.truncateURL(bookmarks[0].url));
+				Glee.subURL.html(bookmarks[0].url);
 			}
 			else //google it
 			{
 				Glee.subText.html("Google "+text);
-				Glee.subURL.html(Glee.truncateURL("http://www.google.com/search?q="+text));
+				Glee.subURL.html("http://www.google.com/search?q="+text);
 			}
 		});
 	},
