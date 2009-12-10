@@ -132,6 +132,7 @@ function restore_options()
 			var newLI = document.createElement('li');
 			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+i+")'/>";
 			newLI.className = "rdomain";
+			newLI.id = "rdomain"+i;
 			newLI.innerHTML = restrictedDomains[i] + inputBt;
 			domainList.insertBefore(newLI,lastChild);
 		}
@@ -153,9 +154,10 @@ function addDomain() {
 	{
 		var domainList = document.getElementById("domains");
 		var newLI = document.createElement('li');
-		var no = domainList.children.length - 3;
+		var no = domainList.children.length+1;
 		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+no+")'/>";
 		newLI.className = "rdomain";
+		newLI.id = "rdomain"+no;
 		newLI.innerHTML = newDomain.value + inputBt;
 		domainList.insertBefore(newLI,lastChild);
 		newDomain.value = "";
@@ -166,9 +168,10 @@ function addDomain() {
 }
 
 function removeDomain(i){
-	//remove the domain from the list
+	var el = document.getElementById("rdomain"+i);
 	var domainList = document.getElementById("domains");
-	domainList.removeChild(domainList.children[i+2]);
+	domainList.removeChild(el);
+	//remove the domain from the list
 	setStatus("URL Removed!");
 	return 0;
 }
