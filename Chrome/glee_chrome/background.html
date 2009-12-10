@@ -108,6 +108,14 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		else
 			sendResponse({domains:null});
 	}
+	else if(request.value == "getPosition")
+	{
+		var pos = localStorage["glee_position"];
+		if(pos != null)
+			sendResponse({position:localStorage["glee_position"]});
+		else
+			sendResponse({position:null});
+	}
 });
 
 </script>

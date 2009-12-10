@@ -290,7 +290,7 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
-			jQuery('html,body').stop(true);	
+			jQuery('html,body').stop(true);
 		}
 	});
 });
@@ -388,11 +388,25 @@ var Glee = {
 		this.searchBox.append(this.searchField).append(sub);
 		jQuery(document.body).append(this.searchBox);
 		this.initStatus();
+		this.initPosition();
 	},
 	initStatus:function(){
+		//sending request to get the status of gleeBox i.e. enabled/disabled
 		chrome.extension.sendRequest({value:"getStatus"},function(response){
 			Glee.status = response.status;
 			Glee.checkDomain();
+		});
+	},
+	initPosition:function(){
+		//sending request to get the position of gleeBox
+		chrome.extension.sendRequest({value:"getPosition"},function(response){
+			if(response.position != null && response.position != 1) //by default, position is in middle anyways
+			{
+				if(response.position == 0) //top
+					Glee.searchBox.css("top","0%");
+				else					   //bottom
+					Glee.searchBox.css("top","78%");
+			}
 		});
 	},
 	closeBox: function(){

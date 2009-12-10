@@ -21,13 +21,9 @@
 		margin:0;
 		padding:0;
 	}
-	ul#options{
+	#options{
+		margin-left:20px;
 		float:left;
-	}
-	li{
-		margin:0;
-		padding:0;
-		margin-bottom:15px;
 	}
 	.option-label{
 		float:left;
@@ -36,6 +32,18 @@
 	.option-field{
 		float:left;
 		margin-left: 20px;
+	}
+	ul li{
+		margin-bottom:30px;
+		display:block;
+		float:left;
+		clear:both;
+	}
+	ul li li{
+		border:none;
+		float:none;
+		margin:0;
+		margin-bottom:12px;
 	}
 	ul li ul{
 		margin:0;
@@ -52,9 +60,6 @@
 	input:focus{
 		outline:none;
 	}
-	.button{
-	}
-	
 	.button:hover{
 		cursor:pointer;
 		background-color:#777;
@@ -76,46 +81,67 @@
 		text-align:center;
 		margin:30px auto;
 	}
+	.subtext{
+		font-size:11px;
+	}
 	</style>
-</head>
 <script type="text/javascript">
 
-// Saves options to localStorage.
+// Saves options to localStorage
 function save_options() {
-  var restrictedDomains = [];
-  //getting the domains
-  var domainList = document.getElementById("domains");
-  for(var i=0;i<domainList.children.length;i++)
-  {
-	if(domainList.children[i].className == "rdomain")
+	var restrictedDomains = [];
+	//saving the disabled URLs
+	var domainList = document.getElementById("domains");
+	for(var i=0;i<domainList.children.length;i++)
 	{
-		restrictedDomains[restrictedDomains.length] = domainList.children[i].innerText;
+		if(domainList.children[i].className == "rdomain")
+		{
+			restrictedDomains[restrictedDomains.length] = domainList.children[i].innerText;
+		}
 	}
-  }
-  //currently using , (automatically added when saving an array in localStorage) as the end marker. need a better way to implement this
-  localStorage["glee_domains"] = restrictedDomains;
-  setStatus("Settings saved!");
+	//currently using , as the end marker. need a better way to implement this
+	localStorage["glee_domains"] = restrictedDomains;
+
+	//saving the gleeBox position
+	if(document.getElementsByName("glee_pos")[0].checked)
+		pos = 0;
+	else if(document.getElementsByName("glee_pos")[1].checked)
+		pos = 1;
+	else
+		pos = 2;
+		
+	localStorage["glee_position"] = pos;
+	setStatus("Settings saved!");
 }
 
 // Restores select box state to saved value from localStorage.
-function restore_options() {
-  var domainBuffer = localStorage["glee_domains"];
-  if(!domainBuffer)
-	return;
-  //parsing domainBuffer to get the domains
-  var restrictedDomains = domainBuffer.split(",");
-  var domainList = document.getElementById("domains");
-  //TODO: use lastChild property here
-  var lastChild = document.getElementById("addDomainLI");
-  //displaying the domains in the restricted list
-  for (var i=0; i<restrictedDomains.length; i++)
-  {
-	var newLI = document.createElement('li');
-	var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+i+")'/>";
-	newLI.className = "rdomain";
-	newLI.innerHTML = restrictedDomains[i] + inputBt;
-	domainList.insertBefore(newLI,lastChild);
-  }
+function restore_options() 
+{
+	//getting the user defined restricted domains
+	var domainBuffer = localStorage["glee_domains"];
+	if(domainBuffer)
+	{
+		//parsing domainBuffer to get the domains
+		var restrictedDomains = domainBuffer.split(",");
+		var domainList = document.getElementById("domains");
+		//TODO: use lastChild property here
+		var lastChild = document.getElementById("addDomainLI");
+		//displaying the domains in the restricted list
+		for (var i=0; i<restrictedDomains.length; i++)
+		{
+			var newLI = document.createElement('li');
+			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+i+")'/>";
+			newLI.className = "rdomain";
+			newLI.innerHTML = restrictedDomains[i] + inputBt;
+			domainList.insertBefore(newLI,lastChild);
+		}
+	}
+	//getting the gleeBox position
+	var pos = localStorage["glee_position"];
+	if(pos)
+		document.getElementsByName("glee_pos")[pos].checked = true;
+	else
+		document.getElementsByName("glee_pos")[1].checked = true;
 }
 
 //Adds a domain to the restricted domain list
@@ -150,22 +176,33 @@ function removeDomain(i){
 function setStatus(text){
 	document.getElementById("status").innerHTML = text;
 }
-</script>
 
+</script>
+</head>
 <body onload="restore_options()">
 <h2>gleeBox Options</h2>
 <div id="status"></div>
 <!--Specifying different options available -->
-<ul id="options">
-	<li><label class="option-label">Disabled URLs:<br/>(gleeBox will be disabled for these)</label>
-		<ul id="domains" class="option-field">
-			<li>mail.google.com (disabled by default)</li>
-			<li>reader.google.com (disabled by default)</li>
-			<li id="addDomainLI"><input id="add_domain" type="text" value="" size=50 /><input type="button" value="Add" class="button" onclick="addDomain()"/></li>
-		</ul>
-	</li>
-<div style="clear:both"></div><br/><br/>
-<input type="button" style="float:right;" class="button" value="Save" onclick="save_options()">
-</ul>
+<div id="options">
+	<ul id="options">
+		<li>
+			<label class="option-label">Disabled URLs:<br/><span class="subtext">gleeBox will be disabled for these</span></label>
+			<ul id="domains" class="option-field">
+				<li>mail.google.com (disabled by default)</li>
+				<li>reader.google.com (disabled by default)</li>
+				<li id="addDomainLI"><input id="add_domain" type="text" value="" size=50 /><input type="button" value="Add" class="button" onclick="addDomain()"/></li>
+			</ul>
+		</li>
+		<li>
+			<label class="option-label">gleeBox Position:<br/><span class="subtext">Where do you want gleeBox to be displayed on your screen?</span></label>
+			<div class="option-field">
+				<input name="glee_pos" type="radio"> Top
+				<input name="glee_pos" type="radio"> Middle
+				<input name="glee_pos" type="radio"> Bottom
+			</div>
+		</li>
+	</ul>
+<input type="button" style="float:right;clear:both;" class="button" value="Save" onclick="save_options()">		
+</div>	
 </body>
 </html>
