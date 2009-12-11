@@ -117,7 +117,8 @@ jQuery(document).ready(function(){
 						c = value.substring(1);
 						c = c.replace("$", location.href);
 						Glee.subText.html("Run yubnub command (press enter to execute): " + c);
-						Glee.subURL.html("http://yubnub.org/parser/parse?command=" + escape(c));
+						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
+						Glee.subURL.html(Glee.truncate(Glee.URL));
 					}
 					else if(value[0] == '*')// Any jQuery selector
 					{
