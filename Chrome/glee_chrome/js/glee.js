@@ -324,6 +324,8 @@ var Glee = {
 	userFocusBeforeGlee:null,
 	//array to store bookmarks, if found for a search
 	bookmarks:[],
+	//whether bookmark search is enabled/disabled
+	bookmarkSearchStatus:false,
 	// !commands
 	commands:[
 		{
@@ -416,8 +418,12 @@ var Glee = {
 		sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(sub);
 		jQuery(document.body).append(this.searchBox);
+		this.initOptions();
+	},
+	initOptions:function(){
 		this.initStatus();
 		this.initPosition();
+		this.initBookmarkSearch();
 	},
 	initStatus:function(){
 		//sending request to get the status of gleeBox i.e. enabled/disabled
@@ -436,6 +442,14 @@ var Glee = {
 				else					   //bottom
 					Glee.searchBox.css("top","78%");
 			}
+		});
+	},
+	initBookmarkSearch:function(){
+		chrome.extension.sendRequest({value:"getBookmarkSearchStatus"},function(response){
+			if(response.status == 1)
+				Glee.bookmarkSearchStatus = true; //enabled
+			else
+				Glee.bookmarkSearchStatus = false;
 		});
 	},
 	closeBox: function(){
@@ -528,10 +542,10 @@ var Glee = {
 			}
 			else //go to URL ,search for bookmarks or google
 			{
-				var text = Glee.searchField.attr("value");
-				Glee.selectedElement = null;
+				var text = this.searchField.attr("value");
+				this.selectedElement = null;
 				//if it is a URL
-				if(Glee.isURL(text))
+				if(this.isURL(text))
 				{
 					this.subText.html(this.truncate("Go to "+text));
 					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
@@ -540,11 +554,15 @@ var Glee = {
 					this.URL = text;
 					this.subURL.html(this.truncate(text));
 				}
-				else 
+				else if(this.bookmarkSearchStatus) //is bookmark search enabled?
 				{
 					//emptying the bookmarks array
-					Glee.bookmarks.splice(0,Glee.bookmarks.length);
-					Glee.isBookmark(text); //check if the text matches a bookmark
+					this.bookmarks.splice(0,Glee.bookmarks.length);
+					this.isBookmark(text); //check if the text matches a bookmark
+				}
+				else //search
+				{
+					this.setSubText(text,"search");
 				}
 			}
 		}

@@ -141,6 +141,11 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		else
 			sendResponse({position:null});
 	}
+	else if(request.value == "getBookmarkSearchStatus")
+	{
+		var status = localStorage["glee_bookmark_search"];
+		sendResponse({status:status});
+	}
 });
 
 </script>

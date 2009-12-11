@@ -89,8 +89,9 @@
 
 // Saves options to localStorage
 function save_options() {
-	var restrictedDomains = [];
+
 	//saving the disabled URLs
+	var restrictedDomains = [];
 	var domainList = document.getElementById("domains");
 	for(var i=0;i<domainList.children.length;i++)
 	{
@@ -103,14 +104,21 @@ function save_options() {
 	localStorage["glee_domains"] = restrictedDomains;
 
 	//saving the gleeBox position
-	if(document.getElementsByName("glee_pos")[0].checked)
+	if(document.getElementsByName("glee_pos")[0].checked) //top
 		pos = 0;
-	else if(document.getElementsByName("glee_pos")[1].checked)
+	else if(document.getElementsByName("glee_pos")[1].checked) //middle
 		pos = 1;
-	else
+	else 	//bottom
 		pos = 2;
-		
 	localStorage["glee_position"] = pos;
+	
+	//saving bookmarks search option
+	if(document.getElementsByName("glee_bookmark_search")[0].checked)
+		bookmark_status = 1; //1 indicates enabled
+	else
+		bookmark_status = 0;
+	
+	localStorage["glee_bookmark_search"] = bookmark_status;
 	setStatus("Settings saved!");
 }
 
@@ -142,7 +150,19 @@ function restore_options()
 	if(pos)
 		document.getElementsByName("glee_pos")[pos].checked = true;
 	else
-		document.getElementsByName("glee_pos")[1].checked = true;
+		document.getElementsByName("glee_pos")[1].checked = true; //default is middle position
+		
+	//getting the bookmark search status (enabled/disabled)
+	var bookmark_status = localStorage["glee_bookmark_search"];
+	if(bookmark_status != null)
+	{
+		if(bookmark_status == 1)
+			document.getElementsByName("glee_bookmark_search")[0].checked = true;
+		else
+			document.getElementsByName("glee_bookmark_search")[1].checked = true;
+	}
+	else
+		document.getElementsByName("glee_bookmark_search")[1].checked = true;
 }
 
 //Adds a domain to the restricted domain list
@@ -204,8 +224,15 @@ function setStatus(text){
 				<input name="glee_pos" type="radio"> Bottom
 			</div>
 		</li>
+		<li>
+			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no links are found on a page for a query?</span></label>
+			<div class="option-field">
+				<input name="glee_bookmark_search" type="radio"> Enabled
+				<input name="glee_bookmark_search" type="radio"> Disabled
+			</div>
+		</li>
 	</ul>
-<input type="button" style="float:right;clear:both;" class="button" value="Save" onclick="save_options()">		
+<input type="button" style="float:right;clear:both;" class="button" value="Save" onclick="save_options()">
 </div>	
 </body>
 </html>
