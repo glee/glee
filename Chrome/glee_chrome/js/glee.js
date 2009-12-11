@@ -470,7 +470,7 @@ var Glee = {
 	setSubText: function(val,type){
 		//reset Glee.URL
 		this.URL = null;
-		if(type == "el")
+		if(type == "el") // here val is the element or maybe null if no element is found for a search
 		{
 			if(val && typeof val!= "undefined")
 			{
@@ -526,7 +526,7 @@ var Glee = {
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //go to URL , search for bookmark or google
+			else //go to URL ,search for bookmarks or google
 			{
 				var text = Glee.searchField.attr("value");
 				Glee.selectedElement = null;
@@ -548,25 +548,25 @@ var Glee = {
 				}
 			}
 		}
-		else if(type == "bookmark")
+		else if(type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
 		{
-			this.subText.html(this.truncate("Open bookmark ("+(val+1)+" of "+this.bookmarks.length+"): "+this.bookmarks[val].title));
+			this.subText.html(this.truncate("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
 			this.URL = this.bookmarks[val].url;
 			this.subURL.html(this.truncate(this.URL));
 		}
-		else if(type == "bookmarklet")
+		else if(type == "bookmarklet") // here val is the bookmarklet returned
 		{
 			this.subText.html("Closest matching bookmarklet: "+val.title+" (press enter to execute)");
 			this.URL = val;
 			this.subURL.html('');
 		}
-		else if(type == "search")
+		else if(type == "search") // here val is the text query
 		{
 			this.subText.html(this.truncate("Google "+val));
 			this.URL = "http://www.google.com/search?q="+val;
 			this.subURL.html(this.URL);	
 		}
-		else if(type == "msg")
+		else if(type == "msg") // here val is the message to be displayed
 		{
 			this.subText.html(val);
 			this.subURL.html('');
