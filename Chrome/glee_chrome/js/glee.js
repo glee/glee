@@ -134,9 +134,10 @@ jQuery(document).ready(function(){
 							if(Glee.commands[i].name == trimVal)
 							{
 								Glee.execCommand(Glee.commands[i]);
-								break;
+								return;
 							}
 						}
+						// if it is not found as a command, search bookmarklets
 					}
 					else
 					{
@@ -691,7 +692,7 @@ var Glee = {
 	},
 	isBookmark:function(text){
 		//send request to search the bookmark tree for the bookmark whose title matches text
-		chrome.extension.sendRequest({value:"searchBookmarks",text:text},function(response){
+		chrome.extension.sendRequest({value:"getBookmarks",text:text},function(response){
 			var bookmarks = response.bookmarks;
 			if(bookmarks.length != 0) 
 			{

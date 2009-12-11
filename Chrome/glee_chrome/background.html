@@ -85,7 +85,7 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		}
 		req.send();
 	}
-	else if(request.value == "searchBookmarks")
+	else if(request.value == "getBookmarks")
 	{
 		var bookmarks = [];
 		chrome.bookmarks.search(request.text,function(results){
@@ -93,7 +93,9 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 			{
 				if(results[i].url)
 				{
-					bookmarks[bookmarks.length] = results[i];
+					//exclude bookmarks whose URLs begin with 'javascript:' i.e. bookmarklets
+					if(results[i].url.indexOf("javascript:") != 0)
+						bookmarks[bookmarks.length] = results[i];
 				}
 			}
 			sendResponse({bookmarks:bookmarks});
