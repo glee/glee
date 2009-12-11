@@ -101,6 +101,29 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 			sendResponse({bookmarks:bookmarks});
 		});
 	}
+	else if(request.value == "getBookmarklet")
+	{
+		chrome.bookmarks.search(request.text,function(results){
+			var found = false;
+			for(i=0;i<results.length;i++)
+			{
+				if(results[i].url)
+				{
+					//check if it is a bookmarklet i.e. if it begins with 'javscript:'. If it is, send the response
+					//Also match only titles
+					if(results[i].url.indexOf("javascript:") == 0 && results[i].title.toLowerCase().indexOf(request.text.toLowerCase()) != -1)
+					{
+						sendResponse({bookmarklet:results[i]});
+						found = true;
+						break;
+					}
+				}
+			}
+			//otherwise, return null if no bookmarklet is found
+			if(!found)
+				sendResponse({bookmarklet:null});
+		});
+	}
 	else if(request.value == "getDisabledDomains")
 	{
 		if(localStorage["glee_domains"])

@@ -125,19 +125,25 @@ jQuery(document).ready(function(){
 						Glee.nullMessage = "Nothing found for your selector.";
 						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
 					}
-					// now searching through the commands declared inside Glee.commands
-					else if(value[0] == "!" && value.length > 1)
+					else if(value[0] == "!" && value.length > 1) //Searching through page commands
 					{
 						trimVal = value.substr(1);
+						Glee.URL = null;
 						for(var i=0; i<Glee.commands.length; i++)
 						{
 							if(Glee.commands[i].name == trimVal)
 							{
-								Glee.execCommand(Glee.commands[i]);
-								return;
+								Glee.setSubText(Glee.commands[i].description,"msg");
+								Glee.URL = Glee.commands[i];
+								break;
 							}
 						}
-						// if it is not found as a command, search bookmarklets
+						//if command is not found
+						if(!Glee.URL)
+						{
+							//find the closest matching bookmarklet
+							Glee.getBookmarklet(trimVal);
+						}
 					}
 					else
 					{
@@ -196,6 +202,22 @@ jQuery(document).ready(function(){
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 			}
+			else if(value[0] == "!" && value.length > 1)
+			{
+				//check if it is a command
+				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
+				if(Glee.URL.name != "undefined" && Glee.URL.name)
+				{
+					Glee.execCommand(Glee.URL);
+					return;
+				}
+				else
+				{
+					url = Glee.URL.url;
+					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
+					location.href = url;
+				}
+			}
 			else
 			{
 				var anythingOnClick = true;
@@ -248,8 +270,9 @@ jQuery(document).ready(function(){
 					}
 					else
 					{
+						url = Glee.URL;
 						Glee.closeBoxWithoutBlur();
-						window.location = Glee.URL;
+						window.location = url;
 					}
 				}
 				else
@@ -307,30 +330,35 @@ var Glee = {
 			name: "tweet",
 			method:"Glee.sendTweet",
 			domain:"*",
+			description:"Tweet this page",
 			statusText:"Redirecting to twitter homepage..."
 		},
 		{
 			name: "shorten",
 			method:"Glee.shortenURL",
 			domain:"*",
+			description:"Shorten the URL of this page using bit.ly",
 			statusText:"Shortening URL via bit.ly..."
 		},
 		{
 			name: "read",
 			method:"Glee.makeReadable",
 			domain:"*",
+			description:"Make your page readable using Readability",
 			statusText:"wait till Glee+Readability work up the magic"
 		},
 		{
 			name: "rss",
 			method:"Glee.getRSSLink",
 			domain:"*",
+			description:"Open the RSS feed of this page in GReader",
 			statusText:"Opening feed in Google Reader..."
 		},
 		{
 			name: "help",
 			method:"Glee.help",
 			domain:"*",
+			description:"View user manual",
 			statusText:"Loading help page..."
 		}
 	],
@@ -415,8 +443,7 @@ var Glee = {
 		this.getBackInitialState();
 		this.searchBox.fadeOut(150);
 		this.searchField.attr('value','');
-		this.subText.html("");
-		this.subURL.html("");
+		this.setSubText(null);
 		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
@@ -424,8 +451,7 @@ var Glee = {
 		LinkReaper.unreapAllLinks();
 		//resetting value of searchField
 		this.searchField.attr('value','');
-		this.subText.html("");
-		this.subURL.html("");
+		this.setSubText(null);
 		this.selectedElement = null;
 	},
 	initReaper: function(reaper){
@@ -442,6 +468,7 @@ var Glee = {
 		LinkReaper.searchTerm = "";	
 	},
 	setSubText: function(val,type){
+		//reset Glee.URL
 		this.URL = null;
 		if(type == "el")
 		{
@@ -521,6 +548,24 @@ var Glee = {
 				}
 			}
 		}
+		else if(type == "bookmark")
+		{
+			this.subText.html(this.truncate("Open bookmark ("+(val+1)+" of "+this.bookmarks.length+"): "+this.bookmarks[val].title));
+			this.URL = this.bookmarks[val].url;
+			this.subURL.html(this.truncate(this.URL));
+		}
+		else if(type == "bookmarklet")
+		{
+			this.subText.html("Closest matching bookmarklet: "+val.title+" (press enter to execute)");
+			this.URL = val;
+			this.subURL.html('');
+		}
+		else if(type == "search")
+		{
+			this.subText.html(this.truncate("Google "+val));
+			this.URL = "http://www.google.com/search?q="+val;
+			this.subURL.html(this.URL);	
+		}
 		else if(type == "msg")
 		{
 			this.subText.html(val);
@@ -539,12 +584,14 @@ var Glee = {
 				this.currentResultIndex = 0;
 			else
 				this.currentResultIndex++;
-			this.subText.html(this.truncate(this.bookmarks[this.currentResultIndex].title));
-			this.URL = this.bookmarks[this.currentResultIndex].url;
-			this.subURL.html(this.truncate(this.URL));
+			//if it is the last, call subText for search
+			if(this.currentResultIndex == this.bookmarks.length-1)
+				this.setSubText(this.bookmarks[this.currentResultIndex],"search");
+			else
+				this.setSubText(this.currentResultIndex,"bookmark");
 		}
 		else
-			return null;	
+			return null;
 	},
 	getPrevBookmark:function(){
 		if(this.bookmarks.length > 1)
@@ -553,9 +600,11 @@ var Glee = {
 				this.currentResultIndex = this.bookmarks.length-1;
 			else
 				this.currentResultIndex --;
-			this.subText.html(this.truncate(this.bookmarks[this.currentResultIndex].title));
-			this.URL = this.bookmarks[this.currentResultIndex].url;
-			this.subURL.html(this.truncate(this.URL));
+			//if it is the last, call subText for search
+			if(this.currentResultIndex == this.bookmarks.length-1)
+				this.setSubText(this.bookmarks[this.currentResultIndex],"search");
+			else
+				this.setSubText(this.currentResultIndex,"bookmark");
 		}
 		else
 			return null;
@@ -693,25 +742,16 @@ var Glee = {
 	isBookmark:function(text){
 		//send request to search the bookmark tree for the bookmark whose title matches text
 		chrome.extension.sendRequest({value:"getBookmarks",text:text},function(response){
-			var bookmarks = response.bookmarks;
-			if(bookmarks.length != 0) 
+			if(response.bookmarks.length != 0) 
 			{
-				for(i=0;i<bookmarks.length;i++)
-				{
-					no = i + 1;
-					Glee.bookmarks[i] = {title:"Open bookmark ("+no+" of "+bookmarks.length+"): " + bookmarks[i].title, url:bookmarks[i].url};
-				}
-				Glee.bookmarks[Glee.bookmarks.length] = { title: "Google "+text, url:"http://www.google.com/search?q="+text };
+				Glee.bookmarks = response.bookmarks;
+				Glee.bookmarks[Glee.bookmarks.length] = text;
 				Glee.currentResultIndex = 0;
-				Glee.subText.html(Glee.truncate("Open bookmark (1 of "+bookmarks.length+"): "+bookmarks[0].title));
-				Glee.URL = bookmarks[0].url;
-				Glee.subURL.html(Glee.URL);
+				Glee.setSubText(0,"bookmark");
 			}
 			else //google it
 			{
-				Glee.subText.html(Glee.truncate("Google "+text));
-				Glee.URL = "http://www.google.com/search?q="+text;
-				Glee.subURL.html(Glee.URL);
+				Glee.setSubText(text,"search");
 			}
 		});
 	},
@@ -780,7 +820,20 @@ var Glee = {
 		this.setSubText(command.statusText,"msg");
 		eval(method);
 	},
-	
+	getBookmarklet: function(text){
+		//sending request to get the first matched bookmarklet
+		chrome.extension.sendRequest({value:"getBookmarklet",text:text},function(response){
+			//if a bookmarklet is returned, run it
+			if(response.bookmarklet)
+			{
+				Glee.setSubText(response.bookmarklet,"bookmarklet");
+			}
+			else
+			{
+				Glee.setSubText("Command not found","msg");
+			}
+		});
+	},
 	makeReadable: function(){
 		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
 		location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
