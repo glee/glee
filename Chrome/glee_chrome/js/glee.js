@@ -311,7 +311,7 @@ jQuery(document).ready(function(){
 	});
 });
 
-var Glee = { 	
+var Glee = {
 	searchText:"",
 	commandMode: false,
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
@@ -332,6 +332,12 @@ var Glee = {
 	position: "middle",
 	//size of gleeBox (small,medium,large)
 	size:"large",
+	//URLs for which gleeBox should be disabled
+	domainsToBlock:[
+		"mail.google.com",
+		"google.com/reader",
+		"wave.google.com"
+	],
 	// !commands
 	commands:[
 		{
@@ -407,12 +413,6 @@ var Glee = {
 			cssStyle: "GleeReaped"
 		}
 		],
-	//Domains which are not supported at the moment.
-	domainsToBlock:[
-		"mail.google.com",
-		"google.com/reader",
-		"wave.google.com"
-	],	
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -523,7 +523,7 @@ var Glee = {
 			jQuery(this).addClass(reaper.cssStyle);
 		});
 		LinkReaper.traversePosition = 0;
-		LinkReaper.searchTerm = "";	
+		LinkReaper.searchTerm = "";
 	},
 	setSubText: function(val,type){
 		//reset Glee.URL
@@ -698,13 +698,9 @@ var Glee = {
 	},
 	toggleActivity: function(toggle){
 		if(toggle == 1)
-		{
 			jQuery("#gleeSubActivity").html("searching");
-		}
 		else
-		{
 			jQuery("#gleeSubActivity").html("");
-		}
 	},
 	getBackInitialState: function(){
 		jQuery('html,body').stop(true);
@@ -739,9 +735,7 @@ var Glee = {
 	},
 	resetTimer: function(){
 		if(typeof(this.timer) != "undefined")
-		{			
 			clearTimeout(this.timer);
-		}
 	},
 	makeURLAbsolute: function(link,host){
 		//check if its a bookmarklet meant to execute JS
@@ -830,9 +824,7 @@ var Glee = {
 	isVisible:function(el){
 		el = jQuery(el);
 		if(el.css('display') == "none" || el.css('visibility') == "hidden")
-		{
 			return false;
-		}
 		else
 		{
 			// TODO: A more efficient way needed, but is there one?
@@ -876,13 +868,9 @@ var Glee = {
 		chrome.extension.sendRequest({value:"getBookmarklet",text:text},function(response){
 			//if a bookmarklet is returned, run it
 			if(response.bookmarklet)
-			{
 				Glee.setSubText(response.bookmarklet,"bookmarklet");
-			}
 			else
-			{
 				Glee.setSubText("Command not found","msg");
-			}
 		});
 	},
 	makeReadable: function(){
@@ -1008,14 +996,10 @@ var LinkReaper = {
 		var isNotEqual = function(element){
 			element = jQuery(element);
 			if(element.attr('href') == el.attr('href') )
-			{
 				return false;
-			}
 			else
-			{
 				return true;
-			}
-		};		
+		};
 		this.selectedLinks = this.selectedLinks.filter(isNotEqual);
 		el.removeClass('GleeReaped').removeClass('GleeHL');
 	},
@@ -1033,9 +1017,7 @@ var LinkReaper = {
 	
 	getNext: function(){
 		if(this.selectedLinks.length == 0)
-		{
 			return null;
-		}
 		else if(this.traversePosition < this.selectedLinks.length - 1)
 		{
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
@@ -1056,9 +1038,7 @@ var LinkReaper = {
 	
 	getPrev: function(){
 		if(this.selectedLinks.length == 0)
-		{
 			return null;
-		}
 		else if(this.traversePosition > 0)
 		{
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
