@@ -119,6 +119,14 @@ function save_options() {
 		bookmark_status = 0;
 	
 	localStorage["glee_bookmark_search"] = bookmark_status;
+	
+	//saving scrolling animation pref
+	if(document.getElementsByName("glee_scrolling_animation")[0].checked)
+		animation = 1; //enabled
+	else
+		animation = 0;
+	
+	localStorage["glee_scrolling_animation"] = animation;
 	setStatus("Settings saved! You'll need to refresh the currently opened tab(s) for changes to take effect.");
 }
 
@@ -163,6 +171,18 @@ function restore_options()
 	}
 	else
 		document.getElementsByName("glee_bookmark_search")[1].checked = true;
+		
+	//getting the scrolling animation pref
+	var scroll_anim = localStorage["glee_scrolling_animation"];
+	if(scroll_anim != null)
+	{
+		if(scroll_anim == 1)
+			document.getElementsByName("glee_scrolling_animation")[0].checked = true;
+		else
+			document.getElementsByName("glee_scrolling_animation")[1].checked = true;
+	}
+	else
+		document.getElementsByName("glee_scrolling_animation")[0].checked = true;
 }
 
 //Adds a domain to the restricted domain list
@@ -231,6 +251,13 @@ function setStatus(text){
 				<input name="glee_bookmark_search" type="radio"> Disabled
 			</div>
 		</li>
+		<li>
+			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do you want the scroll animation when traversing selected elements using gleeBox?</span></label>
+			<div class="option-field">
+				<input name="glee_scrolling_animation" type="radio"> Yes
+				<input name="glee_scrolling_animation" type="radio"> No
+			</div>
+		</li>		
 	</ul>
 <input type="button" style="float:right;clear:both;" class="button" value="Save" onclick="save_options()">
 </div>	

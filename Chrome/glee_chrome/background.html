@@ -64,11 +64,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 //Add listener to respond to requests from content script
 chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
-	if(request.value == "getStatus")
-	{
-		sendResponse({status:status});
-	}
-	else if(request.value == "createTab")
+	if(request.value == "createTab")
 	{
 		chrome.tabs.create({url:request.url,selected:false},null);
 		sendResponse({});
@@ -124,27 +120,21 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 				sendResponse({bookmarklet:null});
 		});
 	}
-	else if(request.value == "getDisabledDomains")
+	else if(request.value == "getOptions")
 	{
+		//Bookmark search status option
+		var bookmark_search = localStorage["glee_bookmark_search"];
+		//gleeBox position
+		var position = localStorage["glee_position"];
+		//disabled domains
 		if(localStorage["glee_domains"])
-		{
-			sendResponse({domains:localStorage["glee_domains"].split(",")});
-		}
+			domains = localStorage["glee_domains"].split(",");
 		else
-			sendResponse({domains:null});
-	}
-	else if(request.value == "getPosition")
-	{
-		var pos = localStorage["glee_position"];
-		if(pos != null)
-			sendResponse({position:localStorage["glee_position"]});
-		else
-			sendResponse({position:null});
-	}
-	else if(request.value == "getBookmarkSearchStatus")
-	{
-		var status = localStorage["glee_bookmark_search"];
-		sendResponse({status:status});
+			domains = null;
+		//scrolling animation
+		var animation = localStorage["glee_scrolling_animation"];
+		
+		sendResponse({status:status, bookmark_search:bookmark_search, position:position, domains:domains, animation:animation});
 	}
 });
 

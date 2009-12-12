@@ -326,6 +326,8 @@ var Glee = {
 	bookmarks:[],
 	//whether bookmark search is enabled/disabled
 	bookmarkSearchStatus:false,
+	//scrolling Animation speed
+	scrollingSpeed:750,
 	// !commands
 	commands:[
 		{
@@ -421,35 +423,43 @@ var Glee = {
 		this.initOptions();
 	},
 	initOptions:function(){
-		this.initStatus();
-		this.initPosition();
-		this.initBookmarkSearch();
-	},
-	initStatus:function(){
-		//sending request to get the status of gleeBox i.e. enabled/disabled
-		chrome.extension.sendRequest({value:"getStatus"},function(response){
+		//sending request to get the gleeBox options
+		chrome.extension.sendRequest({value:"getOptions"},function(response){
+			
+			//gleeBox status i.e. enabled/disabled
 			Glee.status = response.status;
-			Glee.checkDomain();
-		});
-	},
-	initPosition:function(){
-		//sending request to get the position of gleeBox
-		chrome.extension.sendRequest({value:"getPosition"},function(response){
+						
+			//gleeBox position
 			if(response.position != null && response.position != 1) //by default, position is in middle anyways
 			{
 				if(response.position == 0) //top
 					Glee.searchBox.css("top","0%");
-				else					   //bottom
+				else	//bottom
 					Glee.searchBox.css("top","78%");
 			}
-		});
-	},
-	initBookmarkSearch:function(){
-		chrome.extension.sendRequest({value:"getBookmarkSearchStatus"},function(response){
-			if(response.status == 1)
+			
+			//Bookmark search
+			if(response.bookmark_search == 1)
 				Glee.bookmarkSearchStatus = true; //enabled
 			else
 				Glee.bookmarkSearchStatus = false;
+			
+			//getting the restricted domains
+			if(response.domains)
+			{
+				for(var i=0;i<response.domains.length;i++)
+				{
+					Glee.domainsToBlock[Glee.domainsToBlock.length] = response.domains[i];
+				}
+			}
+			
+			//Scrolling animation
+			if(response.animation == 1)
+				Glee.scrollingSpeed = 750; //enabled
+			else
+				Glee.scrollingSpeed = 0; //disabled
+				
+			Glee.checkDomain();
 		});
 	},
 	closeBox: function(){
@@ -639,7 +649,7 @@ var Glee = {
 				var targetOffset = target.offset().top - 60;
 				//stop any previous scrolling to prevent queueing
 				jQuery('html,body').stop(true);
-				jQuery('html,body').animate({scrollTop:targetOffset},750,"linear",Glee.updateUserPosition);
+				jQuery('html,body').animate({scrollTop:targetOffset},Glee.scrollingSpeed,"linear",Glee.updateUserPosition);
 				return false;
 			}
 		}
@@ -774,25 +784,14 @@ var Glee = {
 		});
 	},
 	checkDomain:function(){
-		//send request to get the domains disabled by the user in options
-		chrome.extension.sendRequest({value:"getDisabledDomains"},function(response){
-			if(response.domains)
+		for(var i=0; i<Glee.domainsToBlock.length; i++)
+		{
+			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
 			{
-
-				for(var i=0;i<response.domains.length;i++)
-				{
-					Glee.domainsToBlock[Glee.domainsToBlock.length] = response.domains[i];
-				}
+				Glee.status = 0;
+				break;
 			}
-			for(var i=0; i<Glee.domainsToBlock.length; i++)
-			{
-				if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
-				{
-					Glee.status = 0;
-					break;
-				}
-			}
-		});
+		}
 	},
 	isVisible:function(el){
 		el = jQuery(el);
