@@ -112,6 +112,15 @@ function save_options() {
 		pos = 2;
 	localStorage["glee_position"] = pos;
 	
+	//saving the gleeBox size
+	if(document.getElementsByName("glee_size")[0].checked) //small
+		size = 0;
+	else if(document.getElementsByName("glee_size")[1].checked) //medium
+		size = 1;
+	else 	//large
+		size = 2;
+	localStorage["glee_size"] = size;
+	
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
 		bookmark_status = 1; //1 indicates enabled
@@ -159,6 +168,13 @@ function restore_options()
 		document.getElementsByName("glee_pos")[pos].checked = true;
 	else
 		document.getElementsByName("glee_pos")[1].checked = true; //default is middle position
+		
+	//getting the gleeBox size
+	var size = localStorage["glee_size"];
+	if(size)
+		document.getElementsByName("glee_size")[size].checked = true;
+	else
+		document.getElementsByName("glee_size")[2].checked = true; //default is large size
 		
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
@@ -245,6 +261,14 @@ function setStatus(text){
 			</div>
 		</li>
 		<li>
+			<label class="option-label">gleeBox Size:<br/><span class="subtext">How big do you want gleeBox to be?</span></label>
+			<div class="option-field">
+				<input name="glee_size" type="radio"> Small
+				<input name="glee_size" type="radio"> Medium
+				<input name="glee_size" type="radio"> Large
+			</div>
+		</li>
+		<li>
 			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no links are found on a page for a query?</span></label>
 			<div class="option-field">
 				<input name="glee_bookmark_search" type="radio"> Enabled
@@ -257,7 +281,7 @@ function setStatus(text){
 				<input name="glee_scrolling_animation" type="radio"> Yes
 				<input name="glee_scrolling_animation" type="radio"> No
 			</div>
-		</li>		
+		</li>
 	</ul>
 <input type="button" style="float:right;clear:both;" class="button" value="Save" onclick="save_options()">
 </div>	

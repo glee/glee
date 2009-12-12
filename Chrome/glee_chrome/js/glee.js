@@ -314,7 +314,7 @@ jQuery(document).ready(function(){
 var Glee = { 	
 	searchText:"",
 	commandMode: false,
-	//used to enable/disable gleeBox
+	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1, 
 	//Currently selected element
 	selectedElement:null,
@@ -330,6 +330,8 @@ var Glee = {
 	scrollingSpeed:750,
 	//position of gleeBox (top,middle,bottom)
 	position: "middle",
+	//size of gleeBox (small,medium,large)
+	size:"large",
 	// !commands
 	commands:[
 		{
@@ -422,9 +424,10 @@ var Glee = {
 		sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(sub);
 		jQuery(document.body).append(this.searchBox);
+		this.getOptions();
 		this.initOptions();
 	},
-	initOptions:function(){
+	getOptions:function(){
 		//sending request to get the gleeBox options
 		chrome.extension.sendRequest({value:"getOptions"},function(response){
 			
@@ -439,19 +442,27 @@ var Glee = {
 				else	//bottom
 					Glee.position = "bottom";
 			}
-			if(Glee.position == "top")
-				topSpace = 0;
-			else if(Glee.position == "middle")
-				topSpace = 35;
-			else
-				topSpace = 78;
-			Glee.searchBox.css("top",topSpace+"%");
+			
+			//gleeBox Size
+			if(response.size != null && response.size != 2) //by default, size is large anyways
+			{
+				if(response.size == 0)
+					Glee.size = "small";
+				else if(response.size == 1)
+					Glee.size = 'medium';
+			}
 			
 			//Bookmark search
-			if(response.bookmark_search == 1)
+			if(response.bookmark_search && response.bookmark_search == 1)
 				Glee.bookmarkSearchStatus = true; //enabled
 			else
 				Glee.bookmarkSearchStatus = false;
+				
+			//Scrolling animation
+			if(response.animation && response.animation == 1)
+				Glee.scrollingSpeed = 750; //enabled
+			else
+				Glee.scrollingSpeed = 0; //disabled
 			
 			//getting the restricted domains
 			if(response.domains)
@@ -462,14 +473,28 @@ var Glee = {
 				}
 			}
 			
-			//Scrolling animation
-			if(response.animation == 1)
-				Glee.scrollingSpeed = 750; //enabled
-			else
-				Glee.scrollingSpeed = 0; //disabled
-				
 			Glee.checkDomain();
+			Glee.initOptions();
 		});
+	},
+	initOptions:function(){
+		//setting gleeBox position
+		if(Glee.position == "top")
+			topSpace = 0;
+		else if(Glee.position == "middle")
+			topSpace = 35;
+		else
+			topSpace = 78;
+		Glee.searchBox.css("top",topSpace+"%");
+		
+		//setting gleeBox size
+		if(Glee.size == "small")
+			fontsize = "30px"
+		else if(Glee.size == "medium")
+			fontsize = "50px"
+		else
+			fontsize = "100px"
+		Glee.searchField.css("font-size",fontsize);
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();

@@ -126,6 +126,8 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		var bookmark_search = localStorage["glee_bookmark_search"];
 		//gleeBox position
 		var position = localStorage["glee_position"];
+		//gleeBox size
+		var size = localStorage["glee_size"];
 		//disabled domains
 		if(localStorage["glee_domains"])
 			domains = localStorage["glee_domains"].split(",");
@@ -134,7 +136,7 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		//scrolling animation
 		var animation = localStorage["glee_scrolling_animation"];
 		
-		sendResponse({status:status, bookmark_search:bookmark_search, position:position, domains:domains, animation:animation});
+		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation});
 	}
 });
 
