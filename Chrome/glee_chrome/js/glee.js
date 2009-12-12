@@ -328,6 +328,8 @@ var Glee = {
 	bookmarkSearchStatus:false,
 	//scrolling Animation speed
 	scrollingSpeed:750,
+	//position of gleeBox (top,middle,bottom)
+	position: "middle",
 	// !commands
 	commands:[
 		{
@@ -428,15 +430,22 @@ var Glee = {
 			
 			//gleeBox status i.e. enabled/disabled
 			Glee.status = response.status;
-						
+			
 			//gleeBox position
 			if(response.position != null && response.position != 1) //by default, position is in middle anyways
 			{
 				if(response.position == 0) //top
-					Glee.searchBox.css("top","0%");
+					Glee.position = "top";
 				else	//bottom
-					Glee.searchBox.css("top","78%");
+					Glee.position = "bottom";
 			}
+			if(Glee.position == "top")
+				topSpace = 0;
+			else if(Glee.position == "middle")
+				topSpace = 35;
+			else
+				topSpace = 78;
+			Glee.searchBox.css("top",topSpace+"%");
 			
 			//Bookmark search
 			if(response.bookmark_search == 1)
