@@ -675,7 +675,7 @@ var Glee = {
 	getBackInitialState: function(){
 		jQuery('html,body').stop(true);
 		if(this.userPosBeforeGlee != window.pageYOffset)
-			jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
+			jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},Glee.scrollingSpeed);
 		if(this.userFocusBeforeGlee != null)
 			this.userFocusBeforeGlee.focus();
 		else
