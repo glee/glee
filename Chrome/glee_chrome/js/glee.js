@@ -92,7 +92,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
-					},400);
+					},350);
 				}
 				//else command mode
 				else {
