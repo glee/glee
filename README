@@ -42,11 +42,14 @@ Scraping Commands:
 
 Page commands:
 
-These let you do things to the page. We're thinking of making this a pluggable and domain specific thing. In the meanwhile, here are a few examples:
+These let you do things to the page.
 
 !read - Transform the page for a better reading experience using Readability
 !shorten - Shorten the URL of the current page 
 !tweet - Redirect to twitter with the URL of the current page in the text field
+!rss - Open the current page's RSS feed in Google Reader
+
+In Chrome, you can save bookmarklets and then execute them as a page command. For eg.: say you have saved the Instapaper bookmarklet and renamed its title to "save". You can then run it by typing in "!save" into gleeBox and pressing Enter.
 
 YubNub Commands:
 
@@ -56,6 +59,7 @@ YubNub Commands:
 :wp cricket - Search wikipedia for cricket
 :tube elvis - Search YouTube for elvis
 :site2pdf $ - Get a PDF for the current page.
+:tw gleebox - search Twitter for gleebox
 
 jQuery mode:
 
