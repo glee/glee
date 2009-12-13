@@ -170,13 +170,9 @@ jQuery(document).ready(function(){
 				if(Glee.selectedElement)
 				{	
 					if(e.shiftKey)
-					{
 						Glee.selectedElement = LinkReaper.getPrev();
-					}
 					else
-					{
 						Glee.selectedElement = LinkReaper.getNext();
-					}
 					Glee.setSubText(Glee.selectedElement,"el");
 					Glee.scrollToElement(Glee.selectedElement);
 				}
@@ -546,7 +542,7 @@ var Glee = {
 					else if(isImage)
 						a_el = jQuery(jQueryVal.parents('a'));
 						
-					if(a_el)
+					if(a_el.length != 0)
 					{
 						this.URL = a_el.attr("href");
 						this.subURL.html(this.truncate(this.URL));
@@ -560,13 +556,9 @@ var Glee = {
 					this.subURL.html(this.truncate(this.URL));
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title != "")
-					{
 						this.subText.html(this.truncate(title));
-					}
 					else
-					{
 						this.subText.html("Linked Image");
-					}
 				}	
 				else //it is a link
 				{
@@ -607,9 +599,7 @@ var Glee = {
 					this.isBookmark(text); //check if the text matches a bookmark
 				}
 				else //search
-				{
 					this.setSubText(text,"search");
-				}
 			}
 		}
 		else if(type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
@@ -692,11 +682,9 @@ var Glee = {
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
-		//Only update the user position if it is a scraping command 
+		//Only update the user position if it is a scraping command
 		if(value[0] == "?" && value.length > 1)
-		{
 			Glee.userPosBeforeGlee = window.pageYOffset;
-		}
 	},
 	toggleActivity: function(toggle){
 		if(toggle == 1)
@@ -792,10 +780,13 @@ var Glee = {
 		return hparts.join('/') + '/' + newlinkparts.join('/');
 	},
 	truncate:function(text){
-		if(text.length > 80)
-			return text.substr(0,78)+"...";
-		else
-			return text;
+		if(text && typeof(text) != "undefined")
+		{
+			if(text.length > 80)
+				return text.substr(0,78)+"...";
+			else
+				return text;
+		}
 	},
 	isURL:function(url){
 		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in))");
