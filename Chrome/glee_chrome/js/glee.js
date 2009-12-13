@@ -223,22 +223,33 @@ jQuery(document).ready(function(){
 				var anythingOnClick = true;
 				if(Glee.selectedElement != null && typeof(Glee.selectedElement) != "undefined") //if the element exists
 				{
-					if(jQuery(Glee.selectedElement)[0].tagName == "A") //if the element is a link
+					//check to see if an anchor element is associated with the selected element
+					//currently only checking for headers and images
+					var a_el = null;
+					if (jQuery(Glee.selectedElement)[0].tagName == "A")
+						a_el = Glee.selectedElement;
+					else if (jQuery(Glee.selectedElement)[0].tagName[0] == "H")
+						a_el = jQuery(Glee.selectedElement).find('a');
+					else if (jQuery(Glee.selectedElement)[0].tagName == "IMG")
+						a_el = jQuery(Glee.selectedElement).parents('a');
+
+					if(a_el) //if an anchor element is associated with the selected element
 					{
-						//setting the target value of element depending upon if shift key was pressed
+						//setting the target attribute of element depending upon if shift key was pressed
 						if(e.shiftKey)
 						{
-							jQuery(Glee.selectedElement).attr("target","_blank");
+							jQuery(a_el).attr("target","_blank");
 							target = 1;
 						}
 						else
 						{
-							jQuery(Glee.selectedElement).attr("target","_self");
+							jQuery(a_el).attr("target","_self");
 							target = 0;
 						}
 						//simulating a click on the link
-						anythingOnClick = Glee.simulateClick(Glee.selectedElement);
+						anythingOnClick = Glee.simulateClick(a_el);
 						
+						//if opening the link on the same page, close the gleeBox
 						if(!target)
 						{
 							setTimeout(function(){
@@ -249,18 +260,14 @@ jQuery(document).ready(function(){
 						return false;
 					}
 				}
-				//# in URL is same as null
-				if(Glee.URL == "#")
+				//if URL is empty or #, same as null
+				if(Glee.URL == "#" || Glee.URL == "")
 					Glee.URL = null;
-				//if Glee.URL exists, check if it is relative. if it is, make it absolute
+
 				if(Glee.URL)
 				{
-					// Glee.URL = Glee.makeURLAbsolute(Glee.URL,location.protocol+"//"+location.host);
+					//if the URL is relative, make it absolute
 					Glee.URL = Glee.makeURLAbsolute(Glee.URL, location.href);
-				}
-				//check that preventDefault() is not called and Glee.URL exists
-				if(Glee.URL && anythingOnClick && jQuery(Glee.selectedElement)[0].tagName != "A")
-				{
 					if(e.shiftKey)
 					{
 						//sending request to background.html to create a new tab
@@ -275,7 +282,7 @@ jQuery(document).ready(function(){
 						window.location = url;
 					}
 				}
-				else
+				else //if it is an input element or text field, set focus to it, else bring back focus to document
 				{
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 					{
