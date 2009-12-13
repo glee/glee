@@ -92,7 +92,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
-					},350);
+					},380);
 				}
 				//else command mode
 				else {
@@ -534,25 +534,26 @@ var Glee = {
 			{
 				jQueryVal = jQuery(val); 
 				var isHeading = jQueryVal[0].tagName[0] == "H";
+				var isImage = jQueryVal[0].tagName == "IMG";
 				var isNotLink = (jQueryVal[0].tagName != "A");
 				if(isNotLink) //if it is not a link
 				{
 					this.subText.html(this.truncate(jQueryVal.text()));
+					var a_el = null;
 					if(isHeading)
+						a_el = jQuery(jQueryVal.find('a'));
+					else if(isImage)
+						a_el = jQuery(jQueryVal.parents('a'));
+						
+					if(a_el)
 					{
-						var a_el = jQuery(jQueryVal.find('a'));
-						if(a_el.length != 0)
-						{
-							this.URL = a_el.attr("href");
-							this.subURL.html(this.truncate(this.URL));
-						}
-						else
-							this.subURL.html("");
+						this.URL = a_el.attr("href");
+						this.subURL.html(this.truncate(this.URL));
 					}
 					else
 						this.subURL.html("");
 				}
-				else if(jQueryVal.find("img").length != 0) //it is a linked image
+				else if(jQueryVal.find("img").length != 0) //it is a link containing an image
 				{
 					this.URL = jQueryVal.attr("href");
 					this.subURL.html(this.truncate(this.URL));
