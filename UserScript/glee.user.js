@@ -29,9 +29,10 @@ jQuery(document).ready(function(){
 	Glee.initBox();
 	
 	/* Setup CSS Styles */ 
-	var reaperCSS = '.GleeReaped{background-color: #fbee7e !important;border: 1px dotted #818181 !important;} .GleeHL{background-color: #d7fe65 !important;-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;padding: 3px !important;color: #1c3249 !important;border: 1px solid #818181 !important;}';
 	
-	var gleeCSS = '#gleeBox{ line-height:20px;z-index:999999;position:fixed; left:5%; top:35%; display:none; overflow:auto;width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0;font-family:Calibri,Helvetica,serif; padding:4px 6px;text-align:left;}#gleeSearchField{ outline:none;width:90%; color:#fff; background-color:#333; margin:0; padding:0;margin:3px 0;border:none; font-size:100px; font-family:Calibri,Helvetica,serif; }#gleeSubText, #gleeSubURL, #gleeSubActivity{font-size:15px;font-family:Calibri,Helvetica,serif;color:#fff; font-weight: normal;width:auto}#gleeSubText{float:left;}#gleeSubURL{display:inline; float:right;}#gleeSubActivity{color:#ccc;height:10px;display:inline;float:left;padding-left:5px}';
+	var reaperCSS = '.GleeReaped{ background-color: #fbee7e !important; border: 1px dotted #818181 !important; } .GleeHL{ background-color: #d7fe65 !important; -webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important; -moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important; padding: 3px !important; color: #1c3249 !important; border: 1px solid #818181 !important; } .GleeHL a{ color: #1c3249 !important; }';
+	
+	var gleeCSS = '#gleeBox{ line-height:20px; z-index:100000; position:fixed; left:5%; top:35%; display:none; overflow:auto; width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0; font-family:Calibri,Helvetica,serif; padding:4px 6px; text-align:left; /*rounded corners*/ -moz-border-radius:7px; } #gleeSearchField{ outline:none; width:90%; color:#fff; background-color:#333; margin:0; padding:0; margin:3px 0; border:none; font-size:100px; font-family:Calibri,Helvetica,serif; } #gleeSubText, #gleeSubURL, #gleeSubActivity{ font-size:15px; font-family:Calibri,Helvetica,serif; color:#fff; width:auto; font-weight: normal; } #gleeSubText{ float:left; } #gleeSubURL{ display:inline; float:right; } #gleeSubActivity{ color:#ccc; height:10px; display:inline; float:left; padding-left:5px; }';
 	
 	GM_addStyle(reaperCSS + gleeCSS);
 		
@@ -39,14 +40,14 @@ jQuery(document).ready(function(){
 	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
-		if(Glee.status)
-		{	
+		if(Glee.status != 0)
+		{
 			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey))
 			{
 				e.preventDefault();
+				Glee.userPosBeforeGlee = window.pageYOffset;
 				//set default subtext
 				Glee.subText.html("Nothing selected");
-				Glee.userPosBeforeGlee = window.pageYOffset;
 				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
 					Glee.userFocusBeforeGlee = target;
 				else
@@ -63,9 +64,10 @@ jQuery(document).ready(function(){
 					Glee.closeBox();
 				}
 			}
-		}	
+		}
 	});
 	Glee.searchField.bind('keydown',function(e){
+		//pressing 'esc' hides the gleeBox
 		if(e.keyCode == 27)
 		{
 			e.preventDefault();
@@ -83,7 +85,7 @@ jQuery(document).ready(function(){
 	});
 
 	Glee.searchField.bind('keyup',function(e){
-		var value = Glee.searchField.attr('value');	
+		var value = Glee.searchField.attr('value');
 		//check if the content of the text field has changed
 		if(Glee.searchText != value)
 		{
@@ -92,9 +94,9 @@ jQuery(document).ready(function(){
 			{
 				Glee.toggleActivity(1);
 
-				if(value[0] != "?" 
-					&& value[0] != "!" 
-					&& value[0] != ":" 
+				if(value[0] != "?"
+					&& value[0] != "!"
+					&& value[0] != ":"
 					&& value[0] != '*')
 				{
 					if(Glee.commandMode)
@@ -111,7 +113,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
-					},400);
+					},380);
 				}
 				//else command mode
 				else {
@@ -136,22 +138,24 @@ jQuery(document).ready(function(){
 						c = value.substring(1);
 						c = c.replace("$", location.href);
 						Glee.subText.html("Run yubnub command (press enter to execute): " + c);
-						Glee.subURL.html("http://yubnub.org/parser/parse?command=" + escape(c));
+						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
+						Glee.subURL.html(Glee.truncate(Glee.URL));
 					}
 					else if(value[0] == '*')// Any jQuery selector
 					{
 						Glee.nullMessage = "Nothing found for your selector.";
 						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
 					}
-					// now searching through the commands declared inside Glee.commands
-					else if(value[0] == "!" && value.length > 1)
+					else if(value[0] == "!" && value.length > 1) //Searching through page commands
 					{
 						trimVal = value.substr(1);
+						Glee.URL = null;
 						for(var i=0; i<Glee.commands.length; i++)
 						{
 							if(Glee.commands[i].name == trimVal)
 							{
-								Glee.execCommand(Glee.commands[i]);
+								Glee.setSubText(Glee.commands[i].description,"msg");
+								Glee.URL = Glee.commands[i];
 								break;
 							}
 						}
@@ -193,7 +197,7 @@ jQuery(document).ready(function(){
 		//if ENTER is pressed
 		else if(e.keyCode == 13)
 		{
-			e.preventDefault();	
+			e.preventDefault();
 			if(value[0] == "*")
 			{
 				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
@@ -203,37 +207,47 @@ jQuery(document).ready(function(){
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 			}
+			else if(value[0] == "!" && value.length > 1)
+			{
+				//check if it is a command
+				//TODO:Glee.URL is misleading here when it actually contains the command
+				if(Glee.URL.name != "undefined" && Glee.URL.name)
+				{
+					Glee.execCommand(Glee.URL);
+					return;
+				}
+			}
 			else
 			{
-				var destURL;
-				var anythingOnClick = true;		
+				var anythingOnClick = true;
 				if(Glee.selectedElement != null && typeof(Glee.selectedElement) != "undefined") //if the element exists
 				{
-					if(jQuery(Glee.selectedElement)[0].tagName == "A") //if the element is a link
+					//check to see if an anchor element is associated with the selected element
+					//currently only checking for headers and images
+					var a_el = null;
+					if (jQuery(Glee.selectedElement)[0].tagName == "A")
+						a_el = Glee.selectedElement;
+					else if (jQuery(Glee.selectedElement)[0].tagName[0] == "H")
+						a_el = jQuery(Glee.selectedElement).find('a');
+					else if (jQuery(Glee.selectedElement)[0].tagName == "IMG")
+						a_el = jQuery(Glee.selectedElement).parents('a');
+					
+					if(a_el) //if an anchor element is associated with the selected element
 					{
-						destURL = jQuery(Glee.selectedElement).attr("href");
 						//simulating a click on the link
-						anythingOnClick = Glee.simulateClick(Glee.selectedElement);
+						anythingOnClick = Glee.simulateClick(a_el);
 					}
-					else
-						destURL = Glee.subURL.text();
 				}
-				else
-				{
-					destURL = Glee.subURL.text();
-				}
+
 				//# in URL is same as null
-				if(destURL == "#")
-					destURL = null;
+				if(Glee.URL == "#" || Glee.URL == "")
+					Glee.URL = null;
 				//if destURL exists, check if it is relative. if it is, make it absolute
-				if(destURL)
-				{
-					// destURL = Glee.makeURLAbsolute(destURL,location.protocol+"//"+location.host);
-					destURL = Glee.makeURLAbsolute(destURL, location.href);
-				}
+				if(Glee.URL)
+					Glee.URL = Glee.makeURLAbsolute(Glee.URL, location.href);
 					
 				//check that preventDefault() is not called and destURL exists
-				if(destURL && anythingOnClick)
+				if(Glee.URL && anythingOnClick)
 				{
 					if(e.shiftKey)
 					{
@@ -243,10 +257,12 @@ jQuery(document).ready(function(){
 					}
 					else
 					{
-						window.location = destURL;
+						url = Glee.URL;
+						Glee.closeBoxWithoutBlur();
+						window.location = url;
 					}
 				}
-				else
+				else //if it is an input element or text field, set focus to it, else bring back focus to document
 				{
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 					{
@@ -277,44 +293,70 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
-			jQuery('html,body').stop(true);	
+			jQuery('html,body').stop(true);
 		}
 	});
 });
 
-var Glee = { 	
+var Glee = {
 	searchText:"",
 	commandMode: false,
-	//used to enable/disable gleeBox
+	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1, 
 	//Currently selected element
 	selectedElement:null,
+	//current URL where gleeBox should go
+	URL:null,
+	//element on which the user was focussed before a search
 	userFocusBeforeGlee:null,
+	//scrolling Animation speed
+	scrollingSpeed:0,
+	//position of gleeBox (top,middle,bottom)
+	position: "middle",
+	//size of gleeBox (small,medium,large)
+	size:"medium",
+	//URLs for which gleeBox should be disabled
+	domainsToBlock:[
+		"mail.google.com",
+		"google.com/reader",
+		"wave.google.com"
+	],
 	// !commands
 	commands:[
 		{
 			name: "tweet",
 			method:"Glee.sendTweet",
 			domain:"*",
+			description:"Tweet this page",
 			statusText:"Redirecting to twitter homepage..."
 		},
 		{
 			name: "shorten",
 			method:"Glee.shortenURL",
 			domain:"*",
+			description:"Shorten the URL of this page using bit.ly",
 			statusText:"Shortening URL via bit.ly..."
 		},
 		{
 			name: "read",
 			method:"Glee.makeReadable",
 			domain:"*",
+			description:"Make your page readable using Readability",
 			statusText:"wait till Glee+Readability work up the magic"
 		},
 		{
 			name: "rss",
 			method:"Glee.getRSSLink",
 			domain:"*",
+			description:"Open the RSS feed of this page in GReader",
 			statusText:"Opening feed in Google Reader..."
+		},
+		{
+			name: "help",
+			method:"Glee.help",
+			domain:"*",
+			description:"View user manual",
+			statusText:"Loading help page..."
 		}
 	],
 	
@@ -354,12 +396,6 @@ var Glee = {
 			cssStyle: "GleeReaped"
 		}
 		],
-	//Domains which are not supported at the moment. 	
-	domainsToBlock:[
-		"mail.google.com",
-		"google.com/reader",
-		"wave.google.com"
-	],	
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -371,118 +407,138 @@ var Glee = {
 		sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(sub);
 		jQuery(document.body).append(this.searchBox);
+		this.initOptions();
 		this.checkDomain();
+	},
+	initOptions:function(){
+		//setting gleeBox position
+		if(Glee.position == "top")
+			topSpace = 0;
+		else if(Glee.position == "middle")
+			topSpace = 35;
+		else
+			topSpace = 78;
+		Glee.searchBox.css("top",topSpace+"%");
+		
+		//setting gleeBox size
+		if(Glee.size == "small")
+			fontsize = "30px"
+		else if(Glee.size == "medium")
+			fontsize = "50px"
+		else
+			fontsize = "100px"
+		Glee.searchField.css("font-size",fontsize);
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
-		Glee.getBackInitialState();
-		//resetting value of searchField
-		Glee.searchBox.fadeOut(150);
-		Glee.searchField.attr('value','');
-		this.subText.html("");
-		this.subURL.html("");
+		this.getBackInitialState();
+		this.searchBox.fadeOut(150);
+		this.searchField.attr('value','');
+		this.setSubText(null);
 		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
-		Glee.searchBox.fadeOut(150);
+		this.searchBox.fadeOut(150);
 		LinkReaper.unreapAllLinks();
 		//resetting value of searchField
-		Glee.searchField.attr('value','');
-		this.subText.html("");
-		this.subURL.html("");
+		this.searchField.attr('value','');
+		this.setSubText(null);
 		this.selectedElement = null;
 	},
 	initReaper: function(reaper){
-		Glee.nullMessage = reaper.nullMessage;
+		this.nullMessage = reaper.nullMessage;
 		LinkReaper.selectedLinks = jQuery(reaper.selector);
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		Glee.selectedElement = LinkReaper.getFirst();
-		Glee.setSubText(Glee.selectedElement,"el");
-		Glee.scrollToElement(Glee.selectedElement);
+		this.selectedElement = LinkReaper.getFirst();
+		this.setSubText(Glee.selectedElement,"el");
+		this.scrollToElement(Glee.selectedElement);	
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(reaper.cssStyle);
 		});
 		LinkReaper.traversePosition = 0;
-		LinkReaper.searchTerm = "";	
+		LinkReaper.searchTerm = "";
 	},
 	setSubText: function(val,type){
-		if(type == "el")
+		//reset Glee.URL
+		this.URL = null;
+		if(type == "el") // here val is the element or maybe null if no element is found for a search
 		{
 			if(val && typeof val!= "undefined")
 			{
 				jQueryVal = jQuery(val); 
 				var isHeading = jQueryVal[0].tagName[0] == "H";
+				var isImage = jQueryVal[0].tagName == "IMG";
 				var isNotLink = (jQueryVal[0].tagName != "A");
 				if(isNotLink) //if it is not a link
 				{
-					this.subText.html(jQueryVal.text());
+					this.subText.html(this.truncate(jQueryVal.text()));
+					var a_el = null;
 					if(isHeading)
+						a_el = jQuery(jQueryVal.find('a'));
+					else if(isImage)
+						a_el = jQuery(jQueryVal.parents('a'));
+						
+					if(a_el.length != 0)
 					{
-						var a_el = jQuery(jQueryVal.find('a'));
-						if(a_el.length != 0)
-							this.subURL.html(a_el.attr("href"));
-						else
-							this.subURL.html("");
+						this.URL = a_el.attr("href");
+						this.subURL.html(this.truncate(this.URL));
 					}
 					else
 						this.subURL.html("");
 				}
-				else if(jQueryVal.find("img").length != 0) //it is a linked image
+				else if(jQueryVal.find("img").length != 0) //it is a link containing an image
 				{
-					var href = jQueryVal.attr("href");
-					if(href.length > 80)
-					{
-						href = Glee.truncateURL(href);
-					}
-					this.subURL.html(href);
+					this.URL = jQueryVal.attr("href");
+					this.subURL.html(this.truncate(this.URL));
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title != "")
-					{
-						this.subText.html(title);
-					}
+						this.subText.html(this.truncate(title));
 					else
-					{
 						this.subText.html("Linked Image");
-					}
 				}	
 				else //it is a link
 				{
 					var title = jQueryVal.attr('title');
 					var text = jQueryVal.text();
 
-					this.subText.html(text);
+					this.subText.html(this.truncate(text));
 					if(title !="" && title != text)
 					{
-						this.subText.html(this.subText.html()+" -- "+title);
+						this.subText.html(this.truncate(this.subText.html()+" -- "+title));
 					}
-					this.subURL.html(jQueryVal.attr('href'));
+					this.URL = jQueryVal.attr('href');
+					this.subURL.html(this.truncate(this.URL));
 				}
 			}
 			else if(Glee.commandMode == true)
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //google or go to URL
+			else //go to URL ,search for bookmarks or google
 			{
-				var text = Glee.searchField.attr("value");
+				var text = this.searchField.attr("value");
+				this.selectedElement = null;
 				//if it is a URL
-				if(Glee.isURL(text))
+				if(this.isURL(text))
 				{
-					Glee.selectedElement = null;
-					this.subText.html("Go to "+text);
+					this.subText.html(this.truncate("Go to "+text));
 					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
-					this.subURL.html(text);
+					this.URL = text;
+					this.subURL.html(this.truncate(text));
 				}
-				else
-				{
-					this.subText.html("Google "+text);
-					this.subURL.html("http://www.google.com/search?q="+text);
-				}
+				else //search
+					this.setSubText(text,"search");
 			}
 		}
-		else if(type == "msg")
+		else if(type == "search") // here val is the text query
+		{
+			this.subText.html(this.truncate("Google "+val));
+			this.URL = "http://www.google.com/search?q="+val;
+			this.subURL.html(this.URL);	
+		}
+		else if(type == "msg") // here val is the message to be displayed
 		{
 			this.subText.html(val);
 			this.subURL.html('');
@@ -505,37 +561,29 @@ var Glee = {
 				var targetOffset = target.offset().top - 60;
 				//stop any previous scrolling to prevent queueing
 				jQuery('html,body').stop(true);
-				jQuery('html,body').animate({scrollTop:targetOffset},750,"linear",Glee.updateUserPosition);
+				jQuery('html,body').animate({scrollTop:targetOffset},Glee.scrollingSpeed,"linear",Glee.updateUserPosition);
 				return false;
 			}
 		}
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
-		//Only update the user position if it is a scraping command 
+		//Only update the user position if it is a scraping command
 		if(value[0] == "?" && value.length > 1)
-		{
 			Glee.userPosBeforeGlee = window.pageYOffset;
-		}
 	},
 	toggleActivity: function(toggle){
 		if(toggle == 1)
-		{
-		//	jQuery("#gleeSubActivity").fadeIn('slow');
 			jQuery("#gleeSubActivity").html("searching");
-		}
 		else
-		{
-			// jQuery("#gleeSubActivity").fadeOut('slow');
 			jQuery("#gleeSubActivity").html("");
-		}
 	},
 	getBackInitialState: function(){
 		jQuery('html,body').stop(true);
-		if(Glee.userPosBeforeGlee != window.pageYOffset)
-			jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},750);
-		if(Glee.userFocusBeforeGlee != null)
-			Glee.userFocusBeforeGlee.focus();
+		if(this.userPosBeforeGlee != window.pageYOffset)
+			jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},Glee.scrollingSpeed);
+		if(this.userFocusBeforeGlee != null)
+			this.userFocusBeforeGlee.focus();
 		else
 		{
 			//wait till the thread is free
@@ -543,19 +591,14 @@ var Glee = {
 				Glee.searchField.blur();
 			},0);
 		}
-			
 	},
-	simulateScroll: function(val){		
+	simulateScroll: function(val){
 		jQuery('html,body').stop(true, true);
-		if(val == 1)
-		{
+		if(val == 1) //scroll up
 			window.scrollTo(window.pageXOffset,window.pageYOffset+200);
-		}
-		else if(val == 0)
-		{
+		else if(val == 0) //scroll down
 			window.scrollTo(window.pageXOffset,window.pageYOffset-200);
-		}
-		Glee.userPosBeforeGlee = window.pageYOffset;		
+		this.userPosBeforeGlee = window.pageYOffset;
 	},
 	simulateClick: function(el){
 		var evt = document.createEvent("MouseEvents");
@@ -563,18 +606,20 @@ var Glee = {
 		return el[0].dispatchEvent(evt);
 	},
 	resetTimer: function(){
-		if(typeof(Glee.timer) != "undefined")
-		{			
-			clearTimeout(Glee.timer);
-		}
+		if(typeof(this.timer) != "undefined")
+			clearTimeout(this.timer);
 	},
 	makeURLAbsolute: function(link,host){
+		//check if its a bookmarklet meant to execute JS
+		if(link.indexOf("javascript:") == 0)
+			return link;
 		//code from http://github.com/stoyan/etc/blob/master/toAbs/absolute.html
 		var lparts = link.split('/');
 		if (/http:|https:|ftp:/.test(lparts[0])) {
 			// already abs, return
 			return link;
 		}
+
 		var i, hparts = host.split('/');
 		if (hparts.length > 3) {
 			hparts.pop(); // strip trailing thingie, either scriptname or blank 
@@ -612,11 +657,17 @@ var Glee = {
 
 		return hparts.join('/') + '/' + newlinkparts.join('/');
 	},
-	truncateURL:function(url){
-		return url.substr(0,78)+"...";
+	truncate:function(text){
+		if(text && typeof(text) != "undefined")
+		{
+			if(text.length > 80)
+				return text.substr(0,78)+"...";
+			else
+				return text;
+		}
 	},
 	isURL:function(url){
-		var regex = new RegExp(".(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)");
+		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in))");
 		return url.match(regex);
 	},
 	checkDomain:function(){
@@ -632,9 +683,7 @@ var Glee = {
 	isVisible:function(el){
 		el = jQuery(el);
 		if(el.css('display') == "none" || el.css('visibility') == "hidden")
-		{
 			return false;
-		}
 		else
 		{
 			// TODO: A more efficient way needed, but is there one?
@@ -642,9 +691,7 @@ var Glee = {
 			for(var i=0;i<parents.length;i++)
 			{
 				if(jQuery(parents[i]).css("display") == "none")
-				{
 					return false;
-				}
 			}
 		}
 		return true;
@@ -680,18 +727,16 @@ var Glee = {
 		//not sure if eval is the way to go here
 		var method = command.method+"()";
 		//setting the status
-		Glee.setSubText(command.statusText,"msg");
+		this.setSubText(command.statusText,"msg");
 		eval(method);
 	},
-	
 	makeReadable: function(){
 		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
 		location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
 	},
 	
 	shortenURL: function(){
-		//creating an XMLHTTPRequest to bit.ly using GM_xmlhttpRequest
-		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+		this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
 			var json = JSON.parse("["+data.responseText+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
@@ -705,7 +750,7 @@ var Glee = {
 		var url = location.href;
 		if(url.length > 30)
 		{
-			Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+			this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 			function(data){
 				var json = JSON.parse("["+data.responseText+"]");
 				var shortenedURL = json[0].results[location.href].shortUrl;
@@ -721,10 +766,15 @@ var Glee = {
 			location.href =  "http://twitter.com/?status="+encodedURL;
 		}
 	},
-	
 	getRSSLink:function(){
 		//code via bookmark for google reader
-		var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
+ 		 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
+	},
+	help: function(){
+		// TODO: When we make commands scalable, maybe we can make this load as a div
+		// on the page. In case we do that, should find a way to not make the content
+		// redundant.
+		window.location = "http://thegleebox.com/manual.html";
 	}
 }
 
@@ -803,14 +853,10 @@ var LinkReaper = {
 		var isNotEqual = function(element){
 			element = jQuery(element);
 			if(element.attr('href') == el.attr('href') )
-			{
 				return false;
-			}
 			else
-			{
 				return true;
-			}
-		};		
+		};
 		this.selectedLinks = this.selectedLinks.filter(isNotEqual);
 		el.removeClass('GleeReaped').removeClass('GleeHL');
 	},
@@ -828,9 +874,7 @@ var LinkReaper = {
 	
 	getNext: function(){
 		if(this.selectedLinks.length == 0)
-		{
 			return null;
-		}
 		else if(this.traversePosition < this.selectedLinks.length - 1)
 		{
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
@@ -851,9 +895,7 @@ var LinkReaper = {
 	
 	getPrev: function(){
 		if(this.selectedLinks.length == 0)
-		{
 			return null;
-		}
 		else if(this.traversePosition > 0)
 		{
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));

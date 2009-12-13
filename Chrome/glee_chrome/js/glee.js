@@ -231,7 +231,7 @@ jQuery(document).ready(function(){
 
 					if(a_el) //if an anchor element is associated with the selected element
 					{
-						//setting the target attribute of element depending upon if shift key was pressed
+						//check if Shift key was pressed
 						if(e.shiftKey)
 							target = true;
 						else
