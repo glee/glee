@@ -869,13 +869,7 @@ var LinkReaper = {
 			else
 			{
 				newList = [];
-				jQuery('a').each(function(){
-					if(!LinkReaper.reapALink(jQuery(this), term))
-						LinkReaper.unreapLink(jQuery(this));
-					else
-						newList.push(jQuery(this));
-				});
-				jQuery('a > img').each(function(){
+				jQuery('a, a > img').each(function(){
 					if(!LinkReaper.reapALink(jQuery(this), term))
 						LinkReaper.unreapLink(jQuery(this));
 					else
