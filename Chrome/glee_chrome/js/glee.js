@@ -490,10 +490,13 @@ var Glee = {
 					else if(isImage)
 						a_el = jQuery(jQueryVal.parents('a'));
 						
-					if(a_el.length != 0)
+					if(a_el)
 					{
-						this.URL = a_el.attr("href");
-						this.subURL.html(this.truncate(this.URL));
+						if(a_el.length != 0)
+						{
+							this.URL = a_el.attr("href");
+							this.subURL.html(this.truncate(this.URL));
+						}
 					}
 					else
 						this.subURL.html("");
@@ -515,9 +518,7 @@ var Glee = {
 
 					this.subText.html(this.truncate(text));
 					if(title !="" && title != text)
-					{
 						this.subText.html(this.truncate(this.subText.html()+" -- "+title));
-					}
 					this.URL = jQueryVal.attr('href');
 					this.subURL.html(this.truncate(this.URL));
 				}
