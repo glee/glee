@@ -871,13 +871,15 @@ var LinkReaper = {
 				newList = [];
 				jQuery('a').each(function(){
 					if(!LinkReaper.reapALink(jQuery(this), term))
-					{
 						LinkReaper.unreapLink(jQuery(this));
-					}
 					else
-					{
 						newList.push(jQuery(this));
-					}
+				});
+				jQuery('a > img').each(function(){
+					if(!LinkReaper.reapALink(jQuery(this), term))
+						LinkReaper.unreapLink(jQuery(this));
+					else
+						newList.push(jQuery(this));
 				});
 				LinkReaper.selectedLinks = newList;
 			}
@@ -887,7 +889,10 @@ var LinkReaper = {
 	},
 	
 	reapALink: function(el, term) {
-		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
+		if(el[0].tagName == "A")
+			index = el.text().toLowerCase().indexOf(term.toLowerCase());
+		else if(el[0].tagName == "IMG")
+			index = el.attr('alt').toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1 && Glee.isVisible(el)) {
 			el.addClass('GleeReaped');
 			Glee.setSubText(el,"el");
