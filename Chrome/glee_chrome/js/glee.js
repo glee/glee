@@ -237,17 +237,11 @@ jQuery(document).ready(function(){
 					{
 						//setting the target attribute of element depending upon if shift key was pressed
 						if(e.shiftKey)
-						{
-							jQuery(a_el).attr("target","_blank");
-							target = 1;
-						}
+							target = true;
 						else
-						{
-							jQuery(a_el).attr("target","_self");
-							target = 0;
-						}
+							target = false;
 						//simulating a click on the link
-						anythingOnClick = Glee.simulateClick(a_el);
+						anythingOnClick = Glee.simulateClick(a_el,target);
 						
 						//if opening the link on the same page, close the gleeBox
 						if(!target)
@@ -736,9 +730,13 @@ var Glee = {
 		}
 		this.userPosBeforeGlee = window.pageYOffset;
 	},
-	simulateClick: function(el){
+	simulateClick: function(el,target){
 		var evt = document.createEvent("MouseEvents");
-		evt.initMouseEvent("click",true,true,window,0,0,0,0,0,false,false,false,false,0,null);
+		//on Mac, pass target as e.metaKey
+		if(navigator.platform.indexOf("Mac") != -1)
+			evt.initMouseEvent("click",true,true,window,0,0,0,0,0,false,false,false,target,0,null);
+		else //otherwise, pass target as e.ctrlKey	
+			evt.initMouseEvent("click",true,true,window,0,0,0,0,0,target,false,false,false,0,null);
 		return el[0].dispatchEvent(evt);
 	},
 	resetTimer: function(){
