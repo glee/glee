@@ -40,9 +40,6 @@ Glee.sendRequest = function(url,method,callback){
 }
 
 Glee.setOptions = function(response){
-	//gleeBox status i.e. enabled/disabled
-	if(response.status)
-		Glee.status = response.status;
 	
 	//gleeBox position
 	if(response.position != null) 
@@ -85,8 +82,13 @@ Glee.setOptions = function(response){
 		for(var i=0;i<response.domains.length;i++)
 			Glee.domainsToBlock[i] = response.domains[i];
 	}
-	
+
+	//check if it is a disabled domain
 	Glee.checkDomain();
+	//gleeBox status i.e. enabled/disabled
+	if(response.status && Glee.status == 1)
+		Glee.status = response.status;
+
 	Glee.initOptions();
 }
 Glee.getOptions = function(){
