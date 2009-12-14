@@ -39,7 +39,7 @@
 
 .GleeThemeGlee{ 
 	background-color: #eb1257 !important;
-	color: #fff300;
+	color: #fff300 !important;
 	-webkit-box-shadow: #eb1257 0px 0px 8px !important;
 	-moz-box-shadow: #eb1257 0px 0px 8px !important;
 	opacity: 0.8 !important;
