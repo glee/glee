@@ -136,7 +136,9 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		//scrolling animation
 		var animation = localStorage["glee_scrolling_animation"];
 		
-		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation});
+		var theme = localStorage["glee_theme"];
+		
+		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme});
 	}
 });
 

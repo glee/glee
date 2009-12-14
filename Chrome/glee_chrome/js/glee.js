@@ -415,14 +415,19 @@ var Glee = {
 		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
 		this.searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
-		var sub = jQuery("<div id=\"gleeSub\"></div>");
-		sub.append(this.subText).append(subActivity).append(this.subURL);
-		this.searchBox.append(this.searchField).append(sub);
+		this.sub = jQuery("<div id=\"gleeSub\"></div>");
+		this.sub.append(this.subText).append(subActivity).append(this.subURL);
+		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
 		this.getOptions();
 		this.initOptions();
 	},
 	initOptions:function(){
+
+		// Setup the theme
+		Glee.searchBox.addClass(Glee.ThemeOption);
+		Glee.searchField.addClass(Glee.ThemeOption);
+
 		//setting gleeBox position
 		if(Glee.position == "top")
 			topSpace = 0;
@@ -440,6 +445,7 @@ var Glee = {
 		else
 			fontsize = "100px"
 		Glee.searchField.css("font-size",fontsize);
+
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();

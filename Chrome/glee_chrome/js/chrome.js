@@ -85,6 +85,16 @@ Glee.getOptions = function(){
 			}
 		}
 		
+		//Theme
+		if(response.theme)
+		{
+			Glee.ThemeOption = response.theme;
+		}
+		else
+		{
+			Glee.ThemeOption = "GleeThemeDefault";
+		}
+
 		Glee.checkDomain();
 		Glee.initOptions();
 	});
