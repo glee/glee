@@ -483,9 +483,11 @@ var Glee = {
 			{
 				jQueryVal = jQuery(val); 
 				var isHeading = jQueryVal[0].tagName[0] == "H";
+				var isInput = jQueryVal[0].tagName == "INPUT";
+				var isTextArea = jQueryVal[0].tagName == "TEXTAREA";
 				var isImage = jQueryVal[0].tagName == "IMG";
 				var isNotLink = (jQueryVal[0].tagName != "A");
-				if(isNotLink) //if it is not a link
+				if(isNotLink) //if the selected element is not a link
 				{
 					this.subText.html(this.truncate(jQueryVal.text()));
 					var a_el = null;
@@ -493,7 +495,17 @@ var Glee = {
 						a_el = jQuery(jQueryVal.find('a'));
 					else if(isImage)
 						a_el = jQuery(jQueryVal.parents('a'));
-						
+					else if(isInput)
+					{
+						var value = jQueryVal.attr("value");
+						if(value)
+							this.subText.html(this.truncate(value));
+						else
+							this.subText.html("Input "+jQueryVal.attr("type"));
+					}
+					else if(isTextArea)
+						this.subText.html("Textarea");
+
 					if(a_el)
 					{
 						if(a_el.length != 0)

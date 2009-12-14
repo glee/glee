@@ -137,7 +137,7 @@ jQuery(document).ready(function(){
 					{
 						c = value.substring(1);
 						c = c.replace("$", location.href);
-						Glee.subText.html("Run yubnub command (press enter to execute): " + c);
+						Glee.subText.html(Glee.truncate("Run yubnub command (press enter to execute): " + c));
 						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
 						Glee.subURL.html(Glee.truncate(Glee.URL));
 					}
@@ -210,8 +210,8 @@ jQuery(document).ready(function(){
 			else if(value[0] == "!" && value.length > 1)
 			{
 				//check if it is a command
-				//TODO:Glee.URL is misleading here when it actually contains the command
-				if(Glee.URL.name != "undefined" && Glee.URL.name)
+				//TODO:Glee.URL is misleading here when it actually contains the command. Fix this
+				if(typeof(Glee.URL.name) != "undefined")
 				{
 					Glee.execCommand(Glee.URL);
 					return;
@@ -231,15 +231,14 @@ jQuery(document).ready(function(){
 						a_el = jQuery(Glee.selectedElement).find('a');
 					else if (jQuery(Glee.selectedElement)[0].tagName == "IMG")
 						a_el = jQuery(Glee.selectedElement).parents('a');
-					
+
 					if(a_el) //if an anchor element is associated with the selected element
 					{
 						//simulating a click on the link
 						anythingOnClick = Glee.simulateClick(a_el);
 					}
 				}
-
-				//# in URL is same as null
+				//if URL is empty or #, same as null
 				if(Glee.URL == "#" || Glee.URL == "")
 					Glee.URL = null;
 				//if Glee.URL is relative, make it absolute
@@ -310,11 +309,11 @@ var Glee = {
 	//element on which the user was focussed before a search
 	userFocusBeforeGlee:null,
 	//scrolling Animation speed
-	scrollingSpeed:0,
+	scrollingSpeed:750,
 	//position of gleeBox (top,middle,bottom)
 	position: "middle",
 	//size of gleeBox (small,medium,large)
-	size:"medium",
+	size:"large",
 	//URLs for which gleeBox should be disabled
 	domainsToBlock:[
 		"mail.google.com",
@@ -432,17 +431,18 @@ var Glee = {
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
 		this.getBackInitialState();
-		this.searchBox.fadeOut(150);
-		this.searchField.attr('value','');
-		this.setSubText(null);
+		this.searchBox.fadeOut(150,function(){
+			Glee.searchField.attr('value','');
+			Glee.setSubText(null);
+		});
 		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
-		this.searchBox.fadeOut(150);
+		this.searchBox.fadeOut(150,function(){
+			Glee.searchField.attr('value','');
+			Glee.setSubText(null);
+		});
 		LinkReaper.unreapAllLinks();
-		//resetting value of searchField
-		this.searchField.attr('value','');
-		this.setSubText(null);
 		this.selectedElement = null;
 	},
 	initReaper: function(reaper){
@@ -820,15 +820,11 @@ var LinkReaper = {
 			else
 			{
 				newList = [];
-				jQuery('a').each(function(){
+				jQuery('a, a > img').each(function(){
 					if(!LinkReaper.reapALink(jQuery(this), term))
-					{
 						LinkReaper.unreapLink(jQuery(this));
-					}
 					else
-					{
 						newList.push(jQuery(this));
-					}
 				});
 				LinkReaper.selectedLinks = newList;
 			}
@@ -838,7 +834,10 @@ var LinkReaper = {
 	},
 	
 	reapALink: function(el, term) {
-		var index = el.text().toLowerCase().indexOf(term.toLowerCase());
+		if(el[0].tagName == "A")
+			index = el.text().toLowerCase().indexOf(term.toLowerCase());
+		else if(el[0].tagName == "IMG")
+			index = el.attr('alt').toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1 && Glee.isVisible(el)) {
 			el.addClass('GleeReaped');
 			Glee.setSubText(el,"el");
