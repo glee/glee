@@ -82,6 +82,16 @@ Glee.setOptions = function(response){
 		for(var i=0;i<response.domains.length;i++)
 			Glee.domainsToBlock[i] = response.domains[i];
 	}
+	
+	//Theme
+	if(response.theme)
+	{
+		Glee.ThemeOption = response.theme;
+	}
+	else
+	{
+		Glee.ThemeOption = "GleeThemeDefault";
+	}
 
 	//check if it is a disabled domain
 	if(Glee.checkDomain() == 1 && response.status == 1)
@@ -91,6 +101,7 @@ Glee.setOptions = function(response){
 
 	Glee.initOptions();
 }
+
 Glee.getOptions = function(){
 	//sending request to get the gleeBox options
 	chrome.extension.sendRequest({value:"getOptions"},Glee.setOptions);
