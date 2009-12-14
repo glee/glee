@@ -39,60 +39,67 @@ Glee.sendRequest = function(url,method,callback){
 	});
 }
 
+Glee.setOptions = function(response){
+	//gleeBox status i.e. enabled/disabled
+	if(response.status)
+		Glee.status = response.status;
+	
+	//gleeBox position
+	if(response.position != null) 
+	{
+		if(response.position == 0) //top
+			Glee.position = "top";
+		else if(response.position == 2)	//bottom
+			Glee.position = "bottom";
+		else 
+			Glee.position = "middle";
+	}
+	
+	//gleeBox Size
+	if(response.size != null)
+	{
+		if(response.size == 0)
+			Glee.size = "small";
+		else if(response.size == 1)
+			Glee.size = "medium";
+		else
+			Glee.size = "large";
+	}
+	
+	//Bookmark search
+	if(response.bookmark_search && response.bookmark_search == 1)
+		Glee.bookmarkSearchStatus = true; //enabled
+	else
+		Glee.bookmarkSearchStatus = false;
+		
+	//Scrolling animation
+	if(response.animation && response.animation == 1)
+		Glee.scrollingSpeed = 750; //enabled
+	else
+		Glee.scrollingSpeed = 0; //disabled
+	
+	//getting the restricted domains
+	if(response.domains)
+	{
+		Glee.domainsToBlock.splice(0,Glee.domainsToBlock.length);
+		for(var i=0;i<response.domains.length;i++)
+			Glee.domainsToBlock[i] = response.domains[i];
+	}
+	
+	Glee.checkDomain();
+	Glee.initOptions();
+}
 Glee.getOptions = function(){
 	//sending request to get the gleeBox options
-	chrome.extension.sendRequest({value:"getOptions"},function(response){
-		
-		//gleeBox status i.e. enabled/disabled
-		Glee.status = response.status;
-		
-		//gleeBox position
-		if(response.position != null && response.position != 1) //by default, position is in middle anyways
-		{
-			if(response.position == 0) //top
-				Glee.position = "top";
-			else	//bottom
-				Glee.position = "bottom";
-		}
-		
-		//gleeBox Size
-		if(response.size != null && response.size != 2) //by default, size is large anyways
-		{
-			if(response.size == 0)
-				Glee.size = "small";
-			else if(response.size == 1)
-				Glee.size = 'medium';
-		}
-		
-		//Bookmark search
-		if(response.bookmark_search && response.bookmark_search == 1)
-			Glee.bookmarkSearchStatus = true; //enabled
-		else
-			Glee.bookmarkSearchStatus = false;
-			
-		//Scrolling animation
-		if(response.animation && response.animation == 1)
-			Glee.scrollingSpeed = 750; //enabled
-		else
-			Glee.scrollingSpeed = 0; //disabled
-		
-		//getting the restricted domains
-		if(response.domains)
-		{
-			for(var i=0;i<response.domains.length;i++)
-			{
-				Glee.domainsToBlock[Glee.domainsToBlock.length] = response.domains[i];
-			}
-		}
-		
-		Glee.checkDomain();
-		Glee.initOptions();
-	});
+	chrome.extension.sendRequest({value:"getOptions"},Glee.setOptions);
 }
 
-//adding a listener to respond to requests from background.html to update the status
+//adding a listener to respond to requests from background.html to update the status and options.html to update settings
 chrome.extension.onRequest.addListener(
 	function(request,sender,sendResponse){
-		Glee.status = request.status;
+		if(request.value == "initStatus")
+			Glee.status = request.status;
+		else if(request.value == "updateOptions")
+			Glee.setOptions(request);
 		sendResponse({});
 });

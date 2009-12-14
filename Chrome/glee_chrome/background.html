@@ -50,7 +50,7 @@ function toggleStatus(tab){
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {status:status},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"initStatus",status:status},function(response){
 				});
 			}
 		}

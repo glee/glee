@@ -96,9 +96,7 @@ function save_options() {
 	for(var i=0;i<domainList.children.length;i++)
 	{
 		if(domainList.children[i].className == "rdomain")
-		{
 			restrictedDomains[restrictedDomains.length] = domainList.children[i].innerText;
-		}
 	}
 	//currently using , as the end marker. need a better way to implement this
 	localStorage["glee_domains"] = restrictedDomains;
@@ -123,11 +121,11 @@ function save_options() {
 	
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
-		bookmark_status = 1; //1 indicates enabled
+		bookmark_search = 1; //1 indicates enabled
 	else
-		bookmark_status = 0;
+		bookmark_search = 0;
 	
-	localStorage["glee_bookmark_search"] = bookmark_status;
+	localStorage["glee_bookmark_search"] = bookmark_search;
 	
 	//saving scrolling animation pref
 	if(document.getElementsByName("glee_scrolling_animation")[0].checked)
@@ -136,15 +134,37 @@ function save_options() {
 		animation = 0;
 	
 	localStorage["glee_scrolling_animation"] = animation;
-	setStatus("Settings saved! You'll need to refresh the currently opened tab(s) for changes to take effect.");
+
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains);
+	setStatus("Settings saved!");
 }
 
+function propagateChanges(pos,size,bookmark_search,animation,domains){
+	//get all the windows and their tabs to propagate the change in status
+	chrome.windows.getAll({populate:true}, function(windows){
+		for( i=0; i<windows.length; i++)
+		{
+			//set the status in all the tabs open in the window
+			for(j=0;j<windows[i].tabs.length;j++)
+			{
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains},function(response){
+				});
+			}
+		}
+	});
+}
 // Restores select box state to saved value from localStorage.
 function restore_options() 
 {
 	//getting the user defined restricted domains
 	var domainBuffer = localStorage["glee_domains"];
-	if(domainBuffer)
+	if(typeof(domainBuffer) == "undefined")
+	{
+		//initialize with the default domains that should be blocked
+		domainBuffer = "mail.google.com,google.com/reader,wave.google.com";
+		localStorage["glee_domains"] = domainBuffer;
+	}
+	if(domainBuffer.length != 0)
 	{
 		//parsing domainBuffer to get the domains
 		var restrictedDomains = domainBuffer.split(",");
@@ -247,8 +267,6 @@ function setStatus(text){
 		<li>
 			<label class="option-label">Disabled URLs:<br/><span class="subtext">gleeBox will be disabled for these</span></label>
 			<ul id="domains" class="option-field">
-				<li>mail.google.com (disabled by default)</li>
-				<li>reader.google.com (disabled by default)</li>
 				<li id="addDomainLI"><input id="add_domain" type="text" value="" size=50 /><input type="button" value="Add" class="button" onclick="addDomain()"/></li>
 			</ul>
 		</li>

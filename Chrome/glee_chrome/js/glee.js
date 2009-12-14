@@ -747,9 +747,10 @@ var Glee = {
 			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
 			{
 				Glee.status = 0;
-				break;
+				return;
 			}
 		}
+		Glee.status = 1;
 	},
 	isVisible:function(el){
 		el = jQuery(el);
