@@ -444,17 +444,18 @@ var Glee = {
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
 		this.getBackInitialState();
-		this.searchBox.fadeOut(150);
-		this.searchField.attr('value','');
-		this.setSubText(null);
+		this.searchBox.fadeOut(150,function(){
+			Glee.searchField.attr('value','');
+			Glee.setSubText(null);
+		});
 		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
-		this.searchBox.fadeOut(150);
+		this.searchBox.fadeOut(150,function(){
+			Glee.searchField.attr('value','');
+			Glee.setSubText(null);
+		});
 		LinkReaper.unreapAllLinks();
-		//resetting value of searchField
-		this.searchField.attr('value','');
-		this.setSubText(null);
 		this.selectedElement = null;
 	},
 	initReaper: function(reaper){
