@@ -127,6 +127,7 @@ function save_options() {
 		if (tRadios[i].checked)
 		{
 			localStorage["glee_theme"] = tRadios[i].value;
+			theme = tRadios[i].value;
 			break;
 		}
 	}
@@ -150,11 +151,11 @@ function save_options() {
 	var status = localStorage["glee_status"];
 	if(typeof(status) == "undefined")
 		status = 1;
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status);
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -162,7 +163,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status){
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme},function(response){
 				});
 			}
 		}

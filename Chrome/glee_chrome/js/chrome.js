@@ -84,6 +84,12 @@ Glee.setOptions = function(response){
 	}
 	
 	//Theme
+	//If a theme is already set, remove it
+	if(Glee.ThemeOption)
+	{
+		Glee.searchBox.removeClass(Glee.ThemeOption);
+		Glee.searchField.removeClass(Glee.ThemeOption);
+	}
 	if(response.theme)
 	{
 		Glee.ThemeOption = response.theme;
