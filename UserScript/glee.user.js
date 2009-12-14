@@ -242,7 +242,7 @@ jQuery(document).ready(function(){
 				//# in URL is same as null
 				if(Glee.URL == "#" || Glee.URL == "")
 					Glee.URL = null;
-				//if destURL exists, check if it is relative. if it is, make it absolute
+				//if Glee.URL is relative, make it absolute
 				if(Glee.URL)
 					Glee.URL = Glee.makeURLAbsolute(Glee.URL, location.href);
 					
@@ -252,7 +252,7 @@ jQuery(document).ready(function(){
 					if(e.shiftKey)
 					{
 						//another method from the GM API
-						GM_openInTab(destURL);
+						GM_openInTab(Glee.URL);
 						return false;
 					}
 					else

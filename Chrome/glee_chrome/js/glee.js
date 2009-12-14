@@ -202,7 +202,7 @@ jQuery(document).ready(function(){
 			{
 				//check if it is a command
 				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
-				if(Glee.URL.name != "undefined" && Glee.URL.name)
+				if(typeof(Glee.URL.name) != "undefined")
 				{
 					Glee.execCommand(Glee.URL);
 					return;
@@ -211,7 +211,7 @@ jQuery(document).ready(function(){
 				{
 					url = Glee.URL.url;
 					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
-					location.href = url;
+					eval(unescape(url.substring(11))); //get rid of javascript:
 				}
 			}
 			else
