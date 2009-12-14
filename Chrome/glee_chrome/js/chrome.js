@@ -84,10 +84,10 @@ Glee.setOptions = function(response){
 	}
 
 	//check if it is a disabled domain
-	Glee.checkDomain();
-	//gleeBox status i.e. enabled/disabled
-	if(response.status && Glee.status == 1)
-		Glee.status = response.status;
+	if(Glee.checkDomain() == 1 && response.status == 1)
+		Glee.status = 1;
+	else
+		Glee.status = 0;
 
 	Glee.initOptions();
 }

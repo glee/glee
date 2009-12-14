@@ -745,12 +745,9 @@ var Glee = {
 		for(var i=0; i<Glee.domainsToBlock.length; i++)
 		{
 			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
-			{
-				Glee.status = 0;
-				return;
-			}
+				return 0;
 		}
-		Glee.status = 1;
+		return 1;
 	},
 	isVisible:function(el){
 		el = jQuery(el);

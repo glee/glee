@@ -24,6 +24,7 @@
 	#options{
 		margin-left:20px;
 		float:left;
+		padding-bottom:20px;
 	}
 	.option-label{
 		float:left;
@@ -135,11 +136,14 @@ function save_options() {
 	
 	localStorage["glee_scrolling_animation"] = animation;
 
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains);
+	var status = localStorage["glee_status"];
+	if(typeof(status) == "undefined")
+		status = 1;
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -147,7 +151,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains){
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status},function(response){
 				});
 			}
 		}
@@ -263,7 +267,7 @@ function setStatus(text){
 <div id="status"></div>
 <!--Specifying different options available -->
 <div id="options">
-	<ul id="options">
+	<ul>
 		<li>
 			<label class="option-label">Disabled URLs:<br/><span class="subtext">gleeBox will be disabled for these</span></label>
 			<ul id="domains" class="option-field">
