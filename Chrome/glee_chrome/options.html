@@ -120,6 +120,17 @@ function save_options() {
 		size = 2;
 	localStorage["glee_size"] = size;
 	
+	//save theme
+	tRadios = document.getElementsByName("glee_theme");
+	for (var i=0; i < tRadios.length; i++)
+	{
+		if (tRadios[i].checked)
+		{
+			localStorage["glee_theme"] = tRadios[i].value;
+			break;
+		}
+	}
+	
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
 		bookmark_search = 1; //1 indicates enabled
@@ -200,6 +211,24 @@ function restore_options()
 	else
 		document.getElementsByName("glee_size")[2].checked = true; //default is large size
 		
+	//getting theme
+	var theme = localStorage["glee_theme"];
+	tRadios = document.getElementsByName("glee_theme");
+	if(theme)
+	{
+		for (var i=0; i < tRadios.length; i++)
+		{
+			if (theme == tRadios[i].value)
+			{
+				tRadios[i].checked = true;
+				break;
+			}
+		}
+	}
+	else {
+		tRadios[0].checked = true;
+	}
+		
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
 	if(bookmark_status != null)
@@ -267,13 +296,33 @@ function setStatus(text){
 <div id="status"></div>
 <!--Specifying different options available -->
 <div id="options">
-	<ul>
+	<h3>Features</h3>
+	<hr>
+	<ul id="options">
 		<li>
 			<label class="option-label">Disabled URLs:<br/><span class="subtext">gleeBox will be disabled for these</span></label>
 			<ul id="domains" class="option-field">
 				<li id="addDomainLI"><input id="add_domain" type="text" value="" size=50 /><input type="button" value="Add" class="button" onclick="addDomain()"/></li>
 			</ul>
 		</li>
+		<li>
+			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no links are found on a page for a query?</span></label>
+			<div class="option-field">
+				<input name="glee_bookmark_search" type="radio"> Enabled
+				<input name="glee_bookmark_search" type="radio"> Disabled
+			</div>
+		</li>
+		<li>
+			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do you want the scroll animation when traversing selected elements using gleeBox?</span></label>
+			<div class="option-field">
+				<input name="glee_scrolling_animation" type="radio"> Yes
+				<input name="glee_scrolling_animation" type="radio"> No
+			</div>
+		</li>
+	</ul>
+	<h3>Appearance</h3>
+	<hr>
+	<ul id="options">
 		<li>
 			<label class="option-label">gleeBox Position:<br/><span class="subtext">Where do you want gleeBox to be displayed on your screen?</span></label>
 			<div class="option-field">
@@ -291,17 +340,12 @@ function setStatus(text){
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no links are found on a page for a query?</span></label>
+			<label class="option-label">gleeBox Theme:<br/><span class="subtext">Pick the style for gleeBox</span></label>
 			<div class="option-field">
-				<input name="glee_bookmark_search" type="radio"> Enabled
-				<input name="glee_bookmark_search" type="radio"> Disabled
-			</div>
-		</li>
-		<li>
-			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do you want the scroll animation when traversing selected elements using gleeBox?</span></label>
-			<div class="option-field">
-				<input name="glee_scrolling_animation" type="radio"> Yes
-				<input name="glee_scrolling_animation" type="radio"> No
+				<input name="glee_theme" value="GleeThemeDefault" type="radio"> Default
+				<input name="glee_theme" value="GleeThemeWhite"  type="radio"> White
+				<input name="glee_theme" value="GleeThemeConsole" type="radio"> Console
+				<input name="glee_theme" value="GleeThemeGlee" type="radio"> New Directions
 			</div>
 		</li>
 	</ul>
