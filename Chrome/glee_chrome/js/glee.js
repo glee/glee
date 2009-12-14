@@ -176,7 +176,7 @@ jQuery(document).ready(function(){
 					Glee.setSubText(Glee.selectedElement,"el");
 					Glee.scrollToElement(Glee.selectedElement);
 				}
-				else if(Glee.bookmarks)
+				else if(Glee.bookmarks.length != 0)
 				{
 					if(e.shiftKey)
 						Glee.getPrevBookmark();
