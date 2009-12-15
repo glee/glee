@@ -928,6 +928,7 @@ jQuery(document).ready(function(){
 						url = Glee.URL;
 						Glee.closeBoxWithoutBlur();
 						window.location = url;
+						Glee.searchField.blur();
 					}
 				}
 				else //if it is an input element or text field, set focus to it, else bring back focus to document
