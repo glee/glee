@@ -292,9 +292,7 @@ function addDomain() {
 		domainList.insertBefore(newLI,lastChild);
 		newDomain.value = "";
 		setStatus("URL Added!");
-		return 0;
 	}
-	return 1;
 }
 
 function removeDomain(i){
@@ -329,7 +327,7 @@ function closeOptions(text){
 		<li>
 			<label class="option-label">Disabled URLs:<br/><span class="subtext">URLs for which gleeBox will be disabled. Add your own by entering a part of the URL</span></label>
 			<ul id="domains" class="option-field">
-				<li id="addDomainLI"><input id="add_domain" type="text" value="" size=50 /><input type="button" value="Add" class="button" onclick="addDomain()"/></li>
+				<li id="addDomainLI"><form onsubmit="addDomain();return false;"><input id="add_domain" type="text" value="" size=50 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 		<li>
