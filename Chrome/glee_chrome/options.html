@@ -4,22 +4,31 @@
 	<style>
 	body{
 		background-color:#dedede;
-		color:#333;
-		font-family:Verdana,Helvetica, serif;
-		font-size:13px;
+		font-size:18px;
+		line-height:30px;
+		font-family:Garamond,Helvetica,serif;	
 	}
 	h2{
-		text-align:center;
-		color:#333;
-		margin:30px 0px;
-		font-size:40px;
-		font-weight:normal;
-		font-family:Garamond,"Times New Roman",serif;
+		clear:both;
+		font-size:35px;
+		text-shadow: 1px 1px 2px #ccc;
+		text-align: center;
 	}
-	ul{
-		list-style-type:none;
-		margin:0;
-		padding:0;
+	h3{
+		font-size:30px;
+		text-shadow: 1px 1px 2px #ccc;
+		margin:5px 0px;
+		font-weight:normal;
+		border-bottom: 1px solid #ccc;
+	}
+
+	ul {
+		list-style-type:  none;
+		margin: 0;
+		margin-bottom:20px;
+		padding: 0;
+		display:block;
+		float:left;
 	}
 	#options{
 		margin-left:20px;
@@ -53,7 +62,7 @@
 	input{
 		border:0;
 		background-color:#ccc;
-		border:2px solid #aaa;
+		border:1px solid #aaa;
 		font-size:13px;
 		padding:2px 3px;
 		color:#333;
@@ -82,8 +91,14 @@
 		text-align:center;
 		margin:30px auto;
 	}
+	#wrap{
+		margin:0 auto;
+		width:700px;
+	}
 	.subtext{
 		font-size:11px;
+		font-family: "Lucida Grande", Lucida, Arial, sans-serif;
+		line-height: 14px;
 	}
 	</style>
 <script type="text/javascript">
@@ -293,12 +308,12 @@ function setStatus(text){
 </script>
 </head>
 <body onload="restore_options()">
+<div id="wrap">
 <h2>gleeBox Options</h2>
 <div id="status"></div>
 <!--Specifying different options available -->
 <div id="options">
 	<h3>Features</h3>
-	<hr>
 	<ul id="options">
 		<li>
 			<label class="option-label">Disabled URLs:<br/><span class="subtext">gleeBox will be disabled for these</span></label>
@@ -322,7 +337,6 @@ function setStatus(text){
 		</li>
 	</ul>
 	<h3>Appearance</h3>
-	<hr>
 	<ul id="options">
 		<li>
 			<label class="option-label">gleeBox Position:<br/><span class="subtext">Where do you want gleeBox to be displayed on your screen?</span></label>
@@ -343,14 +357,17 @@ function setStatus(text){
 		<li>
 			<label class="option-label">gleeBox Theme:<br/><span class="subtext">Pick the style for gleeBox</span></label>
 			<div class="option-field">
-				<input name="glee_theme" value="GleeThemeDefault" type="radio"> Default
-				<input name="glee_theme" value="GleeThemeWhite"  type="radio"> White
-				<input name="glee_theme" value="GleeThemeConsole" type="radio"> Console
+				<input name="glee_theme" value="GleeThemeDefault" type="radio"> Default <br>
+				<input name="glee_theme" value="GleeThemeWhite"  type="radio"> White <br>
+				<input name="glee_theme" value="GleeThemeConsole" type="radio"> Console <br>
+				<input name="glee_theme" value="GleeThemeGreener" type="radio"> Greener <br>
+				<input name="glee_theme" value="GleeThemeRuby" type="radio"> Ruby <br>
 				<input name="glee_theme" value="GleeThemeGlee" type="radio"> New Directions
 			</div>
 		</li>
 	</ul>
 <input type="button" style="float:right;clear:both;" class="button" value="Save" onclick="save_options()">
+</div>
 </div>	
 </body>
 </html>
