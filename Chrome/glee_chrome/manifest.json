@@ -1,6 +1,6 @@
 {
 	"name":"gleeBox",
-	"version":"0.5",
+	"version":"0.6",
 	"description":"Keyboard glee for your web",
 	"icons":{
 		"128": "images/icon_128.png"

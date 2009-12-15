@@ -11,7 +11,7 @@
 // ==UserScript==
 // @name          gleeBox
 // @namespace     http://colloki.org/
-// @version		  0.5
+// @version		  0.6
 // @description   gleeBox is an experimental project that takes a keyboard-centric approach to navigating the web. It provides the user with commands which she can run to perform actions that are traditionally performed using the mouse. It is thus mostly meant for keyboard and commandline lovers.
 // @include       *
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js
