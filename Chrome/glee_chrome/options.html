@@ -6,10 +6,11 @@
 		background-color:#dedede;
 		font-size:18px;
 		line-height:30px;
-		font-family:Garamond,Helvetica,serif;	
+		font-family:Garamond,Helvetica,serif;
 	}
 	h2{
 		clear:both;
+		margin-top:20px;
 		font-size:35px;
 		text-shadow: 1px 1px 2px #ccc;
 		text-align: center;
@@ -35,8 +36,8 @@
 		clear:both;
 	}
 	#options{
-		margin-left:20px;
 		float:left;
+		margin-left:10px;
 		padding-bottom:20px;
 	}
 	.option-label{
@@ -91,10 +92,9 @@
 		margin-top:10px;
 	}
 	#status{
-		height:20px;
 		padding:2px;
 		text-align:center;
-		margin:30px auto;
+		margin:10px auto;
 	}
 	#wrap{
 		margin:0 auto;
@@ -325,20 +325,20 @@ function closeOptions(text){
 	<h3>Features</h3>
 	<ul class="options">
 		<li>
-			<label class="option-label">Disabled URLs:<br/><span class="subtext">URLs for which gleeBox will be disabled. Add your own by entering a part of the URL</span></label>
+			<label class="option-label">Disabled URLs:<br/><span class="subtext">URLs for which gleeBox is disabled. Add your own by entering a part of the URL</span></label>
 			<ul id="domains" class="option-field">
 				<li id="addDomainLI"><form onsubmit="addDomain();return false;"><input id="add_domain" type="text" value="" size=50 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 		<li>
-			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no links are found on a page for a query?</span></label>
+			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no matching links are found on a page?</span></label>
 			<div class="option-field">
 				<input name="glee_bookmark_search" type="radio"> Enabled
 				<input name="glee_bookmark_search" type="radio"> Disabled
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do you want the scroll animation when traversing selected elements using gleeBox?</span></label>
+			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do you want the scroll animation while traversing selected elements using gleeBox?</span></label>
 			<div class="option-field">
 				<input name="glee_scrolling_animation" type="radio"> Yes
 				<input name="glee_scrolling_animation" type="radio"> No
