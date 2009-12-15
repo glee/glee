@@ -234,23 +234,26 @@ jQuery(document).ready(function(){
 
 					if(a_el) //if an anchor element is associated with the selected element
 					{
-						//check if Shift key was pressed
-						if(e.shiftKey)
-							target = true;
-						else
-							target = false;
-						//simulating a click on the link
-						anythingOnClick = Glee.simulateClick(a_el,target);
-						
-						//if opening the link on the same page, close the gleeBox
-						if(!target)
+						if(a_el.length != 0)
 						{
-							setTimeout(function(){
-								Glee.searchField.blur();
-							},0);
-							Glee.closeBoxWithoutBlur();
+							//check if Shift key was pressed
+							if(e.shiftKey)
+								target = true;
+							else
+								target = false;
+							//simulating a click on the link
+							anythingOnClick = Glee.simulateClick(a_el,target);
+					
+							//if opening the link on the same page, close the gleeBox
+							if(!target)
+							{
+								setTimeout(function(){
+									Glee.searchField.blur();
+								},0);
+								Glee.closeBoxWithoutBlur();
+							}
+							return false;
 						}
-						return false;
 					}
 				}
 				//if URL is empty or #, same as null
@@ -754,8 +757,8 @@ var Glee = {
 	truncate:function(text){
 		if(text && typeof(text) != "undefined")
 		{
-			if(text.length > 80)
-				return text.substr(0,78)+"...";
+			if(text.length > 75)
+				return text.substr(0,73)+"...";
 			else
 				return text;
 		}

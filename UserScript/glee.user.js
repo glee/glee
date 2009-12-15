@@ -415,8 +415,8 @@ var Glee = {
 	truncate:function(text){
 		if(text && typeof(text) != "undefined")
 		{
-			if(text.length > 80)
-				return text.substr(0,78)+"...";
+			if(text.length > 75)
+				return text.substr(0,73)+"...";
 			else
 				return text;
 		}
@@ -900,8 +900,11 @@ jQuery(document).ready(function(){
 
 					if(a_el) //if an anchor element is associated with the selected element
 					{
-						//simulating a click on the link
-						anythingOnClick = Glee.simulateClick(a_el);
+						if(a_el.length != 0)
+						{
+							//simulating a click on the link
+							anythingOnClick = Glee.simulateClick(a_el);
+						}
 					}
 				}
 				//if URL is empty or #, same as null
