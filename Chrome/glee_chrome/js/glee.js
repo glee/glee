@@ -487,21 +487,21 @@ var Glee = {
 		{
 			if(val && typeof val!= "undefined")
 			{
-				jQueryVal = jQuery(val); 
-				var isHeading = jQueryVal[0].tagName[0] == "H";
-				var isInput = jQueryVal[0].tagName == "INPUT";
-				var isTextArea = jQueryVal[0].tagName == "TEXTAREA";
-				var isImage = jQueryVal[0].tagName == "IMG";
-				var isNotLink = (jQueryVal[0].tagName != "A");
-				if(isNotLink) //if the selected element is not a link
+				jQueryVal = jQuery(val);
+				
+				if(jQueryVal[0].tagName != "A") //if the selected element is not a link
 				{
 					this.subText.html(this.truncate(jQueryVal.text()));
 					var a_el = null;
-					if(isHeading)
+					if(jQueryVal[0].tagName[0] == "H") //if it is a heading
+					{
 						a_el = jQuery(jQueryVal.find('a'));
-					else if(isImage)
+					} 
+					else if(jQueryVal[0].tagName == "IMG") //if it is an image
+					{
 						a_el = jQuery(jQueryVal.parents('a'));
-					else if(isInput)
+					}
+					else if(jQueryVal[0].tagName == "INPUT") //if it is an input field
 					{
 						var value = jQueryVal.attr("value");
 						if(value)
@@ -509,9 +509,14 @@ var Glee = {
 						else
 							this.subText.html("Input "+jQueryVal.attr("type"));
 					}
-					else if(isTextArea)
-						this.subText.html("Textarea");
-
+					else if(jQueryVal[0].tagName == "TEXTAREA") //if it is a text area
+					{
+						var value = jQueryVal.attr("name");
+						if(value)
+							this.subText.html(this.truncate(value));
+						else
+							this.subText.html("Textarea");
+					}
 					if(a_el)
 					{
 						if(a_el.length != 0)
