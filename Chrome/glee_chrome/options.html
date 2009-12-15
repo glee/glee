@@ -22,13 +22,17 @@
 		border-bottom: 1px solid #ccc;
 	}
 
-	ul {
+	ul.options {
 		list-style-type:  none;
 		margin: 0;
-		margin-bottom:20px;
+		margin-bottom:10px;
+		margin-left:20px;
+		margin-top:5px;
 		padding: 0;
+		width:100%;
 		display:block;
 		float:left;
+		clear:both;
 	}
 	#options{
 		margin-left:20px;
@@ -53,7 +57,7 @@
 		border:none;
 		float:none;
 		margin:0;
-		margin-bottom:12px;
+		margin-bottom:5px;
 	}
 	ul li ul{
 		margin:0;
@@ -64,6 +68,7 @@
 		background-color:#ccc;
 		border:1px solid #aaa;
 		font-size:13px;
+		border-radius:2px;
 		padding:2px 3px;
 		color:#333;
 	}
@@ -305,6 +310,12 @@ function setStatus(text){
 	document.getElementById("status").innerHTML = text;
 }
 
+function closeOptions(text){
+	chrome.tabs.getSelected(null, function(tab){
+		chrome.tabs.remove(tab.id, function(){});
+	});
+}
+
 </script>
 </head>
 <body onload="restore_options()">
@@ -314,9 +325,9 @@ function setStatus(text){
 <!--Specifying different options available -->
 <div id="options">
 	<h3>Features</h3>
-	<ul id="options">
+	<ul class="options">
 		<li>
-			<label class="option-label">Disabled URLs:<br/><span class="subtext">gleeBox will be disabled for these</span></label>
+			<label class="option-label">Disabled URLs:<br/><span class="subtext">URLs for which gleeBox will be disabled. Add your own by entering a part of the URL</span></label>
 			<ul id="domains" class="option-field">
 				<li id="addDomainLI"><input id="add_domain" type="text" value="" size=50 /><input type="button" value="Add" class="button" onclick="addDomain()"/></li>
 			</ul>
@@ -337,7 +348,7 @@ function setStatus(text){
 		</li>
 	</ul>
 	<h3>Appearance</h3>
-	<ul id="options">
+	<ul class="options">
 		<li>
 			<label class="option-label">gleeBox Position:<br/><span class="subtext">Where do you want gleeBox to be displayed on your screen?</span></label>
 			<div class="option-field">
@@ -366,7 +377,10 @@ function setStatus(text){
 			</div>
 		</li>
 	</ul>
-<input type="button" style="float:right;clear:both;" class="button" value="Save" onclick="save_options()">
+	<div style="text-align:center">
+		<input type="button" class="button" value="Save" onclick="save_options()">
+		<input type="button" class="button" value="Save and Close" onclick="save_options();closeOptions();">
+	</div>
 </div>
 </div>	
 </body>
