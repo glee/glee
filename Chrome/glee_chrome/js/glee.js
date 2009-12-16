@@ -503,6 +503,13 @@ var Glee = {
 					else if(jQueryVal[0].tagName == "IMG") //if it is an image
 					{
 						a_el = jQuery(jQueryVal.parents('a'));
+						var value = jQueryVal.attr('alt');
+						if(value)
+							this.subText.html(this.truncate(value));
+						else if(value = jQueryVal.parent('a').attr('title'))
+							this.subText.html(this.truncate(value));
+						else
+							this.subText.html("Linked Image");
 					}
 					else if(jQueryVal[0].tagName == "INPUT") //if it is an input field
 					{
