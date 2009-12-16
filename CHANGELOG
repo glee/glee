@@ -1,0 +1,12 @@
+Version 0.6 (15/12/2009)
+
+* Bookmarks integration in default search (Chrome)
+* Bookmarklets as commands (Chrome)
+* Added Options page (Chrome)
+* Option for box location and size
+* Option for bookmarks integration
+* Option for disabling scrolling animation
+* Added linked images' alt text search into default search
+* Themes!
+* New commands - ?p, ?a, !rss, !help
+* Bug fixes
