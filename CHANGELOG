@@ -1,3 +1,7 @@
+0.6.1 (16/12/2009)
+
+Minor bug fixes - CSS theme fix and subtext not getting set for ?img
+
 Version 0.6 (15/12/2009)
 
 * Bookmarks integration in default search (Chrome)
