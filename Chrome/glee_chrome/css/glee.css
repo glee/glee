@@ -85,6 +85,8 @@
 	margin:3px 0;
 	border:none;
 	font-size:100px;
+	background-color:#333;
+	color:#fff;
 }
 #gleeSubText, #gleeSubURL, #gleeSubActivity{
 	font-size:15px;
