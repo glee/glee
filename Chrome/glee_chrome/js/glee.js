@@ -161,6 +161,7 @@ jQuery(document).ready(function(){
 				Glee.toggleActivity(0);
 			}
 			Glee.searchText = value;
+			Glee.lastQuery = null;
 		}
 		else if(e.keyCode == 9)  //if TAB is pressed
 		{
@@ -189,7 +190,7 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 13)
 		{
 			e.preventDefault();
-			if(value[0] == "*")
+			if(value[0] == "*" && value != Glee.lastQuery)
 			{
 				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
 					jQuery(Glee.selectedElement).removeClass('GleeHL');
@@ -197,6 +198,7 @@ jQuery(document).ready(function(){
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
+				Glee.lastQuery = value;
 			}
 			else if(value[0] == "!" && value.length > 1)
 			{
@@ -314,6 +316,8 @@ jQuery(document).ready(function(){
 
 var Glee = {
 	searchText:"",
+	//last query executed in jQuery mode
+	lastQuery:null,
 	commandMode: false,
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1, 
@@ -496,11 +500,7 @@ var Glee = {
 				{
 					this.subText.html(this.truncate(jQueryVal.text()));
 					var a_el = null;
-					if(jQueryVal[0].tagName[0] == "H") //if it is a heading
-					{
-						a_el = jQuery(jQueryVal.find('a'));
-					} 
-					else if(jQueryVal[0].tagName == "IMG") //if it is an image
+					if(jQueryVal[0].tagName == "IMG") //if it is an image
 					{
 						a_el = jQuery(jQueryVal.parents('a'));
 						var value = jQueryVal.attr('alt');
@@ -527,6 +527,9 @@ var Glee = {
 						else
 							this.subText.html("Textarea");
 					}
+					else
+						a_el = jQuery(jQueryVal.find('a'));
+
 					if(a_el)
 					{
 						if(a_el.length != 0)
