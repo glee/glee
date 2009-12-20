@@ -517,8 +517,42 @@ var Glee = {
 		return els;
 	},
 	sortElementsByPosition: function(elements){
-		//using Merge sort
-		return this.mergeSort(elements);
+		//sort the elements using merge sort
+		var sorted_els = this.mergeSort(elements);
+		//begin the array from the element closest to the current position
+		//TODO: Make this more efficient. And maybe, keep this thing optional
+		//or only in case of link search (and not in reapers and jQuerymode)
+		var len = sorted_els.length;
+		var diff = 1000;
+		var flag = 0;
+		var pos = 0;
+		for(var i=0; i<len; i++)
+		{
+			var new_diff = jQuery(sorted_els[i]).offset().top - window.pageYOffset;
+			if(new_diff < diff && new_diff>0)
+			{
+				// alert(new_diff+" "+sorted_els[i].innerHTML);
+				diff = new_diff;
+				pos = i;
+				flag = 1;
+			}
+		}
+		if(pos!=0 && flag==1)
+		{
+			var new_sorted_array = [];
+			j = pos;
+			for(var i=0;i<len;i++)
+			{
+				new_sorted_array[i] = sorted_els[j];
+				if(j == (len-1))
+					j=0;
+				else
+					j++;
+			}
+			return new_sorted_array;
+		}
+		else
+			return sorted_els;
 	},
 	setSubText: function(val,type){
 		//reset Glee.URL
