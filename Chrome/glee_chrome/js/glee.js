@@ -474,6 +474,8 @@ var Glee = {
 		this.nullMessage = reaper.nullMessage;
 		LinkReaper.selectedLinks = jQuery(reaper.selector);
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
+		//sort the elements
+		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
 		this.setSubText(Glee.selectedElement,"el");
 		this.scrollToElement(Glee.selectedElement);	
@@ -839,7 +841,8 @@ var Glee = {
 			jQuery(this).addClass('GleeReaped');
 		});
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		this.traversePosition = 0;
+		LinkReaper.selectedLinks = this.sortElementsByPosition(LinkReaper.selectedLinks);
+		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
 	execCommand: function(command){
