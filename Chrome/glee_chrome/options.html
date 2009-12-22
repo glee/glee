@@ -171,6 +171,24 @@ function save_options() {
 	var status = localStorage["glee_status"];
 	if(typeof(status) == "undefined")
 		status = 1;
+		
+	//saving the custom scraper commands
+	var scraperNames = [];
+	var scraperSel = [];
+	var scraperList = document.getElementById("scraper-commands");
+	var len = scraperList.children.length;
+	for(var i=0;i<len;i++)
+	{
+		var el = scraperList.children[i];
+		if(el.className == "scraper")
+		{
+			//using ` as end marker
+			scraperNames[scraperNames.length] = el.children[0].innerText+"`";
+			scraperSel[scraperSel.length] = el.children[1].innerText+"`";
+		}
+	}
+	localStorage["glee_scraper_names"] = scraperNames;
+	localStorage["glee_scraper_selectors"] = scraperSel;
 	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme);
 	setStatus("Settings saved!");
 }
@@ -218,6 +236,7 @@ function restore_options()
 			domainList.insertBefore(newLI,lastChild);
 		}
 	}
+	
 	//getting the gleeBox position
 	var pos = localStorage["glee_position"];
 	if(pos)
@@ -252,27 +271,48 @@ function restore_options()
 		
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
-	if(bookmark_status != null)
-	{
-		if(bookmark_status == 1)
-			document.getElementsByName("glee_bookmark_search")[0].checked = true;
-		else
-			document.getElementsByName("glee_bookmark_search")[1].checked = true;
-	}
+
+	if(bookmark_status == 1)
+		document.getElementsByName("glee_bookmark_search")[0].checked = true;
 	else
 		document.getElementsByName("glee_bookmark_search")[1].checked = true;
 		
 	//getting the scrolling animation pref
 	var scroll_anim = localStorage["glee_scrolling_animation"];
-	if(scroll_anim != null)
-	{
-		if(scroll_anim == 1)
-			document.getElementsByName("glee_scrolling_animation")[0].checked = true;
-		else
-			document.getElementsByName("glee_scrolling_animation")[1].checked = true;
-	}
+
+	if(scroll_anim == 0)
+		document.getElementsByName("glee_scrolling_animation")[1].checked = true;
 	else
 		document.getElementsByName("glee_scrolling_animation")[0].checked = true;
+		
+	//getting the custom scraper commands
+	var scraper_names = localStorage["glee_scraper_names"];
+	var scraper_sel = localStorage["glee_scraper_selectors"];
+	if(scraper_names != "undefined")
+	{
+		if(scraper_names.length != 0)
+		{
+			var scraperList = document.getElementById("scraper-commands");
+			var scraperName = scraper_names.split("`");
+			var scraperSel = scraper_sel.split("`");
+			var scraperLen = scraperName.length;
+			for (var i=0; i<scraperLen-1; i++)
+			{
+				if(i>0)
+				{
+					//remove the , that is used by localStorage to separate elements
+					scraperName[i] = scraperName[i].slice(1,scraperName[i].length);
+					scraperSel[i] = scraperSel[i].slice(1,scraperSel[i].length);
+				}
+				var newLI = document.createElement('li');
+				var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+i+")'/>";
+				newLI.className = "scraper";
+				newLI.id = "scraper"+i;
+				newLI.innerHTML = "<span>"+scraperName[i]+"</span> - <span>"+scraperSel[i]+"</span>"+inputBt;
+				scraperList.insertBefore(newLI,document.getElementById("addScraper"));
+			}
+		}
+	}
 }
 
 //Adds a domain to the restricted domain list
@@ -301,6 +341,35 @@ function removeDomain(i){
 	domainList.removeChild(el);
 	//remove the domain from the list
 	setStatus("URL Removed!");
+	return 0;
+}
+
+function addScraper(){
+	var scraperName = document.getElementById("scraper-name");
+	var scraperSel = document.getElementById("scraper-selector");
+	//TODO: Create a validate method here
+	if(scraperName.value != "" && scraperSel.value != "")
+	{
+		var scraperList = document.getElementById("scraper-commands");
+		var newLI = document.createElement("li");
+		var no = scraperList.children.length+1;
+		newLI.className = "scraper";
+		newLI.id = "scraper"+no;
+		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+no+")'/>";
+		newLI.innerHTML = "<span>"+scraperName.value+"</span> - <span>"+scraperSel.value+"</span>"+inputBt;
+		scraperList.insertBefore(newLI,document.getElementById("addScraper"));
+		setStatus("<strong>?"+scraperName.value+"</strong> command added!");
+		scraperName.value="";
+		scraperSel.value="";
+	}
+}
+
+function removeScraper(i){
+	var el = document.getElementById("scraper"+i);
+	var scraperList = document.getElementById("scraper-commands");
+	scraperList.removeChild(el);
+	//remove the domain from the list
+	setStatus("Command Removed!");
 	return 0;
 }
 
@@ -343,6 +412,12 @@ function closeOptions(text){
 				<input name="glee_scrolling_animation" type="radio"> Yes
 				<input name="glee_scrolling_animation" type="radio"> No
 			</div>
+		</li>
+		<li>
+			<label class="option-label">Custom scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by specifying command name and jQuery selector.</span></label>
+			<ul id="scraper-commands" class="option-field">
+				<li id="addScraper"><form onsubmit="addScraper();return false;">Name: <input id="scraper-name" type="text" value="" size=10 /> jQuery Selector: <input id="scraper-selector" type="text" value="" size=20 /><input type="submit" value="Add" class="button"/></form></li>
+			</ul>
 		</li>
 	</ul>
 	<h3>Appearance</h3>
