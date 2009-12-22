@@ -478,6 +478,8 @@ var Glee = {
 		this.nullMessage = reaper.nullMessage;
 		LinkReaper.selectedLinks = jQuery(reaper.selector);
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
+		//sort the elements
+		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
 		this.setSubText(Glee.selectedElement,"el");
 		this.scrollToElement(Glee.selectedElement);	
@@ -486,6 +488,63 @@ var Glee = {
 		});
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
+	},
+	mergeSort: function(els){
+
+		var mid = Math.floor(els.length/2);
+		if(mid < 1)
+			return els;
+		var left = [];
+		var right = [];
+
+		while(els.length > mid)
+			left.push(els.shift());
+
+		while(els.length > 0)
+			right.push(els.shift());
+
+		left = this.mergeSort(left);
+		right = this.mergeSort(right);
+		
+		while( (left.length > 0) && (right.length > 0) )
+		{
+			//merging order based on top offet value
+			if(jQuery(right[0]).offset().top < jQuery(left[0]).offset().top)
+				els.push(right.shift());
+			else 
+				els.push(left.shift());
+		}
+		while(left.length > 0)
+			els.push(left.shift());
+		while(right.length > 0)
+			els.push(right.shift());
+		return els;
+	},
+	sortElementsByPosition: function(elements){
+		//sort the elements using merge sort
+		var sorted_els = this.mergeSort(elements);
+		
+		//begin the array from the element closest to the current position
+		var len = sorted_els.length;
+		var pos = 0;
+		var diff = null;
+		for(var i=0; i<len; i++)
+		{
+			var new_diff = jQuery(sorted_els[i]).offset().top - window.pageYOffset;
+			if((new_diff < diff || diff == null) && new_diff >= 0)
+			{
+				diff = new_diff;
+				pos = i;
+			}
+		}
+		if(pos!=0)
+		{
+			var newly_sorted_els = sorted_els.splice(pos,len-pos);
+			jQuery.merge(newly_sorted_els, sorted_els);
+			return newly_sorted_els;
+		}
+		else
+			return sorted_els;
 	},
 	setSubText: function(val,type){
 		//reset Glee.URL
@@ -807,7 +866,8 @@ var Glee = {
 			jQuery(this).addClass('GleeReaped');
 		});
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		this.traversePosition = 0;
+		LinkReaper.selectedLinks = this.sortElementsByPosition(LinkReaper.selectedLinks);
+		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
 	execCommand: function(command){
@@ -915,7 +975,8 @@ var LinkReaper = {
 				});
 				LinkReaper.selectedLinks = newList;
 			}
-			LinkReaper.searchTerm = term;
+			this.searchTerm = term;
+			this.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 			this.traversePosition = 0;
 		}
 	},
