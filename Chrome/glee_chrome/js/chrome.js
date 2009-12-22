@@ -98,6 +98,15 @@ Glee.setOptions = function(response){
 	{
 		Glee.ThemeOption = "GleeThemeDefault";
 	}
+	
+	//getting the custom scraper commands
+	if(response.scrapers)
+	{
+		Glee.reapers.splice(5,Glee.reapers.length);
+		var len = response.scrapers.length;
+		for(i = 0;i < len;i ++)
+			Glee.reapers[5+i] = response.scrapers[i];
+	}
 
 	//check if it is a disabled domain
 	if(Glee.checkDomain() == 1 && response.status == 1)

@@ -173,8 +173,9 @@ function save_options() {
 		status = 1;
 		
 	//saving the custom scraper commands
-	var scraperNames = [];
+	var scraperName = [];
 	var scraperSel = [];
+	var scrapers = [];
 	var scraperList = document.getElementById("scraper-commands");
 	var len = scraperList.children.length;
 	for(var i=0;i<len;i++)
@@ -182,18 +183,21 @@ function save_options() {
 		var el = scraperList.children[i];
 		if(el.className == "scraper")
 		{
-			//using ` as end marker
-			scraperNames[scraperNames.length] = el.children[0].innerText+"`";
-			scraperSel[scraperSel.length] = el.children[1].innerText+"`";
+			var name = el.children[0].innerText;
+			var sel = el.children[1].innerText;
+			scrapers[i] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
+			//using ` as end marker for both scraper names and selectors
+			scraperName[scraperName.length] = name+"`";
+			scraperSel[scraperSel.length] = sel+"`";
 		}
 	}
-	localStorage["glee_scraper_names"] = scraperNames;
+	localStorage["glee_scraper_names"] = scraperName;
 	localStorage["glee_scraper_selectors"] = scraperSel;
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme);
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -201,7 +205,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers},function(response){
 				});
 			}
 		}
@@ -296,6 +300,7 @@ function restore_options()
 			var scraperName = scraper_names.split("`");
 			var scraperSel = scraper_sel.split("`");
 			var scraperLen = scraperName.length;
+			//last element is a string only containing a ,
 			for (var i=0; i<scraperLen-1; i++)
 			{
 				if(i>0)
@@ -414,7 +419,7 @@ function closeOptions(text){
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Custom scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by specifying command name and jQuery selector.</span></label>
+			<label class="option-label">Custom scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by specifying command name and jQuery selector. <br/><br/><strong>DO NOT</strong> use ` in name or selector</span></label>
 			<ul id="scraper-commands" class="option-field">
 				<li id="addScraper"><form onsubmit="addScraper();return false;">Name: <input id="scraper-name" type="text" value="" size=10 /> jQuery Selector: <input id="scraper-selector" type="text" value="" size=20 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
