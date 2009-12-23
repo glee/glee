@@ -185,6 +185,8 @@ function save_options() {
 		{
 			var name = el.children[0].innerText;
 			var sel = el.children[1].innerText;
+			//get rid of the ? in command name
+			name = name.slice(1,name.length);
 			scrapers[i] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
 			//using ` as end marker for both scraper names and selectors
 			scraperName[scraperName.length] = name+"`";
@@ -212,7 +214,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 	});
 }
 // Restores select box state to saved value from localStorage.
-function restore_options() 
+function restore_options()
 {
 	//getting the user defined restricted domains
 	var domainBuffer = localStorage["glee_domains"];
@@ -247,14 +249,14 @@ function restore_options()
 		document.getElementsByName("glee_pos")[pos].checked = true;
 	else
 		document.getElementsByName("glee_pos")[1].checked = true; //default is middle position
-		
+
 	//getting the gleeBox size
 	var size = localStorage["glee_size"];
 	if(size)
 		document.getElementsByName("glee_size")[size].checked = true;
 	else
 		document.getElementsByName("glee_size")[2].checked = true; //default is large size
-		
+
 	//getting theme
 	var theme = localStorage["glee_theme"];
 	tRadios = document.getElementsByName("glee_theme");
@@ -272,7 +274,7 @@ function restore_options()
 	else {
 		tRadios[0].checked = true;
 	}
-		
+
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
 
@@ -280,7 +282,7 @@ function restore_options()
 		document.getElementsByName("glee_bookmark_search")[0].checked = true;
 	else
 		document.getElementsByName("glee_bookmark_search")[1].checked = true;
-		
+
 	//getting the scrolling animation pref
 	var scroll_anim = localStorage["glee_scrolling_animation"];
 
@@ -288,7 +290,7 @@ function restore_options()
 		document.getElementsByName("glee_scrolling_animation")[1].checked = true;
 	else
 		document.getElementsByName("glee_scrolling_animation")[0].checked = true;
-		
+
 	//getting the custom scraper commands
 	var scraper_names = localStorage["glee_scraper_names"];
 	var scraper_sel = localStorage["glee_scraper_selectors"];
@@ -313,7 +315,7 @@ function restore_options()
 				var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+i+")'/>";
 				newLI.className = "scraper";
 				newLI.id = "scraper"+i;
-				newLI.innerHTML = "<span>"+scraperName[i]+"</span> - <span>"+scraperSel[i]+"</span>"+inputBt;
+				newLI.innerHTML = "<span><strong>?"+scraperName[i]+"</strong></span> : <span>"+scraperSel[i]+"</span>"+inputBt;
 				scraperList.insertBefore(newLI,document.getElementById("addScraper"));
 			}
 		}
@@ -352,8 +354,8 @@ function removeDomain(i){
 function addScraper(){
 	var scraperName = document.getElementById("scraper-name");
 	var scraperSel = document.getElementById("scraper-selector");
-	//TODO: Create a validate method here
-	if(scraperName.value != "" && scraperSel.value != "")
+
+	if(validateScraper(scraperName.value,scraperSel.value))
 	{
 		var scraperList = document.getElementById("scraper-commands");
 		var newLI = document.createElement("li");
@@ -361,7 +363,7 @@ function addScraper(){
 		newLI.className = "scraper";
 		newLI.id = "scraper"+no;
 		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+no+")'/>";
-		newLI.innerHTML = "<span>"+scraperName.value+"</span> - <span>"+scraperSel.value+"</span>"+inputBt;
+		newLI.innerHTML = "<span><strong>?"+scraperName.value+"</strong></span> : <span>"+scraperSel.value+"</span>"+inputBt;
 		scraperList.insertBefore(newLI,document.getElementById("addScraper"));
 		setStatus("<strong>?"+scraperName.value+"</strong> command added!");
 		scraperName.value="";
@@ -376,6 +378,23 @@ function removeScraper(i){
 	//remove the domain from the list
 	setStatus("Command Removed!");
 	return 0;
+}
+
+function validateScraper(name,selector)
+{
+	//check that command name/selector should not be blank
+	if(name == "" || selector == "")
+	{
+		setStatus("Command name / Selector cannot be blank!");
+		return false;
+	}
+	//check that command name does not conflict with the default scraper command names
+	if(name == "h" || name == "?" || name == "img" || name == "p" || name == "a")
+	{
+		setStatus("Command name conflicts with a default scraper command!");
+		return false;
+	}
+	return true;
 }
 
 function setStatus(text){
@@ -419,7 +438,7 @@ function closeOptions(text){
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Custom scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by specifying command name and jQuery selector. <br/><br/><strong>DO NOT</strong> use ` in name or selector</span></label>
+			<label class="option-label">Custom scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by specifying command name and jQuery selector. <br/><br/><strong>* DO NOT</strong> use <strong>`</strong> in name or selector. <br/>* Enter command name without the ?</span></label>
 			<ul id="scraper-commands" class="option-field">
 				<li id="addScraper"><form onsubmit="addScraper();return false;">Name: <input id="scraper-name" type="text" value="" size=10 /> jQuery Selector: <input id="scraper-selector" type="text" value="" size=20 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
