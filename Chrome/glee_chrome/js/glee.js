@@ -339,7 +339,7 @@ var Glee = {
 	//scrolling Animation speed
 	scrollingSpeed:750,
 	//Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
-	pageScrollSpeed:1,
+	pageScrollSpeed:5,
 	//position of gleeBox (top,middle,bottom)
 	position: "middle",
 	//size of gleeBox (small,medium,large)
