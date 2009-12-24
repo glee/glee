@@ -337,7 +337,7 @@ var Glee = {
 	//whether bookmark search is enabled/disabled
 	bookmarkSearchStatus:false,
 	//scrolling Animation speed
-	scrollingSpeed:750,
+	scrollingSpeed:500,
 	//Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
 	pageScrollSpeed:5,
 	//position of gleeBox (top,middle,bottom)
@@ -736,10 +736,20 @@ var Glee = {
 				var targetOffset = target.offset().top - 60;
 				//stop any previous scrolling to prevent queueing
 				Glee.Cache.jBody.stop(true);
-				Glee.Cache.jBody.animate({scrollTop:targetOffset},Glee.scrollingSpeed,"linear",Glee.updateUserPosition);
+				Glee.Cache.jBody.animate(
+					{scrollTop:targetOffset},
+					Glee.scrollingSpeed + 
+					Glee.getBufferDuration(window.pageYOffset - targetOffset),
+					"swing",
+					Glee.updateUserPosition);
 				return false;
 			}
 		}
+	},
+	getBufferDuration: function(distance){
+		if(distance < 0)
+			distance *= -1;
+		return (Glee.scrollingSpeed == 0 ? 0 : distance);
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
