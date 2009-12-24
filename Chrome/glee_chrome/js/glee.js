@@ -790,9 +790,8 @@ var Glee = {
 	},
 	infiniteScroll: function() {
 		if(Glee.scrollState > 0) {
-			// TODO @Ankit: Change this to page height from the current arbitrary value
-			loc = 20000;
-			duration = (20000 - window.pageYOffset)/Glee.pageScrollSpeed;
+			loc = jQuery(document).height();
+			duration = (loc - window.pageYOffset)/Glee.pageScrollSpeed;
 		}
 		else {
 			loc = 0;
