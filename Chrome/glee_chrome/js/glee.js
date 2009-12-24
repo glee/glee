@@ -14,7 +14,10 @@ jQuery(document).ready(function(){
 	
 	/* initialize the searchBox */
 	Glee.initBox();
-		
+	
+	// Setup cache for global jQuery objects
+	Glee.Cache.jBody = jQuery('html,body');
+	
 	// Bind Keys
 	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
@@ -59,7 +62,7 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
-			Glee.simulateScroll((e.keyCode == 40 ? 1:0));
+			Glee.simulateScroll((e.keyCode == 40 ? 1:-1));
 		}
 	});
 
@@ -309,13 +312,15 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
-			jQuery('html,body').stop(true);
+			Glee.simulateScroll(0);
 		}
 	});
 });
 
 var Glee = {
 	searchText:"",
+	//State of scrolling. 0=None, 1=Up, -1=Down.
+	scrollState: 0,
 	//last query executed in jQuery mode
 	lastQuery:null,
 	commandMode: false,
@@ -333,6 +338,8 @@ var Glee = {
 	bookmarkSearchStatus:false,
 	//scrolling Animation speed
 	scrollingSpeed:750,
+	//Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
+	pageScrollSpeed:1,
 	//position of gleeBox (top,middle,bottom)
 	position: "middle",
 	//size of gleeBox (small,medium,large)
@@ -418,6 +425,12 @@ var Glee = {
 			cssStyle: "GleeReaped"
 		}
 		],
+	
+	//jQuery cache objects
+	Cache: {
+		jBody: null
+	},
+	
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -722,8 +735,8 @@ var Glee = {
 				// the top.
 				var targetOffset = target.offset().top - 60;
 				//stop any previous scrolling to prevent queueing
-				jQuery('html,body').stop(true);
-				jQuery('html,body').animate({scrollTop:targetOffset},Glee.scrollingSpeed,"linear",Glee.updateUserPosition);
+				Glee.Cache.jBody.stop(true);
+				Glee.Cache.jBody.animate({scrollTop:targetOffset},Glee.scrollingSpeed,"linear",Glee.updateUserPosition);
 				return false;
 			}
 		}
@@ -741,9 +754,9 @@ var Glee = {
 			jQuery("#gleeSubActivity").html("");
 	},
 	getBackInitialState: function(){
-		jQuery('html,body').stop(true);
+		Glee.Cache.jBody.stop(true);
 		if(this.userPosBeforeGlee != window.pageYOffset)
-			jQuery('html,body').animate({scrollTop:Glee.userPosBeforeGlee},Glee.scrollingSpeed);
+			Glee.Cache.jBody.animate({scrollTop:Glee.userPosBeforeGlee},Glee.scrollingSpeed);
 		if(this.userFocusBeforeGlee != null)
 			this.userFocusBeforeGlee.focus();
 		else
@@ -755,12 +768,30 @@ var Glee = {
 		}
 	},
 	simulateScroll: function(val){
-		jQuery('html,body').stop(true, true);
-		if(val == 1) //scroll up
-			window.scrollTo(window.pageXOffset,window.pageYOffset+200);
-		else if(val == 0) //scroll down
-			window.scrollTo(window.pageXOffset,window.pageYOffset-200);
-		this.userPosBeforeGlee = window.pageYOffset;
+		if(val == 0) {
+			Glee.Cache.jBody.stop(true);
+			Glee.scrollState = 0;
+			Glee.userPosBeforeGlee = window.pageYOffset;
+		}
+		else if(Glee.scrollState == 0) {
+			Glee.scrollState = val;
+			Glee.infiniteScroll();
+		}
+	},
+	infiniteScroll: function() {
+		if(Glee.scrollState > 0) {
+			// TODO @Ankit: Change this to page height from the current arbitrary value
+			loc = 20000;
+			duration = (20000 - window.pageYOffset)/Glee.pageScrollSpeed;
+		}
+		else {
+			loc = 0;
+			duration = window.pageYOffset/Glee.pageScrollSpeed;
+		}
+
+		Glee.Cache.jBody.animate(
+			{scrollTop:loc},
+			duration);
 	},
 	simulateClick: function(el,target){
 		var evt = document.createEvent("MouseEvents");
