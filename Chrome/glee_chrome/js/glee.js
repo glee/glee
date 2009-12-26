@@ -406,7 +406,7 @@ var Glee = {
 			name: "set",
 			method:"Glee.Chrome.setOptionValue",
 			domain:"*",
-			description:"Set an option. For eg.: !set scroll=on will turn animated scrolling on. For more, execute !help",
+			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
 			statusText:"Setting option..."
 		}
 	],

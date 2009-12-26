@@ -172,7 +172,7 @@ Glee.Chrome.setOptionValue = function(){
 	// if failed validity test, return
 	if(!valid)
 	{
-		Glee.setSubText("Invalid !set syntax. Refer help using !help","msg");
+		Glee.setSubText("Invalid !set syntax. Please refer manual using !help command","msg");
 		return;
 	}
 	chrome.extension.sendRequest({value:"updateOption",option:option,option_value:value},function(response){
