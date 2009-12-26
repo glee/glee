@@ -146,7 +146,7 @@ jQuery(document).ready(function(){
 						if(!Glee.URL)
 						{
 							//find the closest matching bookmarklet
-							Glee.getBookmarklet(trimVal);
+							Glee.Chrome.getBookmarklet(trimVal);
 						}
 					}
 					else
@@ -272,7 +272,7 @@ jQuery(document).ready(function(){
 					Glee.URL = Glee.makeURLAbsolute(Glee.URL, location.href);
 					if(e.shiftKey)
 					{
-						Glee.openNewTab();
+						Glee.Chrome.openNewTab();
 						return false;
 					}
 					else
@@ -447,7 +447,7 @@ var Glee = {
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
 		Glee.userPosBeforeGlee = window.pageYOffset;
-		this.getOptions();	
+		this.Chrome.getOptions();	
 	},
 	initOptions:function(){
 		// Setup the theme
@@ -673,7 +673,7 @@ var Glee = {
 				{
 					//emptying the bookmarks array
 					this.bookmarks.splice(0,Glee.bookmarks.length);
-					this.isBookmark(text); //check if the text matches a bookmark
+					this.Chrome.isBookmark(text); //check if the text matches a bookmark
 				}
 				else //search
 					this.setSubText(text,"search");
@@ -940,7 +940,7 @@ var Glee = {
 	},
 	
 	shortenURL: function(){
-		this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+		this.Chrome.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
 			var json = JSON.parse("["+data+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
@@ -954,7 +954,7 @@ var Glee = {
 		var url = location.href;
 		if(url.length > 30)
 		{
-			this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+			this.Chrome.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 			function(data){
 				var json = JSON.parse("["+data+"]");
 				var shortenedURL = json[0].results[location.href].shortUrl;

@@ -1,10 +1,11 @@
-Glee.openNewTab = function(){
+Glee.Chrome = {};
+Glee.Chrome.openNewTab = function(){
 	//sending request to background.html to create a new tab
 	chrome.extension.sendRequest({value:"createTab",url:Glee.URL},function(response){
 	});
 }
 
-Glee.isBookmark = function(text){
+Glee.Chrome.isBookmark = function(text){
 	//send request to search the bookmark tree for the bookmark whose title matches text
 	chrome.extension.sendRequest({value:"getBookmarks",text:text},function(response){
 		if(response.bookmarks.length != 0) 
@@ -21,7 +22,7 @@ Glee.isBookmark = function(text){
 	});
 }
 
-Glee.getBookmarklet = function(text){
+Glee.Chrome.getBookmarklet = function(text){
 	//sending request to get the first matched bookmarklet
 	chrome.extension.sendRequest({value:"getBookmarklet",text:text},function(response){
 		//if a bookmarklet is returned, run it
@@ -32,14 +33,14 @@ Glee.getBookmarklet = function(text){
 	});
 }
 
-Glee.sendRequest = function(url,method,callback){
+Glee.Chrome.sendRequest = function(url,method,callback){
 	//send request to background.html to send an XMLHTTPRequest
 	chrome.extension.sendRequest({value:"sendRequest",url:url,method:method},function(response){
 		callback(response.data);
 	});
 }
 
-Glee.applyOptions = function(response){
+Glee.Chrome.applyOptions = function(response){
 	
 	//gleeBox position
 	if(response.position == 0) //top
@@ -104,9 +105,9 @@ Glee.applyOptions = function(response){
 	Glee.initOptions();
 }
 
-Glee.getOptions = function(){
+Glee.Chrome.getOptions = function(){
 	//sending request to get the gleeBox options
-	chrome.extension.sendRequest({value:"getOptions"},Glee.applyOptions);
+	chrome.extension.sendRequest({value:"getOptions"},Glee.Chrome.applyOptions);
 }
 
 //adding a listener to respond to requests from background.html to update the status and options.html to update settings
@@ -115,6 +116,6 @@ chrome.extension.onRequest.addListener(
 		if(request.value == "initStatus")
 			Glee.status = request.status;
 		else if(request.value == "updateOptions")
-			Glee.applyOptions(request);
+			Glee.Chrome.applyOptions(request);
 		sendResponse({});
 });
