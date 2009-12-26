@@ -160,6 +160,59 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		}
 		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme,scrapers:scrapers, hyper:hyper});
 	}
+	else if(request.value == "updateOption")
+	{
+		switch(request.option_value)
+		{
+			case "off"		:
+			case "small"	:
+			case "top"		: value = 0; break;
+			
+			case "on"		:
+			case "medium"	:
+			case "med"		:
+			case "middle"	:
+			case "mid"		: value = 1; break;
+			
+			case "large"	:
+			case "bottom"	: value = 2; break;
+			
+			case 'default'	: value = "GleeThemeDefault"; break;
+			case 'white'	: value = "GleeThemeWhite"; break;
+			case 'console'	: value = "GleeThemeConsole"; break;
+			case 'greener'	: value = "GleeThemeGreener"; break;
+			case 'ruby'		: value = "GleeThemeRuby"; break;
+			case 'glee'		: value = "GleeThemeGlee"; break;
+		}
+
+		switch(request.option)
+		{
+			case "scroll"	: localStorage["glee_scrolling_animation"] = value;
+							  sendResponse({animation:value});
+							  break;
+
+			case "bsearch"	: localStorage["glee_bookmark_search"] = value;
+							  sendResponse({bookmark_search:value});
+							  break;
+							
+			case "hyper"	: localStorage["glee_hyper"] = value;
+							  sendResponse({hyper:value});
+							  break;
+
+			case "size"		: localStorage["glee_size"] = value;
+							  sendResponse({size:value});
+							  break;
+			
+			case "pos"		:
+			case "position"	: localStorage["glee_position"] = value;
+							  sendResponse({position:value});
+							  break;
+
+			case "theme"	: localStorage["glee_theme"] = value;
+							  sendResponse({theme:value});
+							  break;
+		}
+	}
 });
 
 </script>

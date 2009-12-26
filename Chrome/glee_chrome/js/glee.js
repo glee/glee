@@ -403,6 +403,13 @@ var Glee = {
 			domain:"*",
 			description:"View gleeBox options",
 			statusText:"Opening options page..."
+		},
+		{
+			name: "set",
+			method:"Glee.Chrome.setOptionValue",
+			domain:"*",
+			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
+			statusText:"Setting option..."
 		}
 	],
 	
