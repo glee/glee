@@ -18,6 +18,15 @@ jQuery(document).ready(function(){
 	// Setup cache for global jQuery objects
 	Glee.Cache.jBody = jQuery('html,body');
 	
+	// HyperGlee
+	Glee.searchField.attr('value','');
+	Glee.searchBox.fadeIn(150);
+	// TODO: Hack to steal focus from page's window onload. 
+	// We can't add this stuff to onload. See if there's another way.
+	jQuery(window).fadeTo(1, 1, function(){
+		Glee.searchField.focus();
+	});
+	
 	// Bind Keys
 	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
@@ -29,7 +38,7 @@ jQuery(document).ready(function(){
 				e.preventDefault();
 				Glee.userPosBeforeGlee = window.pageYOffset;
 				//set default subtext
-				Glee.subText.html("Nothing selected");
+				Glee.subText.html(Glee.nullStateMessage);
 				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
 					Glee.userFocusBeforeGlee = target;
 				else
@@ -319,6 +328,7 @@ jQuery(document).ready(function(){
 
 var Glee = {
 	searchText:"",
+	nullStateMessage:"Nothing selected",
 	//State of scrolling. 0=None, 1=Up, -1=Down.
 	scrollState: 0,
 	//last query executed in jQuery mode
@@ -434,7 +444,7 @@ var Glee = {
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		this.subText = jQuery("<div id=\"gleeSubText\">Nothing selected</div>");
+		this.subText = jQuery("<div id=\"gleeSubText\">"+Glee.nullStateMessage+"</div>");
 		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
 		this.searchBox = jQuery("<div id=\"gleeBox\"></div>");
 		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
@@ -442,8 +452,10 @@ var Glee = {
 		this.sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
+		Glee.userPosBeforeGlee = window.pageYOffset;
 		this.getOptions();
 		this.initOptions();
+		
 	},
 	initOptions:function(){
 
@@ -688,7 +700,7 @@ var Glee = {
 		}
 		else
 		{
-			this.subText.html("Nothing selected");
+			this.subText.html(Glee.nullStateMessage);
 			this.subURL.html('');
 		}
 	},
