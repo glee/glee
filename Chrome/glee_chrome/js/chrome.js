@@ -102,10 +102,10 @@ Glee.setOptions = function(response){
 	//getting the custom scraper commands
 	if(response.scrapers)
 	{
-		Glee.reapers.splice(5,Glee.reapers.length);
+		Glee.scrapers.splice(5,Glee.scrapers.length);
 		var len = response.scrapers.length;
 		for(i = 0;i < len;i ++)
-			Glee.reapers[5+i] = response.scrapers[i];
+			Glee.scrapers[5+i] = response.scrapers[i];
 	}
 
 	//check if it is a disabled domain

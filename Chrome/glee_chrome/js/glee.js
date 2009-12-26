@@ -103,11 +103,11 @@ jQuery(document).ready(function(){
 					if(value[0]=='?' && value.length > 1)
 					{
 						trimVal = value.substr(1);
-						for(var i=0; i<Glee.reapers.length; i++)
+						for(var i=0; i<Glee.scrapers.length; i++)
 						{
-							if(Glee.reapers[i].command == trimVal)
+							if(Glee.scrapers[i].command == trimVal)
 							{
-								Glee.initReaper(Glee.reapers[i]);
+								Glee.initScraper(Glee.scrapers[i]);
 								break;
 							}
 						}
@@ -382,11 +382,11 @@ var Glee = {
 		}
 	],
 	
-	// Reaper Commands
+	// Scraper Commands
 
 	//We can add methods to the associative array below to support custom actions.
 	//It works, I've tried it.
-	reapers : [
+	scrapers : [
 		{
 			command : "?",
 			nullMessage : "Could not find any input elements on the page.",
@@ -474,9 +474,9 @@ var Glee = {
 		LinkReaper.unreapAllLinks();
 		this.selectedElement = null;
 	},
-	initReaper: function(reaper){
-		this.nullMessage = reaper.nullMessage;
-		LinkReaper.selectedLinks = jQuery(reaper.selector);
+	initScraper: function(scraper){
+		this.nullMessage = scraper.nullMessage;
+		LinkReaper.selectedLinks = jQuery(scraper.selector);
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
 		//sort the elements
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
@@ -484,7 +484,7 @@ var Glee = {
 		this.setSubText(Glee.selectedElement,"el");
 		this.scrollToElement(Glee.selectedElement);	
 		jQuery(LinkReaper.selectedLinks).each(function(){
-			jQuery(this).addClass(reaper.cssStyle);
+			jQuery(this).addClass(scraper.cssStyle);
 		});
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
