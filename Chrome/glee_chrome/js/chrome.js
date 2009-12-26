@@ -42,38 +42,32 @@ Glee.sendRequest = function(url,method,callback){
 Glee.applyOptions = function(response){
 	
 	//gleeBox position
-	if(response.position != null) 
-	{
-		if(response.position == 0) //top
-			Glee.position = "top";
-		else if(response.position == 2)	//bottom
-			Glee.position = "bottom";
-		else 
-			Glee.position = "middle";
-	}
+	if(response.position == 0) //top
+		Glee.position = "top";
+	else if(response.position == 2)	//bottom
+		Glee.position = "bottom";
+	else 
+		Glee.position = "middle";
 	
 	//gleeBox Size
-	if(response.size != null)
-	{
-		if(response.size == 0)
-			Glee.size = "small";
-		else if(response.size == 1)
-			Glee.size = "medium";
-		else
-			Glee.size = "large";
-	}
+	if(response.size == 0)
+		Glee.size = "small";
+	else if(response.size == 1)
+		Glee.size = "medium";
+	else
+		Glee.size = "large";
 	
 	//Bookmark search
-	if(response.bookmark_search && response.bookmark_search == 1)
+	if(response.bookmark_search == 1)
 		Glee.bookmarkSearchStatus = true; //enabled
 	else
 		Glee.bookmarkSearchStatus = false;
 		
 	//Scrolling animation
-	if(response.animation && response.animation == 1)
-		Glee.scrollingSpeed = 750; //enabled
-	else
+	if(response.animation == 0)
 		Glee.scrollingSpeed = 0; //disabled
+	else
+		Glee.scrollingSpeed = 750; //enabled
 	
 	//getting the restricted domains
 	if(response.domains)
@@ -91,29 +85,22 @@ Glee.applyOptions = function(response){
 		Glee.searchField.removeClass(Glee.ThemeOption);
 	}
 	if(response.theme)
-	{
 		Glee.ThemeOption = response.theme;
-	}
 	else
-	{
 		Glee.ThemeOption = "GleeThemeDefault";
-	}
+
+	//Hyper Mode
+	if(response.hyper == 1)
+		Glee.hyperMode = true;
+	else
+		Glee.hyperMode = false;	
 
 	//check if it is a disabled domain
 	if(Glee.checkDomain() == 1 && response.status == 1)
 		Glee.status = 1;
 	else
 		Glee.status = 0;
-		
-	if(response.hyper!=null)
-	{
-	if(response.hyper == 0)
-		Glee.hyperMode = false;
-	else
-		Glee.hyperMode = true;
-	}
-	else
-		Glee.hyperMode = false;
+
 	Glee.initOptions();
 }
 

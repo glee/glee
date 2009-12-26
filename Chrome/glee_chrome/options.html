@@ -157,8 +157,7 @@ function save_options() {
 		hyper = localStorage["glee_hyper"] = 1; //1 indicates enabled
 	else
 		hyper = localStorage["glee_hyper"] = 0;
-		
-	
+
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
 		bookmark_search = 1; //1 indicates enabled
@@ -269,7 +268,7 @@ function restore_options()
 	}
 	else
 		hRadios[1].checked = true;
-		
+
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
 	if(bookmark_status != null)

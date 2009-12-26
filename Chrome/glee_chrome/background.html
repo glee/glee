@@ -135,10 +135,12 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 			domains = null;
 		//scrolling animation
 		var animation = localStorage["glee_scrolling_animation"];
-		
+		//theme
 		var theme = localStorage["glee_theme"];
-		
-		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme});
+		//hyper mode
+		var hyper = localStorage["glee_hyper"];
+
+		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme, hyper:hyper});
 	}
 });
 
