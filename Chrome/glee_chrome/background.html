@@ -129,7 +129,7 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		//gleeBox size
 		var size = localStorage["glee_size"];
 		//disabled domains
-		if(localStorage["glee_domains"])
+		if(localStorage["glee_domains"]) 
 			domains = localStorage["glee_domains"].split(",");
 		else
 			domains = null;
@@ -139,8 +139,26 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		var theme = localStorage["glee_theme"];
 		//hyper mode
 		var hyper = localStorage["glee_hyper"];
-
-		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme, hyper:hyper});
+		//custom scraper commands
+		if(localStorage["glee_scraper_names"])
+		{
+			var scraperName = localStorage["glee_scraper_names"].split("`");
+			var scraperSel = localStorage["glee_scraper_selectors"].split("`");
+			var scrapers = [];
+			var len = scraperName.length;
+			//last element is an empty string only containing a ,
+			for(var i=0;i < len-1; i++)
+			{
+				if(i > 0)
+				{
+					//remove the , that is used by localStorage to separate elements
+					scraperName[i] = scraperName[i].slice(1,scraperName[i].length);
+					scraperSel[i] = scraperSel[i].slice(1,scraperSel[i].length);
+				}
+				scrapers[i] = { command:scraperName[i], selector:scraperSel[i], cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
+			}
+		}
+		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme,scrapers:scrapers, hyper:hyper});
 	}
 });
 

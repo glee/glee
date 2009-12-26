@@ -177,11 +177,35 @@ function save_options() {
 	var status = localStorage["glee_status"];
 	if(typeof(status) == "undefined")
 		status = 1;
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,hyper);
+
+	//saving the custom scraper commands
+	var scraperName = [];
+	var scraperSel = [];
+	var scrapers = [];
+	var scraperList = document.getElementById("scraper-commands");
+	var len = scraperList.children.length;
+	for(var i=0;i<len;i++)
+	{
+		var el = scraperList.children[i];
+		if(el.className == "scraper")
+		{
+			var name = el.children[0].innerText;
+			var sel = el.children[1].innerText;
+			//get rid of the ? in command name
+			name = name.slice(1,name.length);
+			scrapers[i] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
+			//using ` as end marker for both scraper names and selectors
+			scraperName[scraperName.length] = name+"`";
+			scraperSel[scraperSel.length] = sel+"`";
+		}
+	}
+	localStorage["glee_scraper_names"] = scraperName;
+	localStorage["glee_scraper_selectors"] = scraperSel;
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,hyper);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,hyper){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers,hyper){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -189,14 +213,14 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,hyper:hyper},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers,hyper:hyper},function(response){
 				});
 			}
 		}
 	});
 }
-// Restores select box state to saved value from localStorage.
-function restore_options() 
+// Restores select box state to saved value from localStorage
+function restore_options()
 {
 	//getting the user defined restricted domains
 	var domainBuffer = localStorage["glee_domains"];
@@ -224,20 +248,21 @@ function restore_options()
 			domainList.insertBefore(newLI,lastChild);
 		}
 	}
+	
 	//getting the gleeBox position
 	var pos = localStorage["glee_position"];
 	if(pos)
 		document.getElementsByName("glee_pos")[pos].checked = true;
 	else
 		document.getElementsByName("glee_pos")[1].checked = true; //default is middle position
-		
+
 	//getting the gleeBox size
 	var size = localStorage["glee_size"];
 	if(size)
 		document.getElementsByName("glee_size")[size].checked = true;
 	else
 		document.getElementsByName("glee_size")[2].checked = true; //default is large size
-		
+
 	//getting theme
 	var theme = localStorage["glee_theme"];
 	tRadios = document.getElementsByName("glee_theme");
@@ -254,8 +279,7 @@ function restore_options()
 	}
 	else {
 		tRadios[0].checked = true;
-	}
-	
+	}	
 	// Getting HyperGlee
 	var hyper = localStorage["glee_hyper"];
 	hRadios = document.getElementsByName("glee_hyper");
@@ -271,27 +295,49 @@ function restore_options()
 
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
-	if(bookmark_status != null)
-	{
-		if(bookmark_status == 1)
-			document.getElementsByName("glee_bookmark_search")[0].checked = true;
-		else
-			document.getElementsByName("glee_bookmark_search")[1].checked = true;
-	}
+
+	if(bookmark_status == 1)
+		document.getElementsByName("glee_bookmark_search")[0].checked = true;
 	else
 		document.getElementsByName("glee_bookmark_search")[1].checked = true;
-	
+
 	//getting the scrolling animation pref
 	var scroll_anim = localStorage["glee_scrolling_animation"];
-	if(scroll_anim != null)
-	{
-		if(scroll_anim == 1)
-			document.getElementsByName("glee_scrolling_animation")[0].checked = true;
-		else
-			document.getElementsByName("glee_scrolling_animation")[1].checked = true;
-	}
+
+	if(scroll_anim == 0)
+		document.getElementsByName("glee_scrolling_animation")[1].checked = true;
 	else
 		document.getElementsByName("glee_scrolling_animation")[0].checked = true;
+
+	//getting the custom scraper commands
+	var scraper_names = localStorage["glee_scraper_names"];
+	var scraper_sel = localStorage["glee_scraper_selectors"];
+	if(scraper_names != "undefined")
+	{
+		if(scraper_names.length != 0)
+		{
+			var scraperList = document.getElementById("scraper-commands");
+			var scraperName = scraper_names.split("`");
+			var scraperSel = scraper_sel.split("`");
+			var scraperLen = scraperName.length;
+			//last element is a string only containing a ,
+			for (var i=0; i<scraperLen-1; i++)
+			{
+				if(i>0)
+				{
+					//remove the , that is used by localStorage to separate elements
+					scraperName[i] = scraperName[i].slice(1,scraperName[i].length);
+					scraperSel[i] = scraperSel[i].slice(1,scraperSel[i].length);
+				}
+				var newLI = document.createElement('li');
+				var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+i+")'/>";
+				newLI.className = "scraper";
+				newLI.id = "scraper"+i;
+				newLI.innerHTML = "<span><strong>?"+scraperName[i]+"</strong></span> : <span>"+scraperSel[i]+"</span>"+inputBt;
+				scraperList.insertBefore(newLI,document.getElementById("addScraper"));
+			}
+		}
+	}
 }
 
 //Adds a domain to the restricted domain list
@@ -321,6 +367,52 @@ function removeDomain(i){
 	//remove the domain from the list
 	setStatus("URL Removed!");
 	return 0;
+}
+
+function addScraper(){
+	var scraperName = document.getElementById("scraper-name");
+	var scraperSel = document.getElementById("scraper-selector");
+
+	if(validateScraper(scraperName.value,scraperSel.value))
+	{
+		var scraperList = document.getElementById("scraper-commands");
+		var newLI = document.createElement("li");
+		var no = scraperList.children.length+1;
+		newLI.className = "scraper";
+		newLI.id = "scraper"+no;
+		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+no+")'/>";
+		newLI.innerHTML = "<span><strong>?"+scraperName.value+"</strong></span> : <span>"+scraperSel.value+"</span>"+inputBt;
+		scraperList.insertBefore(newLI,document.getElementById("addScraper"));
+		setStatus("<strong>?"+scraperName.value+"</strong> command added!");
+		scraperName.value="";
+		scraperSel.value="";
+	}
+}
+
+function removeScraper(i){
+	var el = document.getElementById("scraper"+i);
+	var scraperList = document.getElementById("scraper-commands");
+	scraperList.removeChild(el);
+	//remove the domain from the list
+	setStatus("Command Removed!");
+	return 0;
+}
+
+function validateScraper(name,selector)
+{
+	//check that command name/selector should not be blank
+	if(name == "" || selector == "")
+	{
+		setStatus("Command name / Selector cannot be blank!");
+		return false;
+	}
+	//check that command name does not conflict with the default scraper command names
+	if(name == "h" || name == "?" || name == "img" || name == "p" || name == "a")
+	{
+		setStatus("Command name conflicts with a default scraper command!");
+		return false;
+	}
+	return true;
 }
 
 function setStatus(text){
@@ -369,6 +461,12 @@ function closeOptions(text){
 				<input name="glee_hyper" value="enabled" type="radio"> Enabled
 				<input name="glee_hyper" value="disabled" type="radio"> Disabled
 			</div>
+		</li>
+		<li>
+			<label class="option-label">Custom scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by specifying command name and jQuery selector. <br/><br/><strong>* DO NOT</strong> use <strong>`</strong> in name or selector. <br/>* Enter command name without the ?</span></label>
+			<ul id="scraper-commands" class="option-field">
+				<li id="addScraper"><form onsubmit="addScraper();return false;">Name: <input id="scraper-name" type="text" value="" size=10 /> jQuery Selector: <input id="scraper-selector" type="text" value="" size=20 /><input type="submit" value="Add" class="button"/></form></li>
+			</ul>
 		</li>
 	</ul>
 	<h3>Appearance</h3>

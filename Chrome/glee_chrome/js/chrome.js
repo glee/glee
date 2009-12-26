@@ -89,12 +89,21 @@ Glee.Chrome.applyOptions = function(response){
 		Glee.ThemeOption = response.theme;
 	else
 		Glee.ThemeOption = "GleeThemeDefault";
-
+	
+	//getting the custom scraper commands
+	if(response.scrapers)
+	{
+		Glee.scrapers.splice(5,Glee.scrapers.length);
+		var len = response.scrapers.length;
+		for(i = 0;i < len;i ++)
+			Glee.scrapers[5+i] = response.scrapers[i];
+	}
+	
 	//Hyper Mode
 	if(response.hyper == 1)
 		Glee.hyperMode = true;
 	else
-		Glee.hyperMode = false;	
+		Glee.hyperMode = false;
 
 	//check if it is a disabled domain
 	if(Glee.checkDomain() == 1 && response.status == 1)
