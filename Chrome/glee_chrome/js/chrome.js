@@ -41,37 +41,48 @@ Glee.Chrome.sendRequest = function(url,method,callback){
 }
 
 Glee.Chrome.applyOptions = function(response){
-	
 	//gleeBox position
-	if(response.position == 0) //top
-		Glee.position = "top";
-	else if(response.position == 2)	//bottom
-		Glee.position = "bottom";
-	else 
-		Glee.position = "middle";
+	if(response.position != undefined)
+	{
+		if(response.position == 0) //top
+			Glee.position = "top";
+		else if(response.position == 2)	//bottom
+			Glee.position = "bottom";
+		else 
+			Glee.position = "middle";
+	}
 	
 	//gleeBox Size
-	if(response.size == 0)
-		Glee.size = "small";
-	else if(response.size == 1)
-		Glee.size = "medium";
-	else
-		Glee.size = "large";
+	if(response.size != undefined)
+	{
+		if(response.size == 0)
+			Glee.size = "small";
+		else if(response.size == 1)
+			Glee.size = "medium";
+		else
+			Glee.size = "large";
+	}
 	
 	//Bookmark search
-	if(response.bookmark_search == 1)
-		Glee.bookmarkSearchStatus = true; //enabled
-	else
-		Glee.bookmarkSearchStatus = false;
-		
+	if(response.bookmark_search != undefined)
+	{
+		if(response.bookmark_search == 1)
+			Glee.bookmarkSearchStatus = true; //enabled
+		else
+			Glee.bookmarkSearchStatus = false;
+	}
+
 	//Scrolling animation
-	if(response.animation == 0)
-		Glee.scrollingSpeed = 0; //disabled
-	else
-		Glee.scrollingSpeed = 750; //enabled
+	if(response.animation != undefined)
+	{
+		if(response.animation == 0)
+			Glee.scrollingSpeed = 0; //disabled
+		else
+			Glee.scrollingSpeed = 750; //enabled
+	}
 	
 	//getting the restricted domains
-	if(response.domains)
+	if(response.domains != undefined && response.domains)
 	{
 		Glee.domainsToBlock.splice(0,Glee.domainsToBlock.length);
 		for(var i=0;i<response.domains.length;i++)
@@ -79,19 +90,19 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//Theme
-	//If a theme is already set, remove it
-	if(Glee.ThemeOption)
+	if(response.theme != undefined && response.theme)
 	{
-		Glee.searchBox.removeClass(Glee.ThemeOption);
-		Glee.searchField.removeClass(Glee.ThemeOption);
-	}
-	if(response.theme)
+		//If a theme is already set, remove it
+		if(Glee.ThemeOption)
+		{
+			Glee.searchBox.removeClass(Glee.ThemeOption);
+			Glee.searchField.removeClass(Glee.ThemeOption);
+		}		
 		Glee.ThemeOption = response.theme;
-	else
-		Glee.ThemeOption = "GleeThemeDefault";
-	
+	}
+
 	//getting the custom scraper commands
-	if(response.scrapers)
+	if(response.scrapers != undefined && response.scrapers)
 	{
 		Glee.scrapers.splice(5,Glee.scrapers.length);
 		var len = response.scrapers.length;
@@ -100,17 +111,22 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//Hyper Mode
-	if(response.hyper == 1)
-		Glee.hyperMode = true;
-	else
-		Glee.hyperMode = false;
+	if(response.hyper != undefined)
+	{
+		if(response.hyper == 1)
+			Glee.hyperMode = true;
+		else
+			Glee.hyperMode = false;
+	}
 
 	//check if it is a disabled domain
-	if(Glee.checkDomain() == 1 && response.status == 1)
-		Glee.status = 1;
-	else
-		Glee.status = 0;
-
+	if(response.status != undefined)
+	{
+		if(Glee.checkDomain() == 1 && response.status == 1)
+			Glee.status = 1;
+		else
+			Glee.status = 0;
+	}
 	Glee.initOptions();
 }
 
@@ -118,6 +134,42 @@ Glee.Chrome.displayOptionsPage = function(){
 	Glee.closeBox();
 	Glee.URL = chrome.extension.getURL("options.html");
 	Glee.Chrome.openNewTab(true);
+}
+
+Glee.Chrome.setOptionValue = function(){
+	var valid = true;
+	var validOptions = [
+		"scroll",
+		"hyper"
+	];
+	
+	/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
+	var input = Glee.searchField.attr('value').substring(4).replace(" ","");
+	var eqPos = input.indexOf("=");
+	
+	if(eqPos == -1)
+		valid = false;
+	else
+	{
+		var option = input.substring(0,eqPos);
+		var value = input.substring(eqPos+1);
+	}
+	
+	if(option=="" || jQuery.inArray(option,validOptions) == -1)
+		valid = false;
+	if(option == "scroll" && jQuery.inArray(value,["on","off"]) == -1)
+		valid = false;
+		
+	// if failed validity test, return
+	if(!valid)
+	{
+		Glee.setSubText("Invalid !set syntax. Refer help using !help","msg");
+		return;
+	}
+	chrome.extension.sendRequest({value:"updateOption",option:option,option_value:value},function(response){
+		Glee.closeBox();
+		Glee.Chrome.applyOptions(response);
+	});
 }
 
 Glee.Chrome.getOptions = function(){

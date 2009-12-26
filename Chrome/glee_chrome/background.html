@@ -160,6 +160,18 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		}
 		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme,scrapers:scrapers, hyper:hyper});
 	}
+	else if(request.value == "updateOption")
+	{
+		if(request.option == "scroll")
+		{
+			if(request.option_value == "on")
+				animation = 1;
+			else
+				animation = 0;
+			localStorage["glee_scrolling_animation"] = animation;
+		}
+		sendResponse({animation:animation});
+	}
 });
 
 </script>
