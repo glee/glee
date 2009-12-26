@@ -765,7 +765,7 @@ var Glee = {
 	getBufferDuration: function(distance){
 		if(distance < 0)
 			distance *= -1;
-		return (Glee.scrollingSpeed == 0 ? 0 : distance);
+		return (Glee.scrollingSpeed == 0 ? 0 : distance*0.9);
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
