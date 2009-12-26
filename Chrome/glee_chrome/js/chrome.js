@@ -140,7 +140,8 @@ Glee.Chrome.setOptionValue = function(){
 	var valid = true;
 	var validOptions = [
 		"scroll",
-		"hyper"
+		"hyper",
+		"size"
 	];
 	
 	/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
@@ -157,9 +158,10 @@ Glee.Chrome.setOptionValue = function(){
 	
 	if(option=="" || jQuery.inArray(option,validOptions) == -1)
 		valid = false;
-	if(option == "scroll" && jQuery.inArray(value,["on","off"]) == -1)
+	else if( (option == "scroll" || option == "hyper") && jQuery.inArray(value,['on','off']) == -1)
 		valid = false;
-		
+	else if( option == "size" && jQuery.inArray(value,['small','medium','large']) == -1)
+		valid = false;
 	// if failed validity test, return
 	if(!valid)
 	{
@@ -167,7 +169,8 @@ Glee.Chrome.setOptionValue = function(){
 		return;
 	}
 	chrome.extension.sendRequest({value:"updateOption",option:option,option_value:value},function(response){
-		Glee.closeBox();
+		Glee.searchField.attr('value','');
+		Glee.setSubText(null);
 		Glee.Chrome.applyOptions(response);
 	});
 }

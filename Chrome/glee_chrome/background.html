@@ -162,15 +162,30 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	}
 	else if(request.value == "updateOption")
 	{
+		switch(request.option_value)
+		{
+			case "off":
+			case "small": value = 0; break;
+			case "on":
+			case "medium": value = 1;break;
+			case "large": value = 2; break;
+		}
+
 		if(request.option == "scroll")
 		{
-			if(request.option_value == "on")
-				animation = 1;
-			else
-				animation = 0;
-			localStorage["glee_scrolling_animation"] = animation;
+			localStorage["glee_scrolling_animation"] = value;
+			sendResponse({animation:value});
 		}
-		sendResponse({animation:animation});
+		else if(request.option == "hyper")
+		{
+			localStorage["glee_hyper"] = value;
+			sendResponse({hyper:value});
+		}
+		else if(request.option == "size")
+		{
+			localStorage["glee_size"] = value;
+			sendResponse({size:value});
+		}
 	}
 });
 
