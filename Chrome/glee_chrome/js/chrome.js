@@ -39,7 +39,7 @@ Glee.sendRequest = function(url,method,callback){
 	});
 }
 
-Glee.setOptions = function(response){
+Glee.applyOptions = function(response){
 	
 	//gleeBox position
 	if(response.position != null) 
@@ -104,13 +104,22 @@ Glee.setOptions = function(response){
 		Glee.status = 1;
 	else
 		Glee.status = 0;
-
+		
+	if(response.hyper!=null)
+	{
+	if(response.hyper == 0)
+		Glee.hyperMode = false;
+	else
+		Glee.hyperMode = true;
+	}
+	else
+		Glee.hyperMode = false;
 	Glee.initOptions();
 }
 
 Glee.getOptions = function(){
 	//sending request to get the gleeBox options
-	chrome.extension.sendRequest({value:"getOptions"},Glee.setOptions);
+	chrome.extension.sendRequest({value:"getOptions"},Glee.applyOptions);
 }
 
 //adding a listener to respond to requests from background.html to update the status and options.html to update settings
@@ -119,6 +128,6 @@ chrome.extension.onRequest.addListener(
 		if(request.value == "initStatus")
 			Glee.status = request.status;
 		else if(request.value == "updateOptions")
-			Glee.setOptions(request);
+			Glee.applyOptions(request);
 		sendResponse({});
 });

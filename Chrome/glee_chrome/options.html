@@ -152,6 +152,13 @@ function save_options() {
 		}
 	}
 	
+	//save hyper
+	if(document.getElementsByName("glee_hyper")[0].checked)
+		hyper = localStorage["glee_hyper"] = 1; //1 indicates enabled
+	else
+		hyper = localStorage["glee_hyper"] = 0;
+		
+	
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
 		bookmark_search = 1; //1 indicates enabled
@@ -171,11 +178,11 @@ function save_options() {
 	var status = localStorage["glee_status"];
 	if(typeof(status) == "undefined")
 		status = 1;
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme);
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,hyper);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,hyper){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -183,7 +190,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,hyper:hyper},function(response){
 				});
 			}
 		}
@@ -249,6 +256,19 @@ function restore_options()
 	else {
 		tRadios[0].checked = true;
 	}
+	
+	// Getting HyperGlee
+	var hyper = localStorage["glee_hyper"];
+	hRadios = document.getElementsByName("glee_hyper");
+	if(hyper != null)
+	{
+		if(hyper == 1)
+			hRadios[0].checked = true;
+		else
+			hRadios[1].checked = true;
+	}
+	else
+		hRadios[1].checked = true;
 		
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
@@ -261,7 +281,7 @@ function restore_options()
 	}
 	else
 		document.getElementsByName("glee_bookmark_search")[1].checked = true;
-		
+	
 	//getting the scrolling animation pref
 	var scroll_anim = localStorage["glee_scrolling_animation"];
 	if(scroll_anim != null)
@@ -333,7 +353,7 @@ function closeOptions(text){
 		<li>
 			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no matching links are found on a page?</span></label>
 			<div class="option-field">
-				<input name="glee_bookmark_search" type="radio"> Enabled
+				<input name="glee_bookmark_search" type="radio"> Enabled 
 				<input name="glee_bookmark_search" type="radio"> Disabled
 			</div>
 		</li>
@@ -344,13 +364,20 @@ function closeOptions(text){
 				<input name="glee_scrolling_animation" type="radio"> No
 			</div>
 		</li>
+		<li>
+			<label class="option-label">HyperGlee<br/><span class="subtext">In the HyperGlee mode, gleeBox is switched on by default when a page loads.</span></label>
+			<div class="option-field">
+				<input name="glee_hyper" value="enabled" type="radio"> Enabled
+				<input name="glee_hyper" value="disabled" type="radio"> Disabled
+			</div>
+		</li>
 	</ul>
 	<h3>Appearance</h3>
 	<ul class="options">
 		<li>
 			<label class="option-label">Position:<br/><span class="subtext">Where do you want gleeBox to be displayed on your screen?</span></label>
 			<div class="option-field">
-				<input name="glee_pos" type="radio"> Top
+				<input name="glee_pos" type="radio"> Top 
 				<input name="glee_pos" type="radio"> Middle
 				<input name="glee_pos" type="radio"> Bottom
 			</div>
@@ -358,8 +385,8 @@ function closeOptions(text){
 		<li>
 			<label class="option-label">Size:<br/><span class="subtext">How big do you want gleeBox to be?</span></label>
 			<div class="option-field">
-				<input name="glee_size" type="radio"> Small
-				<input name="glee_size" type="radio"> Medium
+				<input name="glee_size" type="radio"> Small 
+				<input name="glee_size" type="radio"> Medium 
 				<input name="glee_size" type="radio"> Large
 			</div>
 		</li>

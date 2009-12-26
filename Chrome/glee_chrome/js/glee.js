@@ -5,7 +5,6 @@
  * Copyright (c) 2009 Ankit Ahuja
  * Copyright (c) 2009 Sameer Ahuja
  *
- *
  **/
 
 jQuery(document).ready(function(){
@@ -15,24 +14,17 @@ jQuery(document).ready(function(){
 	/* initialize the searchBox */
 	Glee.initBox();
 	
+	// Crash and burn. This won't work because the loading has probably not finished yet.
+	if(Glee.status == 0)
+		return;
+	
 	// Setup cache for global jQuery objects
 	Glee.Cache.jBody = jQuery('html,body');
-	
-	// HyperGlee
-	Glee.searchField.attr('value','');
-	Glee.searchBox.fadeIn(150);
-	// TODO: Hack to steal focus from page's window onload. 
-	// We can't add this stuff to onload. See if there's another way.
-	jQuery(window).fadeTo(1, 1, function(){
-		Glee.searchField.focus();
-	});
 	
 	// Bind Keys
 	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
 		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
-		if(Glee.status != 0)
-		{
 			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey))
 			{
 				e.preventDefault();
@@ -55,7 +47,6 @@ jQuery(document).ready(function(){
 					Glee.closeBox();
 				}
 			}
-		}
 	});
 	Glee.searchField.bind('keydown',function(e){
 		//pressing 'esc' hides the gleeBox
@@ -326,11 +317,13 @@ jQuery(document).ready(function(){
 	});
 });
 
+
 var Glee = {
 	searchText:"",
 	nullStateMessage:"Nothing selected",
 	//State of scrolling. 0=None, 1=Up, -1=Down.
 	scrollState: 0,
+	hyperMode: false,
 	//last query executed in jQuery mode
 	lastQuery:null,
 	commandMode: false,
@@ -446,19 +439,16 @@ var Glee = {
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
 		this.subText = jQuery("<div id=\"gleeSubText\">"+Glee.nullStateMessage+"</div>");
 		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
-		this.searchBox = jQuery("<div id=\"gleeBox\"></div>");
+		this.searchBox = jQuery("<div id=\"gleeBox\" style='display:none'></div>");
 		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
 		this.sub = jQuery("<div id=\"gleeSub\"></div>");
 		this.sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
 		Glee.userPosBeforeGlee = window.pageYOffset;
-		this.getOptions();
-		this.initOptions();
-		
+		this.getOptions();	
 	},
 	initOptions:function(){
-
 		// Setup the theme
 		Glee.searchBox.addClass(Glee.ThemeOption);
 		Glee.searchField.addClass(Glee.ThemeOption);
@@ -480,7 +470,20 @@ var Glee = {
 		else
 			fontsize = "100px"
 		Glee.searchField.css("font-size",fontsize);
-
+		
+		//Load HyperGlee if needed
+		if(Glee.status != 0 && Glee.hyperMode==true) {
+			Glee.getHyperized();
+		}
+	},
+	getHyperized: function(){
+		Glee.searchField.attr('value','');
+		Glee.searchBox.fadeIn(100);
+		// TODO: Hack to steal focus from page's window onload. 
+		// We can't add this stuff to onload. See if there's another way.
+		jQuery(window).fadeTo(100, 1, function(){
+			Glee.searchField.focus();
+		});
 	},
 	closeBox: function(){
 		LinkReaper.unreapAllLinks();
