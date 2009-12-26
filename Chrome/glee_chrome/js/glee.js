@@ -139,7 +139,7 @@ jQuery(document).ready(function(){
 						Glee.URL = null;
 						for(var i=0; i<Glee.commands.length; i++)
 						{
-							if(Glee.commands[i].name == trimVal)
+							if(trimVal.indexOf(Glee.commands[i].name) == 0)
 							{
 								Glee.setSubText(Glee.commands[i].description,"msg");
 								Glee.URL = Glee.commands[i];
@@ -251,6 +251,8 @@ jQuery(document).ready(function(){
 								target = true;
 							else
 								target = false;
+							//resetting target attribute of link
+							a_el.attr("target","_self");
 							//simulating a click on the link
 							anythingOnClick = Glee.simulateClick(a_el,target);
 					
@@ -401,6 +403,13 @@ var Glee = {
 			domain:"*",
 			description:"View gleeBox options",
 			statusText:"Opening options page..."
+		},
+		{
+			name: "set",
+			method:"Glee.Chrome.setOptionValue",
+			domain:"*",
+			description:"Set an option. For eg.: !set scroll=on will turn animated scrolling on. For more, execute !help",
+			statusText:"Setting option..."
 		}
 	],
 	
