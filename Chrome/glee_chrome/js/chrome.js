@@ -1,7 +1,7 @@
 Glee.Chrome = {};
-Glee.Chrome.openNewTab = function(){
+Glee.Chrome.openNewTab = function(selected){
 	//sending request to background.html to create a new tab
-	chrome.extension.sendRequest({value:"createTab",url:Glee.URL},function(response){
+	chrome.extension.sendRequest({value:"createTab",url:Glee.URL,selected:selected},function(response){
 	});
 }
 
@@ -116,7 +116,8 @@ Glee.Chrome.applyOptions = function(response){
 
 Glee.Chrome.displayOptionsPage = function(){
 	Glee.closeBox();
-	window.open(chrome.extension.getURL("options.html"));
+	Glee.URL = chrome.extension.getURL("options.html");
+	Glee.Chrome.openNewTab(true);
 }
 
 Glee.Chrome.getOptions = function(){

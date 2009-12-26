@@ -66,7 +66,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	if(request.value == "createTab")
 	{
-		chrome.tabs.create({url:request.url,selected:false},null);
+		chrome.tabs.create({url:request.url,selected:request.selected},null);
 		sendResponse({});
 	}
 	else if(request.value == "sendRequest")

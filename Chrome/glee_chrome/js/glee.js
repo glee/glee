@@ -276,7 +276,7 @@ jQuery(document).ready(function(){
 					Glee.URL = Glee.makeURLAbsolute(Glee.URL, location.href);
 					if(e.shiftKey)
 					{
-						Glee.Chrome.openNewTab();
+						Glee.Chrome.openNewTab(false);
 						return false;
 					}
 					else
