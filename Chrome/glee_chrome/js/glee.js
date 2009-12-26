@@ -807,11 +807,11 @@ var Glee = {
 	infiniteScroll: function() {
 		if(Glee.scrollState < 0) {
 			loc = jQuery(document).height();
-			duration = (loc - window.pageYOffset)/Glee.pageScrollSpeed;
+			duration = 2*(loc - window.pageYOffset)/Glee.pageScrollSpeed;
 		}
 		else {
 			loc = 0;
-			duration = window.pageYOffset/Glee.pageScrollSpeed;
+			duration = 2*(window.pageYOffset/Glee.pageScrollSpeed);
 		}
 
 		Glee.Cache.jBody.animate(
