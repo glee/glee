@@ -62,7 +62,8 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
-			Glee.simulateScroll((e.keyCode == 40 ? 1:-1));
+			// 38 is keyCode for UP Arrow key
+			Glee.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
 	});
 
@@ -789,7 +790,7 @@ var Glee = {
 		}
 	},
 	infiniteScroll: function() {
-		if(Glee.scrollState > 0) {
+		if(Glee.scrollState < 0) {
 			loc = jQuery(document).height();
 			duration = (loc - window.pageYOffset)/Glee.pageScrollSpeed;
 		}
