@@ -46,7 +46,8 @@ jQuery(document).ready(function(){
 				}
 				else
 				{
-					Glee.closeBox();
+					//If gleeBox is already visible, focus is returned to it
+					Glee.searchField.focus();
 				}
 			}
 		}
