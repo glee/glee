@@ -114,6 +114,11 @@ Glee.Chrome.applyOptions = function(response){
 	Glee.initOptions();
 }
 
+Glee.Chrome.displayOptionsPage = function(){
+	Glee.closeBox();
+	window.open(chrome.extension.getURL("options.html"));
+}
+
 Glee.Chrome.getOptions = function(){
 	//sending request to get the gleeBox options
 	chrome.extension.sendRequest({value:"getOptions"},Glee.Chrome.applyOptions);

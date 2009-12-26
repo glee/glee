@@ -394,6 +394,13 @@ var Glee = {
 			domain:"*",
 			description:"View user manual",
 			statusText:"Loading help page..."
+		},
+		{
+			name: "options",
+			method:"Glee.Chrome.displayOptionsPage",
+			domain:"*",
+			description:"View gleeBox options",
+			statusText:"Opening options page..."
 		}
 	],
 	
