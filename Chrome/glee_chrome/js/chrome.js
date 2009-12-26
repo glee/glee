@@ -143,7 +143,8 @@ Glee.Chrome.setOptionValue = function(){
 		"hyper",
 		"size",
 		"pos", "position",
-		"theme"
+		"theme",
+		"bsearch"
 	];
 	
 	/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
@@ -160,7 +161,7 @@ Glee.Chrome.setOptionValue = function(){
 	
 	if(option=="" || jQuery.inArray(option,validOptions) == -1)
 		valid = false;
-	else if( (option == "scroll" || option == "hyper") && jQuery.inArray(value,['on','off']) == -1)
+	else if( (option == "scroll" || option == "hyper" || option == "bsearch") && jQuery.inArray(value,['on','off']) == -1)
 		valid = false;
 	else if( option == "size" && jQuery.inArray(value,['small','medium','med','large']) == -1)
 		valid = false;

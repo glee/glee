@@ -190,6 +190,10 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 			case "scroll"	: localStorage["glee_scrolling_animation"] = value;
 							  sendResponse({animation:value});
 							  break;
+
+			case "bsearch"	: localStorage["glee_bookmark_search"] = value;
+							  sendResponse({bookmark_search:value});
+							  break;
 							
 			case "hyper"	: localStorage["glee_hyper"] = value;
 							  sendResponse({hyper:value});
