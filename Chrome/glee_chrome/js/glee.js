@@ -24,7 +24,9 @@ jQuery(document).ready(function(){
 	// Bind Keys
 	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
-		//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
+		if(Glee.status != 0)
+		{
+			//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
 			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey))
 			{
 				e.preventDefault();
@@ -47,6 +49,7 @@ jQuery(document).ready(function(){
 					Glee.closeBox();
 				}
 			}
+		}
 	});
 	Glee.searchField.bind('keydown',function(e){
 		//pressing 'esc' hides the gleeBox
@@ -447,7 +450,7 @@ var Glee = {
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
 		Glee.userPosBeforeGlee = window.pageYOffset;
-		this.Chrome.getOptions();	
+		this.Chrome.getOptions();
 	},
 	initOptions:function(){
 		// Setup the theme
