@@ -1,0 +1,82 @@
+<?xml version="1.0"?> 
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window title="gleeBox options"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	width="500"
+	height="400">
+	<vbox flex="1" style="overflow:auto"> 
+		<groupbox height="385">   
+			<prefpane id="gleebox-pane" label="gleeBox Options">
+				<preferences>
+					<preference id="pref_size" name="extensions.gleebox.size" type="string"/>
+					<preference id="pref_positon" name="extensions.gleebox.position" type="string"/>
+					<preference id="pref_theme" name="extensions.gleebox.theme" type="string"/>
+					<preference id="pref_scroll" name="extensions.gleebox.scroll_animation" type="bool"/>
+				</preferences>
+				<tabbox flex="1" >
+					<tabs>
+						<tab label="Features" />
+						<tab label="Appearance" />
+						<tab label="Help" />
+					</tabs>
+					<tabpanels flex="1" >
+						<vbox>
+							<hbox align="center">
+			  					<checkbox flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
+							</hbox>
+								</vbox>
+								<vbox>
+							<hbox align="center">
+								<label control="symbol" value="Position: "/>
+								<hbox>
+									<menulist label="Position">
+										<menupopup>
+											<menuitem label="Top" />
+											<menuitem label="Middle" />
+											<menuitem label="Bottom" />
+										</menupopup>
+									</menulist>
+								</hbox> 
+							</hbox>
+							<separator flex="thin" />
+							<hbox align="center">
+								<label control="symbol" value="Size: "/>
+								<hbox>
+									<menulist label="Size">
+										<menupopup> 
+											<menuitem label="Small" />
+											<menuitem label="Medium" />
+											<menuitem label="Large" /> 
+										</menupopup> 
+									</menulist> 
+								</hbox>
+							</hbox>
+							<separator flex="thin" />
+							<hbox align="center">
+								<label control="symbol" value="Theme: "/>
+								<hbox>
+									<menulist label="Theme">
+										<menupopup> 
+											<menuitem label="Default" />
+											<menuitem label="White" />
+											<menuitem label="Console" />
+											<menuitem label="Greener" />
+											<menuitem label="Ruby" />
+											<menuitem label="New Directions" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</hbox>
+						</vbox>
+						<separator class="thin"/>
+					</tabpanels>
+				</tabbox>
+				<separator flex="1" />
+			</prefpane>
+			<hbox align="right">
+				<button label="Cancel" oncommand="" />
+				<button  label="Save" oncommand="" />
+			</hbox>
+		</groupbox>
+	</vbox>
+</window>
