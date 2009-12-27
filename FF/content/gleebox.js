@@ -163,9 +163,9 @@ var Glee = {
 	},
 	getOptions: function(){
 		//gleeBox size
-		Glee.size = GM_getValue('size','large');
+		Glee.size = GM_getValue('size','medium');
 		//gleeBox position
-		Glee.position = GM_getValue('position','middle');
+		Glee.position = GM_getValue('position','bottom');
 		//scrolling animation
 		var animation = GM_getValue('scroll_animation',true);
 
