@@ -66,8 +66,20 @@
 						</hbox>
 					<separator class="thin"/> 
 					</groupbox> 
+					<groupbox>
+						<hbox>
+							<text value="For the complete list of gleeBox commands, please read the " /><label  class="text-link" style="margin:0;margin-top:-1.5px" value="user manual" href="http://thegleebox.com/manual.html"/> 
+						</hbox>
+						<separator flex="thin" />
+						<hbox>
+							<text value="Send us feedback at " /><label class="text-link" style="margin:0;margin-top:-1.5px " value="gleebox@gmail.com" href="mailto: gleebox@gmail.com" />
+						</hbox>
+						<hbox>
+							<text value="Or reach us on twitter at " /><label style="margin:0;margin-top:-1.5px" class="text-link" href="http://twitter.com/ahujaankit" value="@ahujaankit" /><text value=" and " /><label style="margin:0;margin-top:-1.5px"  class="text-link" href="http://twitter.com/sam33r" value="@sam33r" />
+						</hbox>
+					</groupbox>
 				</tabpanels>
-<separator flex="1" /> 
+<separator flex="1" />
 <description>Refresh currently open tabs to see changes</description> 
 			</tabbox>
 			<separator flex="1" />
