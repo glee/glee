@@ -11,8 +11,10 @@
 
 <groupbox align="center" orient="horizontal">
 <vbox>
-  <text value="gleeBox" style="font-weight: bold; font-size: x-large;"/>
-  <text value="ver. 0.6.1"/>
+<text value="gleeBox" style="font-weight: bold; font-size: x-large;"/>
+ <text value="Keyboard glee for your web"/>
+<separator flex="thin" />
+<text value="Version 0.6.1"/>
   <separator class="thin"/>
   <text value="Created By:" style="font-weight: bold;"/>
   <hbox>
@@ -29,10 +31,10 @@
         onclick="window.open('http://thegleebox.com'); window.close();"/>
     <separator class="thin"/>
     <text value="User Manual" style="font-weight: bold;"/>
-    <text value="http://thegleebox.com/manual.html"
-          class="url" style="color:blue;text-decoration:underline"
+    <text value="http://thegleebox.com/manual.html" class="url" style="color:blue;text-decoration:underline"
         onclick="window.open('http://thegleebox.com/manual.html'); window.close();"/>
   <separator class="thin"/>
+
 </vbox>
 <spring flex="1"/>
 </groupbox>
