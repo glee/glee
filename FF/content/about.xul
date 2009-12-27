@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window class="dialog"
+	title="About gleeBox"
+	orient="vertical"
+	autostretch="always"
+	onload="sizeToContent()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!-- Original template by Jed Brown -->
+
+<groupbox align="center" orient="horizontal">
+<vbox>
+  <text value="gleeBox" style="font-weight: bold; font-size: x-large;"/>
+  <text value="ver. 0.6.1"/>
+  <separator class="thin"/>
+  <text value="Created By:" style="font-weight: bold;"/>
+  <hbox>
+  <text value="Ankit Ahuja" class="url"
+        onclick="window.open('http://ankitahuja.com'); window.close();"/>
+  <text value=" and "  />
+  <text value="Sameer Ahuja" class="url"
+        onclick="window.open('http://sameerahuja.com'); window.close();"/>
+  </hbox>
+  <separator class="thin"/>
+    <text value="Homepage" style="font-weight: bold;"/>
+    <text value="http://thegleebox.com"
+          class="url" style="color:blue;text-decoration:underline"
+        onclick="window.open('http://thegleebox.com'); window.close();"/>
+    <separator class="thin"/>
+    <text value="User Manual" style="font-weight: bold;"/>
+    <text value="http://thegleebox.com/manual.html"
+          class="url" style="color:blue;text-decoration:underline"
+        onclick="window.open('http://thegleebox.com/manual.html'); window.close();"/>
+  <separator class="thin"/>
+</vbox>
+<spring flex="1"/>
+</groupbox>
+
+  <hbox>
+  <spacer flex="1"/>
+   <button label="Close" oncommand="window.close();"/>
+  </hbox>
+</window>

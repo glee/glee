@@ -1,0 +1,2 @@
+content	gleebox	content/
+overlay	chrome://browser/content/browser.xul	chrome://gleebox/content/script-compiler-overlay.xul
