@@ -1,5 +1,5 @@
 function gleebox_PrefManager() {
-	var startPoint="gleebox.";
+	var startPoint="extensions.gleebox.";
 
 	var pref=Components.classes["@mozilla.org/preferences-service;1"].
 		getService(Components.interfaces.nsIPrefService).

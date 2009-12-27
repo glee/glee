@@ -158,8 +158,25 @@ var Glee = {
 		this.sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
-		this.initOptions();
+		this.getOptions();
 		this.checkDomain();
+	},
+	getOptions: function(){
+		//gleeBox size
+		Glee.size = GM_getValue('size','large');
+		//gleeBox position
+		Glee.position = GM_getValue('position','middle');
+		//scrolling animation
+		var animation = GM_getValue('scroll_animation',true);
+
+		if(animation)
+			Glee.scrollingSpeed = 750;
+		else
+			Glee.scrollingSpeed = 0;
+		
+		Glee.ThemeOption = GM_getValue('theme','Default');
+		
+		Glee.initOptions();
 	},
 	initOptions:function(){
 
