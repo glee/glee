@@ -163,6 +163,14 @@ var Glee = {
 		
 		Glee.ThemeOption = GM_getValue('theme','Default');
 		
+		var domains = GM_getValue('disabledurls','mail.google.com,wave.google.com').split(',');
+		if(domains)
+		{
+			Glee.domainsToBlock.splice(0,Glee.domainsToBlock.length);
+			for(var i=0;i<domains.length;i++)
+				Glee.domainsToBlock[i] = domains[i];
+		}
+
 		Glee.initOptions();
 	},
 	initOptions:function(){
