@@ -13,6 +13,7 @@
         <em:aboutURL>chrome://gleebox/content/about.xul</em:aboutURL>
 		<em:optionsURL>chrome://gleebox/content/options.xul</em:optionsURL>
 		<em:iconURL>chrome://gleebox/skin/classic/icon.png</em:iconURL>
+		<em:updateURL>http://thegleebox.com/FF/update.rdf</em:updateURL>
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
