@@ -8,15 +8,17 @@
 <script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
 <script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
 
+
 	<prefpane id="gleebox-pane" label="gleeBox Options" >
 		<preferences>
 			<preference id="pref_size" name="extensions.gleebox.size" type="string"/>
 			<preference id="pref_position" name="extensions.gleebox.position" type="string"/>
 			<preference id="pref_theme" name="extensions.gleebox.theme" type="string"/>
 			<preference id="pref_scroll" name="extensions.gleebox.scroll_animation" type="bool"/>
+                        <preference id="pref_disabledurls" name="extensions.gleebox.disabledurls" type="string" /> 
 		</preferences>
 
-		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="500" > 
+		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="500"  > 
 			<tabbox flex="1" >
 				<tabs>
 					<tab label="Features" />
@@ -25,14 +27,25 @@
 				</tabs>
 				<tabpanels flex="1" >
 					<groupbox>
+
 						<hbox align="center">
 		  					<checkbox preference="pref_scroll" flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
 						</hbox>
 						<hbox align="center">
-							<label value="Disabled URLs: " />
- 							<listbox rows="3" id="disabled_url_list">
-							</listbox>
+							<label value="Disabled URLs: " /> 
+<tree rows="4" flex="1" hidecolumnpicker="true" seltype="single" preference="pref_disabledurls" preference-editable="true" onsynctopreference="return saveDisabledURLList();">
+<treecols>
+<treecol id="url_name" flex="1" label="URL" />
+</treecols>
+<treechildren id="disabled_urls_list" >
+</treechildren>
+</tree>
+
 						</hbox>
+<hbox flex="1" align="right">
+<button label="Add URL" />
+<button label="Remove URL" oncommand="removeURL()"/>
+</hbox>
 					</groupbox>
 					<groupbox>
 						<hbox align="center">
