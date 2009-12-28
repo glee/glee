@@ -4,7 +4,7 @@
 	
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>gleebox@ankit.ahuja.and.sameer.ahuja</em:id>
-		<em:name>gleebox</em:name>
+		<em:name>gleeBox</em:name>
 		<em:version>0.6.1</em:version>
 		<em:description>Keyboard glee for your web</em:description>
 		<em:creator>Ankit Ahuja and Sameer Ahuja</em:creator>
@@ -12,6 +12,7 @@
 		<em:homepageURL>http://thegleebox.com</em:homepageURL>
         <em:aboutURL>chrome://gleebox/content/about.xul</em:aboutURL>
 		<em:optionsURL>chrome://gleebox/content/options.xul</em:optionsURL>
+		<em:iconURL>chrome://gleebox/skin/classic/icon.png</em:iconURL>
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>

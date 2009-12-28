@@ -1,2 +1,3 @@
 content	gleebox	content/
+skin gleebox classic/1.0 skin/
 overlay	chrome://browser/content/browser.xul	chrome://gleebox/content/script-compiler-overlay.xul
