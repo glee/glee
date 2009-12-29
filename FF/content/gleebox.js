@@ -170,7 +170,23 @@ var Glee = {
 			for(var i=0;i<domains.length;i++)
 				Glee.domainsToBlock[i] = domains[i];
 		}
-
+		
+		//get the custom scrapers
+		var custom_scrapers_str = GM_getValue('custom_scrapers','');
+		if(custom_scrapers_str != "")
+		{
+			var custom_scrapers = custom_scrapers_str.split(".NEXT.");
+			for(var i=0;i<custom_scrapers.length;i++)
+			{
+				var pieces = custom_scrapers[i].split(".ITEM.");
+				Glee.reapers[4+i] = {
+					command: pieces[0],
+					nullMessage: "Could not find any elements",
+					selector: pieces[1],
+					cssStyle: "GleeReaped"
+				}
+			}
+		}
 		Glee.initOptions();
 	},
 	initOptions:function(){
