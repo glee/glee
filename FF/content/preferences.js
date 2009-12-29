@@ -45,16 +45,21 @@ function addURL(){
 	var newCell = document.createElement("treecell");
 	newRow.appendChild(newCell);
 	treeList.appendChild(newItem);
-	var tree = document.getElementById("disabled_urls_tree");
+	var tree = document.getElementById("disabled_urls_tree");  
 	var treeCol = tree.columns[0];
-	tree.startEditing(treeList.childNodes.length-1,treeCol);
+	var newRowIndex = treeList.childNodes.length-1;
+	tree.view.selection.select(newRowIndex);
+	tree.startEditing(newRowIndex,treeCol); 
 }
 
 function removeURL(){
 	var tree = document.getElementById("disabled_urls_tree");
-	var itemIndex = tree.currentIndex;
 	var treeList = document.getElementById("disabled_urls_list");
-	var treeItem = treeList.childNodes[itemIndex];
-	treeList.removeChild(treeItem);
-	prefs.setValue('disabledurls', getDisabledURLList());
+	var itemIndex = tree.currentIndex;
+	if(itemIndex != -1 && tree.view.selection.isSelected(itemIndex))
+	{
+		var treeItem = treeList.childNodes[itemIndex];
+		treeList.removeChild(treeItem);
+		prefs.setValue('disabledurls', getDisabledURLList());
+	}
 }
