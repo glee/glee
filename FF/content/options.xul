@@ -5,9 +5,8 @@
 						xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 						onload="initOptions()">
 
-<script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
-<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
-
+	<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
+	<script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
 
 	<prefpane id="gleebox-pane" label="gleeBox Options" >
 		<preferences>
@@ -15,7 +14,7 @@
 			<preference id="pref_position" name="extensions.gleebox.position" type="string"/>
 			<preference id="pref_theme" name="extensions.gleebox.theme" type="string"/>
 			<preference id="pref_scroll" name="extensions.gleebox.scroll_animation" type="bool"/>
-                        <preference id="pref_disabledurls" name="extensions.gleebox.disabledurls" type="string" /> 
+			<preference id="pref_disabled_urls" name="extensions.gleebox.disabledurls" type="string" /> 
 		</preferences>
 
 		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="500"  > 
@@ -33,17 +32,17 @@
 						</hbox>
 						<hbox align="center">
 							<label value="Disabled URLs: " /> 
-<tree rows="4" flex="1" hidecolumnpicker="true" seltype="single" preference="pref_disabledurls" preference-editable="true" onsynctopreference="return saveDisabledURLList();">
+<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return getDisabledURLList();">
 <treecols>
 <treecol id="url_name" flex="1" label="URL" />
-</treecols>
+</treecols> 
 <treechildren id="disabled_urls_list" >
 </treechildren>
 </tree>
 
-						</hbox>
+</hbox>
 <hbox flex="1" align="right">
-<button label="Add URL" />
+<button label="Add URL" oncommand="addURL()"/>
 <button label="Remove URL" oncommand="removeURL()"/>
 </hbox>
 					</groupbox>
