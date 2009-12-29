@@ -833,7 +833,6 @@ var Glee = {
 			loc = 0;
 			duration = 2*(window.pageYOffset/Glee.pageScrollSpeed);
 		}
-
 		Glee.Cache.jBody.animate(
 			{scrollTop:loc},
 			duration);
