@@ -1,0 +1,135 @@
+<?xml version="1.0"?> 
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<prefwindow id="gleebox-prefs" 
+						xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+						onload="initOptions()">
+
+	<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
+	<script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
+
+	<prefpane id="gleebox-pane" label="gleeBox Options" >
+		<preferences>
+			<preference id="pref_size" name="extensions.gleebox.size" type="string"/>
+			<preference id="pref_position" name="extensions.gleebox.position" type="string"/>
+			<preference id="pref_theme" name="extensions.gleebox.theme" type="string"/>
+			<preference id="pref_scroll" name="extensions.gleebox.scroll_animation" type="bool"/>
+			<preference id="pref_disabled_urls" name="extensions.gleebox.disabledurls" type="string" />
+			<preference id="pref_custom_scrapers" name="extensions.gleebox.custom_scrapers" type="string" /> 
+		</preferences>
+
+		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="500"  > 
+			<tabbox flex="1" >
+				<tabs>
+					<tab label="Features" />
+					<tab label="Appearance" />
+					<tab label="Help" />
+				</tabs>
+				<tabpanels flex="1" >
+					<groupbox>
+
+						<hbox align="center">
+		  					<checkbox preference="pref_scroll" flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
+						</hbox>
+						<hbox align="center">
+							<label value="Disabled URLs: " width="90"/> 
+	<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return getDisabledURLList();">
+	<treecols>
+	<treecol id="url_name" flex="1" label="URL" />
+	</treecols> 
+	<treechildren id="disabled_urls_list" >
+	</treechildren>
+	</tree>
+
+	</hbox>
+	<hbox flex="1" align="right">
+	<button label="Add URL" oncommand="addURL()"/>
+	<button label="Remove URL" oncommand="removeURL()"/>
+	</hbox>
+
+						<hbox align="center">
+							<label width="90">Custom Scraper commands:</label>
+	<tree id="custom_scrapers_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_custom_scrapers" preference-editable="true" onsynctopreference="return getCustomScrapers();">
+	<treecols>
+	<treecol id="sel_name" flex="1" label="Name" />
+	<treecol id="sel_selector" flex="1" label="jQuery Selector" />
+	</treecols> 
+	<treechildren id="custom_scrapers_list" >
+	</treechildren>
+	</tree>
+
+	</hbox>
+	<hbox flex="1" align="right">
+	<button label="Add scraper" oncommand="addScraper()"/>
+	<button label="Remove scraper" oncommand="removeScraper()"/>
+	</hbox>
+					</groupbox>
+					<groupbox>
+						<hbox align="center">
+							<label control="symbol" value="Position: " width="90" />
+							<hbox>
+								<menulist label="Position" preference="pref_position">
+									<menupopup>
+										<menuitem value="top" label="Top" />
+										<menuitem value="middle" label="Middle" />
+										<menuitem value="bottom" label="Bottom" />
+									</menupopup>
+								</menulist>
+							</hbox> 
+						</hbox>
+						<separator flex="thin" />
+						<hbox align="center">
+							<label control="symbol" value="Size: " width="90"/>
+							<hbox>
+								<menulist label="Size" preference="pref_size">
+									<menupopup> 
+										<menuitem value="small"  label="Small" />
+										<menuitem value="medium" label="Medium" />
+										<menuitem value="large" label="Large" />
+									</menupopup> 
+								</menulist> 
+							</hbox>
+						</hbox>
+						<separator flex="thin" />
+						<hbox align="center">
+							<label control="symbol" value="Theme: " width="90"/>
+							<hbox>
+								<menulist label="Theme" preference="pref_theme">
+									<menupopup> 
+										<menuitem value="Default" label="Default" />
+										<menuitem value="White" label="White" />
+										<menuitem value="Console" label="Console" />
+										<menuitem value="Greener" label="Greener" />
+										<menuitem value="Ruby" label="Ruby" />
+										<menuitem value="Glee" label="New Directions" />
+									</menupopup>
+								</menulist>
+							</hbox>
+						</hbox>
+					<separator class="thin"/> 
+					</groupbox> 
+					<groupbox>
+						<hbox>
+							<text value="For the complete list of gleeBox commands, please read the " /><label  class="text-link" style="margin:0;margin-top:-1.5px" value="user manual" href="http://thegleebox.com/manual.html"/> 
+						</hbox>
+						<separator flex="thin" />
+						<hbox >
+							<text value="Send us feedback at " /><label class="text-link" style="margin:0;margin-top:-1.5px " value="gleebox@gmail.com" href="mailto: gleebox@gmail.com" />
+						</hbox>
+						<separator flex="thin" />
+	<hbox>
+	<text value="gleeBox was created by Ankit Ahuja (" /><label style="margin:0;margin-top:-1.5px" class="text-link" href="http://twitter.com/ahujaankit" value="@ahujaankit" /><text value=") and Sameer Ahuja (" /><label style="margin:0;margin-top:-1.5px"  class="text-link" href="http://twitter.com/sam33r" value="@sam33r" /><text value=")" />
+	</hbox>
+						<separator flex="thin" />
+						<hbox>
+							<text value="To promote further development of gleeBox, contribute by making a " /><label class="text-link" style="margin:0;margin-top:-1.5px " value="donation" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=10478979" />
+						</hbox>
+					</groupbox>
+				</tabpanels>
+	<separator flex="1" />
+	<description>Refresh currently open tabs to see changes</description> 
+			</tabbox>
+			<separator flex="1" />
+		</vbox>
+	</prefpane>
+</prefwindow>
