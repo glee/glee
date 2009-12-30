@@ -55,10 +55,13 @@ contentLoad: function(e) {
 		&& ( /.*/.test(href) )
 		&& true
 	) {
+		var jquery = gleebox_gmCompiler.getUrlContents(
+			'chrome://gleebox/content/jquery.js'
+		);
 		var script=gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/gleebox.js'
 		);
-		gleebox_gmCompiler.injectScript(script, href, unsafeWin);
+		gleebox_gmCompiler.injectScript(jquery+script, href, unsafeWin);
 	}
 },
 
