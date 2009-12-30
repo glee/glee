@@ -96,6 +96,13 @@ var Glee = {
 			domain:"*",
 			description:"View user manual",
 			statusText:"Loading help page..."
+		},
+		{
+			name: "set",
+			method:"Glee.setOptionValue",
+			domain:"*",
+			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
+			statusText:"Setting option..."
 		}
 	],
 	// Reaper Commands
@@ -161,6 +168,11 @@ var Glee = {
 		else
 			Glee.scrollingSpeed = 0;
 		
+		if(Glee.ThemeOption)
+		{
+			Glee.searchBox.removeClass("GleeTheme"+Glee.ThemeOption);
+			Glee.searchField.removeClass("GleeTheme"+Glee.ThemeOption);
+		}
 		Glee.ThemeOption = GM_getValue('theme','Default');
 		
 		var domains = GM_getValue('disabledurls','mail.google.com,wave.google.com').split(',');
@@ -585,6 +597,73 @@ var Glee = {
 		// on the page. In case we do that, should find a way to not make the content
 		// redundant.
 		window.location = "http://thegleebox.com/manual.html";
+	},
+	setOptionValue: function(){
+		var valid = true;
+		var validOptions = [
+			"scroll",
+			"size",
+			"pos", "position",
+			"theme"
+		];
+		
+		/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
+		var input = Glee.searchField.attr('value').substring(4).replace(" ","");
+		var eqPos = input.indexOf("=");
+		
+		if(eqPos == -1)
+			valid = false;
+		else
+		{
+			var option = input.substring(0,eqPos);
+			var value = input.substring(eqPos+1);
+		}
+		
+		if(option=="" || jQuery.inArray(option,validOptions) == -1)
+			valid = false;
+		else if( (option == "scroll") && jQuery.inArray(value,['on','off']) == -1)
+			valid = false;
+		else if( option == "size" && jQuery.inArray(value,['small','medium','med','large']) == -1)
+			valid = false;
+		else if( (option == "position" || option == "pos") && jQuery.inArray(value,['top','mid','middle','bottom']) == -1)
+			valid = false;
+		else if( option == "theme" && jQuery.inArray(value,['default','white','console','greener','ruby','glee']) == -1)
+			valid = false;
+		// if failed validity test, return
+		if(!valid)
+		{
+			Glee.setSubText("Invalid !set syntax. Please refer manual using !help command","msg");
+			return;
+		}
+		//set appropriate value to store in Prefs
+		switch(option)
+		{
+			case "scroll"	: option = "scroll_animation";break;
+			case "pos"		: option = "position";break;
+		}
+		switch(value)
+		{
+			case "off"		: value = false; break;
+			
+			case "on"		: value = true; break;
+	
+			case "med"		: value = "medium"; break;
+	
+			case "mid"		: value = "middle"; break;
+	
+			case 'default'	: 
+			case 'white'	: 
+			case 'console'	: 
+			case 'greener'	: 
+			case 'ruby'		: 
+			case 'glee'		: value = value.charAt(0).toUpperCase() + value.slice(1); break;
+		}
+		setTimeout(function(){
+			GM_setValue(option, value);
+			Glee.searchField.attr('value','');
+			Glee.setSubText(null);
+			Glee.getOptions();
+		},0);
 	}
 }
 
@@ -873,7 +952,7 @@ jQuery(document).ready(function(){
 						Glee.URL = null;
 						for(var i=0; i<Glee.commands.length; i++)
 						{
-							if(Glee.commands[i].name == trimVal)
+							if(trimVal.indexOf(Glee.commands[i].name) == 0)
 							{
 								Glee.setSubText(Glee.commands[i].description,"msg");
 								Glee.URL = Glee.commands[i];
