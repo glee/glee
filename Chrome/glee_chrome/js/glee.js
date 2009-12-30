@@ -236,7 +236,7 @@ jQuery(document).ready(function(){
 					//currently only checking for headers and images
 					var a_el = null;
 					if (jQuery(Glee.selectedElement)[0].tagName == "A")
-						a_el = Glee.selectedElement;
+						a_el = jQuery(Glee.selectedElement);
 					else if (jQuery(Glee.selectedElement)[0].tagName[0] == "H")
 						a_el = jQuery(Glee.selectedElement).find('a');
 					else if (jQuery(Glee.selectedElement)[0].tagName == "IMG")
