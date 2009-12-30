@@ -292,10 +292,17 @@ jQuery(document).ready(function(){
 				{
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 					{
-						if(jQuery(Glee.selectedElement)[0].tagName == "INPUT" || jQuery(Glee.selectedElement)[0].tagName == "TEXTAREA")
+						var el = jQuery(Glee.selectedElement)[0];
+						if((el.tagName == "INPUT" && el.type == "text") || el.tagName == "TEXTAREA")
 						{
 							setTimeout(function(){
 								Glee.selectedElement.focus();
+							},0);
+						}
+						else if(el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
+						{
+							setTimeout(function(){
+								Glee.simulateClick(Glee.selectedElement,false);
 							},0);
 						}
 						else
