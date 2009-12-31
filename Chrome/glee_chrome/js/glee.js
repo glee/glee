@@ -360,7 +360,7 @@ var Glee = {
 	//position of gleeBox (top,middle,bottom)
 	position: "middle",
 	//size of gleeBox (small,medium,large)
-	size:"large",
+	size:"medium",
 	//URLs for which gleeBox should be disabled
 	domainsToBlock:[
 		"mail.google.com",

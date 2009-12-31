@@ -49,7 +49,7 @@ Glee.Chrome.applyOptions = function(response){
 		else if(response.position == 2)	//bottom
 			Glee.position = "bottom";
 		else 
-			Glee.position = "middle";
+			Glee.position = "middle"; //default
 	}
 	
 	//gleeBox Size
@@ -57,10 +57,10 @@ Glee.Chrome.applyOptions = function(response){
 	{
 		if(response.size == 0)
 			Glee.size = "small";
-		else if(response.size == 1)
-			Glee.size = "medium";
-		else
+		else if(response.size == 2)
 			Glee.size = "large";
+		else
+			Glee.size = "medium"; //default
 	}
 	
 	//Bookmark search
@@ -104,7 +104,7 @@ Glee.Chrome.applyOptions = function(response){
 	//getting the custom scraper commands
 	if(response.scrapers != undefined && response.scrapers)
 	{
-		var curr_len = Glee.scrapers.length;
+		var current_len = Glee.scrapers.length;
 		Glee.scrapers.splice(current_len,Glee.scrapers.length);
 		var len = response.scrapers.length;
 		for(i = 0;i < len;i ++)
