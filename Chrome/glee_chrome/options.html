@@ -8,6 +8,12 @@
 		line-height:30px;
 		font-family:Garamond,Helvetica,serif;
 	}
+	a,a:visited,a:active{
+		color:#2C5877;
+	}
+	a:hover{
+		color: #39719b;
+	}
 	h2{
 		clear:both;
 		margin-top:20px;
@@ -102,8 +108,15 @@
 	}
 	.subtext{
 		font-size:11px;
-		font-family: "Lucida Grande", Lucida, Arial, sans-serif;
+		color:#555;
+		font-family: Verdana, Arial, sans-serif;
 		line-height: 14px;
+	}
+	#footer{
+		margin-top:50px;
+		border-top:1px solid #ccc;
+		font-size:16px;
+		line-height:25px;
 	}
 	</style>
 <script type="text/javascript">
@@ -501,7 +514,7 @@ function initDefaultTexts() {
 			</div>
 		</li> -->
 		<li>
-			<label class="option-label">Scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by adding command name and a corresponding jQuery selector. <br/><br/><strong>* DO NOT</strong> use <strong>`</strong> in name or selector.</span></label>
+			<label class="option-label">Scraper commands:<br/><span class="subtext">Create your own scraper(?) commands by adding command name and a corresponding jQuery selector. <br/><br/><strong>* DO NOT</strong> use <strong>`</strong> in name or selector.</span></label>
 			<ul id="scraper-commands" class="option-field">
 				<li><strong>??</strong> : Input Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
@@ -541,17 +554,15 @@ function initDefaultTexts() {
 			</div>
 		</li>
 	</ul>
-	<h3>Help and Feedback</h3>
-	<a href="http://thegleebox.com/manual.html">The manual</a> lists the full set of features and options for gleeBox.<br>
-	Developed by Ankit Ahuja (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and Sameer Ahuja (<a href="http://twitter.com/sam33r">@sam33r</a>). Submit issues and feature requests on the <a href="http://github.com/glee/glee/issues">issues page</a>, or mail them to <a href="mailto:gleebox@gmail.com">gleebox@gmail.com</a>.<br>
-	If you like this extension, <a href="https://www.paypal.com/in/cgi-bin/webscr?cmd=_flow&SESSION=By0usnkZELhqxlioLOryA3yeRy4n9BmgAGdcJSuLGm8FVU1-CNdm7w3I4bK&dispatch=5885d80a13c0db1ffc45dc241d84e953ae3a912d7415d1a97451b677930c8a71">consider donating</a> for its further development.<br><br>
 	<div style="text-align:center">
 		<input type="button" class="button" value="Save" onclick="save_options()">
 		<input type="button" class="button" value="Save and Close" onclick="save_options();closeOptions();">
 	</div>
-	
-	
+	<div id="footer">
+ For the complete list of features and commands, please read the <a href="http://thegleebox.com/manual.html">user manual</a>. You can submit bugs and feature requests on the <a href="http://github.com/glee/glee/issues">issues page</a>, or mail them to us at <a href="mailto:gleebox@gmail.com">gleebox@gmail.com</a>.<br/><br/>
+		gleeBox was developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>). If you like this extension, <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">consider donating</a> for its further development.<br><br>
+	</div>
 </div>
-</div>	
+</div>
 </body>
 </html>
