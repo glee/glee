@@ -416,15 +416,20 @@ function removeScraper(i){
 function validateScraper(name,selector)
 {
 	//check that command name/selector should not be blank
-	if(name == "" || selector == "")
+	if(name == "" || selector == "" || name == "Name" || selector == "jQuery Selector")
 	{
 		setStatus("Command name / Selector cannot be blank!");
 		return false;
 	}
 	//check that command name does not conflict with the default scraper command names
-	if(name == "h" || name == "?" || name == "img" || name == "p" || name == "a")
+	if(name == "h" || name == "?" || name == "img" || name == "a")
 	{
 		setStatus("Command name conflicts with a default scraper command!");
+		return false;
+	}
+	if(name.indexOf('`')!=-1 || selector.indexOf('`')!= -1)
+	{
+		setStatus("Command name / Selector cannot contain `");
 		return false;
 	}
 	return true;
@@ -463,8 +468,8 @@ function initDefaultTexts() {
     for (var i = 0; i < formInputs.length; i++) {
         var theInput = formInputs[i];
         
-        if (theInput.type == 'text') {  
-            /* Add event handlers */          
+        if (theInput.type == 'text') {
+            /* Add event handlers */
             theInput.addEventListener('focus', clearDefaultText, false);
             theInput.addEventListener('blur', replaceDefaultText, false);
             /* Save the current value */
@@ -514,7 +519,7 @@ function initDefaultTexts() {
 			</div>
 		</li> -->
 		<li>
-			<label class="option-label">Scraper commands:<br/><span class="subtext">Create your own scraper(?) commands by adding command name and a corresponding jQuery selector. <br/><br/><strong>* DO NOT</strong> use <strong>`</strong> in name or selector.</span></label>
+			<label class="option-label">Scraper commands:<br/><span class="subtext">Create your own scraper(?) commands by adding command name and a corresponding jQuery selector. <br/><br/>* You cannot use <strong>`</strong> in name or selector.</span></label>
 			<ul id="scraper-commands" class="option-field">
 				<li><strong>??</strong> : Input Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
