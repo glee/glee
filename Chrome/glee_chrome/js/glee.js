@@ -364,7 +364,6 @@ var Glee = {
 	//URLs for which gleeBox should be disabled
 	domainsToBlock:[
 		"mail.google.com",
-		"google.com/reader",
 		"wave.google.com"
 	],
 	// !commands
@@ -388,7 +387,7 @@ var Glee = {
 			method:"Glee.makeReadable",
 			domain:"*",
 			description:"Make your page readable using Readability",
-			statusText:"wait till Glee+Readability work up the magic"
+			statusText:"Please wait while Glee+Readability work up the magic..."
 		},
 		{
 			name: "rss",

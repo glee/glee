@@ -229,7 +229,7 @@ function restore_options()
 	if(typeof(domainBuffer) == "undefined")
 	{
 		//initialize with the default domains that should be blocked
-		domainBuffer = "mail.google.com,google.com/reader,wave.google.com";
+		domainBuffer = "mail.google.com,wave.google.com";
 		localStorage["glee_domains"] = domainBuffer;
 	}
 	if(domainBuffer.length != 0)
