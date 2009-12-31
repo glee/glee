@@ -153,10 +153,10 @@ function save_options() {
 	}
 	
 	//save hyper
-	if(document.getElementsByName("glee_hyper")[0].checked)
-		hyper = localStorage["glee_hyper"] = 1; //1 indicates enabled
-	else
-		hyper = localStorage["glee_hyper"] = 0;
+	// if(document.getElementsByName("glee_hyper")[0].checked)
+	// 	hyper = localStorage["glee_hyper"] = 1; //1 indicates enabled
+	// else
+	// 	hyper = localStorage["glee_hyper"] = 0;
 
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
@@ -201,11 +201,11 @@ function save_options() {
 	}
 	localStorage["glee_scraper_names"] = scraperName;
 	localStorage["glee_scraper_selectors"] = scraperSel;
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,hyper);
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers,hyper){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -213,7 +213,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers,hyper:hyper},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers},function(response){
 				});
 			}
 		}
@@ -283,17 +283,17 @@ function restore_options()
 		tRadios[0].checked = true;
 	}	
 	// Getting HyperGlee
-	var hyper = localStorage["glee_hyper"];
-	hRadios = document.getElementsByName("glee_hyper");
-	if(hyper != null)
-	{
-		if(hyper == 1)
-			hRadios[0].checked = true;
-		else
-			hRadios[1].checked = true;
-	}
-	else
-		hRadios[1].checked = true;
+	// var hyper = localStorage["glee_hyper"];
+	// hRadios = document.getElementsByName("glee_hyper");
+	// if(hyper != null)
+	// {
+	// 	if(hyper == 1)
+	// 		hRadios[0].checked = true;
+	// 	else
+	// 		hRadios[1].checked = true;
+	// }
+	// else
+	// 	hRadios[1].checked = true;
 
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = localStorage["glee_bookmark_search"];
@@ -507,7 +507,7 @@ function initDefaultTexts() {
 				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?h</strong> : H1, H2 and H3 Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?a</strong> : Links<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-				<li id="addScraper"><form onsubmit="addScraper();return false;">?<input id="scraper-name" type="text" value="Name" size=12 /> : <input id="scraper-selector" type="text" value="jQuery Selector" size=30 /><input type="submit" value="Add" class="button"/></form></li>
+				<li id="addScraper"><form onsubmit="addScraper();return false;"><strong>?</strong><input id="scraper-name" type="text" value="Name" size=12 /> : <input id="scraper-selector" type="text" value="jQuery Selector" size=30 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 	</ul>

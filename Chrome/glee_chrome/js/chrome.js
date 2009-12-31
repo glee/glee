@@ -111,13 +111,13 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//Hyper Mode
-	if(response.hyper != undefined)
-	{
-		if(response.hyper == 1)
-			Glee.hyperMode = true;
-		else
-			Glee.hyperMode = false;
-	}
+	// if(response.hyper != undefined)
+	// {
+	// 	if(response.hyper == 1)
+	// 		Glee.hyperMode = true;
+	// 	else
+	// 		Glee.hyperMode = false;
+	// }
 
 	//check if it is a disabled domain
 	if(response.status != undefined)
