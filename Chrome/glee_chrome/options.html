@@ -222,6 +222,8 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 // Restores select box state to saved value from localStorage
 function restore_options()
 {
+	initDefaultTexts();
+
 	//getting the user defined restricted domains
 	var domainBuffer = localStorage["glee_domains"];
 	if(typeof(domainBuffer) == "undefined")
@@ -425,6 +427,41 @@ function closeOptions(text){
 	});
 }
 
+function clearDefaultText(e) {
+    var target = window.event ? window.event.srcElement : e ? e.target : null;
+    if (!target) return;
+    
+    if (target.value == target.defaultText) {
+        target.value = '';
+    }
+}
+
+function replaceDefaultText(e) {
+    var target = window.event ? window.event.srcElement : e ? e.target : null;
+    if (!target) return;
+    
+    if (target.value == '' && target.defaultText) {
+        target.value = target.defaultText;
+    }
+}
+
+function initDefaultTexts() {
+    var formInputs = document.getElementsByTagName('input');
+    for (var i = 0; i < formInputs.length; i++) {
+        var theInput = formInputs[i];
+        
+        if (theInput.type == 'text') {  
+            /* Add event handlers */          
+            theInput.addEventListener('focus', clearDefaultText, false);
+            theInput.addEventListener('blur', replaceDefaultText, false);
+            /* Save the current value */
+            if (theInput.value != '') {
+                theInput.defaultText = theInput.value;
+            }
+        }
+	}
+}	
+
 </script>
 </head>
 <body onload="restore_options()">
@@ -436,36 +473,41 @@ function closeOptions(text){
 	<h3>Features</h3>
 	<ul class="options">
 		<li>
-			<label class="option-label">Disabled URLs:<br/><span class="subtext">URLs for which gleeBox is disabled. Add your own by entering a part of the URL</span></label>
+			<label class="option-label">Disabled URLs:<br/><span class="subtext">Enter part of a URL to disable gleeBox on all pages with matching URLs</span></label>
 			<ul id="domains" class="option-field">
+				<li>chrome.google.com/extensions <span style="float:right;font-size:14px;color:gray">Disabled by Google</span></li>
 				<li id="addDomainLI"><form onsubmit="addDomain();return false;"><input id="add_domain" type="text" value="" size=50 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 		<li>
-			<label class="option-label">Bookmark search:<br/><span class="subtext">Should gleeBox search bookmarks when no matching links are found on a page?</span></label>
+			<label class="option-label">Bookmark search:<br/><span class="subtext">Search bookmarks when no matching links are found on a page?</span></label>
 			<div class="option-field">
 				<input name="glee_bookmark_search" type="radio"> Enabled 
 				<input name="glee_bookmark_search" type="radio"> Disabled
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do you want the scroll animation while traversing selected elements using gleeBox?</span></label>
+			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do scroll animation while traversing selected elements using gleeBox?</span></label>
 			<div class="option-field">
 				<input name="glee_scrolling_animation" type="radio"> Yes
 				<input name="glee_scrolling_animation" type="radio"> No
 			</div>
 		</li>
-		<li>
+		<!-- <li>
 			<label class="option-label">HyperGlee<br/><span class="subtext">In the HyperGlee mode, gleeBox is visible by default when a page loads.</span></label>
 			<div class="option-field">
 				<input name="glee_hyper" value="enabled" type="radio"> Enabled
 				<input name="glee_hyper" value="disabled" type="radio"> Disabled
 			</div>
-		</li>
+		</li> -->
 		<li>
-			<label class="option-label">Custom scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by specifying command name and jQuery selector. <br/><br/><strong>* DO NOT</strong> use <strong>`</strong> in name or selector.</span></label>
+			<label class="option-label">Scraper commands:<br/><span class="subtext">Create your own custom scraper(?) commands by adding command name and a corresponding jQuery selector. <br/><br/><strong>* DO NOT</strong> use <strong>`</strong> in name or selector.</span></label>
 			<ul id="scraper-commands" class="option-field">
-				<li id="addScraper"><form onsubmit="addScraper();return false;">Name: ?<input id="scraper-name" type="text" value="" size=10 /> jQuery Selector: <input id="scraper-selector" type="text" value="" size=20 /><input type="submit" value="Add" class="button"/></form></li>
+				<li><strong>??</strong> : Input Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li><strong>?h</strong> : H1, H2 and H3 Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li><strong>?a</strong> : Links<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li id="addScraper"><form onsubmit="addScraper();return false;">?<input id="scraper-name" type="text" value="Name" size=10 /> : <input id="scraper-selector" type="text" value="jQuery Selector" size=20 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 	</ul>

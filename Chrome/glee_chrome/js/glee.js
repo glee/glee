@@ -444,12 +444,6 @@ var Glee = {
 			cssStyle : "GleeReaped"
 		},
 		{
-			command : "p",
-			nullMessage : "Could not find any paragraphs on the page.",
-			selector: "p",
-			cssStyle : "GleeReaped"
-		},
-		{
 			command : "a",
 			nullMessage : "No links found on the page",
 			selector: "a",
