@@ -104,20 +104,21 @@ Glee.Chrome.applyOptions = function(response){
 	//getting the custom scraper commands
 	if(response.scrapers != undefined && response.scrapers)
 	{
-		Glee.scrapers.splice(5,Glee.scrapers.length);
+		var curr_len = Glee.scrapers.length;
+		Glee.scrapers.splice(current_len,Glee.scrapers.length);
 		var len = response.scrapers.length;
 		for(i = 0;i < len;i ++)
-			Glee.scrapers[5+i] = response.scrapers[i];
+			Glee.scrapers[current_len+i] = response.scrapers[i];
 	}
 	
-	//Hyper Mode
-	// if(response.hyper != undefined)
-	// {
-	// 	if(response.hyper == 1)
-	// 		Glee.hyperMode = true;
-	// 	else
-	// 		Glee.hyperMode = false;
-	// }
+	// Hyper Mode
+	if(response.hyper != undefined)
+	{
+		if(response.hyper == 1)
+			Glee.hyperMode = true;
+		else
+			Glee.hyperMode = false;
+	}
 
 	//check if it is a disabled domain
 	if(response.status != undefined)
