@@ -34,13 +34,13 @@
 .GleeThemeRuby{
 	background-color: #530000 !important;
 	color: #f6b0ab !important;
-	font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important;	
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important;
 }
 
-.GleeThemeGreener, input.GleeThemeGreener{
+.GleeThemeGreener{
 	background-color: #2e5c4f !important;
 	color: #d3ff5a !important;
-	font-family: Georgia, "Times New Roman", Times, serif !important;	
+	font-family: Georgia, "Times New Roman", Times, serif !important;
 }
 
 .GleeThemeConsole{

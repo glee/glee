@@ -37,7 +37,7 @@ jQuery(document).ready(function(){
 	
 	var themesCSS = '.GleeThemeDefault{ background-color:#333 !important; color:#fff !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; }.GleeThemeWhite{ background-color:#fff !important; color:#000 !important; opacity: 0.85 !important; border: 1px solid #939393 !important; -moz-border-radius: 10px !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; }.GleeThemeRuby{ background-color: #530000 !important; color: #f6b0ab !important; font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important; }.GleeThemeGreener{ background-color: #2e5c4f !important; color: #d3ff5a !important; font-family: Georgia, "Times New Roman", Times, serif !important; }.GleeThemeConsole{ font-family: Monaco, Consolas, "Courier New", Courier, mono !important; color: #eafef6 !important; background-color: #111 !important; }.GleeThemeGlee{ background-color: #eb1257 !important; color: #fff300 !important; -moz-box-shadow: #eb1257 0px 0px 8px !important; -moz-box-shadow: #eb1257 0px 0px 8px !important; opacity: 0.8 !important; font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important; }';
 	
-	var gleeCSS = '#gleeBox{ line-height:20px; z-index:100000; position:fixed; left:5%; top:35%; display:none; overflow:auto; width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif; padding:4px 6px; text-align:left; /*rounded corners*/ -moz-border-radius:7px; } #gleeSearchField{ outline:none; width:90%; margin:0; padding:0; margin:3px 0; border:none; font-size:100px; background-color:#333; color:#fff; } #gleeSubText, #gleeSubURL, #gleeSubActivity{ font-size:15px; width:auto; font-weight: normal; } #gleeSubText{ float:left; } #gleeSubURL{ display:inline; float:right; } #gleeSubActivity{ color:#ccc; height:10px; display:inline; float:left; padding-left:5px; }';
+	var gleeCSS = '#gleeBox{ line-height:20px; z-index:100000; position:fixed; left:5%; top:35%; display:none; overflow:auto; width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif; padding:4px 6px; text-align:left; /*rounded corners*/ -moz-border-radius:7px; } #gleeSearchField{ outline:none; width:90%; margin:0; padding:0; margin:3px 0; border:none; font-size:100px; background:none !important; color:#fff; } #gleeSubText, #gleeSubURL, #gleeSubActivity{ font-size:15px; width:auto; font-weight: normal; } #gleeSubText{ float:left; } #gleeSubURL{ display:inline; float:right; } #gleeSubActivity{ color:#ccc; height:10px; display:inline; float:left; padding-left:5px; }';
 	
 	GM_addStyle(reaperCSS + themesCSS + gleeCSS);
 
@@ -245,6 +245,8 @@ jQuery(document).ready(function(){
 					{
 						if(a_el.length != 0)
 						{
+							//resetting target attribute of link
+							a_el.attr("target","_self");
 							//simulating a click on the link
 							anythingOnClick = Glee.simulateClick(a_el);
 						}
@@ -278,7 +280,14 @@ jQuery(document).ready(function(){
 				{
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 					{
-						if(jQuery(Glee.selectedElement)[0].tagName == "INPUT" || jQuery(Glee.selectedElement)[0].tagName == "TEXTAREA")
+						var el = jQuery(Glee.selectedElement)[0];
+						if(el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
+						{
+							setTimeout(function(){
+								Glee.simulateClick(Glee.selectedElement,false);
+							},0);
+						}
+						else if(el.tagName == "INPUT" || el.tagName == "TEXTAREA")
 						{
 							setTimeout(function(){
 								Glee.selectedElement.focus();
@@ -408,7 +417,7 @@ var Glee = {
 			method:"Glee.makeReadable",
 			domain:"*",
 			description:"Make your page readable using Readability",
-			statusText:"wait till Glee+Readability work up the magic"
+			statusText:"Please wait while Glee+Readability work up the magic..."
 		},
 		{
 			name: "rss",
@@ -695,7 +704,7 @@ var Glee = {
 			{
 				// We keep the scroll such that the element stays a little away from
 				// the top.
-				var targetOffset = target.offset().top - 60;
+				var targetOffset = target.offset().top - Glee.getOffsetFromTop();
 				//stop any previous scrolling to prevent queueing
 				Glee.Cache.jBody.stop(true);
 				Glee.Cache.jBody.animate(
@@ -708,10 +717,18 @@ var Glee = {
 			}
 		}
 	},
+	getOffsetFromTop: function(){
+		if(Glee.position == "top")
+			return 180;
+		else if(Glee.position == "middle")
+			return 70;
+		else
+			return 120;
+	},
 	getBufferDuration: function(distance){
 		if(distance < 0)
 			distance *= -1;
-		return (Glee.scrollingSpeed == 0 ? 0 : distance*0.9);
+		return (Glee.scrollingSpeed == 0 ? 0 : distance*0.4);
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
