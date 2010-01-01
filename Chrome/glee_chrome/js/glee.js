@@ -293,16 +293,16 @@ jQuery(document).ready(function(){
 					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
 					{
 						var el = jQuery(Glee.selectedElement)[0];
-						if((el.tagName == "INPUT" && el.type == "text") || el.tagName == "TEXTAREA")
-						{
-							setTimeout(function(){
-								Glee.selectedElement.focus();
-							},0);
-						}
-						else if(el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
+						if(el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
 						{
 							setTimeout(function(){
 								Glee.simulateClick(Glee.selectedElement,false);
+							},0);
+						}
+						else if(el.tagName == "INPUT" || el.tagName == "TEXTAREA")
+						{
+							setTimeout(function(){
+								Glee.selectedElement.focus();
 							},0);
 						}
 						else

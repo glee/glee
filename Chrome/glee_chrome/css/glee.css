@@ -37,7 +37,7 @@
 	font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important;	
 }
 
-.GleeThemeGreener{
+.GleeThemeGreener, input.GleeThemeGreener{
 	background-color: #2e5c4f !important;
 	color: #d3ff5a !important;
 	font-family: Georgia, "Times New Roman", Times, serif !important;	
@@ -81,11 +81,11 @@
 	outline:none;
 	width:90%;
 	margin:0;
+	background:none !important;
 	padding:0;
 	margin:3px 0;
 	border:none;
 	font-size:100px;
-	background-color:#333;
 	color:#fff;
 }
 #gleeSubText, #gleeSubURL, #gleeSubActivity{
