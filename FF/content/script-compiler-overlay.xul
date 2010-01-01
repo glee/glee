@@ -11,7 +11,7 @@
 					label="gleeBox" insertafter="javascriptConsole,devToolsSeparator"
 					image="chrome://gleebox/skin/classic/icon_16x16.png">
 			<menupopup id="gleeboxToolsMenuPopup">
-				<menuitem id="gleeboxMenuItem_status" label="Turn gleeBox Off" oncommand="Glee.toggleStatus();" />
+				<menuitem id="gleeboxMenuItem_status" label="Turn gleeBox Off (refresh to see changes)" oncommand="Glee.toggleStatus();" />
 				<menuseparator />
 				<menuitem id="gleeboxMenuItem_options" label="Options" oncommand="Glee.openOptionsDialog();" />
 				<menuseparator />

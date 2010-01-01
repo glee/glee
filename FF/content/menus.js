@@ -20,9 +20,9 @@ var Glee = {
 		{
 			this.status = this.prefs.getValue('status',this.status);
 			if(this.status)
-				statusMenuItem.label = "Turn gleeBox Off";
+				statusMenuItem.label = "Turn gleeBox Off (refresh to see changes)";
 			else
-				statusMenuItem.label = "Turn gleeBox On";
+				statusMenuItem.label = "Turn gleeBox On (refresh to see changes)";
 		}
 	},
 	
