@@ -40,7 +40,7 @@ jQuery(document).ready(function(){
 	// Bind Keys
 	jQuery(window).bind('keydown',function(e){
 		var target = e.target || e.srcElement;
-		if(Glee.status != 0)
+		if(Glee.status)
 		{
 			//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
 			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey))
@@ -381,8 +381,8 @@ var Glee = {
 	//last query executed in jQuery mode
 	lastQuery:null,
 	commandMode: false,
-	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
-	status:1, 
+	//used to enable/disable gleeBox
+	status:true, 
 	//Currently selected element
 	selectedElement:null,
 	//current URL where gleeBox should go
@@ -456,6 +456,8 @@ var Glee = {
 		this.checkDomain();
 	},
 	getOptions:function(){
+		//gleeBox status
+		Glee.status = GM_getValue('status', true);
 		//gleeBox size
 		Glee.size = GM_getValue('size','medium');
 		//gleeBox position
@@ -525,7 +527,7 @@ var Glee = {
 		Glee.searchField.css("font-size",fontsize);
 		
 		//Load HyperGlee if needed
-		if(Glee.status != 0 && Glee.hyperMode == true) {
+		if(Glee.status && Glee.hyperMode == true) {
 			Glee.getHyperized();
 		}
 	},
@@ -902,7 +904,7 @@ var Glee = {
 		{
 			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
 			{
-				Glee.status = 0;
+				Glee.status = false;
 				break;
 			}
 		}

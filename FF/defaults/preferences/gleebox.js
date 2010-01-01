@@ -1,3 +1,4 @@
+pref("extensions.gleebox.status",true);
 pref("extensions.gleebox.size","medium");
 pref("extensions.gleebox.position","bottom");
 pref("extensions.gleebox.scroll_animation",true);

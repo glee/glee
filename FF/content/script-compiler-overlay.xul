@@ -3,4 +3,21 @@
 	<script type='application/x-javascript' src='chrome://gleebox/content/xmlhttprequester.js'></script>
 	<script type='application/x-javascript' src='chrome://gleebox/content/prefman.js'></script>
 	<script type='application/x-javascript' src='chrome://gleebox/content/script-compiler.js'></script>
+	<script type='application/x-javascript' src='chrome://gleebox/content/menus.js'></script>	
+	
+	//tools menu
+	<menupopup id="menu_ToolsPopup">
+		<menu class="menu-gleebox" id="gleebox-menu"
+					label="gleeBox" insertafter="javascriptConsole,devToolsSeparator"
+					image="chrome://gleebox/skin/classic/icon_16x16.png">
+			<menupopup id="gleeboxToolsMenuPopup">
+				<menuitem id="gleeboxMenuItem_status" label="Turn gleeBox Off" oncommand="Glee.toggleStatus();" />
+				<menuseparator />
+				<menuitem id="gleeboxMenuItem_options" label="Options" oncommand="Glee.openOptionsDialog();" />
+				<menuseparator />
+				<menuitem id="gleeboxMenuItem_about" label="About" oncommand="Glee.openAboutDialog();" />
+			</menupopup>
+		</menu>
+	</menupopup>
+	
 </overlay>
