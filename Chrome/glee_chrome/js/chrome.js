@@ -104,11 +104,10 @@ Glee.Chrome.applyOptions = function(response){
 	//getting the custom scraper commands
 	if(response.scrapers != undefined && response.scrapers)
 	{
-		var current_len = Glee.scrapers.length;
-		Glee.scrapers.splice(current_len,Glee.scrapers.length);
+		Glee.scrapers.splice(4,Glee.scrapers.length);
 		var len = response.scrapers.length;
 		for(i = 0;i < len;i ++)
-			Glee.scrapers[current_len+i] = response.scrapers[i];
+			Glee.scrapers[4+i] = response.scrapers[i];
 	}
 	
 	// Hyper Mode

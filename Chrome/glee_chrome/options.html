@@ -208,7 +208,7 @@ function save_options() {
 			var sel = el.children[1].innerText;
 			//get rid of the ? in command name
 			name = name.slice(1,name.length);
-			scrapers[i] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
+			scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
 			//using ` as end marker for both scraper names and selectors
 			scraperName[scraperName.length] = name+"`";
 			scraperSel[scraperSel.length] = sel+"`";
