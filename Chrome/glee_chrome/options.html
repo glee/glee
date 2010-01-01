@@ -107,7 +107,7 @@
 		width:700px;
 	}
 	.subtext{
-		font-size:11px;
+		font-size:10px;
 		color:#555;
 		font-family: Verdana, Arial, sans-serif;
 		line-height: 14px;
@@ -115,8 +115,10 @@
 	#footer{
 		margin-top:50px;
 		border-top:1px solid #ccc;
-		font-size:16px;
+		font-size:14px;
 		line-height:25px;
+		text-align:center;
+		color:#555;
 	}
 	</style>
 <script type="text/javascript">
@@ -491,21 +493,21 @@ function initDefaultTexts() {
 	<h3>Features</h3>
 	<ul class="options">
 		<li>
-			<label class="option-label">Disabled URLs:<br/><span class="subtext">Enter part of a URL to disable gleeBox on all pages with matching URLs</span></label>
+			<label class="option-label">Disabled URLs<br/><span class="subtext">Enter part of a URL to disable gleeBox on all pages with matching URLs</span></label>
 			<ul id="domains" class="option-field">
 				<li>chrome.google.com/extensions <span style="float:right;font-size:14px;color:gray">Disabled by Google</span></li>
 				<li id="addDomainLI"><form onsubmit="addDomain();return false;"><input id="add_domain" type="text" value="" size=50 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 		<li>
-			<label class="option-label">Bookmark search:<br/><span class="subtext">Search bookmarks when no matching links are found on a page?</span></label>
+			<label class="option-label">Bookmark search<br/><span class="subtext">Search bookmarks when no matching links are found on a page</span></label>
 			<div class="option-field">
 				<input name="glee_bookmark_search" type="radio"> Yes
 				<input name="glee_bookmark_search" type="radio"> No
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Animated scrolling:<br/><span class="subtext">Do scroll animation while traversing selected elements using gleeBox?</span></label>
+			<label class="option-label">Animated scrolling<br/><span class="subtext">Do scroll animation while traversing selected elements using gleeBox</span></label>
 			<div class="option-field">
 				<input name="glee_scrolling_animation" type="radio"> Yes
 				<input name="glee_scrolling_animation" type="radio"> No
@@ -519,7 +521,7 @@ function initDefaultTexts() {
 			</div>
 		</li> -->
 		<li>
-			<label class="option-label">Scraper commands:<br/><span class="subtext">Create your own scraper(?) commands by adding command name and a corresponding jQuery selector. <br/><br/>* You cannot use <strong>`</strong> in name or selector.</span></label>
+			<label class="option-label">Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label>
 			<ul id="scraper-commands" class="option-field">
 				<li><strong>??</strong> : Input Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
@@ -532,7 +534,7 @@ function initDefaultTexts() {
 	<h3>Appearance</h3>
 	<ul class="options">
 		<li>
-			<label class="option-label">Position:</label>
+			<label class="option-label">Position</label>
 			<div class="option-field">
 				<input name="glee_pos" type="radio"> Top 
 				<input name="glee_pos" type="radio"> Middle
@@ -540,7 +542,7 @@ function initDefaultTexts() {
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Size:</label>
+			<label class="option-label">Size</label>
 			<div class="option-field">
 				<input name="glee_size" type="radio"> Small 
 				<input name="glee_size" type="radio"> Medium 
@@ -548,7 +550,7 @@ function initDefaultTexts() {
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Theme:</label>
+			<label class="option-label">Theme</label>
 			<div class="option-field">
 				<input name="glee_theme" value="GleeThemeDefault" type="radio"> Default <br>
 				<input name="glee_theme" value="GleeThemeWhite"  type="radio"> White <br>
@@ -564,8 +566,8 @@ function initDefaultTexts() {
 		<input type="button" class="button" value="Save and Close" onclick="save_options();closeOptions();">
 	</div>
 	<div id="footer">
- For the complete list of features and commands, please read the <a href="http://thegleebox.com/manual.html">user manual</a>. You can submit bugs and feature requests on the <a href="http://github.com/glee/glee/issues">issues page</a>, or mail them to us at <a href="mailto:gleebox@gmail.com">gleebox@gmail.com</a>.<br/><br/>
-		gleeBox was developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>). If you like this extension, <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">consider donating</a> for its further development.<br><br>
+ For the complete list of features and commands, please read the <a href="http://thegleebox.com/manual.html">user manual</a>. <br>You can submit bugs and feature requests on the <a href="http://github.com/glee/glee/issues">issues page</a>, or mail them to us at <a href="mailto:gleebox@gmail.com">gleebox@gmail.com</a>.<br/><br/>
+		gleeBox was developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>).<br>If you like this extension, <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">consider donating</a> for its further development.<br><br>
 	</div>
 </div>
 </div>
