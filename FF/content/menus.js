@@ -1,4 +1,4 @@
-var Glee = {
+var gleebox_Menus = {
 	status:true,
 	prefs:null,
 	toggleStatus: function(){
@@ -32,14 +32,14 @@ var Glee = {
 		// if(popup)
 		// {
 		// 	popup.addEventListener("popupshowing",function(e){
-		// 		Glee.initContextMenu(e);
+		// 		gleebox_Menus.initContextMenu(e);
 		// 	}, false);
 		// }
 		var toolsMenuPopup = document.getElementById("gleeboxToolsMenuPopup");
 		if(toolsMenuPopup)
 		{
 			toolsMenuPopup.addEventListener("popupshowing",function(e){
-				Glee.initToolsMenu(e);
+				gleebox_Menus.initToolsMenu(e);
 			}, false);
 		}
 	},
@@ -57,4 +57,4 @@ var Glee = {
 	}
 }
 
-window.addEventListener("load", function(e) { Glee.initContextMenuListeners(); }, false);
+window.addEventListener("load", function(e) { gleebox_Menus.initContextMenuListeners(); }, false);

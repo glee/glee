@@ -1,13 +1,15 @@
 <?xml version="1.0"?> 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://gleebox/skin/classic/style.css" type="text/css"?>
 
 <prefwindow id="gleebox-prefs" 
 						xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-						onload="initOptions()">
+						onload="gleebox_Options.initOptions()">
 
 	<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
 	<script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
-
+	<script type="application/x-javascript" src="chrome://gleebox/content/common.js" />
+	
 	<prefpane id="gleebox-pane" label="gleeBox Options" >
 		<preferences>
 			<preference id="pref_size" name="extensions.gleebox.size" type="string"/>
@@ -33,7 +35,7 @@
 						</hbox>
 						<hbox align="center">
 							<label value="Disabled URLs: " width="90"/> 
-	<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return getDisabledURLList();">
+	<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return gleebox_Options.getDisabledURLList();">
 	<treecols>
 	<treecol id="url_name" flex="1" label="URL" />
 	</treecols> 
@@ -43,13 +45,13 @@
 
 	</hbox>
 	<hbox flex="1" align="right">
-	<button label="Add URL" oncommand="addURL()"/>
-	<button label="Remove URL" oncommand="removeURL()"/>
+	<button label="Add URL" oncommand="gleebox_Options.addURL()"/>
+	<button label="Remove URL" oncommand="gleebox_Options.removeURL()"/>
 	</hbox>
 
 						<hbox align="center">
 							<label width="90">Custom Scraper commands:</label>
-	<tree id="custom_scrapers_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_custom_scrapers" preference-editable="true" onsynctopreference="return getCustomScrapers();">
+	<tree id="custom_scrapers_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_custom_scrapers" preference-editable="true" onsynctopreference="return gleebox_Options.getCustomScrapers();">
 	<treecols>
 	<treecol id="sel_name" flex="1" label="Name" />
 	<treecol id="sel_selector" flex="1" label="jQuery Selector" />
@@ -60,8 +62,8 @@
 
 	</hbox>
 	<hbox flex="1" align="right">
-	<button label="Add scraper" oncommand="addScraper()"/>
-	<button label="Remove scraper" oncommand="removeScraper()"/>
+	<button label="Add scraper" oncommand="gleebox_Options.addScraper()"/>
+	<button label="Remove scraper" oncommand="gleebox_Options.removeScraper()"/>
 	</hbox>
 					</groupbox>
 					<groupbox>
@@ -110,24 +112,24 @@
 					</groupbox> 
 					<groupbox>
 						<hbox>
-							<text value="For the complete list of gleeBox commands, please read the " /><label  class="text-link" style="margin:0;margin-top:-1.5px" value="user manual" href="http://thegleebox.com/manual.html"/> 
+							<text value="For the complete list of gleeBox commands, please read the " /><label class="text-link" value="user manual" onclick="gleebox_Common.openInNewTab('http://thegleebox.com/manual.html');"/> 
 						</hbox>
 						<separator flex="thin" />
 						<hbox >
-							<text value="Send us feedback at " /><label class="text-link" style="margin:0;margin-top:-1.5px " value="gleebox@gmail.com" href="mailto: gleebox@gmail.com" />
+							<text value="Send us feedback at " /><label class="text-link" value="gleebox@gmail.com" onclick="gleebox_Common.openInNewTab('mailto:gleebox@gmail.com');"/>
 						</hbox>
 						<separator flex="thin" />
 	<hbox>
-	<text value="gleeBox was created by Ankit Ahuja (" /><label style="margin:0;margin-top:-1.5px" class="text-link" href="http://twitter.com/ahujaankit" value="@ahujaankit" /><text value=") and Sameer Ahuja (" /><label style="margin:0;margin-top:-1.5px"  class="text-link" href="http://twitter.com/sam33r" value="@sam33r" /><text value=")" />
+	<text value="gleeBox was created by Ankit Ahuja (" /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/ahujaankit');" value="@ahujaankit" /><text value=") and Sameer Ahuja (" /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/sam33r');" value="@sam33r" /><text value=")" />
 	</hbox>
 						<separator flex="thin" />
 						<hbox>
-							<text value="To promote further development of gleeBox, contribute by making a " /><label class="text-link" style="margin:0;margin-top:-1.5px " value="donation" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=10478979" />
+							<text value="To promote further development of gleeBox, contribute by making a " /><label class="text-link" value="donation" onclick="gleebox_Common.openInNewTab('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=10478979');" />
 						</hbox>
 					</groupbox>
 				</tabpanels>
 	<separator flex="1" />
-	<description>Refresh currently open tabs to see changes</description> 
+	<description>Refresh currently open tabs to see changes</description>
 			</tabbox>
 			<separator flex="1" />
 		</vbox>
