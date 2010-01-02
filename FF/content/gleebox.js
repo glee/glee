@@ -964,7 +964,7 @@ var Glee = {
 	},
 	
 	shortenURL: function(){
-		this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+		this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
 			var json = JSON.parse("["+data.responseText+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
@@ -978,11 +978,11 @@ var Glee = {
 		var url = location.href;
 		if(url.length > 30)
 		{
-			this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+			this.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 			function(data){
 				var json = JSON.parse("["+data.responseText+"]");
 				var shortenedURL = json[0].results[location.href].shortUrl;
-				var encodedURL = escape(shortenedURL);
+				var encodedURL = encodeURIComponent(shortenedURL);
 				//redirect to twitter homepage
 				location.href = "http://twitter.com/?status="+encodedURL;
 			});
@@ -990,7 +990,7 @@ var Glee = {
 		else
 		{
 			//redirect to twitter without shortening the URL
-			var encodedURL = escape(location.href);
+			var encodedURL = encodeURIComponent(location.href);
 			location.href =  "http://twitter.com/?status="+encodedURL;
 		}
 	},
