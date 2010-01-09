@@ -13,9 +13,9 @@
 			<menupopup id="gleeboxToolsMenuPopup">
 				<menuitem id="gleeboxMenuItem_status" label="Turn gleeBox Off (refresh to see changes)" oncommand="gleebox_Menus.toggleStatus();" />
 				<menuseparator />
-				<menuitem id="gleeboxMenuItem_options" label="Options" oncommand="gleebox_Menus.openOptionsDialog();" />
+				<menuitem id="gleeboxMenuItem_options" label="Options..." oncommand="gleebox_Menus.openOptionsDialog();" />
 				<menuseparator />
-				<menuitem id="gleeboxMenuItem_about" label="About" oncommand="gleebox_Menus.openAboutDialog();" />
+				<menuitem id="gleeboxMenuItem_about" label="About... 0.6.1" oncommand="gleebox_Menus.openAboutDialog();" />
 			</menupopup>
 		</menu>
 	</menupopup>

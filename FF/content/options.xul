@@ -4,13 +4,14 @@
 
 <prefwindow id="gleebox-prefs" 
 						xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-						onload="gleebox_Options.initOptions()">
+						onload="gleebox_Options.initOptions()"
+						title="gleeBox Options" >
 
 	<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
 	<script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
 	<script type="application/x-javascript" src="chrome://gleebox/content/common.js" />
 	
-	<prefpane id="gleebox-pane" label="gleeBox Options" >
+	<prefpane id="gleebox-pane" label="gleeBox Options">
 		<preferences>
 			<preference id="pref_size" name="extensions.gleebox.size" type="string"/>
 			<preference id="pref_position" name="extensions.gleebox.position" type="string"/>
@@ -33,6 +34,7 @@
 						<hbox align="center">
 		  					<checkbox preference="pref_scroll" flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
 						</hbox>
+						<separator flex="thin" />
 						<hbox align="center">
 							<label value="Disabled URLs: " width="90"/> 
 	<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return gleebox_Options.getDisabledURLList();">
@@ -48,7 +50,7 @@
 	<button label="Add URL" oncommand="gleebox_Options.addURL()"/>
 	<button label="Remove URL" oncommand="gleebox_Options.removeURL()"/>
 	</hbox>
-
+	<separator flex="thin" />
 						<hbox align="center">
 							<label width="90">Custom Scraper commands:</label>
 	<tree id="custom_scrapers_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_custom_scrapers" preference-editable="true" onsynctopreference="return gleebox_Options.getCustomScrapers();">
