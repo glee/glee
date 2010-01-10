@@ -16,7 +16,6 @@ Glee.Firefox.isBookmark = function(text){
 }
 
 Glee.Firefox.getBookmarklet = function(text){
-	Glee.bookmarks = []; //empty the bookmarks array
 	var results = GM_getBookmarks(text);
 	var len = results.length;
 	for(var i=0; i<len; i++)

@@ -357,7 +357,7 @@ var Glee = {
 	
 	hyperMode: false,		//HyperGlee mode: In this mode, glee is automatically displayed on page load
 	
-	bookmarkSearchStatus:true,
+	bookmarkSearchStatus:false,
 	
 	// Scraper Commands
 
@@ -487,6 +487,8 @@ var Glee = {
 		Glee.size = GM_getValue('size','medium');
 		//gleeBox position
 		Glee.position = GM_getValue('position','bottom');
+		//bookmark search
+		Glee.bookmarkSearchStatus = GM_getValue('bookmark_search', false);
 		//scrolling animation
 		var animation = GM_getValue('scroll_animation',true);
 
@@ -1092,7 +1094,8 @@ var Glee = {
 			"scroll",
 			"size",
 			"pos", "position",
-			"theme"
+			"theme",
+			"bsearch"
 		];
 		
 		/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
@@ -1109,7 +1112,7 @@ var Glee = {
 		
 		if(option=="" || jQuery.inArray(option,validOptions) == -1)
 			valid = false;
-		else if( (option == "scroll") && jQuery.inArray(value,['on','off']) == -1)
+		else if( (option == "scroll" || option == "bsearch") && jQuery.inArray(value,['on','off']) == -1)
 			valid = false;
 		else if( option == "size" && jQuery.inArray(value,['small','medium','med','large']) == -1)
 			valid = false;
@@ -1128,6 +1131,7 @@ var Glee = {
 		{
 			case "scroll"	: option = "scroll_animation";break;
 			case "pos"		: option = "position";break;
+			case "bsearch"	: option = "bookmark_search";break;
 		}
 		switch(value)
 		{
