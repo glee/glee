@@ -113,11 +113,6 @@
 	#addDomainLi{
 		margin-top:10px;
 	}
-	#status{
-		padding:2px;
-		text-align:center;
-		margin:10px auto;
-	}
 	#wrap{
 		margin:0 auto;
 		width:780px;
@@ -243,7 +238,6 @@ function save_options() {
 	localStorage["glee_scraper_names"] = scraperName;
 	localStorage["glee_scraper_selectors"] = scraperSel;
 	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers, search);
-	setStatus("Settings saved!");
 }
 
 function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers, search){
@@ -406,7 +400,6 @@ function addDomain() {
 		newLI.innerHTML = newDomain.value + inputBt;
 		domainList.insertBefore(newLI,lastChild);
 		newDomain.value = "";
-		setStatus("URL Added!");
 	}
 }
 
@@ -415,7 +408,7 @@ function removeDomain(i){
 	var domainList = document.getElementById("domains");
 	domainList.removeChild(el);
 	//remove the domain from the list
-	setStatus("URL Removed!");
+
 	return 0;
 }
 
@@ -433,7 +426,6 @@ function addScraper(){
 		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+no+")'/>";
 		newLI.innerHTML = "<span><strong>?"+scraperName.value+"</strong></span> : <span>"+scraperSel.value+"</span>"+inputBt;
 		scraperList.insertBefore(newLI,document.getElementById("addScraper"));
-		setStatus("<strong>?"+scraperName.value+"</strong> command added!");
 		scraperName.value="";
 		scraperSel.value="";
 	}
@@ -444,7 +436,6 @@ function removeScraper(i){
 	var scraperList = document.getElementById("scraper-commands");
 	scraperList.removeChild(el);
 	//remove the domain from the list
-	setStatus("Command Removed!");
 	return 0;
 }
 
@@ -452,26 +443,13 @@ function validateScraper(name,selector)
 {
 	//check that command name/selector should not be blank
 	if(name == "" || selector == "" || name == "Name" || selector == "jQuery Selector")
-	{
-		setStatus("Command name / Selector cannot be blank!");
 		return false;
-	}
 	//check that command name does not conflict with the default scraper command names
 	if(name == "h" || name == "?" || name == "img" || name == "a")
-	{
-		setStatus("Command name conflicts with a default scraper command!");
 		return false;
-	}
 	if(name.indexOf('`')!=-1 || selector.indexOf('`')!= -1)
-	{
-		setStatus("Command name / Selector cannot contain `");
 		return false;
-	}
 	return true;
-}
-
-function setStatus(text){
-	document.getElementById("status").innerHTML = text;
 }
 
 function closeOptions(text){
@@ -520,7 +498,6 @@ function initDefaultTexts() {
 <body onload="restore_options()">
 <div id="wrap">
 <h2>gleeBox Options</h2>
-<div id="status"></div>
 <!--Specifying different options available -->
 <div id="options">
 	<h3>Features</h3>
