@@ -43,6 +43,8 @@ jQuery(document).ready(function(){
 					Glee.searchField.attr('value','');
 					Glee.searchBox.fadeIn(150);
 					Glee.searchField.focus();
+					if(Glee.espStatus)
+						Glee.fireEsp();
 				}
 				else
 				{
@@ -176,24 +178,21 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 9)  //if TAB is pressed
 		{
 			e.preventDefault();
-			if(value != "")
+			if(Glee.selectedElement)
 			{
-				if(Glee.selectedElement)
-				{	
-					if(e.shiftKey)
-						Glee.selectedElement = LinkReaper.getPrev();
-					else
-						Glee.selectedElement = LinkReaper.getNext();
-					Glee.setSubText(Glee.selectedElement,"el");
-					Glee.scrollToElement(Glee.selectedElement);
-				}
-				else if(Glee.bookmarks.length != 0)
-				{
-					if(e.shiftKey)
-						Glee.getPrevBookmark();
-					else
-						Glee.getNextBookmark();
-				}
+				if(e.shiftKey)
+					Glee.selectedElement = LinkReaper.getPrev();
+				else
+					Glee.selectedElement = LinkReaper.getNext();
+				Glee.setSubText(Glee.selectedElement,"el");
+				Glee.scrollToElement(Glee.selectedElement);
+			}
+			else if(Glee.bookmarks.length != 0)
+			{
+				if(e.shiftKey)
+					Glee.getPrevBookmark();
+				else
+					Glee.getNextBookmark();
 			}
 		}
 		//if ENTER is pressed
@@ -344,7 +343,9 @@ var Glee = {
 	lastQuery:null,
 	commandMode: false,
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
-	status:1, 
+	status:1,
+	//used to enable/disabled ESP (default scrapers)
+	espStatus:true,
 	//Currently selected element
 	selectedElement:null,
 	//current URL where gleeBox should go
@@ -452,6 +453,12 @@ var Glee = {
 		}
 		],
 	
+	espModifiers: [
+		{
+			url : "www.google.co.in/search",
+			selector : "h3:not(ol.nobr>li>h3)"
+		}
+	],
 	//jQuery cache objects
 	Cache: {
 		jBody: null
@@ -533,7 +540,7 @@ var Glee = {
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
 		this.setSubText(Glee.selectedElement,"el");
-		this.scrollToElement(Glee.selectedElement);	
+		this.scrollToElement(Glee.selectedElement);
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(scraper.cssStyle);
 		});
@@ -762,6 +769,29 @@ var Glee = {
 		else
 			return null;
 	},
+	//method for ESP
+	fireEsp: function(){
+		var url = document.location.href;
+		var len = Glee.espModifiers.length;
+		for(var i=0; i<len; i++)
+		{
+			if(url.indexOf(Glee.espModifiers[i].url) != -1)
+			{
+				var sel = Glee.espModifiers[i].selector;
+				//creating a new temporary scraper object
+				var tempScraper = {
+					nullMessage : "Could not find any elements on the page",
+					selector : sel,
+					cssStyle : "GleeReaped"
+				};
+				Glee.commandMode = true;
+				Glee.initScraper(tempScraper);
+				return true;
+			}
+		}
+		return false;
+	},
+	//end of ESP
 	scrollToElement: function(el){
 		var target;
 		if(typeof(el) != "undefined" && el)

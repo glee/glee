@@ -228,13 +228,48 @@ function save_options() {
 			scraperSel[scraperSel.length] = sel+"`";
 		}
 	}
+	
 	localStorage["glee_scraper_names"] = scraperName;
 	localStorage["glee_scraper_selectors"] = scraperSel;
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers);
+	
+	//saving the ESP Status
+	if(document.getElementsByName("glee_esp_status")[0].checked)
+		espStatus = 1; //enabled
+	else
+		espStatus = 0;
+	localStorage["glee_esp_status"] = espStatus;
+	
+	//saving the ESP Modifiers
+	
+	var espURL = [];
+	var espSel = [];
+	var espModifiers = [];
+	var espList = document.getElementById("esp-modifiers");
+	var len = espList.children.length;
+	for(var i=0;i<len;i++)
+	{
+		var el = espList.children[i];
+		if(el.className == "esp")
+		{
+			var url = el.children[0].innerText;
+			var sel = el.children[1].innerText;
+			
+			espModifiers[espModifiers.length] = { url:url, selector:sel };
+			
+			//using .NEXT. as end marker for both esp urls and esp selectors
+			espURL[espURL.length] = url+".NEXT.";
+			espSel[espSel.length] = sel+".NEXT.";
+		}
+	}
+	
+	localStorage["glee_esp_urls"] = espURL;
+	localStorage["glee_esp_selectors"] = espSel;
+
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,espStatus,espModifiers);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers,espStatus,espModifiers){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -242,7 +277,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers,espStatus:espStatus,espModifiers:espModifiers},function(response){
 				});
 			}
 		}
@@ -369,6 +404,44 @@ function restore_options()
 			}
 		}
 	}
+	
+	//getting ESP Status
+	var espStatus = localStorage["glee_esp_status"];
+
+	if(espStatus == 0)
+		document.getElementsByName("glee_esp_status")[1].checked = true;
+	else
+		document.getElementsByName("glee_esp_status")[0].checked = true;
+	
+	//getting ESP Modifiers
+	var espURL = localStorage["glee_esp_urls"];
+	var espSel = localStorage["glee_esp_selectors"];
+	if(espURL != "undefined")
+	{
+		if(espURL.length != 0)
+		{
+			var espList = document.getElementById("esp-modifiers");
+			espURL = espURL.split(".NEXT.");
+			espSel = espSel.split(".NEXT.");
+			var espLen = espURL.length;
+			//last element is a string only containing a ,
+			for (var i=0; i<espLen-1; i++)
+			{
+				if(i>0)
+				{
+					//remove the , that is used by localStorage to separate elements
+					espURL[i] = espURL[i].slice(1,espURL[i].length);
+					espSel[i] = espSel[i].slice(1,espSel[i].length);
+				}
+				var newLI = document.createElement('li');
+				var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier("+i+")'/>";
+				newLI.className = "esp";
+				newLI.id = "esp"+i;
+				newLI.innerHTML = "<span>"+espURL[i]+"</span> : <span>"+espSel[i]+"</span>"+inputBt;
+				espList.insertBefore(newLI,document.getElementById("addEspModifier"));
+			}
+		}
+	}
 }
 
 //Adds a domain to the restricted domain list
@@ -448,6 +521,40 @@ function validateScraper(name,selector)
 		setStatus("Command name / Selector cannot contain `");
 		return false;
 	}
+	return true;
+}
+
+function addEspModifier(){
+	var espURL = document.getElementById("esp-url");
+	var espSel = document.getElementById("esp-selector");
+	
+	if(validateEspModifier(espURL.value,espSel.value))
+	{
+		var espList = document.getElementById("esp-modifiers");
+		var newLI = document.createElement("li");
+		var no = espList.children.length+1;
+		newLI.className = "esp";
+		newLI.id = "esp"+no;
+		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier("+no+")'/>";
+		newLI.innerHTML = "<span>"+espURL.value+"</span> : <span>"+espSel.value+"</span>"+inputBt;
+		espList.insertBefore(newLI,document.getElementById("addEspModifier"));
+		espURL.value="";
+		espSel.value="";
+	}
+}
+
+function removeEspModifier(i){
+	var el = document.getElementById("esp"+i);
+	var espList = document.getElementById("esp-modifiers");
+	espList.removeChild(el);
+	return 0;
+}
+
+function validateEspModifier(name,selector)
+{
+	//check that name/selector should not be blank
+	if(name == "" || selector == "" || name == "Page URL" || selector == "jQuery Selector")
+		return false;
 	return true;
 }
 
@@ -542,6 +649,19 @@ function initDefaultTexts() {
 				<li><strong>?h</strong> : H1, H2 and H3 Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?a</strong> : Links<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li id="addScraper"><form onsubmit="addScraper();return false;"><strong>?</strong><input id="scraper-name" type="text" value="Name" size=12 /> : <input id="scraper-selector" type="text" value="jQuery Selector" size=30 /><input type="submit" value="Add" class="button"/></form></li>
+			</ul>
+		</li>
+		<li>
+			<label class="option-label">ESP Mode<br/><span class="subtext">In this mode, you can specify default selector for a page which will automatically execute when you launch gleeBox on that page</span></label>
+			<div class="option-field">
+				<input name="glee_esp_status" type="radio"> Yes
+				<input name="glee_esp_status" type="radio"> No
+			</div>
+		</li>
+		<li>
+			<label class="option-label">ESP Visions<br/><span class="subtext">Specify the page and the default selector </span></label>
+			<ul id="esp-modifiers" class="option-field">
+				<li id="addEspModifier"><form onsubmit="addEspModifier();return false;"><input id="esp-url" type="text" value="Page URL" size=30 /> : <input id="esp-selector" type="text" value="jQuery Selector" size=20 /><input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 	</ul>

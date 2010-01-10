@@ -118,7 +118,20 @@ Glee.Chrome.applyOptions = function(response){
 		else
 			Glee.hyperMode = false;
 	}
+	
+	// ESP Status
+	if(response.espStatus != undefined)
+	{
+		if(response.espStatus == 1)
+			Glee.espStatus = true;
+		else
+			Glee.espStatus = false;
+	}
 
+	// ESP Modifiers
+	if(response.espModifiers != undefined)
+		Glee.espModifiers = response.espModifiers;
+	
 	//check if it is a disabled domain
 	if(response.status != undefined)
 	{
