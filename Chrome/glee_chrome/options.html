@@ -40,15 +40,17 @@
 		display:block;
 		float:left;
 		clear:both;
+		width:780px;
 	}
 	#options{
 		float:left;
 		margin-left:10px;
 		padding-bottom:20px;
+		width:780px;
 	}
 	.option-label{
 		float:left;
-		width:200px;
+		width:330px;
 	}
 	.option-field{
 		float:left;
@@ -118,7 +120,7 @@
 	}
 	#wrap{
 		margin:0 auto;
-		width:700px;
+		width:780px;
 	}
 	.subtext{
 		font-size:10px;
@@ -151,6 +153,16 @@ function save_options() {
 	//currently using , as the end marker. need a better way to implement this
 	localStorage["glee_domains"] = restrictedDomains;
 
+	//Save search engine
+	if(document.getElementsByName("glee_search")[0].value 
+		&& document.getElementsByName("glee_search")[0].value != "")
+		{
+			search = document.getElementsByName("glee_search")[0].value;
+		}
+	else
+		search = "http://www.google.com/search?q=";
+	localStorage["glee_search"] = search;
+		
 	//saving the gleeBox position
 	if(document.getElementsByName("glee_pos")[0].checked) //top
 		pos = 0;
@@ -230,11 +242,11 @@ function save_options() {
 	}
 	localStorage["glee_scraper_names"] = scraperName;
 	localStorage["glee_scraper_selectors"] = scraperSel;
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers);
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers, search);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers, search){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -242,7 +254,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers,search:search},function(response){
 				});
 			}
 		}
@@ -293,6 +305,13 @@ function restore_options()
 		document.getElementsByName("glee_size")[size].checked = true;
 	else
 		document.getElementsByName("glee_size")[2].checked = true; //default is large size
+
+	//getting search engine
+	var search = localStorage["glee_search"];
+	if(search)
+		document.getElementsByName("glee_search")[0].value = search;
+	else
+		document.getElementsByName("glee_search")[0].value = "http://www.google.com/search?q=";
 
 	//getting theme
 	var theme = localStorage["glee_theme"];
@@ -514,14 +533,23 @@ function initDefaultTexts() {
 			</ul>
 		</li>
 		<li>
-			<label class="option-label">Bookmark search<br/><span class="subtext">Search bookmarks when no matching links are found on a page</span></label>
+			<label class="option-label">Search Engine</label>
+			<div class="option-field">
+				<input name="glee_search" type="text" size=56><br/>
+				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.google.com/search?q=";'>Google</a>&nbsp;&nbsp;
+				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.bing.com/search?q=";'>Bing</a>&nbsp;&nbsp;
+<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://search.yahoo.com/search?p=";'>Yahoo</a>
+			</div>
+		</li>
+		<li>
+			<label class="option-label">Bookmark search<br/><span class="subtext">Searches bookmarks when no matching links are found</span></label>
 			<div class="option-field">
 				<input name="glee_bookmark_search" type="radio"> Yes
 				<input name="glee_bookmark_search" type="radio"> No
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Animated scrolling<br/><span class="subtext">Do scroll animation while traversing selected elements using gleeBox</span></label>
+			<label class="option-label">Animated scrolling<br/><span class="subtext">Provides scrolling animation when traversing selected elements</span></label>
 			<div class="option-field">
 				<input name="glee_scrolling_animation" type="radio"> Yes
 				<input name="glee_scrolling_animation" type="radio"> No

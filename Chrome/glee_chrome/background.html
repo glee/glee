@@ -128,6 +128,8 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		var position = localStorage["glee_position"];
 		//gleeBox size
 		var size = localStorage["glee_size"];
+		//search engine
+		var search = localStorage["glee_search"];
 		//disabled domains
 		if(localStorage["glee_domains"]) 
 			domains = localStorage["glee_domains"].split(",");
@@ -158,7 +160,7 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 				scrapers[i] = { command:scraperName[i], selector:scraperSel[i], cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
 			}
 		}
-		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme,scrapers:scrapers, hyper:hyper});
+		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme,scrapers:scrapers, hyper:hyper, search:search});
 	}
 	else if(request.value == "updateOption")
 	{

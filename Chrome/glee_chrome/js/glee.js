@@ -349,6 +349,8 @@ var Glee = {
 	selectedElement:null,
 	//current URL where gleeBox should go
 	URL:null,
+	//Search Engine URL
+	searchEngineUrl:"http://www.google.com/search?q=",
 	//element on which the user was focussed before a search
 	userFocusBeforeGlee:null,
 	//array to store bookmarks, if found for a search
@@ -373,49 +375,42 @@ var Glee = {
 		{
 			name: "tweet",
 			method:"Glee.sendTweet",
-			domain:"*",
 			description:"Tweet this page",
 			statusText:"Redirecting to twitter homepage..."
 		},
 		{
 			name: "shorten",
 			method:"Glee.shortenURL",
-			domain:"*",
 			description:"Shorten the URL of this page using bit.ly",
 			statusText:"Shortening URL via bit.ly..."
 		},
 		{
 			name: "read",
 			method:"Glee.makeReadable",
-			domain:"*",
 			description:"Make your page readable using Readability",
 			statusText:"Please wait while Glee+Readability work up the magic..."
 		},
 		{
 			name: "rss",
 			method:"Glee.getRSSLink",
-			domain:"*",
 			description:"Open the RSS feed of this page in GReader",
 			statusText:"Opening feed in Google Reader..."
 		},
 		{
 			name: "help",
 			method:"Glee.help",
-			domain:"*",
 			description:"View user manual",
 			statusText:"Loading help page..."
 		},
 		{
 			name: "options",
 			method:"Glee.Chrome.displayOptionsPage",
-			domain:"*",
 			description:"View gleeBox options",
 			statusText:"Opening options page..."
 		},
 		{
 			name: "set",
 			method:"Glee.Chrome.setOptionValue",
-			domain:"*",
 			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
 			statusText:"Setting option..."
 		}
@@ -715,8 +710,8 @@ var Glee = {
 		}
 		else if(type == "search") // here val is the text query
 		{
-			this.subText.html(this.truncate("Google "+val));
-			this.URL = "http://www.google.com/search?q="+val;
+			this.subText.html(this.truncate("Search for "+val));
+			this.URL = Glee.searchEngineUrl+val;
 			this.subURL.html(this.URL);	
 		}
 		else if(type == "msg") // here val is the message to be displayed
