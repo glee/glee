@@ -657,6 +657,13 @@ var Glee = {
 	setSubText: function(val,type){
 		//reset Glee.URL
 		this.URL = null;
+		//if it isn't a bookmark, empty the array
+		//TODO: Find a less costly way to implement this
+		if(Glee.bookmarkSearchStatus)
+		{
+			if(type != "bookmark" && Glee.bookmarks.length != 0)
+				Glee.bookmarks = [];
+		}
 		if(type == "el") // here val is the element or maybe null if no element is found for a search
 		{
 			if(val && typeof val!= "undefined")
