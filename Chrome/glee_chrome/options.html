@@ -90,6 +90,19 @@
 	.button:active{
 		background-color:#444;
 	}
+	.superButton{
+		font-size:20px;
+		border-radius:6px;
+	}
+	.superButton:hover{
+		cursor:pointer;
+		background-color:#777;
+		color:#fff;
+	}
+	.superButton:active{
+		background-color:#444;
+	}
+
 	.inline_button{
 		padding-left:20px;
 		float:right;
@@ -562,12 +575,12 @@ function initDefaultTexts() {
 		</li>
 	</ul>
 	<div style="text-align:center">
-		<input type="button" class="button" value="Save" onclick="save_options()">
-		<input type="button" class="button" value="Save and Close" onclick="save_options();closeOptions();">
+		<input type="button" class="superButton" value="&nbsp;Save&nbsp;" onclick="save_options()">&nbsp;&nbsp;
+		<input type="button" class="superButton" value="&nbsp;Save and Close&nbsp;" onclick="save_options();closeOptions();">
 	</div>
 	<div id="footer">
  For the complete list of features and commands, please read the <a href="http://thegleebox.com/manual.html">user manual</a>. <br>You can submit bugs and feature requests on the <a href="http://github.com/glee/glee/issues">issues page</a>, or mail them to us at <a href="mailto:gleebox@gmail.com">gleebox@gmail.com</a>.<br/><br/>
-		gleeBox was developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>).<br>If you like this extension, <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">consider donating</a> for its further development.<br><br>
+		gleeBox was developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>).<br>If you like this extension, <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">consider donating</a> for its further development.
 	</div>
 </div>
 </div>
