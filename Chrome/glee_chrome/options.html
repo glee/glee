@@ -274,7 +274,6 @@ function save_options() {
 	localStorage["glee_esp_selectors"] = espSel;
 
 	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,search,espStatus,espModifiers);
-	setStatus("Settings saved!");
 }
 
 function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers,search,espStatus,espModifiers){
@@ -559,10 +558,6 @@ function validateEspModifier(name,selector)
 	if(name == "" || selector == "" || name == "Page URL" || selector == "jQuery Selector")
 		return false;
 	return true;
-}
-
-function setStatus(text){
-	document.getElementById("status").innerHTML = text;
 }
 
 function closeOptions(text){
