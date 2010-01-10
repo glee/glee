@@ -58,10 +58,13 @@ contentLoad: function(e) {
 		var jquery = gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/jquery.js'
 		);
+		var firefox = gleebox_gmCompiler.getUrlContents(
+			'chrome://gleebox/content/firefox.js'
+		);
 		var script=gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/gleebox.js'
 		);
-		gleebox_gmCompiler.injectScript(jquery+script, href, unsafeWin);
+		gleebox_gmCompiler.injectScript(jquery+script+firefox, href, unsafeWin);
 	}
 },
 
@@ -87,6 +90,7 @@ injectScript: function(script, url, unsafeContentWin) {
 	sandbox.GM_addStyle=function(css) { gleebox_gmCompiler.addStyle(sandbox.document, css) };
 	sandbox.GM_setValue=gleebox_gmCompiler.hitch(storage, "setValue");
 	sandbox.GM_getValue=gleebox_gmCompiler.hitch(storage, "getValue");
+	sandbox.GM_getBookmarks=gleebox_gmCompiler.hitch(this,"getBookmarks");
 	sandbox.GM_openInTab=gleebox_gmCompiler.hitch(this, "openInTab", unsafeContentWin);
 	sandbox.GM_xmlhttpRequest=gleebox_gmCompiler.hitch(
 		xmlhttpRequester, "contentStartRequest"
@@ -128,6 +132,40 @@ evalInSandbox: function(code, codebase, sandbox) {
 	}
 },
 
+getBookmarks: function(searchQuery){
+	var bookmarks = Components.classes["@mozilla.org/browser/nav-bookmarks-service;1"]
+	                .getService(Ci.nsINavBookmarksService);
+	var history = Cc["@mozilla.org/browser/nav-history-service;1"]
+	              .getService(Ci.nsINavHistoryService);
+
+	var query = history.getNewQuery();
+	
+	// Specify folders to be searched
+	var folders = [bookmarks.toolbarFolder, bookmarks.bookmarksMenuFolder,
+	               bookmarks.unfiledBookmarksFolder];
+	query.setFolders(folders, folders.length);
+
+	// Specify terms to search for, matches against title, URL and tags
+	query.searchTerms = searchQuery;
+
+	var options = history.getNewQueryOptions();
+	options.queryType = options.QUERY_TYPE_BOOKMARKS;
+
+	var result = history.executeQuery(query, options);
+
+	// The root property of a query result is an object representing the folder you specified above.
+	var resultContainerNode = result.root;
+
+	var results = [];
+	// Open the folder, and iterate over it's contents.
+	resultContainerNode.containerOpen = true;
+	for (var i=0; i < resultContainerNode.childCount; ++i) {
+	  var childNode = resultContainerNode.getChild(i);
+	  results[results.length] = { title: childNode.title, url: childNode.uri };
+	}
+	return results;
+},
+
 openInTab: function(unsafeContentWin, url) {
 	var tabBrowser = getBrowser(), browser, isMyWindow = false;
 	for (var i = 0; browser = tabBrowser.browsers[i]; i++)
@@ -148,7 +186,7 @@ openInTab: function(unsafeContentWin, url) {
 	 tabBrowser.loadOneTab(url, referrer, null, null, loadInBackground);
  },
  
- hitch: function(obj, meth) {
+hitch: function(obj, meth) {
 	var unsafeTop = new XPCNativeWrapper(unsafeContentWin, "top").top;
 
 	for (var i = 0; i < this.browserWindows.length; i++) {

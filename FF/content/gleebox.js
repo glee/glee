@@ -186,16 +186,22 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			if(value != "")
 			{
-				if(e.shiftKey)
-				{
-					Glee.selectedElement = LinkReaper.getPrev();
+				if(Glee.selectedElement)
+				{	
+					if(e.shiftKey)
+						Glee.selectedElement = LinkReaper.getPrev();
+					else
+						Glee.selectedElement = LinkReaper.getNext();
+					Glee.setSubText(Glee.selectedElement,"el");
+					Glee.scrollToElement(Glee.selectedElement);
 				}
-				else
+				else if(Glee.bookmarks.length != 0)
 				{
-					Glee.selectedElement = LinkReaper.getNext();
+					if(e.shiftKey)
+						Glee.getPrevBookmark();
+					else
+						Glee.getNextBookmark();
 				}
-				Glee.setSubText(Glee.selectedElement,"el");
-				Glee.scrollToElement(Glee.selectedElement);
 			}
 		}
 		//if ENTER is pressed
@@ -336,6 +342,8 @@ var Glee = {
 	
 	hyperMode: false,		//HyperGlee mode: In this mode, glee is automatically displayed on page load
 	
+	bookmarkSearchStatus:true,
+	
 	// Scraper Commands
 
 	scrapers : [
@@ -389,6 +397,8 @@ var Glee = {
 	URL:null,
 	//element on which the user was focussed before a search
 	userFocusBeforeGlee:null,
+	//bookmarks array
+	bookmarks:[],
 	
 	// !commands
 	commands:[
@@ -723,9 +733,27 @@ var Glee = {
 					this.URL = text;
 					this.subURL.html(this.truncate(text));
 				}
+				else if(this.bookmarkSearchStatus) //is bookmark search enabled?
+				{
+					//emptying the bookmarks array
+					this.bookmarks.splice(0,Glee.bookmarks.length);
+					this.Firefox.isBookmark(text); //check if the text matches a bookmark
+				}
 				else //search
 					this.setSubText(text,"search");
 			}
+		}
+		else if(type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
+		{
+			this.subText.html(this.truncate("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
+			this.URL = this.bookmarks[val].url;
+			this.subURL.html(this.truncate(this.URL));
+		}
+		else if(type == "bookmarklet") // here val is the bookmarklet returned
+		{
+			this.subText.html("Closest matching bookmarklet: "+val.title+" (press enter to execute)");
+			this.URL = val;
+			this.subURL.html('');
 		}
 		else if(type == "search") // here val is the text query
 		{
@@ -743,6 +771,38 @@ var Glee = {
 			this.subText.html(Glee.nullStateMessage);
 			this.subURL.html('');
 		}
+	},
+	getNextBookmark:function(){
+		if(this.bookmarks.length > 1)
+		{
+			if(this.currentResultIndex == this.bookmarks.length-1)
+				this.currentResultIndex = 0;
+			else
+				this.currentResultIndex++;
+			//if it is the last, call subText for search
+			if(this.currentResultIndex == this.bookmarks.length-1)
+				this.setSubText(this.bookmarks[this.currentResultIndex],"search");
+			else
+				this.setSubText(this.currentResultIndex,"bookmark");
+		}
+		else
+			return null;
+	},
+	getPrevBookmark:function(){
+		if(this.bookmarks.length > 1)
+		{
+			if(this.currentResultIndex == 0)
+				this.currentResultIndex = this.bookmarks.length-1;
+			else
+				this.currentResultIndex --;
+			//if it is the last, call subText for search
+			if(this.currentResultIndex == this.bookmarks.length-1)
+				this.setSubText(this.bookmarks[this.currentResultIndex],"search");
+			else
+				this.setSubText(this.currentResultIndex,"bookmark");
+		}
+		else
+			return null;
 	},
 	scrollToElement: function(el){
 		var target;
@@ -1224,4 +1284,4 @@ var LinkReaper = {
 		el.removeClass("GleeHL");
 		el.addClass("GleeReaped");
 	}
-}
+};
