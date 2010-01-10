@@ -345,7 +345,7 @@ var Glee = {
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1,
 	//used to enable/disabled ESP (default scrapers)
-	espStatus:true,
+	espStatus:false,
 	//Currently selected element
 	selectedElement:null,
 	//current URL where gleeBox should go
@@ -450,8 +450,12 @@ var Glee = {
 	
 	espModifiers: [
 		{
-			url : "www.google.co.in/search",
+			url : "google.com/search",
 			selector : "h3:not(ol.nobr>li>h3)"
+		},
+		{
+			url : "bing.com/search",
+			selector : "h3>a"
 		}
 	],
 	//jQuery cache objects
@@ -497,7 +501,7 @@ var Glee = {
 		Glee.searchField.css("font-size",fontsize);
 		
 		//Load HyperGlee if needed
-		if(Glee.status != 0 && Glee.hyperMode==true) {
+		if(Glee.status != 0 && Glee.hyperMode == true) {
 			Glee.getHyperized();
 		}
 	},

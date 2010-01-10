@@ -163,7 +163,8 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		
 		//esp status
 		var espStatus = localStorage["glee_esp_status"];
-
+		
+		var espModifiers = null;
 		//esp modifiers
 		if(localStorage["glee_esp_urls"])
 		{

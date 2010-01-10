@@ -42,7 +42,7 @@ Glee.Chrome.sendRequest = function(url,method,callback){
 
 Glee.Chrome.applyOptions = function(response){
 	//gleeBox position
-	if(response.position)
+	if(response.position != undefined)
 	{
 		if(response.position == 0) //top
 			Glee.position = "top";
@@ -53,7 +53,7 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//gleeBox Size
-	if(response.size)
+	if(response.size != undefined)
 	{
 		if(response.size == 0)
 			Glee.size = "small";
@@ -64,7 +64,7 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//Bookmark search
-	if(response.bookmark_search)
+	if(response.bookmark_search != undefined)
 	{
 		if(response.bookmark_search == 1)
 			Glee.bookmarkSearchStatus = true; //enabled
@@ -73,7 +73,7 @@ Glee.Chrome.applyOptions = function(response){
 	}
 
 	//Scrolling animation
-	if(response.animation)
+	if(response.animation != undefined)
 	{
 		if(response.animation == 0)
 			Glee.scrollingSpeed = 0; //disabled
@@ -82,7 +82,7 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//getting the restricted domains
-	if(response.domains)
+	if(response.domains != undefined)
 	{
 		Glee.domainsToBlock.splice(0,Glee.domainsToBlock.length);
 		for(var i=0;i<response.domains.length;i++)
@@ -90,7 +90,7 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//Theme
-	if(response.theme)
+	if(response.theme != undefined)
 	{
 		//If a theme is already set, remove it
 		if(Glee.ThemeOption)
@@ -102,13 +102,13 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	//Search
-	if(response.search)
+	if(response.search != undefined)
 	{
 		Glee.searchEngineUrl = response.search;
 	}
 
 	//getting the custom scraper commands
-	if(response.scrapers)
+	if(response.scrapers != undefined)
 	{
 		Glee.scrapers.splice(4,Glee.scrapers.length);
 		var len = response.scrapers.length;
@@ -117,7 +117,7 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	// Hyper Mode
-	if(response.hyper)
+	if(response.hyper != undefined)
 	{
 		if(response.hyper == 1)
 			Glee.hyperMode = true;
@@ -139,7 +139,7 @@ Glee.Chrome.applyOptions = function(response){
 		Glee.espModifiers = response.espModifiers;
 	
 	//check if it is a disabled domain
-	if(response.status)
+	if(response.status != undefined)
 	{
 		if(Glee.checkDomain() == 1 && response.status == 1)
 			Glee.status = 1;
@@ -150,7 +150,8 @@ Glee.Chrome.applyOptions = function(response){
 }
 
 Glee.Chrome.displayOptionsPage = function(){
-	Glee.closeBox();
+	Glee.searchField.attr('value','');
+	Glee.setSubText(null);
 	Glee.URL = chrome.extension.getURL("options.html");
 	Glee.Chrome.openNewTab(true);
 }

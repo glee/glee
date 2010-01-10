@@ -171,10 +171,10 @@ function save_options() {
 	//saving the gleeBox size
 	if(document.getElementsByName("glee_size")[0].checked) //small
 		size = 0;
-	else if(document.getElementsByName("glee_size")[1].checked) //medium
-		size = 1;
-	else 	//large
+	else if(document.getElementsByName("glee_size")[2].checked) //large
 		size = 2;
+	else 	//medium
+		size = 1;
 	localStorage["glee_size"] = size;
 	
 	//save theme
@@ -334,7 +334,7 @@ function restore_options()
 	if(size)
 		document.getElementsByName("glee_size")[size].checked = true;
 	else
-		document.getElementsByName("glee_size")[2].checked = true; //default is large size
+		document.getElementsByName("glee_size")[1].checked = true; //default is medium size
 
 	//getting search engine
 	var search = localStorage["glee_search"];
@@ -392,7 +392,7 @@ function restore_options()
 	//getting the custom scraper commands
 	var scraper_names = localStorage["glee_scraper_names"];
 	var scraper_sel = localStorage["glee_scraper_selectors"];
-	if(scraper_names != "undefined")
+	if(scraper_names != undefined)
 	{
 		if(scraper_names.length != 0)
 		{
@@ -422,19 +422,19 @@ function restore_options()
 	//getting ESP Status
 	var espStatus = localStorage["glee_esp_status"];
 
-	if(espStatus == 0)
-		document.getElementsByName("glee_esp_status")[1].checked = true;
-	else
+	if(espStatus == 1)
 		document.getElementsByName("glee_esp_status")[0].checked = true;
+	else
+		document.getElementsByName("glee_esp_status")[1].checked = true; //default
 	
 	//getting ESP Modifiers
 	var espURL = localStorage["glee_esp_urls"];
 	var espSel = localStorage["glee_esp_selectors"];
-	if(espURL != "undefined")
+	var espList = document.getElementById("esp-modifiers");	
+	if(espURL != undefined)
 	{
 		if(espURL.length != 0)
 		{
-			var espList = document.getElementById("esp-modifiers");
 			espURL = espURL.split(".NEXT.");
 			espSel = espSel.split(".NEXT.");
 			var espLen = espURL.length;
@@ -455,6 +455,23 @@ function restore_options()
 				espList.insertBefore(newLI,document.getElementById("addEspModifier"));
 			}
 		}
+	}
+	else
+	{
+		//adding a couple of default examples
+		var newLI = document.createElement('li');
+		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(0)'/>";
+		newLI.className = "esp";
+		newLI.id = "esp0";
+		newLI.innerHTML = "<span>google.com/search</span> : <span>h3:not(ol.nobr>li>h3)</span>"+inputBt;
+		espList.insertBefore(newLI,document.getElementById("addEspModifier"));
+
+		var newLI_2 = document.createElement('li');
+		var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(1)'/>";
+		newLI_2.className = "esp";
+		newLI_2.id = "esp1";
+		newLI_2.innerHTML = "<span>bing.com/search</span> : <span>h3>a</span>"+inputBt_2;
+		espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
 	}
 }
 
