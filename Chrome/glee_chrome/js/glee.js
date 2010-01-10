@@ -106,6 +106,8 @@ jQuery(document).ready(function(){
 				else {
 					LinkReaper.unreapAllLinks();
 					Glee.commandMode = true;
+					if(Glee.bookmarkSearchStatus)
+						Glee.bookmarks = []; //empty the bookmarks array
 					Glee.resetTimer();
 					Glee.toggleActivity(0);
 					if(value[0]=='?' && value.length > 1)
