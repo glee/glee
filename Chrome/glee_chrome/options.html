@@ -1,6 +1,7 @@
 <html>
 <head>
 	<title>gleeBox Options</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<style>
 	body{
 		background-color:#dedede;
@@ -40,15 +41,17 @@
 		display:block;
 		float:left;
 		clear:both;
+		width:780px;
 	}
 	#options{
 		float:left;
 		margin-left:10px;
 		padding-bottom:20px;
+		width:780px;
 	}
 	.option-label{
 		float:left;
-		width:200px;
+		width:330px;
 	}
 	.option-field{
 		float:left;
@@ -111,14 +114,9 @@
 	#addDomainLi{
 		margin-top:10px;
 	}
-	#status{
-		padding:2px;
-		text-align:center;
-		margin:10px auto;
-	}
 	#wrap{
 		margin:0 auto;
-		width:700px;
+		width:780px;
 	}
 	.subtext{
 		font-size:10px;
@@ -151,6 +149,16 @@ function save_options() {
 	//currently using , as the end marker. need a better way to implement this
 	localStorage["glee_domains"] = restrictedDomains;
 
+	//Save search engine
+	if(document.getElementsByName("glee_search")[0].value 
+		&& document.getElementsByName("glee_search")[0].value != "")
+		{
+			search = document.getElementsByName("glee_search")[0].value;
+		}
+	else
+		search = "http://www.google.com/search?q=";
+	localStorage["glee_search"] = search;
+		
 	//saving the gleeBox position
 	if(document.getElementsByName("glee_pos")[0].checked) //top
 		pos = 0;
@@ -265,11 +273,11 @@ function save_options() {
 	localStorage["glee_esp_urls"] = espURL;
 	localStorage["glee_esp_selectors"] = espSel;
 
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,espStatus,espModifiers);
+	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,search,espStatus,espModifiers);
 	setStatus("Settings saved!");
 }
 
-function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers,espStatus,espModifiers){
+function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers,search,espStatus,espModifiers){
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
 		for( i=0; i<windows.length; i++)
@@ -277,7 +285,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers,espStatus:espStatus,espModifiers:espModifiers},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers,search:search,espStatus:espStatus,espModifiers:espModifiers},function(response){
 				});
 			}
 		}
@@ -328,6 +336,13 @@ function restore_options()
 		document.getElementsByName("glee_size")[size].checked = true;
 	else
 		document.getElementsByName("glee_size")[2].checked = true; //default is large size
+
+	//getting search engine
+	var search = localStorage["glee_search"];
+	if(search)
+		document.getElementsByName("glee_search")[0].value = search;
+	else
+		document.getElementsByName("glee_search")[0].value = "http://www.google.com/search?q=";
 
 	//getting theme
 	var theme = localStorage["glee_theme"];
@@ -460,7 +475,6 @@ function addDomain() {
 		newLI.innerHTML = newDomain.value + inputBt;
 		domainList.insertBefore(newLI,lastChild);
 		newDomain.value = "";
-		setStatus("URL Added!");
 	}
 }
 
@@ -469,7 +483,7 @@ function removeDomain(i){
 	var domainList = document.getElementById("domains");
 	domainList.removeChild(el);
 	//remove the domain from the list
-	setStatus("URL Removed!");
+
 	return 0;
 }
 
@@ -487,7 +501,6 @@ function addScraper(){
 		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+no+")'/>";
 		newLI.innerHTML = "<span><strong>?"+scraperName.value+"</strong></span> : <span>"+scraperSel.value+"</span>"+inputBt;
 		scraperList.insertBefore(newLI,document.getElementById("addScraper"));
-		setStatus("<strong>?"+scraperName.value+"</strong> command added!");
 		scraperName.value="";
 		scraperSel.value="";
 	}
@@ -498,7 +511,6 @@ function removeScraper(i){
 	var scraperList = document.getElementById("scraper-commands");
 	scraperList.removeChild(el);
 	//remove the domain from the list
-	setStatus("Command Removed!");
 	return 0;
 }
 
@@ -506,21 +518,12 @@ function validateScraper(name,selector)
 {
 	//check that command name/selector should not be blank
 	if(name == "" || selector == "" || name == "Name" || selector == "jQuery Selector")
-	{
-		setStatus("Command name / Selector cannot be blank!");
 		return false;
-	}
 	//check that command name does not conflict with the default scraper command names
 	if(name == "h" || name == "?" || name == "img" || name == "a")
-	{
-		setStatus("Command name conflicts with a default scraper command!");
 		return false;
-	}
 	if(name.indexOf('`')!=-1 || selector.indexOf('`')!= -1)
-	{
-		setStatus("Command name / Selector cannot contain `");
 		return false;
-	}
 	return true;
 }
 
@@ -608,7 +611,6 @@ function initDefaultTexts() {
 <body onload="restore_options()">
 <div id="wrap">
 <h2>gleeBox Options</h2>
-<div id="status"></div>
 <!--Specifying different options available -->
 <div id="options">
 	<h3>Features</h3>
@@ -621,14 +623,23 @@ function initDefaultTexts() {
 			</ul>
 		</li>
 		<li>
-			<label class="option-label">Bookmark search<br/><span class="subtext">Search bookmarks when no matching links are found on a page</span></label>
+			<label class="option-label">Search Engine</label>
+			<div class="option-field">
+				<input name="glee_search" type="text" size=56><br/>
+				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.google.com/search?q=";'>Google</a>&nbsp;&nbsp;
+				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.bing.com/search?q=";'>Bing</a>&nbsp;&nbsp;
+<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://search.yahoo.com/search?p=";'>Yahoo</a>
+			</div>
+		</li>
+		<li>
+			<label class="option-label">Bookmark search<br/><span class="subtext">Searches bookmarks when no matching links are found</span></label>
 			<div class="option-field">
 				<input name="glee_bookmark_search" type="radio"> Yes
 				<input name="glee_bookmark_search" type="radio"> No
 			</div>
 		</li>
 		<li>
-			<label class="option-label">Animated scrolling<br/><span class="subtext">Do scroll animation while traversing selected elements using gleeBox</span></label>
+			<label class="option-label">Animated scrolling<br/><span class="subtext">Provides scrolling animation when traversing selected elements</span></label>
 			<div class="option-field">
 				<input name="glee_scrolling_animation" type="radio"> Yes
 				<input name="glee_scrolling_animation" type="radio"> No
@@ -700,8 +711,9 @@ function initDefaultTexts() {
 		<input type="button" class="superButton" value="&nbsp;Save and Close&nbsp;" onclick="save_options();closeOptions();">
 	</div>
 	<div id="footer">
- For the complete list of features and commands, please read the <a href="http://thegleebox.com/manual.html">user manual</a>. <br>You can submit bugs and feature requests on the <a href="http://github.com/glee/glee/issues">issues page</a>, or mail them to us at <a href="mailto:gleebox@gmail.com">gleebox@gmail.com</a>.<br/><br/>
-		gleeBox was developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>).<br>If you like this extension, <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">consider donating</a> for its further development.
+		<a href="http://thegleebox.com/manual.html">User Manual</a>&nbsp; • &nbsp;<a href="http://tipjar.thegleebox.com">TipJar</a>&nbsp; • &nbsp;<a href="http://github.com/glee/glee/issues">Report Issues</a>&nbsp; • &nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">Donate</a>
+<br/>
+Created by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>).
 	</div>
 </div>
 </div>
