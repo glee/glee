@@ -162,6 +162,12 @@ jQuery(document).ready(function(){
 								break;
 							}
 						}
+						//if command is not found
+						if(!Glee.URL)
+						{
+							//find the closest matching bookmarklet
+							Glee.Firefox.getBookmarklet(trimVal);
+						}
 					}
 					else
 					{
@@ -221,11 +227,20 @@ jQuery(document).ready(function(){
 			else if(value[0] == "!" && value.length > 1)
 			{
 				//check if it is a command
-				//TODO:Glee.URL is misleading here when it actually contains the command. Fix this
+				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 				if(typeof(Glee.URL.name) != "undefined")
 				{
 					Glee.execCommand(Glee.URL);
 					return;
+				}
+				else
+				{
+					url = Glee.URL.url;
+					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
+					eval(unescape(url.substring(11))); //get rid of javascript:
+					setTimeout(function(){
+						Glee.closeBox();
+					},0);
 				}
 			}
 			else

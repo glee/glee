@@ -150,6 +150,7 @@ getBookmarks: function(searchQuery){
 
 	var options = history.getNewQueryOptions();
 	options.queryType = options.QUERY_TYPE_BOOKMARKS;
+	options.sortingMode = options.SORT_BY_TITLE_ASCENDING;
 
 	var result = history.executeQuery(query, options);
 
