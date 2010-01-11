@@ -108,6 +108,7 @@ jQuery(document).ready(function(){
 				else {
 					LinkReaper.unreapAllLinks();
 					Glee.commandMode = true;
+					Glee.selectedElement = null; //reset selected element
 					if(Glee.bookmarkSearchStatus)
 						Glee.bookmarks = []; //empty the bookmarks array
 					Glee.resetTimer();
@@ -533,6 +534,7 @@ var Glee = {
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
 		});
+		this.searchText = "";
 		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
@@ -541,6 +543,7 @@ var Glee = {
 			Glee.setSubText(null);
 		});
 		LinkReaper.unreapAllLinks();
+		this.searchText = "";
 		this.selectedElement = null;
 	},
 	initScraper: function(scraper){
@@ -840,8 +843,8 @@ var Glee = {
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
-		//Only update the user position if it is a scraping command
-		if(value[0] == "?" && value.length > 1)
+		//Only update the user position if it is a scraping command or tabbing in ESP mode
+		if((value[0] == "?" && value.length > 1) || (value == "" && Glee.espStatus))
 			Glee.userPosBeforeGlee = window.pageYOffset;
 	},
 	toggleActivity: function(toggle){
