@@ -39,7 +39,7 @@ function save_options(close_tab) {
 	else 	//medium
 		size = 1;
 	prefs.size = size;
-	
+
 	//save theme
 	tRadios = document.getElementsByName("glee_theme");
 	for (var i=0; i < tRadios.length; i++)
@@ -164,14 +164,14 @@ function restore_options(prefs)
 	}
 	//getting the gleeBox position
 	var pos = parseInt(prefs.position);
-	if(pos)
+	if(pos != undefined)
 		document.getElementsByName("glee_pos")[pos].checked = true;
 	else
 		document.getElementsByName("glee_pos")[1].checked = true;
 
 	//getting the gleeBox size
 	var size = parseInt(prefs.size);
-	if(size)
+	if(size != undefined)
 		document.getElementsByName("glee_size")[size].checked = true;
 	else
 		document.getElementsByName("glee_size")[1].checked = true;
