@@ -424,7 +424,7 @@ var Glee = {
 		{
 			name: "share",
 			method:"Glee.sharePage",
-			description:"Share this page. Valid params are mail, gmail, fb/facebook, deli(cious), digg, and su/stumbleupon."
+			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, deli(cious), digg, and su/stumbleupon."
 		}
 	],
 	
@@ -1026,10 +1026,12 @@ var Glee = {
 			desc = "";
 		switch(site) 
 		{
+			case "g":
 			case "gmail":
 				location.href="https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
 					+document.title+"&body="+location.href+"  -  "+desc;
 				break;
+			case "m":
 			case "mail":
 				location.href="mailto:?subject="
 					+document.title+"&body="+location.href+"  -  "+desc;
