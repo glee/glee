@@ -41,56 +41,58 @@ Glee.Chrome.sendRequest = function(url,method,callback){
 }
 
 Glee.Chrome.applyOptions = function(response){
+	var prefs = response.preferences;
 	//gleeBox position
-	if(response.position != undefined)
+	if(prefs.position != undefined)
 	{
-		if(response.position == 0) //top
+		if(prefs.position == 0) 		//top
 			Glee.position = "top";
-		else if(response.position == 2)	//bottom
+		else if(prefs.position == 2)	//bottom
 			Glee.position = "bottom";
 		else 
-			Glee.position = "middle"; //default
+			Glee.position = "middle"; 	//default
 	}
 	
 	//gleeBox Size
-	if(response.size != undefined)
+	if(prefs.size != undefined)
 	{
-		if(response.size == 0)
+		if(prefs.size == 0)
 			Glee.size = "small";
-		else if(response.size == 2)
+		else if(prefs.size == 2)
 			Glee.size = "large";
 		else
 			Glee.size = "medium"; //default
 	}
 	
 	//Bookmark search
-	if(response.bookmark_search != undefined)
+	if(prefs.bookmark_search != undefined)
 	{
-		if(response.bookmark_search == 1)
+		if(prefs.bookmark_search == 1)
 			Glee.bookmarkSearchStatus = true; //enabled
 		else
 			Glee.bookmarkSearchStatus = false;
 	}
 
 	//Scrolling animation
-	if(response.animation != undefined)
+	if(prefs.scroll_animation != undefined)
 	{
-		if(response.animation == 0)
+		if(prefs.scroll_animation == 0)
 			Glee.scrollingSpeed = 0; //disabled
 		else
 			Glee.scrollingSpeed = 750; //enabled
 	}
 	
 	//getting the restricted domains
-	if(response.domains != undefined)
+	if(prefs.disabledUrls != undefined)
 	{
 		Glee.domainsToBlock.splice(0,Glee.domainsToBlock.length);
-		for(var i=0;i<response.domains.length;i++)
-			Glee.domainsToBlock[i] = response.domains[i];
+		var len = prefs.disabledUrls.length;
+		for(var i=0;i<len;i++)
+			Glee.domainsToBlock[i] = prefs.disabledUrls[i];
 	}
 	
 	//Theme
-	if(response.theme != undefined)
+	if(prefs.theme != undefined)
 	{
 		//If a theme is already set, remove it
 		if(Glee.ThemeOption)
@@ -98,50 +100,50 @@ Glee.Chrome.applyOptions = function(response){
 			Glee.searchBox.removeClass(Glee.ThemeOption);
 			Glee.searchField.removeClass(Glee.ThemeOption);
 		}		
-		Glee.ThemeOption = response.theme;
+		Glee.ThemeOption = prefs.theme;
 	}
 	
 	//Search
-	if(response.search != undefined)
+	if(prefs.search_engine != undefined)
 	{
-		Glee.searchEngineUrl = response.search;
+		Glee.searchEngineUrl = prefs.search_engine;
 	}
 
 	//getting the custom scraper commands
-	if(response.scrapers != undefined)
+	if(prefs.scrapers != undefined)
 	{
 		Glee.scrapers.splice(4,Glee.scrapers.length);
-		var len = response.scrapers.length;
+		var len = prefs.scrapers.length;
 		for(i = 0;i < len;i ++)
-			Glee.scrapers[4+i] = response.scrapers[i];
+			Glee.scrapers[4+i] = prefs.scrapers[i];
 	}
 	
 	// Hyper Mode
-	if(response.hyper != undefined)
+	if(prefs.hyper != undefined)
 	{
-		if(response.hyper == 1)
+		if(prefs.hyper == 1)
 			Glee.hyperMode = true;
 		else
 			Glee.hyperMode = false;
 	}
 	
 	// ESP Status
-	if(response.espStatus != undefined)
+	if(prefs.espStatus != undefined)
 	{
-		if(response.espStatus == 1)
+		if(prefs.espStatus == 1)
 			Glee.espStatus = true;
 		else
 			Glee.espStatus = false;
 	}
 
 	// ESP Modifiers
-	if(response.espModifiers != undefined)
-		Glee.espModifiers = response.espModifiers;
+	if(prefs.espModifiers != undefined)
+		Glee.espModifiers = prefs.espModifiers;
 	
 	//check if it is a disabled domain
-	if(response.status != undefined)
+	if(prefs.status != undefined)
 	{
-		if(Glee.checkDomain() == 1 && response.status == 1)
+		if(Glee.checkDomain() == 1 && prefs.status == 1)
 			Glee.status = 1;
 		else
 			Glee.status = 0;
@@ -207,7 +209,7 @@ Glee.Chrome.getOptions = function(){
 	chrome.extension.sendRequest({value:"getOptions"},Glee.Chrome.applyOptions);
 }
 
-//adding a listener to respond to requests from background.html to update the status and options.html to update settings
+//adding a listener to respond to requests from background.html to update the status/settings
 chrome.extension.onRequest.addListener(
 	function(request,sender,sendResponse){
 		if(request.value == "initStatus")

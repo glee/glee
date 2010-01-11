@@ -8,7 +8,6 @@ function getDefaultPreferences(){
 		scroll_animation:"1",
 		esp_status:"0"
 	};
-	
 	return prefs;
 }
 

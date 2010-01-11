@@ -74,10 +74,6 @@ function save_options() {
 
 	prefs[prefs.length] = {name:"scroll_animation",value:animation};
 
-	prefs[prefs.length] = {name:"status", value:localStorage["glee_status"]};
-	if(typeof(status) == "undefined")
-		status = 1;
-
 	//saving the custom scraper commands
 	var scraperList = document.getElementById("scraper-commands");
 	var len = scraperList.children.length;
@@ -166,11 +162,17 @@ function restore_options(prefs)
 	
 	//getting the gleeBox position
 	var pos = parseInt(prefs["position"]);
-	document.getElementsByName("glee_pos")[pos].checked = true;
+	if(pos)
+		document.getElementsByName("glee_pos")[pos].checked = true;
+	else
+		document.getElementsByName("glee_pos")[1].checked = true;
 
 	//getting the gleeBox size
 	var size = parseInt(prefs["size"]);
-	document.getElementsByName("glee_size")[size].checked = true;
+	if(size)
+		document.getElementsByName("glee_size")[size].checked = true;
+	else
+		document.getElementsByName("glee_size")[1].checked = true;
 
 	//getting search engine
 	var search = prefs["search_engine"];
@@ -276,7 +278,7 @@ function restore_options(prefs)
 			newLI_2.id = "esp1";
 			newLI_2.innerHTML = "<span>bing.com/search</span> : <span>div.sb_tlst</span>"+inputBt_2;
 			espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
-		}		
+		}
 	});
 }
 

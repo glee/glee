@@ -20,7 +20,7 @@ function opendb(){
 	return glee_db;
 }
 
-function createPrefTable(A)
+function createPrefsTable(A)
 {
 	if(A)
 	{
@@ -59,7 +59,7 @@ function createESPTable(A)
 	}
 }
 
-function createScraperTable(A)
+function createScrapersTable(A)
 {
 	if(A)
 	{
@@ -75,7 +75,7 @@ function createScraperTable(A)
 function savePrefs(prefs)
 {
 	var A = opendb();
-	createPrefTable(A);
+	createPrefsTable(A);
 	if(A)
 	{
 		A.transaction(function(D){
@@ -92,7 +92,7 @@ function savePrefs(prefs)
 
 function saveScrapers(scrapers){
 	var A = opendb();
-	createScraperTable(A);
+	createScrapersTable(A);
 	if(A)
 	{
 		A.transaction(function(D){
@@ -145,7 +145,28 @@ function saveESP(esp){
 	}	
 }
 
-function loadPrefs(){
+function loadAllPrefs(callback){
+	//TODO: Find a better way to do this. Currently, successive callbacks are used to get the values from all the 4 tables
+	//before sending the response
+
+	//This method is used by background.html and options.html to get options and send them back to the content script
+	var response = {};
+
+	loadPrefs(function(val1){
+		response = val1;
+		loadDisabledUrls(function(val2){
+			response.disabledUrls = val2;
+			loadScrapers(function(val3){
+				response.scrapers = val3;
+				loadESP(function(val4){
+					response.espModifiers = val4;
+					callback(response);
+				});
+			});
+		});
+	});
+}
+function loadPrefs(callback){
 	var A = opendb();
 	if(A)
 	{
@@ -153,24 +174,25 @@ function loadPrefs(){
 			B.executeSql("SELECT * FROM gleeboxPrefs",
 			[],
 			function(E,F){
-				var prefs = [];
+				var prefs = {};
 				for(var i=0;i<F.rows.length;i++)
 				{
 					prefs[F.rows.item(i)["prefname"]] = F.rows.item(i)["prefvalue"];
 				}
-				restore_options(prefs);
+				callback(prefs);
 			},
 			function(E,F){console.log(F);
 				//send back default values
 				var prefs = getDefaultPreferences();
-				restore_options(prefs);
-				})
+				callback(prefs);
+			});
 		});
 	}
 }
 
 function loadDisabledUrls(callback){
 	var A = opendb();
+
 	if(A)
 	{
 		A.transaction(function(B){
@@ -178,16 +200,15 @@ function loadDisabledUrls(callback){
 			[],
 			function(E,F){
 				var disabledUrls = [];
-				for(var i=0;i<F.rows.length;i++)
-				{
+				var len = F.rows.length;
+				for(var i=0;i<len;i++)
 					disabledUrls[i] = F.rows.item(i)["url"];
-				}
+
 				callback(disabledUrls);
 			},
 			function(E,F){
 				console.log(F);
-				var urls = getDefaultDisabledUrls();
-				callback(urls);
+				callback(getDefaultDisabledUrls());
 			})
 		});
 	}
@@ -195,6 +216,7 @@ function loadDisabledUrls(callback){
 
 function loadScrapers(callback){
 	var A = opendb();
+
 	if(A)
 	{
 		A.transaction(function(B){
@@ -202,10 +224,10 @@ function loadScrapers(callback){
 			[],
 			function(E,F){
 				var scrapers = [];
-				for(var i=0;i<F.rows.length;i++)
-				{
+				var len = F.rows.length;
+				for(var i=0;i<len;i++)
 					scrapers[i] = {name:F.rows.item(i)["name"], selector:F.rows.item(i)["selector"]};
-				}
+
 				callback(scrapers);
 			},
 			function(E,F){console.log(F);})
@@ -215,6 +237,7 @@ function loadScrapers(callback){
 
 function loadESP(callback){
 	var A = opendb();
+
 	if(A)
 	{
 		A.transaction(function(B){
@@ -223,9 +246,7 @@ function loadESP(callback){
 			function(E,F){
 				var espModifiers = [];
 				for(var i=0;i<F.rows.length;i++)
-				{
 					espModifiers[i] = {url:F.rows.item(i)["url"], selector:F.rows.item(i)["selector"]};
-				}
 				callback(espModifiers);
 			},
 			function(E,F){
@@ -237,37 +258,61 @@ function loadESP(callback){
 	}
 }
 
-function loadPreference(prefname,defaultValue,callback){
+function loadPreference(prefname, defaultValue, callback){
 	var A = opendb();
-	createPrefTable(A);	
+	createPrefsTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
 			B.executeSql("SELECT * FROM gleeboxPrefs where prefname=?",
 			[prefname],
 			function(C,D){
-				var value = D.rows.item(0)["prefvalue"];
-				if(value)
-					callback(value);
+				if(D.rows.length != 0)
+				{
+					var value = D.rows.item(0)["prefvalue"];
+					if(value)
+						callback(value);
+					else
+						callback(defaultValue);
+				}
 				else
-					callback(defaultValue);
+					initPreference(prefname,defaultValue,callback);
 			},
 			function(C,D){
 				console.log(D);
-				callback(defaultValue);
+				callback(null);
 			});
 		});
 	}
 }
 
-function saveStatus(status){
+function initPreference(prefname, value, callback){
 	var A = opendb();
-	createPrefTable(A);
+	createPrefsTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("UPDATE gleeboxPrefs SET prefvalue = ? WHERE prefname='status'",
-			[status],
+			B.executeSql("INSERT INTO gleeboxPrefs (prefname,prefvalue) VALUES (?, ?)",
+			[prefname,value],
+			function(C,D){
+				callback(value);
+			},
+			function(C,D){
+				console.log(D);
+				callback(null);
+			});
+		});
+	}	
+}
+
+function savePreference(prefname,value){
+	var A = opendb();
+	createPrefsTable(A);
+	if(A)
+	{
+		A.transaction(function(B){
+			B.executeSql("UPDATE gleeboxPrefs SET prefvalue = ? WHERE prefname=?",
+			[value,prefname],
 			function(C,D){
 			},
 			function(C,D){
