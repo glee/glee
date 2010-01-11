@@ -467,7 +467,7 @@ function restore_options()
 		var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(1)'/>";
 		newLI_2.className = "esp";
 		newLI_2.id = "esp1";
-		newLI_2.innerHTML = "<span>bing.com/search</span> : <span>h3>a</span>"+inputBt_2;
+		newLI_2.innerHTML = "<span>bing.com/search</span> : <span>div.sb_tlst</span>"+inputBt_2;
 		espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
 	}
 }
@@ -643,15 +643,15 @@ function initDefaultTexts() {
 		<li>
 			<label class="option-label">Bookmark search<br/><span class="subtext">Searches bookmarks when no matching links are found</span></label>
 			<div class="option-field">
-				<input name="glee_bookmark_search" type="radio"> Yes
-				<input name="glee_bookmark_search" type="radio"> No
+				<input name="glee_bookmark_search" type="radio"> On
+				<input name="glee_bookmark_search" type="radio"> Off
 			</div>
 		</li>
 		<li>
 			<label class="option-label">Animated scrolling<br/><span class="subtext">Provides scrolling animation when traversing selected elements</span></label>
 			<div class="option-field">
-				<input name="glee_scrolling_animation" type="radio"> Yes
-				<input name="glee_scrolling_animation" type="radio"> No
+				<input name="glee_scrolling_animation" type="radio"> On
+				<input name="glee_scrolling_animation" type="radio"> Off
 			</div>
 		</li>
 		<!-- <li>
@@ -661,29 +661,6 @@ function initDefaultTexts() {
 				<input name="glee_hyper" value="disabled" type="radio"> Disabled
 			</div>
 		</li> -->
-		<li>
-			<label class="option-label">Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label>
-			<ul id="scraper-commands" class="option-field">
-				<li><strong>??</strong> : Input Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-				<li><strong>?h</strong> : H1, H2 and H3 Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-				<li><strong>?a</strong> : Links<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-				<li id="addScraper"><form onsubmit="addScraper();return false;"><strong>?</strong><input id="scraper-name" type="text" value="Name" size=12 /> : <input id="scraper-selector" type="text" value="jQuery Selector" size=30 /><input type="submit" value="Add" class="button"/></form></li>
-			</ul>
-		</li>
-		<li>
-			<label class="option-label">ESP Mode<br/><span class="subtext">In this mode, you can specify default selector for a page which will automatically execute when you launch gleeBox on that page</span></label>
-			<div class="option-field">
-				<input name="glee_esp_status" type="radio"> Yes
-				<input name="glee_esp_status" type="radio"> No
-			</div>
-		</li>
-		<li>
-			<label class="option-label">ESP Visions<br/><span class="subtext">Specify the page and the default selector </span></label>
-			<ul id="esp-modifiers" class="option-field">
-				<li id="addEspModifier"><form onsubmit="addEspModifier();return false;"><input id="esp-url" type="text" value="Page URL" size=30 /> : <input id="esp-selector" type="text" value="jQuery Selector" size=20 /><input type="submit" value="Add" class="button"/></form></li>
-			</ul>
-		</li>
 	</ul>
 	<h3>Appearance</h3>
 	<ul class="options">
@@ -713,6 +690,35 @@ function initDefaultTexts() {
 				<input name="glee_theme" value="GleeThemeRuby" type="radio"> Ruby <br>
 				<input name="glee_theme" value="GleeThemeGlee" type="radio"> New Directions
 			</div>
+		</li>
+	</ul>
+	<h3>Advanced</h3>
+	<ul class="options">
+		<li style="font-size:14px;color:gray">
+			Some of these options require an understanding of <a href="http://docs.jquery.com/Selectors">jQuery selectors</a>. Find and share advanced gleeBox tips at <a href="http://tipjar.thegleebox.com">TipJar</a>.
+		</li>
+		<li>
+			<label class="option-label">Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label>
+			<ul id="scraper-commands" class="option-field">
+				<li><strong>??</strong> : Input Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li><strong>?h</strong> : H1, H2 and H3 Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li><strong>?a</strong> : Links<span style="float:right;font-size:14px;color:gray">In-built</span></li>
+				<li id="addScraper"><form onsubmit="addScraper();return false;"><strong>?</strong><input id="scraper-name" type="text" value="Name" size=12 /> : <input id="scraper-selector" type="text" value="jQuery Selector" size=30 /><input type="submit" value="Add" class="button"/></form></li>
+			</ul>
+		</li>
+		<li>
+			<label class="option-label">ESP Mode<br/><span class="subtext">Gives gleeBox powers of 'ESP'. In this mode, you can make gleeBox run a jQuery selector on a page as soon as you open it.</span></label>
+			<div class="option-field">
+				<input name="glee_esp_status" type="radio"> On
+				<input name="glee_esp_status" type="radio"> Off
+			</div>
+		</li>
+		<li>
+			<label class="option-label">ESP Visions<br/><span class="subtext">Specify part of a page's URL and the default jQuery selector to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is set to On.</span></label>
+			<ul id="esp-modifiers" class="option-field">
+				<li id="addEspModifier"><form onsubmit="addEspModifier();return false;"><input id="esp-url" type="text" value="Page URL" size=22 /> : <input id="esp-selector" type="text" value="jQuery Selector" size=20 /><input type="submit" value="Add" class="button"/></form></li>
+			</ul>
 		</li>
 	</ul>
 	<div style="text-align:center">

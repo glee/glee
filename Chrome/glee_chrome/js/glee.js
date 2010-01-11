@@ -461,7 +461,7 @@ var Glee = {
 		},
 		{
 			url : "bing.com/search",
-			selector : "h3>a"
+			selector : "div.sb_tlst"
 		}
 	],
 	//jQuery cache objects
