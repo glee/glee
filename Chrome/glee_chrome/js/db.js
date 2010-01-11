@@ -56,7 +56,7 @@ function initPrefsTable(A){
 			var prefs = getDefaultPreferences();
 			for(var i in prefs)
 			{
-				B.executeSql("INSERT INTO preferences (prefname, prefvalue) VALUES (?, ?)",[prefs[i].name,prefs[i].value],
+				B.executeSql("INSERT INTO preferences (prefname, prefvalue) VALUES (?, ?)",[i,prefs[i]],
 				function(C,D){},
 				function(C,D){ console.log(D); });
 			}
