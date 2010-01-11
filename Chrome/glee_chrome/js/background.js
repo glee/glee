@@ -1,44 +1,41 @@
+var response = {};
 var status;
 
 //set the status value and update the browser action
 function setStatus(value)
 {
-	status = value;
-	if(status == 1)
-	{
-		chrome.browserAction.setBadgeText({text:"ON"});	
-		chrome.browserAction.setBadgeBackgroundColor({color:[103,163,82,255]});
-	}
+	if(!value)
+		status = 1;
 	else
+		status = value;
+	if(status == 0)
 	{
 		chrome.browserAction.setBadgeText({text:"OFF"});	
 		chrome.browserAction.setBadgeBackgroundColor({color:[185,188,193,255]});
+	}
+	else
+	{
+		chrome.browserAction.setBadgeText({text:"ON"});	
+		chrome.browserAction.setBadgeBackgroundColor({color:[103,163,82,255]});
 	}
 }
 
 //initialize the status value on load of background.html
 function initStatus(){
-	if(typeof(localStorage['glee_status']) != "undefined")
-	{
-		setStatus(localStorage['glee_status']);
-	}
-	else
-		setStatus(1);
+	loadPreference("status",1,function(status){
+		setStatus(status);
+	});
 }
 
 //Toggle status value and store it in local storage
 function toggleStatus(tab){
-	if(typeof(localStorage['glee_status']) != "undefined")
-	{
-		status = localStorage['glee_status'];
-	}
+	if(status == 1)
+		status = 0;
 	else
 		status = 1;
-	if(status == 1)
-		setStatus(0);
-	else
-		setStatus(1);
-	localStorage['glee_status'] = status;
+
+	savePreference("status",status);
+	setStatus(status);
 	
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
@@ -119,71 +116,10 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	}
 	else if(request.value == "getOptions")
 	{
-		//Bookmark search status option
-		var bookmark_search = localStorage["glee_bookmark_search"];
-		//gleeBox position
-		var position = localStorage["glee_position"];
-		//gleeBox size
-		var size = localStorage["glee_size"];
-		//search engine
-		var search = localStorage["glee_search"];
-		//disabled domains
-		if(localStorage["glee_domains"]) 
-			domains = localStorage["glee_domains"].split(",");
-		else
-			domains = null;
-		//scrolling animation
-		var animation = localStorage["glee_scrolling_animation"];
-		//theme
-		var theme = localStorage["glee_theme"];
-		//hyper mode
-		var hyper = localStorage["glee_hyper"];
-		//custom scraper commands
-		if(localStorage["glee_scraper_names"])
-		{
-			var scraperName = localStorage["glee_scraper_names"].split("`");
-			var scraperSel = localStorage["glee_scraper_selectors"].split("`");
-			var scrapers = [];
-			var len = scraperName.length;
-			//last element is an empty string only containing a ,
-			for(var i=0;i < len-1; i++)
-			{
-				if(i > 0)
-				{
-					//remove the , that is used by localStorage to separate elements
-					scraperName[i] = scraperName[i].slice(1,scraperName[i].length);
-					scraperSel[i] = scraperSel[i].slice(1,scraperSel[i].length);
-				}
-				scrapers[i] = { command:scraperName[i], selector:scraperSel[i], cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
-			}
-		}
+		loadAllPrefs(function(response){
+			sendResponse({preferences:response});
+		});
 		
-		//esp status
-		var espStatus = localStorage["glee_esp_status"];
-		
-		var espModifiers = null;
-		//esp modifiers
-		if(localStorage["glee_esp_urls"])
-		{
-			var espURL = localStorage["glee_esp_urls"].split(".NEXT.");
-			var espSel = localStorage["glee_esp_selectors"].split(".NEXT.");
-			var espModifiers = [];
-			var len = espURL.length;
-			//last element is an empty string only containing a ,
-			for(var i=0;i < len-1; i++)
-			{
-				if(i > 0)
-				{
-					//remove the , that is used by localStorage to separate elements
-					espURL[i] = espURL[i].slice(1,espURL[i].length);
-					espSel[i] = espSel[i].slice(1,espSel[i].length);
-				}
-				espModifiers[i] = { url:espURL[i], selector:espSel[i] };
-			}
-		}
-		
-		sendResponse({status:status, bookmark_search:bookmark_search, position:position, size:size, domains:domains, animation:animation, theme:theme,scrapers:scrapers, hyper:hyper, search:search, espStatus:espStatus, espModifiers:espModifiers});
-
 	}
 	else if(request.value == "updateOption")
 	{
@@ -209,33 +145,34 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 			case 'ruby'		: value = "GleeThemeRuby"; break;
 			case 'glee'		: value = "GleeThemeGlee"; break;
 		}
-
+		var response = {};
 		switch(request.option)
 		{
-			case "scroll"	: localStorage["glee_scrolling_animation"] = value;
-							  sendResponse({animation:value});
+			case "scroll"	: savePreference("scroll_animation",value);
+							  response.scroll_animation = value;
 							  break;
 
-			case "bsearch"	: localStorage["glee_bookmark_search"] = value;
-							  sendResponse({bookmark_search:value});
+			case "bsearch"	: savePreference("bookmark_search",value);
+							  response.bookmark_search = value;
 							  break;
 							
-			case "hyper"	: localStorage["glee_hyper"] = value;
-							  sendResponse({hyper:value});
+			case "hyper"	: savePreference("hyper",value);
+							  response.hyper = value;
 							  break;
 
-			case "size"		: localStorage["glee_size"] = value;
-							  sendResponse({size:value});
+			case "size"		: savePreference("size",value);
+							  response.size = value;
 							  break;
 			
 			case "pos"		:
-			case "position"	: localStorage["glee_position"] = value;
-							  sendResponse({position:value});
+			case "position"	: savePreference("position",value);
+							  response.position = value;
 							  break;
 
-			case "theme"	: localStorage["glee_theme"] = value;
-							  sendResponse({theme:value});
+			case "theme"	: savePreference("theme",value);
+							  response.theme = value;
 							  break;
 		}
+		sendResponse({preferences:response});
 	}
 });
