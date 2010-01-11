@@ -1,13 +1,37 @@
 function getDefaultPreferences(){
-	var prefs = {
-		position:1,
-		size:1,
-		search_engine:"http://www.google.com/search?q=",
-		theme:"GleeThemeDefault",
-		bookmark_search:"0",
-		scroll_animation:"1",
-		esp_status:"0"
-	};
+	var prefs = [{
+		name:"position",
+		value:1
+	},
+	{
+		name:"status",
+		value:1
+	},
+	{
+		name:"size",
+		value:1
+	},
+	{
+		name:"search_engine",
+		value:"http://www.google.com/search?q="
+	},
+	{
+		name:"theme",
+		value:"GleeThemeDefault"
+	},
+	{
+		name:"bookmark_search",
+		value:0
+	},
+	{
+		name:"scroll_animation",
+		value:1
+	},
+	{
+		name:"esp_status",
+		value:0
+	}];
+
 	return prefs;
 }
 

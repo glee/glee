@@ -20,12 +20,18 @@ function setStatus(value)
 	}
 }
 
+function init(){
+	//initialize the db
+	initdb(initStatus);
+}
+
 //initialize the status value on load of background.html
 function initStatus(){
-	loadPreference("status",1,function(status){
+	loadPreference("status",function(status){
 		setStatus(status);
 	});
 }
+
 
 //Toggle status value and store it in local storage
 function toggleStatus(tab){

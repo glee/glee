@@ -7,7 +7,7 @@
 <script type="text/javascript" src="js/db.js"></script>
 <script type="text/javascript" src="js/defaults.js"></script>
 </head>
-<body onload="loadPrefs(restore_options);">
+<body onload="loadAllPrefs(restore_options);">
 <div id="wrap">
 <h2>gleeBox Options</h2>
 <!--Specifying different options available -->
@@ -112,8 +112,8 @@
 		</li>
 	</ul>
 	<div style="text-align:center">
-		<input type="button" class="superButton" value="&nbsp;Save&nbsp;" onclick="save_options()">&nbsp;&nbsp;
-		<input type="button" class="superButton" value="&nbsp;Save and Close&nbsp;" onclick="save_options();closeOptions();">
+		<input type="button" class="superButton" value="&nbsp;Save&nbsp;" onclick="save_options(false)">&nbsp;&nbsp;
+		<input type="button" class="superButton" value="&nbsp;Save and Close&nbsp;" onclick="save_options(true);">
 	</div>
 	<div id="footer">
 		<a href="http://thegleebox.com/manual.html">User Manual</a>&nbsp; • &nbsp;<a href="http://tipjar.thegleebox.com">TipJar</a>&nbsp; • &nbsp;<a href="http://github.com/glee/glee/issues">Report Issues</a>&nbsp; • &nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">Donate</a>

@@ -20,16 +20,75 @@ function opendb(){
 	return glee_db;
 }
 
+function initdb(callback){
+	var A = opendb();
+	createPrefsTable(A);
+	createDisabledUrlsTable(A);
+	createScrapersTable(A);
+	createESPTable(A);
+	if(A)
+	{
+		A.transaction(function(B){
+			B.executeSql("SELECT * from preferences",
+			[],
+			function(C,D){
+				if(D.rows.length == 0)
+				{
+					initPrefsTable(A);
+					initDisabledUrlsTable(A);
+					initScrapersTable(A);
+					initESPTable(A);
+				}
+				callback();
+			},
+			function(C,D){
+				console.log(D)
+				callback();
+			}
+			)});
+	}
+}
+
+function initPrefsTable(A){
+	if(A)
+	{
+		A.transaction(function(B){
+			var prefs = getDefaultPreferences();
+			for(var i in prefs)
+			{
+				B.executeSql("INSERT INTO preferences (prefname, prefvalue) VALUES (?, ?)",[prefs[i].name,prefs[i].value],
+				function(C,D){},
+				function(C,D){ console.log(D); });
+			}
+		});
+	}
+}
+
 function createPrefsTable(A)
 {
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("CREATE TABLE IF NOT EXISTS gleeboxPrefs(prefname varchar(255) PRIMARY KEY, prefvalue varchar(255), CONSTRAINT preftype UNIQUE (prefname))",
+			B.executeSql("CREATE TABLE IF NOT EXISTS preferences(prefname varchar(255) PRIMARY KEY, prefvalue varchar(255), CONSTRAINT preftype UNIQUE (prefname))",
 			[],
-			function(C,D){ },
+			function(C,D){},
 			function(C,D){ console.log(D); }
 		)});
+	}
+}
+
+function initDisabledUrlsTable(A){
+	if(A)
+	{
+		A.transaction(function(B){
+			var disabledUrls = getDefaultDisabledUrls();
+			for(var i in disabledUrls)
+			{
+				B.executeSql("INSERT INTO disabledUrls (url) VALUES (?)",[disabledUrls[i]],
+				function(C,D){},
+				function(C,D){ console.log(D); });
+			}
+		});
 	}
 }
 
@@ -38,11 +97,26 @@ function createDisabledUrlsTable(A)
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("CREATE TABLE IF NOT EXISTS gleeboxDisabledUrls(url varchar(255) PRIMARY KEY, CONSTRAINT urltype UNIQUE (url))",
+			B.executeSql("CREATE TABLE IF NOT EXISTS disabledUrls(url varchar(255) PRIMARY KEY, CONSTRAINT urltype UNIQUE (url))",
 			[],
 			function(C,D){},
 			function(C,D){console.log(D)}
-			)});
+		)});
+	}
+}
+
+function initESPTable(A){
+	if(A)
+	{
+		A.transaction(function(B){
+			var esp = getDefaultESP();
+			for(var i in esp)
+			{
+				B.executeSql("INSERT INTO esp (url, selector) VALUES (?, ?)",[esp[i].url, esp[i].selector],
+				function(C,D){},
+				function(C,D){ console.log(D); });
+			}
+		});
 	}
 }
 
@@ -51,12 +125,16 @@ function createESPTable(A)
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("CREATE TABLE IF NOT EXISTS gleeboxESP(url varchar(255) PRIMARY KEY, selector varchar(255), CONSTRAINT esptype UNIQUE (url))",
+			B.executeSql("CREATE TABLE IF NOT EXISTS esp(url varchar(255) PRIMARY KEY, selector varchar(255), CONSTRAINT esptype UNIQUE (url))",
 			[],
 			function(C,D){},
 			function(C,D){console.log(D)}
 			)});
 	}
+}
+
+function initScrapersTable(A){
+	//no default scrapers
 }
 
 function createScrapersTable(A)
@@ -64,7 +142,7 @@ function createScrapersTable(A)
 	if(A)
 	{
 		A.transaction(function(B){
- 			B.executeSql("CREATE TABLE IF NOT EXISTS gleeboxScrapers(name varchar(255) PRIMARY KEY, selector varchar(255), CONSTRAINT scrapertype UNIQUE (name))",
+ 			B.executeSql("CREATE TABLE IF NOT EXISTS scrapers(name varchar(255) PRIMARY KEY, selector varchar(255), CONSTRAINT scrapertype UNIQUE (name))",
 			[],
 			function(C,D){},
 			function(C,D){console.log(D)}
@@ -72,7 +150,7 @@ function createScrapersTable(A)
 	}
 }
 
-function savePrefs(prefs)
+function savePrefs(prefs,callback)
 {
 	var A = opendb();
 	createPrefsTable(A);
@@ -81,8 +159,11 @@ function savePrefs(prefs)
 		A.transaction(function(D){
 			for(var i in prefs)
 			{
-				D.executeSql("REPLACE INTO gleeboxPrefs (prefname, prefvalue) VALUES (?, ?)",[prefs[i].name,prefs[i].value],
-				function(E,F){},
+				D.executeSql("REPLACE INTO preferences (prefname, prefvalue) VALUES (?, ?)",[prefs[i].name,prefs[i].value],
+				function(E,F){
+					if(i == prefs.length-1)
+						callback();
+				},
 				function(E,F){console.log(F)}
 				);
 			}
@@ -90,55 +171,64 @@ function savePrefs(prefs)
 	}
 }
 
-function saveScrapers(scrapers){
+function saveScrapers(scrapers,callback){
 	var A = opendb();
 	createScrapersTable(A);
 	if(A)
 	{
 		A.transaction(function(D){
 			//empty the table first
-			D.executeSql("DELETE FROM gleeboxScrapers");
+			D.executeSql("DELETE FROM scrapers");
 			for(var i in scrapers)
 			{
-				D.executeSql("INSERT INTO gleeboxScrapers (name, selector) VALUES (?, ?)",[scrapers[i].command,scrapers[i].selector],
-				function(E,F){},
+				D.executeSql("INSERT INTO scrapers (name, selector) VALUES (?, ?)",[scrapers[i].command,scrapers[i].selector],
+				function(E,F){
+					if(i == scrapers.length-1)
+						callback();
+				},
 				function(E,F){console.log(F)});
 			}
 		});
 	}
 }
-function saveDisabledUrls(disabledUrls){
+function saveDisabledUrls(disabledUrls,callback){
 	var A = opendb();
 	createDisabledUrlsTable(A);
 	if(A)
 	{
 		A.transaction(function(D){
 			//empty the table first
-			D.executeSql("DELETE FROM gleeboxDisabledUrls");
+			D.executeSql("DELETE FROM disabledUrls");
 			
 			for(var i in disabledUrls)
 			{
-				D.executeSql("INSERT INTO gleeboxDisabledUrls (url) VALUES (?)",[disabledUrls[i]],
-				function(E,F){},
+				D.executeSql("INSERT INTO disabledUrls (url) VALUES (?)",[disabledUrls[i]],
+				function(E,F){
+					if(i == disabledUrls.length-1)
+						callback();
+				},
 				function(E,F){console.log(F)});
 			}
 		});
 	}
 }
 
-function saveESP(esp){
+function saveESP(esp,callback){
 	var A = opendb();
 	createESPTable(A);
 	if(A)
 	{
 		A.transaction(function(D){
 			//empty the table first
-			D.executeSql("DELETE FROM gleeboxESP");
+			D.executeSql("DELETE FROM esp");
 			
 			for(var i in esp)
 			{
-				D.executeSql("INSERT INTO gleeboxESP (url, selector) VALUES (?, ?)",[esp[i].url, esp[i].selector],
-				function(E,F){},
+				D.executeSql("INSERT INTO esp (url, selector) VALUES (?, ?)",[esp[i].url, esp[i].selector],
+				function(E,F){
+					if(i == esp.length-1)
+						callback();
+				},
 				function(E,F){console.log(F)});
 			}
 		});
@@ -168,23 +258,22 @@ function loadAllPrefs(callback){
 }
 function loadPrefs(callback){
 	var A = opendb();
+	createPrefsTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("SELECT * FROM gleeboxPrefs",
+			B.executeSql("SELECT * FROM preferences",
 			[],
 			function(E,F){
 				var prefs = {};
-				for(var i=0;i<F.rows.length;i++)
+				var len = F.rows.length;
+				for(var i=0;i<len;i++)
 				{
 					prefs[F.rows.item(i)["prefname"]] = F.rows.item(i)["prefvalue"];
 				}
 				callback(prefs);
 			},
 			function(E,F){console.log(F);
-				//send back default values
-				var prefs = getDefaultPreferences();
-				callback(prefs);
 			});
 		});
 	}
@@ -192,11 +281,11 @@ function loadPrefs(callback){
 
 function loadDisabledUrls(callback){
 	var A = opendb();
-
+	createDisabledUrlsTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("SELECT * FROM gleeboxDisabledUrls",
+			B.executeSql("SELECT * FROM disabledUrls",
 			[],
 			function(E,F){
 				var disabledUrls = [];
@@ -208,7 +297,6 @@ function loadDisabledUrls(callback){
 			},
 			function(E,F){
 				console.log(F);
-				callback(getDefaultDisabledUrls());
 			})
 		});
 	}
@@ -216,11 +304,11 @@ function loadDisabledUrls(callback){
 
 function loadScrapers(callback){
 	var A = opendb();
-
+	createScrapersTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("SELECT * FROM gleeboxScrapers",
+			B.executeSql("SELECT * FROM scrapers",
 			[],
 			function(E,F){
 				var scrapers = [];
@@ -237,11 +325,11 @@ function loadScrapers(callback){
 
 function loadESP(callback){
 	var A = opendb();
-
+	createESPTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("SELECT * FROM gleeboxESP",
+			B.executeSql("SELECT * FROM esp",
 			[],
 			function(E,F){
 				var espModifiers = [];
@@ -251,20 +339,18 @@ function loadESP(callback){
 			},
 			function(E,F){
 				console.log(F);
-				var esp = getDefaultESP();
-				callback(esp);	
 			})
 		});
 	}
 }
 
-function loadPreference(prefname, defaultValue, callback){
+function loadPreference(prefname, callback){
 	var A = opendb();
 	createPrefsTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("SELECT * FROM gleeboxPrefs where prefname=?",
+			B.executeSql("SELECT * FROM preferences where prefname=?",
 			[prefname],
 			function(C,D){
 				if(D.rows.length != 0)
@@ -273,10 +359,10 @@ function loadPreference(prefname, defaultValue, callback){
 					if(value)
 						callback(value);
 					else
-						callback(defaultValue);
+						callback(null);
 				}
 				else
-					initPreference(prefname,defaultValue,callback);
+					callback(null);
 			},
 			function(C,D){
 				console.log(D);
@@ -286,32 +372,13 @@ function loadPreference(prefname, defaultValue, callback){
 	}
 }
 
-function initPreference(prefname, value, callback){
-	var A = opendb();
-	createPrefsTable(A);
-	if(A)
-	{
-		A.transaction(function(B){
-			B.executeSql("INSERT INTO gleeboxPrefs (prefname,prefvalue) VALUES (?, ?)",
-			[prefname,value],
-			function(C,D){
-				callback(value);
-			},
-			function(C,D){
-				console.log(D);
-				callback(null);
-			});
-		});
-	}	
-}
-
 function savePreference(prefname,value){
 	var A = opendb();
 	createPrefsTable(A);
 	if(A)
 	{
 		A.transaction(function(B){
-			B.executeSql("UPDATE gleeboxPrefs SET prefvalue = ? WHERE prefname=?",
+			B.executeSql("UPDATE preferences SET prefvalue = ? WHERE prefname=?",
 			[value,prefname],
 			function(C,D){
 			},
@@ -321,3 +388,23 @@ function savePreference(prefname,value){
 		});
 	}
 }
+
+// 
+// function initPreference(prefname, value, callback){
+// 	var A = opendb();
+// 	createPrefsTable(A);
+// 	if(A)
+// 	{
+// 		A.transaction(function(B){
+// 			B.executeSql("INSERT INTO preferences (prefname,prefvalue) VALUES (?, ?)",
+// 			[prefname,value],
+// 			function(C,D){
+// 				callback(value);
+// 			},
+// 			function(C,D){
+// 				console.log(D);
+// 				callback(null);
+// 			});
+// 		});
+// 	}	
+// }
