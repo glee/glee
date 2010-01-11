@@ -102,7 +102,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
-					},380);
+					},300);
 				}
 				//else command mode
 				else {
@@ -517,6 +517,7 @@ var Glee = {
 		// TODO: Hack to steal focus from page's window onload. 
 		// We can't add this stuff to onload. See if there's another way.
 		jQuery(window).fadeTo(100, 1, function(){
+			Glee.fireEsp();
 			Glee.searchField.focus();
 		});
 	},
