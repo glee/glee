@@ -420,6 +420,11 @@ var Glee = {
 			method:"Glee.Chrome.setOptionValue",
 			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
 			statusText:"Setting option..."
+		},
+		{
+			name: "share",
+			method:"Glee.sharePage",
+			description:"Share this page. Valid params are mail, gmail, fb/facebook, deli(cious), digg, and su/stumbleupon."
 		}
 	],
 	
@@ -1013,7 +1018,46 @@ var Glee = {
 			Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
 		});
 	},
-	
+	sharePage: function(){
+		var site = Glee.searchField.attr('value').substring(6).replace(" ","");
+		//Try to get description
+		var desc = jQuery('meta[name=description],meta[name=Downescription]').attr("content");
+		if(!desc)
+			desc = "";
+		switch(site) 
+		{
+			case "gmail":
+				location.href="https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
+					+document.title+"&body="+location.href+"  -  "+desc;
+				break;
+			case "mail":
+				location.href="mailto:?subject="
+					+document.title+"&body="+location.href+"  -  "+desc;
+				break;
+			case "fb":
+			case "facebook":
+				location.href="http://www.facebook.com/share.php?u="+location.href;
+				break;
+			case "deli":
+			case "delicious":
+				location.href="http://delicious.com/save?title="
+				+document.title
+				+"&url="
+				+location.href
+				+"&notes="
+				+desc;
+				break;
+			case "digg":
+				location.href="http://digg.com/submit/?url="+location.href;
+				break;
+			case "su":
+			case "stumbleupon":
+				location.href="http://www.stumbleupon.com/submit?url="+location.href;
+				break;
+			default:
+				break;
+		}
+	},
 	sendTweet: function(){
 		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 		var url = location.href;
