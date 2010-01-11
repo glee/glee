@@ -1,17 +1,17 @@
 // Saves options to localStorage
 function save_options() {
-
+	var prefs = [];
+	var scrapers = [];
+	var espModifiers = [];
+	var disabledUrls = [];
+	
 	//saving the disabled URLs
-	var restrictedDomains = [];
 	var domainList = document.getElementById("domains");
 	for(var i=0;i<domainList.children.length;i++)
 	{
 		if(domainList.children[i].className == "rdomain")
-			restrictedDomains[restrictedDomains.length] = domainList.children[i].innerText;
+			disabledUrls[disabledUrls.length] = domainList.children[i].innerText;
 	}
-	//currently using , as the end marker. need a better way to implement this
-	localStorage["glee_domains"] = restrictedDomains;
-
 	//Save search engine
 	if(document.getElementsByName("glee_search")[0].value 
 		&& document.getElementsByName("glee_search")[0].value != "")
@@ -20,7 +20,7 @@ function save_options() {
 		}
 	else
 		search = "http://www.google.com/search?q=";
-	localStorage["glee_search"] = search;
+	prefs[prefs.length] = {name:"search_engine", value:search};
 		
 	//saving the gleeBox position
 	if(document.getElementsByName("glee_pos")[0].checked) //top
@@ -29,7 +29,7 @@ function save_options() {
 		pos = 1;
 	else 	//bottom
 		pos = 2;
-	localStorage["glee_position"] = pos;
+	prefs[prefs.length] = {name:"position", value:pos};
 	
 	//saving the gleeBox size
 	if(document.getElementsByName("glee_size")[0].checked) //small
@@ -38,7 +38,7 @@ function save_options() {
 		size = 2;
 	else 	//medium
 		size = 1;
-	localStorage["glee_size"] = size;
+	prefs[prefs.length] = {name:"size", value:size}
 	
 	//save theme
 	tRadios = document.getElementsByName("glee_theme");
@@ -46,7 +46,7 @@ function save_options() {
 	{
 		if (tRadios[i].checked)
 		{
-			localStorage["glee_theme"] = tRadios[i].value;
+ 			prefs[prefs.length] = {name:"theme", value:tRadios[i].value};
 			theme = tRadios[i].value;
 			break;
 		}
@@ -63,25 +63,22 @@ function save_options() {
 		bookmark_search = 1; //1 indicates enabled
 	else
 		bookmark_search = 0;
-	
-	localStorage["glee_bookmark_search"] = bookmark_search;
+
+	prefs[prefs.length] = {name:"bookmark_search",value:bookmark_search};
 	
 	//saving scrolling animation pref
 	if(document.getElementsByName("glee_scrolling_animation")[0].checked)
 		animation = 1; //enabled
 	else
 		animation = 0;
-	
-	localStorage["glee_scrolling_animation"] = animation;
 
-	var status = localStorage["glee_status"];
+	prefs[prefs.length] = {name:"scroll_animation",value:animation};
+
+	prefs[prefs.length] = {name:"status", value:localStorage["glee_status"]};
 	if(typeof(status) == "undefined")
 		status = 1;
 
 	//saving the custom scraper commands
-	var scraperName = [];
-	var scraperSel = [];
-	var scrapers = [];
 	var scraperList = document.getElementById("scraper-commands");
 	var len = scraperList.children.length;
 	for(var i=0;i<len;i++)
@@ -92,29 +89,20 @@ function save_options() {
 			var name = el.children[0].innerText;
 			var sel = el.children[1].innerText;
 			//get rid of the ? in command name
-			name = name.slice(1,name.length);
+			name = name.slice(1, name.length);
 			scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
-			//using ` as end marker for both scraper names and selectors
-			scraperName[scraperName.length] = name+"`";
-			scraperSel[scraperSel.length] = sel+"`";
 		}
 	}
-	
-	localStorage["glee_scraper_names"] = scraperName;
-	localStorage["glee_scraper_selectors"] = scraperSel;
 	
 	//saving the ESP Status
 	if(document.getElementsByName("glee_esp_status")[0].checked)
 		espStatus = 1; //enabled
 	else
 		espStatus = 0;
-	localStorage["glee_esp_status"] = espStatus;
+ 	prefs.espStatus = espStatus;
 	
 	//saving the ESP Modifiers
-	
-	var espURL = [];
-	var espSel = [];
-	var espModifiers = [];
+
 	var espList = document.getElementById("esp-modifiers");
 	var len = espList.children.length;
 	for(var i=0;i<len;i++)
@@ -126,17 +114,13 @@ function save_options() {
 			var sel = el.children[1].innerText;
 			
 			espModifiers[espModifiers.length] = { url:url, selector:sel };
-			
-			//using .NEXT. as end marker for both esp urls and esp selectors
-			espURL[espURL.length] = url+".NEXT.";
-			espSel[espSel.length] = sel+".NEXT.";
 		}
 	}
-	
-	localStorage["glee_esp_urls"] = espURL;
-	localStorage["glee_esp_selectors"] = espSel;
-
-	propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,search,espStatus,espModifiers);
+	savePrefs(prefs);
+	saveScrapers(scrapers);
+	saveDisabledUrls(disabledUrls);
+	saveESP(espModifiers);
+	// propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,search,espStatus,espModifiers);
 }
 
 function propagateChanges(pos,size,bookmark_search,animation,domains,status,theme,scrapers,search,espStatus,espModifiers){
@@ -153,6 +137,7 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 		}
 	});
 }
+
 // Restores select box state to saved value from localStorage
 function restore_options()
 {
