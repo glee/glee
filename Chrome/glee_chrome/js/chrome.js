@@ -128,9 +128,9 @@ Glee.Chrome.applyOptions = function(response){
 	}
 	
 	// ESP Status
-	if(prefs.espStatus != undefined)
+	if(prefs.esp_status != undefined)
 	{
-		if(prefs.espStatus == 1)
+		if(prefs.esp_status == 1)
 			Glee.espStatus = true;
 		else
 			Glee.espStatus = false;

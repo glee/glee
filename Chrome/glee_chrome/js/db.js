@@ -157,12 +157,20 @@ function savePrefs(prefs,callback)
 	if(A)
 	{
 		A.transaction(function(D){
+			if(prefs.length == 0)
+			{
+				callback();
+				return;
+			}
+			
+			var count = 0;
 			for(var i in prefs)
 			{
-				D.executeSql("REPLACE INTO preferences (prefname, prefvalue) VALUES (?, ?)",[prefs[i].name,prefs[i].value],
+				D.executeSql("REPLACE INTO preferences (prefname, prefvalue) VALUES (?, ?)",[i,prefs[i]],
 				function(E,F){
-					if(i == prefs.length-1)
+					if(count == 6)
 						callback();
+					count ++;
 				},
 				function(E,F){console.log(F)}
 				);
@@ -179,12 +187,19 @@ function saveScrapers(scrapers,callback){
 		A.transaction(function(D){
 			//empty the table first
 			D.executeSql("DELETE FROM scrapers");
+			if(scrapers.length == 0)
+			{
+				callback();
+				return;
+			}
+			var count = 0;
 			for(var i in scrapers)
 			{
 				D.executeSql("INSERT INTO scrapers (name, selector) VALUES (?, ?)",[scrapers[i].command,scrapers[i].selector],
 				function(E,F){
-					if(i == scrapers.length-1)
+					if(count == scrapers.length-1)
 						callback();
+					count++;
 				},
 				function(E,F){console.log(F)});
 			}
@@ -199,13 +214,19 @@ function saveDisabledUrls(disabledUrls,callback){
 		A.transaction(function(D){
 			//empty the table first
 			D.executeSql("DELETE FROM disabledUrls");
-			
+			if(disabledUrls.length == 0)
+			{
+				callback();
+				return;
+			}
+			var count = 0;
 			for(var i in disabledUrls)
 			{
 				D.executeSql("INSERT INTO disabledUrls (url) VALUES (?)",[disabledUrls[i]],
 				function(E,F){
-					if(i == disabledUrls.length-1)
+					if(count == disabledUrls.length-1)
 						callback();
+					count++;
 				},
 				function(E,F){console.log(F)});
 			}
@@ -221,18 +242,36 @@ function saveESP(esp,callback){
 		A.transaction(function(D){
 			//empty the table first
 			D.executeSql("DELETE FROM esp");
-			
+			if(esp.length == 0)
+			{
+				callback();
+				return;
+			}
+			var count = 0;
 			for(var i in esp)
 			{
 				D.executeSql("INSERT INTO esp (url, selector) VALUES (?, ?)",[esp[i].url, esp[i].selector],
 				function(E,F){
-					if(i == esp.length-1)
+					if(count == esp.length-1)
 						callback();
+					count ++;
 				},
 				function(E,F){console.log(F)});
 			}
 		});
 	}	
+}
+
+function saveAllPrefs(prefs,scrapers,disabledUrls,espModifiers,callback){
+	savePrefs(prefs,function(){
+		saveScrapers(scrapers,function(){
+			saveDisabledUrls(disabledUrls,function(){
+				saveESP(espModifiers, function(){
+					callback();
+				});
+			});
+		});
+	});
 }
 
 function loadAllPrefs(callback){

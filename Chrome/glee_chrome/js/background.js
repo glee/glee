@@ -22,14 +22,18 @@ function setStatus(value)
 
 function init(){
 	//initialize the db
-	initdb(initStatus);
+	initdb(initGlobals);
+	function initGlobals(){
+		loadAllPrefs(function(prefs){
+			gleeboxPreferences = prefs;
+			initStatus();
+		});
+	}
 }
 
 //initialize the status value on load of background.html
 function initStatus(){
-	loadPreference("status",function(status){
-		setStatus(status);
-	});
+	setStatus(gleeboxPreferences.status);
 }
 
 
@@ -122,10 +126,7 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	}
 	else if(request.value == "getOptions")
 	{
-		loadAllPrefs(function(response){
-			sendResponse({preferences:response});
-		});
-		
+		sendResponse({preferences:gleeboxPreferences});
 	}
 	else if(request.value == "updateOption")
 	{
@@ -156,29 +157,39 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		{
 			case "scroll"	: savePreference("scroll_animation",value);
 							  response.scroll_animation = value;
+							  gleeboxPreferences.scroll_animation = value;
 							  break;
 
 			case "bsearch"	: savePreference("bookmark_search",value);
 							  response.bookmark_search = value;
+							  gleeboxPreferences.bookmark_search = value;
 							  break;
 							
 			case "hyper"	: savePreference("hyper",value);
 							  response.hyper = value;
+							  gleeboxPreferences.hyper = value;
 							  break;
 
 			case "size"		: savePreference("size",value);
 							  response.size = value;
+							  gleeboxPreferences.size = value;
 							  break;
 			
 			case "pos"		:
 			case "position"	: savePreference("position",value);
 							  response.position = value;
+							  gleeboxPreferences.position = value;
 							  break;
 
 			case "theme"	: savePreference("theme",value);
 							  response.theme = value;
+							  gleeboxPreferences.theme = value;
 							  break;
 		}
 		sendResponse({preferences:response});
+	}
+	else if(request.value == "updatePrefCache")
+	{
+		gleeboxPreferences = request.preferences;
 	}
 });

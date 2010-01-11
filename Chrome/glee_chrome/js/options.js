@@ -1,6 +1,6 @@
 // Saves options to clientside DB
 function save_options(close_tab) {
-	var prefs = [];
+	var prefs = {};
 	var scrapers = [];
 	var espModifiers = [];
 	var disabledUrls = [];
@@ -20,7 +20,7 @@ function save_options(close_tab) {
 		}
 	else
 		search = "http://www.google.com/search?q=";
-	prefs[prefs.length] = {name:"search_engine", value:search};
+	prefs.search_engine = search;
 		
 	//saving the gleeBox position
 	if(document.getElementsByName("glee_pos")[0].checked) //top
@@ -29,7 +29,7 @@ function save_options(close_tab) {
 		pos = 1;
 	else 	//bottom
 		pos = 2;
-	prefs[prefs.length] = {name:"position", value:pos};
+	prefs.position = pos;
 	
 	//saving the gleeBox size
 	if(document.getElementsByName("glee_size")[0].checked) //small
@@ -38,7 +38,7 @@ function save_options(close_tab) {
 		size = 2;
 	else 	//medium
 		size = 1;
-	prefs[prefs.length] = {name:"size", value:size}
+	prefs.size = size;
 	
 	//save theme
 	tRadios = document.getElementsByName("glee_theme");
@@ -46,7 +46,7 @@ function save_options(close_tab) {
 	{
 		if (tRadios[i].checked)
 		{
- 			prefs[prefs.length] = {name:"theme", value:tRadios[i].value};
+ 			prefs.theme = tRadios[i].value;
 			theme = tRadios[i].value;
 			break;
 		}
@@ -64,7 +64,7 @@ function save_options(close_tab) {
 	else
 		bookmark_search = 0;
 
-	prefs[prefs.length] = {name:"bookmark_search",value:bookmark_search};
+	prefs.bookmark_search = bookmark_search;
 	
 	//saving scrolling animation pref
 	if(document.getElementsByName("glee_scrolling_animation")[0].checked)
@@ -72,7 +72,7 @@ function save_options(close_tab) {
 	else
 		animation = 0;
 
-	prefs[prefs.length] = {name:"scroll_animation",value:animation};
+	prefs.scroll_animation = animation;
 
 	//saving the custom scraper commands
 	var scraperList = document.getElementById("scraper-commands");
@@ -95,7 +95,7 @@ function save_options(close_tab) {
 		espStatus = 1; //enabled
 	else
 		espStatus = 0;
- 	prefs[prefs.length] = {name:"esp_status", value:espStatus};
+ 	prefs.esp_status = espStatus;
 
 	//saving the ESP Modifiers
 
@@ -112,34 +112,32 @@ function save_options(close_tab) {
 			espModifiers[espModifiers.length] = { url:url, selector:sel };
 		}
 	}
-	savePrefs(prefs,function(){
-		saveScrapers(scrapers,function(){
-			saveDisabledUrls(disabledUrls,function(){
-				saveESP(espModifiers, function(){
-					if(close_tab)
-						closeOptions();
-				});
-			});
-		});
+	saveAllPrefs(prefs,scrapers,disabledUrls,espModifiers,function(){
+		prefs.scrapers = scrapers;
+		prefs.disabledUrls = disabledUrls;
+		prefs.espModifiers = espModifiers;
+		propagateChanges(prefs);
+		if(close_tab)
+			closeOptions();
 	});
-
-	// propagateChanges(pos,size,bookmark_search,animation,restrictedDomains,status,theme,scrapers,search,espStatus,espModifiers);
 }
 
-// function propagateChanges(prefs, disabledUrls, scrapers, esp){
-// 	//get all the windows and their tabs to propagate the change in status
-// 	chrome.windows.getAll({populate:true}, function(windows){
-// 		for( i=0; i<windows.length; i++)
-// 		{
-// 			//set the status in all the tabs open in the window
-// 			for(j=0;j<windows[i].tabs.length;j++)
-// 			{
-// 				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions",position:pos,size:size,bookmark_search:bookmark_search,animation:animation,domains:domains,status:status,theme:theme,scrapers:scrapers,search:search,espStatus:espStatus,espModifiers:espModifiers},function(response){
-// 				});
-// 			}
-// 		}
-// 	});
-// }
+function propagateChanges(prefs)
+{
+	chrome.windows.getAll({populate:true}, function(windows){
+		for( i=0; i<windows.length; i++)
+		{
+			//set the status in all the tabs open in the window
+			for(j=0;j<windows[i].tabs.length;j++)
+			{
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions", preferences:prefs},function(response){
+				});
+			}
+		}
+	});
+	//update the global preferences cache
+	chrome.extension.sendRequest({value:"updatePrefCache", preferences:prefs},function(){});
+}
 
 // Restores select box state to saved value from DB
 function restore_options(prefs)
