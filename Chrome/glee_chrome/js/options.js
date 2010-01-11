@@ -1,4 +1,4 @@
-// Saves options to localStorage
+// Saves options to clientside DB
 function save_options() {
 	var prefs = [];
 	var scrapers = [];
@@ -99,8 +99,8 @@ function save_options() {
 		espStatus = 1; //enabled
 	else
 		espStatus = 0;
- 	prefs.espStatus = espStatus;
-	
+ 	prefs[prefs.length] = {name:"esp_status", value:espStatus};
+
 	//saving the ESP Modifiers
 
 	var espList = document.getElementById("esp-modifiers");
@@ -138,76 +138,55 @@ function propagateChanges(pos,size,bookmark_search,animation,domains,status,them
 	});
 }
 
-// Restores select box state to saved value from localStorage
-function restore_options()
+// Restores select box state to saved value from DB
+function restore_options(prefs)
 {
 	initDefaultTexts();
-
 	//getting the user defined restricted domains
-	var domainBuffer = localStorage["glee_domains"];
-	if(typeof(domainBuffer) == "undefined")
-	{
-		//initialize with the default domains that should be blocked
-		domainBuffer = "mail.google.com,wave.google.com";
-		localStorage["glee_domains"] = domainBuffer;
-	}
-	if(domainBuffer.length != 0)
-	{
-		//parsing domainBuffer to get the domains
-		var restrictedDomains = domainBuffer.split(",");
-		var domainList = document.getElementById("domains");
-		//TODO: use lastChild property here
-		var lastChild = document.getElementById("addDomainLI");
-		//displaying the domains in the restricted list
-		for (var i=0; i<restrictedDomains.length; i++)
+	loadDisabledUrls(function(disabledUrls){
+		var len = disabledUrls.length;
+		if(len != 0)
 		{
-			var newLI = document.createElement('li');
-			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+i+")'/>";
-			newLI.className = "rdomain";
-			newLI.id = "rdomain"+i;
-			newLI.innerHTML = restrictedDomains[i] + inputBt;
-			domainList.insertBefore(newLI,lastChild);
-		}
-	}
-	
-	//getting the gleeBox position
-	var pos = localStorage["glee_position"];
-	if(pos)
-		document.getElementsByName("glee_pos")[pos].checked = true;
-	else
-		document.getElementsByName("glee_pos")[1].checked = true; //default is middle position
-
-	//getting the gleeBox size
-	var size = localStorage["glee_size"];
-	if(size)
-		document.getElementsByName("glee_size")[size].checked = true;
-	else
-		document.getElementsByName("glee_size")[1].checked = true; //default is medium size
-
-	//getting search engine
-	var search = localStorage["glee_search"];
-	if(search)
-		document.getElementsByName("glee_search")[0].value = search;
-	else
-		document.getElementsByName("glee_search")[0].value = "http://www.google.com/search?q=";
-
-	//getting theme
-	var theme = localStorage["glee_theme"];
-	tRadios = document.getElementsByName("glee_theme");
-	if(theme)
-	{
-		for (var i=0; i < tRadios.length; i++)
-		{
-			if (theme == tRadios[i].value)
+			//parsing domainBuffer to get the domains
+			var domainList = document.getElementById("domains");
+			//TODO: use lastChild property here
+			var lastChild = document.getElementById("addDomainLI");
+			//displaying the domains in the restricted list
+			for (var i=0; i<len; i++)
 			{
-				tRadios[i].checked = true;
-				break;
+				var newLI = document.createElement('li');
+				var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+i+")'/>";
+				newLI.className = "rdomain";
+				newLI.id = "rdomain"+i;
+				newLI.innerHTML = disabledUrls[i] + inputBt;
+				domainList.insertBefore(newLI,lastChild);
 			}
 		}
+	});
+	
+	//getting the gleeBox position
+	var pos = parseInt(prefs["position"]);
+	document.getElementsByName("glee_pos")[pos].checked = true;
+
+	//getting the gleeBox size
+	var size = parseInt(prefs["size"]);
+	document.getElementsByName("glee_size")[size].checked = true;
+
+	//getting search engine
+	var search = prefs["search_engine"];
+	document.getElementsByName("glee_search")[0].value = search;
+
+	//getting theme
+	var theme = prefs["theme"];
+	tRadios = document.getElementsByName("glee_theme");
+	for (var i=0; i < tRadios.length; i++)
+	{
+		if (theme == tRadios[i].value)
+		{
+			tRadios[i].checked = true;
+			break;
+		}
 	}
-	else {
-		tRadios[0].checked = true;
-	}	
 	// Getting HyperGlee
 	// var hyper = localStorage["glee_hyper"];
 	// hRadios = document.getElementsByName("glee_hyper");
@@ -222,7 +201,7 @@ function restore_options()
 	// 	hRadios[1].checked = true;
 
 	//getting the bookmark search status (enabled/disabled)
-	var bookmark_status = localStorage["glee_bookmark_search"];
+	var bookmark_status = prefs["bookmark_search"];
 
 	if(bookmark_status == 1)
 		document.getElementsByName("glee_bookmark_search")[0].checked = true;
@@ -230,7 +209,7 @@ function restore_options()
 		document.getElementsByName("glee_bookmark_search")[1].checked = true;
 
 	//getting the scrolling animation pref
-	var scroll_anim = localStorage["glee_scrolling_animation"];
+	var scroll_anim = prefs["scroll_animation"];
 
 	if(scroll_anim == 0)
 		document.getElementsByName("glee_scrolling_animation")[1].checked = true;
@@ -238,37 +217,27 @@ function restore_options()
 		document.getElementsByName("glee_scrolling_animation")[0].checked = true;
 
 	//getting the custom scraper commands
-	var scraper_names = localStorage["glee_scraper_names"];
-	var scraper_sel = localStorage["glee_scraper_selectors"];
-	if(scraper_names != undefined)
-	{
-		if(scraper_names.length != 0)
+	loadScrapers(function(scrapers){
+		var len = scrapers.length;
+		if(len != 0)
 		{
 			var scraperList = document.getElementById("scraper-commands");
-			var scraperName = scraper_names.split("`");
-			var scraperSel = scraper_sel.split("`");
-			var scraperLen = scraperName.length;
+
 			//last element is a string only containing a ,
-			for (var i=0; i<scraperLen-1; i++)
+			for (var i=0; i<len; i++)
 			{
-				if(i>0)
-				{
-					//remove the , that is used by localStorage to separate elements
-					scraperName[i] = scraperName[i].slice(1,scraperName[i].length);
-					scraperSel[i] = scraperSel[i].slice(1,scraperSel[i].length);
-				}
 				var newLI = document.createElement('li');
 				var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+i+")'/>";
 				newLI.className = "scraper";
 				newLI.id = "scraper"+i;
-				newLI.innerHTML = "<span><strong>?"+scraperName[i]+"</strong></span> : <span>"+scraperSel[i]+"</span>"+inputBt;
+				newLI.innerHTML = "<span><strong>?"+scrapers[i].name+"</strong></span> : <span>"+scrapers[i].selector+"</span>"+inputBt;
 				scraperList.insertBefore(newLI,document.getElementById("addScraper"));
 			}
-		}
-	}
-	
+		}	
+	});
+
 	//getting ESP Status
-	var espStatus = localStorage["glee_esp_status"];
+	var espStatus = prefs["esp_status"];
 
 	if(espStatus == 1)
 		document.getElementsByName("glee_esp_status")[0].checked = true;
@@ -276,51 +245,39 @@ function restore_options()
 		document.getElementsByName("glee_esp_status")[1].checked = true; //default
 	
 	//getting ESP Modifiers
-	var espURL = localStorage["glee_esp_urls"];
-	var espSel = localStorage["glee_esp_selectors"];
-	var espList = document.getElementById("esp-modifiers");	
-	if(espURL != undefined)
-	{
-		if(espURL.length != 0)
+	loadESP(function(espModifiers){
+		var espList = document.getElementById("esp-modifiers");	
+		var len = espModifiers.length;
+		if(len != 0)
 		{
-			espURL = espURL.split(".NEXT.");
-			espSel = espSel.split(".NEXT.");
-			var espLen = espURL.length;
-			//last element is a string only containing a ,
-			for (var i=0; i<espLen-1; i++)
+			for (var i=0; i<len; i++)
 			{
-				if(i>0)
-				{
-					//remove the , that is used by localStorage to separate elements
-					espURL[i] = espURL[i].slice(1,espURL[i].length);
-					espSel[i] = espSel[i].slice(1,espSel[i].length);
-				}
 				var newLI = document.createElement('li');
 				var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier("+i+")'/>";
 				newLI.className = "esp";
 				newLI.id = "esp"+i;
-				newLI.innerHTML = "<span>"+espURL[i]+"</span> : <span>"+espSel[i]+"</span>"+inputBt;
+				newLI.innerHTML = "<span>"+espModifiers[i].url+"</span> : <span>"+espModifiers[i].selector+"</span>"+inputBt;
 				espList.insertBefore(newLI,document.getElementById("addEspModifier"));
 			}
 		}
-	}
-	else
-	{
-		//adding a couple of default examples
-		var newLI = document.createElement('li');
-		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(0)'/>";
-		newLI.className = "esp";
-		newLI.id = "esp0";
-		newLI.innerHTML = "<span>google.com/search</span> : <span>h3:not(ol.nobr>li>h3)</span>"+inputBt;
-		espList.insertBefore(newLI,document.getElementById("addEspModifier"));
+		else
+		{
+			//adding a couple of default examples
+			var newLI = document.createElement('li');
+			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(0)'/>";
+			newLI.className = "esp";
+			newLI.id = "esp0";
+			newLI.innerHTML = "<span>google.com/search</span> : <span>h3:not(ol.nobr>li>h3)</span>"+inputBt;
+			espList.insertBefore(newLI,document.getElementById("addEspModifier"));
 
-		var newLI_2 = document.createElement('li');
-		var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(1)'/>";
-		newLI_2.className = "esp";
-		newLI_2.id = "esp1";
-		newLI_2.innerHTML = "<span>bing.com/search</span> : <span>div.sb_tlst</span>"+inputBt_2;
-		espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
-	}
+			var newLI_2 = document.createElement('li');
+			var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(1)'/>";
+			newLI_2.className = "esp";
+			newLI_2.id = "esp1";
+			newLI_2.innerHTML = "<span>bing.com/search</span> : <span>div.sb_tlst</span>"+inputBt_2;
+			espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
+		}		
+	});
 }
 
 //Adds a domain to the restricted domain list

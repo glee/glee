@@ -4,41 +4,34 @@ var status;
 function setStatus(value)
 {
 	status = value;
-	if(status == 1)
-	{
-		chrome.browserAction.setBadgeText({text:"ON"});	
-		chrome.browserAction.setBadgeBackgroundColor({color:[103,163,82,255]});
-	}
-	else
+	if(status == 0)
 	{
 		chrome.browserAction.setBadgeText({text:"OFF"});	
 		chrome.browserAction.setBadgeBackgroundColor({color:[185,188,193,255]});
+	}
+	else
+	{
+		chrome.browserAction.setBadgeText({text:"ON"});	
+		chrome.browserAction.setBadgeBackgroundColor({color:[103,163,82,255]});
 	}
 }
 
 //initialize the status value on load of background.html
 function initStatus(){
-	if(typeof(localStorage['glee_status']) != "undefined")
-	{
-		setStatus(localStorage['glee_status']);
-	}
-	else
-		setStatus(1);
+	loadPreference("status",1,function(status){
+		setStatus(status);
+	});
 }
 
 //Toggle status value and store it in local storage
 function toggleStatus(tab){
-	if(typeof(localStorage['glee_status']) != "undefined")
-	{
-		status = localStorage['glee_status'];
-	}
+	if(status == 1)
+		status = 0;
 	else
 		status = 1;
-	if(status == 1)
-		setStatus(0);
-	else
-		setStatus(1);
-	localStorage['glee_status'] = status;
+
+	saveStatus(status);
+	setStatus(status);
 	
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
