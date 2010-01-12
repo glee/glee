@@ -34,7 +34,7 @@
 					<tab label="Help" />
 				</tabs>
 				<tabpanels flex="1" >
-					<groupbox>
+					<vbox>
 						<hbox align="center">
 		  					<checkbox preference="pref_scroll" flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
 						</hbox>
@@ -66,8 +66,8 @@
 	<button label="Add URL" oncommand="gleebox_Options.addURL()"/>
 	<button label="Remove URL" oncommand="gleebox_Options.removeURL()"/>
 	</hbox>
-					</groupbox>
-					<groupbox>
+					</vbox>
+					<vbox>
 						<hbox align="center">
 							<label control="symbol" value="Position: " width="90" />
 							<hbox>
@@ -108,8 +108,8 @@
 							</hbox>
 						</hbox>
 					<separator class="thin"/> 
-					</groupbox>
- <groupbox>
+					</vbox>
+ <vbox>
 						<hbox align="center">
 							<label width="90">Custom Scraper (?) commands:</label>
 	<tree id="custom_scrapers_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_custom_scrapers" preference-editable="true" onsynctopreference="return gleebox_Options.getCustomScrapers();">
@@ -145,29 +145,25 @@
 	<button label="Remove Vision" oncommand="gleebox_Options.removeVision()"/>
 	</hbox>
 
-</groupbox>
-					<groupbox>
-						<hbox>
-							<text value="For the complete list of gleeBox commands, please read the " /><label class="text-link" value="user manual" onclick="gleebox_Common.openInNewTab('http://thegleebox.com/manual.html');"/> 
+</vbox>
+					<vbox>
+						<hbox style="float:left">
+							<text value="For the complete list of gleeBox commands, please refer the " /><label class="text-link" value="user manual" onclick="gleebox_Common.openInNewTab('http://thegleebox.com/manual.html');"/>. <text value="You can also share and find tips, commands and more on " /><label class="text-link" value="tipjar" onclick="gleebox_Common.openInNewTab('http://tipjar.thegleebox.com');"/>.
 						</hbox>
 						<separator flex="thin" />
-						<hbox >
-							<text value="Send us feedback at " /><label class="text-link" value="gleebox@gmail.com" onclick="gleebox_Common.openInNewTab('mailto:gleebox@gmail.com');"/>
+						<hbox style="float:left">
+							<text value="Send us feedback at " /><label class="text-link" value="gleebox@gmail.com" onclick="gleebox_Common.openInNewTab('mailto:gleebox@gmail.com');"/>.	<text value=" Or report issues " /><label class="text-link" value="here" onclick="gleebox_Common.openInNewTab('http://github.com/glee/glee/issues');"/>.
+
 						</hbox>
 						<separator flex="thin" />
-	<hbox>
-	<text value="gleeBox was created by Ankit Ahuja (" /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/ahujaankit');" value="@ahujaankit" /><text value=") and Sameer Ahuja (" /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/sam33r');" value="@sam33r" /><text value=")" />
-	</hbox>
-						<separator flex="thin" />
-						<hbox>
-							<text value="To promote further development of gleeBox, contribute by making a " /><label class="text-link" value="donation" onclick="gleebox_Common.openInNewTab('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=10478979');" />
+	<hbox style="float:left">
+	<text value="gleeBox was created by " /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://ankitahuja.com');" value="Ankit Ahuja" />(<label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/ahujaankit');" value="@ahujaankit" /><text value=") and " /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://sameerahuja.com');" value="Sameer Ahuja" />(<label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/sam33r');" value="@sam33r" /><text value=")" />. <text value="To promote further development of gleeBox, contribute by making a " /><label class="text-link" value="donation" onclick="gleebox_Common.openInNewTab('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=10478979');" />.
 						</hbox>
-					</groupbox>
+					</vbox>
 				</tabpanels>
 	<separator flex="1" />
 	<description>Refresh currently open tabs to see changes</description>
 			</tabbox>
-			<separator flex="1" />
 		</vbox>
 	</prefpane>
 </prefwindow>
