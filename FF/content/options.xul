@@ -18,8 +18,11 @@
 			<preference id="pref_theme" name="extensions.gleebox.theme" type="string"/>
 			<preference id="pref_scroll" name="extensions.gleebox.scroll_animation" type="bool"/>
 			<preference id="pref_bookmark_search" name="extensions.gleebox.bookmark_search" type="bool"/>
+			<preference id="pref_esp_status" name="extensions.gleebox.esp_status" type="bool"/>
 			<preference id="pref_disabled_urls" name="extensions.gleebox.disabledurls" type="string" />
 			<preference id="pref_custom_scrapers" name="extensions.gleebox.custom_scrapers" type="string" /> 
+			<preference id="pref_esp_visions" name="extensions.gleebox.esp_visions" type="string" /> 
+			<preference id="pref_search_engine" name="extensions.gleebox.search_engine" type="string" /> 
 		</preferences>
 
 		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="500"  > 
@@ -27,21 +30,28 @@
 				<tabs>
 					<tab label="Features" />
 					<tab label="Appearance" />
+					<tab label="Advanced" />
 					<tab label="Help" />
 				</tabs>
 				<tabpanels flex="1" >
 					<groupbox>
-
 						<hbox align="center">
 		  					<checkbox preference="pref_scroll" flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
 						</hbox>
-						<separator flex="thin" />
+
 						<hbox align="center">
 		  					<checkbox preference="pref_bookmark_search" flex="1" label="Enable Bookmark Search" tabindex="1" oncommand="" />
 						</hbox>
-						<separator flex="thin" />
-
 						<hbox align="center">
+<label width="90" value="Search Engine:"/>
+<textbox id="search_engine_textbox" preference="pref_search_engine" width="230" />
+						</hbox>
+<hbox align="center" style="margin-left:105px">
+<label class="text-link" style="margin-right:5px;" value="Google" onclick="gleebox_Options.updateSearchEngine(this.value);" />
+<label class="text-link" style="margin-right:5px;" value="Bing" onclick="gleebox_Options.updateSearchEngine(this.value);"  />
+<label class="text-link" value="Yahoo" onclick="gleebox_Options.updateSearchEngine(this.value);"  />
+</hbox>
+						<hbox align="center" style="margin-top:10px">
 							<label value="Disabled URLs: " width="90"/> 
 	<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return gleebox_Options.getDisabledURLList();">
 	<treecols>
@@ -55,23 +65,6 @@
 	<hbox flex="1" align="right">
 	<button label="Add URL" oncommand="gleebox_Options.addURL()"/>
 	<button label="Remove URL" oncommand="gleebox_Options.removeURL()"/>
-	</hbox>
-	<separator flex="thin" />
-						<hbox align="center">
-							<label width="90">Custom Scraper commands:</label>
-	<tree id="custom_scrapers_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_custom_scrapers" preference-editable="true" onsynctopreference="return gleebox_Options.getCustomScrapers();">
-	<treecols>
-	<treecol id="sel_name" flex="1" label="Name" />
-	<treecol id="sel_selector" flex="1" label="jQuery Selector" />
-	</treecols> 
-	<treechildren id="custom_scrapers_list" >
-	</treechildren>
-	</tree>
-
-	</hbox>
-	<hbox flex="1" align="right">
-	<button label="Add scraper" oncommand="gleebox_Options.addScraper()"/>
-	<button label="Remove scraper" oncommand="gleebox_Options.removeScraper()"/>
 	</hbox>
 					</groupbox>
 					<groupbox>
@@ -87,8 +80,7 @@
 								</menulist>
 							</hbox> 
 						</hbox>
-						<separator flex="thin" />
-						<hbox align="center">
+						<hbox align="center" style="margin-top:5px">
 							<label control="symbol" value="Size: " width="90"/>
 							<hbox>
 								<menulist label="Size" preference="pref_size">
@@ -100,8 +92,7 @@
 								</menulist> 
 							</hbox>
 						</hbox>
-						<separator flex="thin" />
-						<hbox align="center">
+						<hbox align="center" style="margin-top:5px">
 							<label control="symbol" value="Theme: " width="90"/>
 							<hbox>
 								<menulist label="Theme" preference="pref_theme">
@@ -117,7 +108,44 @@
 							</hbox>
 						</hbox>
 					<separator class="thin"/> 
-					</groupbox> 
+					</groupbox>
+ <groupbox>
+						<hbox align="center">
+							<label width="90">Custom Scraper (?) commands:</label>
+	<tree id="custom_scrapers_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_custom_scrapers" preference-editable="true" onsynctopreference="return gleebox_Options.getCustomScrapers();">
+	<treecols>
+	<treecol id="sel_name" flex="1" label="Name" />
+	<treecol id="sel_selector" flex="1" label="jQuery Selector" />
+	</treecols> 
+	<treechildren id="custom_scrapers_list" >
+	</treechildren>
+	</tree>
+	</hbox>
+	<hbox flex="1" align="right">
+	<button label="Add scraper" oncommand="gleebox_Options.addScraper()"/>
+	<button label="Remove scraper" oncommand="gleebox_Options.removeScraper()"/>
+	</hbox>
+						<hbox align="center">
+		  					<checkbox preference="pref_esp_status" flex="1" label="Enable ESP Mode (in this mode, a jQuery selector is run on a page as soon as gleeBox is opened)" tabindex="1" oncommand="" />
+						</hbox>
+
+						<hbox align="center" style="margin-top:5px">
+							<label width="90">ESP Visions (specify page URLs and selectors for ESP Mode):</label>
+	<tree id="esp_visions_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_esp_visions" preference-editable="true" onsynctopreference="return gleebox_Options.getESPVisions();">
+	<treecols>
+	<treecol id="esp_url" flex="1" label="Part of URL" />
+	<treecol id="esp_selector" flex="1" label="jQuery Selector" />
+	</treecols> 
+	<treechildren id="esp_visions_list" >
+	</treechildren>
+	</tree>
+	</hbox>
+	<hbox flex="1" align="right">
+	<button label="Add Vision" oncommand="gleebox_Options.addVision()"/>
+	<button label="Remove Vision" oncommand="gleebox_Options.removeVision()"/>
+	</hbox>
+
+</groupbox>
 					<groupbox>
 						<hbox>
 							<text value="For the complete list of gleeBox commands, please read the " /><label class="text-link" value="user manual" onclick="gleebox_Common.openInNewTab('http://thegleebox.com/manual.html');"/> 
