@@ -25,7 +25,11 @@ jQuery(document).ready(function(){
 	
 	/* initialize the searchBox */
 	Glee.initBox();
-
+	
+	// Crash and burn. This won't work because the loading has probably not finished yet.
+	if(Glee.status == 0)
+		return;
+	
 	// Setup cache for global jQuery objects
 	Glee.Cache.jBody = jQuery('html,body');
 
@@ -58,7 +62,9 @@ jQuery(document).ready(function(){
 					//reseting value of searchField
 					Glee.searchField.attr('value','');
 					Glee.searchBox.fadeIn(150);
-					Glee.searchField.focus();
+					Glee.searchField[0].focus();
+					if(Glee.espStatus)
+						Glee.fireEsp();
 				}
 				else
 				{
@@ -116,12 +122,13 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
-					},380);
+					},300);
 				}
 				//else command mode
 				else {
 					LinkReaper.unreapAllLinks();
 					Glee.commandMode = true;
+					Glee.selectedElement = null; //reset selected element
 					if(Glee.bookmarkSearchStatus)
 						Glee.bookmarks = []; //empty the bookmarks array
 					Glee.resetTimer();
@@ -192,24 +199,21 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 9)  //if TAB is pressed
 		{
 			e.preventDefault();
-			if(value != "")
+			if(Glee.selectedElement)
+			{	
+				if(e.shiftKey)
+					Glee.selectedElement = LinkReaper.getPrev();
+				else
+					Glee.selectedElement = LinkReaper.getNext();
+				Glee.setSubText(Glee.selectedElement,"el");
+				Glee.scrollToElement(Glee.selectedElement);
+			}
+			else if(Glee.bookmarks.length != 0)
 			{
-				if(Glee.selectedElement)
-				{	
-					if(e.shiftKey)
-						Glee.selectedElement = LinkReaper.getPrev();
-					else
-						Glee.selectedElement = LinkReaper.getNext();
-					Glee.setSubText(Glee.selectedElement,"el");
-					Glee.scrollToElement(Glee.selectedElement);
-				}
-				else if(Glee.bookmarks.length != 0)
-				{
-					if(e.shiftKey)
-						Glee.getPrevBookmark();
-					else
-						Glee.getNextBookmark();
-				}
+				if(e.shiftKey)
+					Glee.getPrevBookmark();
+				else
+					Glee.getNextBookmark();
 			}
 		}
 		//if ENTER is pressed
@@ -338,31 +342,98 @@ jQuery(document).ready(function(){
 
 
 var Glee = {
-	/* editable options */
-	
-	scrollingSpeed:750, 	//scrolling Animation speed ( 0 - 750 ) 0 disables scrolling animation
-	
-	pageScrollSpeed:5,		//Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
-	
-	position: "bottom",		//position of gleeBox. Possible values are (top, middle, bottom)
-	
-	size:"medium",			//size of gleeBox. Possible values are (small, medium, large)
-	
-	domainsToBlock: 		//URLs for which gleeBox should be disabled. Add a part of the URL for which you want to disable gleeBox
-	[		
+	searchText:"",
+	nullStateMessage:"Nothing selected",
+	//State of scrolling. 0=None, 1=Up, -1=Down.
+	scrollState: 0,
+	hyperMode: false,
+	//last query executed in jQuery mode
+	lastQuery:null,
+	commandMode: false,
+	//used to enable/disable gleeBox
+	status:true,
+	//used to enable/disabled ESP (default scrapers)
+	espStatus:true,
+	//Currently selected element
+	selectedElement:null,
+	//current URL where gleeBox should go
+	URL:null,
+	//Search Engine URL
+	searchEngineUrl:"http://www.google.com/search?q=",
+	//element on which the user was focussed before a search
+	userFocusBeforeGlee:null,
+	//array to store bookmarks, if found for a search
+	bookmarks:[],
+	//whether bookmark search is enabled/disabled
+	bookmarkSearchStatus:false,
+	//scrolling Animation speed
+	scrollingSpeed:500,
+	//Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
+	pageScrollSpeed:4,
+	//position of gleeBox (top,middle,bottom)
+	position: "middle",
+	//size of gleeBox (small,medium,large)
+	size:"medium",
+	//URLs for which gleeBox should be disabled
+	domainsToBlock:[
 		"mail.google.com",
-		"google.com/reader",
 		"wave.google.com"
 	],
-	
-	ThemeOption:"Default",	//Specify a Theme. Available Themes are ( Default, White, Console, Greener, Ruby, Glee)
-	
-	hyperMode: false,		//HyperGlee mode: In this mode, glee is automatically displayed on page load
-	
-	bookmarkSearchStatus:false,
+	// !commands
+	commands:[
+		{
+			name: "tweet",
+			method:"Glee.sendTweet",
+			description:"Tweet this page",
+			statusText:"Redirecting to twitter homepage..."
+		},
+		{
+			name: "shorten",
+			method:"Glee.shortenURL",
+			description:"Shorten the URL of this page using bit.ly",
+			statusText:"Shortening URL via bit.ly..."
+		},
+		{
+			name: "read",
+			method:"Glee.makeReadable",
+			description:"Make your page readable using Readability",
+			statusText:"Please wait while Glee+Readability work up the magic..."
+		},
+		{
+			name: "rss",
+			method:"Glee.getRSSLink",
+			description:"Open the RSS feed of this page in GReader",
+			statusText:"Opening feed in Google Reader..."
+		},
+		{
+			name: "help",
+			method:"Glee.help",
+			description:"View user manual",
+			statusText:"Loading help page..."
+		},
+		{
+			name: "tipjar",
+			method:"Glee.tipjar",
+			description:"Got to the gleeBox TipJar",
+			statusText:"Opening TipJar..."
+		},
+		{
+			name: "set",
+			method:"Glee.setOptionValue",
+			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
+			statusText:"Setting option..."
+		},
+		{
+			name: "share",
+			method:"Glee.sharePage",
+			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, deli(cious), digg, and su/stumbleupon."
+		}
+	],
 	
 	// Scraper Commands
 
+	//We can add methods to the associative array below to support custom actions.
+	//It works, I've tried it.
 	scrapers : [
 		{
 			command : "?",
@@ -383,86 +454,23 @@ var Glee = {
 			cssStyle : "GleeReaped"
 		},
 		{
-			command : "p",
-			nullMessage : "Could not find any paragraphs on the page.",
-			selector: "p",
-			cssStyle : "GleeReaped"
-		},
-		{
 			command : "a",
 			nullMessage : "No links found on the page",
 			selector: "a",
 			cssStyle: "GleeReaped"
 		}
-	],
+		],
 	
-	/* end of editable options */
-	
-	/* DO NOT edit anything after this */
-	searchText:"",
-	nullStateMessage:"Nothing selected",
-	//State of scrolling. 0=None, 1=Up, -1=Down.
-	scrollState: 0,
-	//last query executed in jQuery mode
-	lastQuery:null,
-	commandMode: false,
-	//used to enable/disable gleeBox
-	status:true, 
-	//Currently selected element
-	selectedElement:null,
-	//current URL where gleeBox should go
-	URL:null,
-	//element on which the user was focussed before a search
-	userFocusBeforeGlee:null,
-	//bookmarks array
-	bookmarks:[],
-	
-	// !commands
-	commands:[
+	espModifiers: [
 		{
-			name: "tweet",
-			method:"Glee.sendTweet",
-			domain:"*",
-			description:"Tweet this page",
-			statusText:"Redirecting to twitter homepage..."
+			url : "google.com/search",
+			selector : "h3:not(ol.nobr>li>h3)"
 		},
 		{
-			name: "shorten",
-			method:"Glee.shortenURL",
-			domain:"*",
-			description:"Shorten the URL of this page using bit.ly",
-			statusText:"Shortening URL via bit.ly..."
-		},
-		{
-			name: "read",
-			method:"Glee.makeReadable",
-			domain:"*",
-			description:"Make your page readable using Readability",
-			statusText:"Please wait while Glee+Readability work up the magic..."
-		},
-		{
-			name: "rss",
-			method:"Glee.getRSSLink",
-			domain:"*",
-			description:"Open the RSS feed of this page in GReader",
-			statusText:"Opening feed in Google Reader..."
-		},
-		{
-			name: "help",
-			method:"Glee.help",
-			domain:"*",
-			description:"View user manual",
-			statusText:"Loading help page..."
-		},
-		{
-			name: "set",
-			method:"Glee.setOptionValue",
-			domain:"*",
-			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
-			statusText:"Setting option..."
+			url : "bing.com/search",
+			selector : "div.sb_tlst"
 		}
 	],
-	
 	//jQuery cache objects
 	Cache: {
 		jBody: null
@@ -554,7 +562,6 @@ var Glee = {
 		else
 			fontsize = "100px"
 		Glee.searchField.css("font-size",fontsize);
-		
 		//Load HyperGlee if needed
 		if(Glee.status && Glee.hyperMode == true) {
 			Glee.getHyperized();
@@ -566,6 +573,7 @@ var Glee = {
 		// TODO: Hack to steal focus from page's window onload. 
 		// We can't add this stuff to onload. See if there's another way.
 		jQuery(window).fadeTo(100, 1, function(){
+			Glee.fireEsp();
 			Glee.searchField.focus();
 		});
 	},
@@ -576,6 +584,7 @@ var Glee = {
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
 		});
+		this.searchText = "";
 		this.selectedElement = null;
 	},
 	closeBoxWithoutBlur: function(){
@@ -584,6 +593,7 @@ var Glee = {
 			Glee.setSubText(null);
 		});
 		LinkReaper.unreapAllLinks();
+		this.searchText = "";
 		this.selectedElement = null;
 	},
 	initScraper: function(scraper){
@@ -594,7 +604,7 @@ var Glee = {
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
 		this.setSubText(Glee.selectedElement,"el");
-		this.scrollToElement(Glee.selectedElement);	
+		this.scrollToElement(Glee.selectedElement);
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(scraper.cssStyle);
 		});
@@ -776,8 +786,8 @@ var Glee = {
 		}
 		else if(type == "search") // here val is the text query
 		{
-			this.subText.html(this.truncate("Google "+val));
-			this.URL = "http://www.google.com/search?q="+val;
+			this.subText.html(this.truncate("Search for "+val));
+			this.URL = Glee.searchEngineUrl+val;
 			this.subURL.html(this.URL);	
 		}
 		else if(type == "msg") // here val is the message to be displayed
@@ -823,6 +833,29 @@ var Glee = {
 		else
 			return null;
 	},
+	//method for ESP
+	fireEsp: function(){
+		var url = document.location.href;
+		var len = Glee.espModifiers.length;
+		for(var i=0; i<len; i++)
+		{
+			if(url.indexOf(Glee.espModifiers[i].url) != -1)
+			{
+				var sel = Glee.espModifiers[i].selector;
+				//creating a new temporary scraper object
+				var tempScraper = {
+					nullMessage : "Could not find any elements on the page",
+					selector : sel,
+					cssStyle : "GleeReaped"
+				};
+				Glee.commandMode = true;
+				Glee.initScraper(tempScraper);
+				return true;
+			}
+		}
+		return false;
+	},
+	//end of ESP
 	scrollToElement: function(el){
 		var target;
 		if(typeof(el) != "undefined" && el)
@@ -860,8 +893,8 @@ var Glee = {
 	},
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
-		//Only update the user position if it is a scraping command
-		if(value[0] == "?" && value.length > 1)
+		//Only update the user position if it is a scraping command or tabbing in ESP mode
+		if((value[0] == "?" && value.length > 1) || (value == "" && Glee.espStatus))
 			Glee.userPosBeforeGlee = window.pageYOffset;
 	},
 	toggleActivity: function(toggle){
@@ -1051,7 +1084,48 @@ var Glee = {
 			Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
 		});
 	},
-	
+	sharePage: function(){
+		var site = Glee.searchField.attr('value').substring(6).replace(" ","");
+		//Try to get description
+		var desc = jQuery('meta[name=description],meta[name=Downescription]').attr("content");
+		if(!desc)
+			desc = "";
+		switch(site) 
+		{
+			case "g":
+			case "gmail":
+				location.href="https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
+					+document.title+"&body="+location.href+"  -  "+desc;
+				break;
+			case "m":
+			case "mail":
+				location.href="mailto:?subject="
+					+document.title+"&body="+location.href+"  -  "+desc;
+				break;
+			case "fb":
+			case "facebook":
+				location.href="http://www.facebook.com/share.php?u="+location.href;
+				break;
+			case "deli":
+			case "delicious":
+				location.href="http://delicious.com/save?title="
+				+document.title
+				+"&url="
+				+location.href
+				+"&notes="
+				+desc;
+				break;
+			case "digg":
+				location.href="http://digg.com/submit/?url="+location.href;
+				break;
+			case "su":
+			case "stumbleupon":
+				location.href="http://www.stumbleupon.com/submit?url="+location.href;
+				break;
+			default:
+				break;
+		}
+	},
 	sendTweet: function(){
 		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 		var url = location.href;
@@ -1078,9 +1152,6 @@ var Glee = {
  		 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 	},
 	help: function(){
-		// TODO: When we make commands scalable, maybe we can make this load as a div
-		// on the page. In case we do that, should find a way to not make the content
-		// redundant.
 		window.location = "http://thegleebox.com/manual.html";
 	},
 	setOptionValue: function(){
