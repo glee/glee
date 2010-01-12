@@ -539,6 +539,29 @@ var Glee = {
 				}
 			}
 		}
+		
+		//get the search engine
+		Glee.searchEngineUrl = GM_getValue('search_engine','http://www.google.com/search?q=');
+
+		//get the esp status
+		Glee.espStatus = GM_getValue('esp_status', true);
+		
+		//get the esp modifiers
+		var esp_modifiers_str = GM_getValue('esp_visions','');
+		if(esp_modifiers_str != "")
+		{
+			var esp_modifiers = esp_modifiers_str.split(".NEXT.");
+			Glee.espModifiers = [];
+			for(var i=0;i<esp_modifiers.length;i++)
+			{
+				var pieces = esp_modifiers[i].split(".ITEM.");
+				Glee.espModifiers[i] = {
+					url: pieces[0],
+					selector: pieces[1]
+				}
+			}
+		}
+		
 		Glee.initOptions();	
 	},
 	initOptions:function(){
@@ -1162,7 +1185,8 @@ var Glee = {
 			"size",
 			"pos", "position",
 			"theme",
-			"bsearch"
+			"bsearch",
+			"esp"
 		];
 		
 		/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
@@ -1179,7 +1203,7 @@ var Glee = {
 		
 		if(option=="" || jQuery.inArray(option,validOptions) == -1)
 			valid = false;
-		else if( (option == "scroll" || option == "bsearch") && jQuery.inArray(value,['on','off']) == -1)
+		else if( (option == "scroll" || option == "bsearch" || option == "esp") && jQuery.inArray(value,['on','off']) == -1)
 			valid = false;
 		else if( option == "size" && jQuery.inArray(value,['small','medium','med','large']) == -1)
 			valid = false;
@@ -1199,6 +1223,7 @@ var Glee = {
 			case "scroll"	: option = "scroll_animation";break;
 			case "pos"		: option = "position";break;
 			case "bsearch"	: option = "bookmark_search";break;
+			case "esp"		: option = "esp_status";break;
 		}
 		switch(value)
 		{

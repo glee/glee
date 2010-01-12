@@ -185,6 +185,10 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 							  response.theme = value;
 							  gleeboxPreferences.theme = value;
 							  break;
+			case "esp"		: savePreference("esp_status",value);
+							  response.esp_status = value;
+							  gleeboxPreferences.esp_status = value;
+							  break;
 		}
 		sendResponse({preferences:response});
 	}
