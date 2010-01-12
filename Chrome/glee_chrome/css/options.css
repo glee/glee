@@ -124,7 +124,7 @@ input{
 	text-align:center;
 	color:#555;
 }
-li.esp, #scraper-commands li, #addScraper, #addEspModifier {
+li.esp, #scraper-commands li {
 	width:410px;
 	float:left;
 }
