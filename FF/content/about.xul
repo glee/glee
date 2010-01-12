@@ -41,7 +41,7 @@
         onclick="gleebox_Common.openInNewTab('http://thegleebox.com/manual.html');window.close();"/>
     <separator class="thin"/>
   <separator class="thin"/>
-    <text value="Tip Jar" style="font-weight: bold;"/>
+    <text value="TipJar" style="font-weight: bold;"/>
     <label value="http://tipjar.thegleebox.com" class="text-link"
         onclick="gleebox_Common.openInNewTab('http://tipjar.thegleebox.com');window.close();"/>
   <separator class="thin"/>

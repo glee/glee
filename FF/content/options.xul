@@ -35,14 +35,21 @@
 				</tabs>
 				<tabpanels flex="1" >
 					<vbox>
-						<hbox align="center">
-		  					<checkbox preference="pref_scroll" flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
-						</hbox>
-
-						<hbox align="center">
-		  					<checkbox preference="pref_bookmark_search" flex="1" label="Enable Bookmark Search" tabindex="1" oncommand="" />
-						</hbox>
-						<hbox align="center">
+						<hbox align="center" >
+							<label value="Disabled URLs: " width="90"/> 
+	<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return gleebox_Options.getDisabledURLList();">
+	<treecols>
+	<treecol id="url_name" flex="1" label="Part of URL" />
+	</treecols> 
+	<treechildren id="disabled_urls_list" >
+	</treechildren>
+	</tree>
+	</hbox>
+	<hbox align="right">
+	<button label="Add URL" oncommand="gleebox_Options.addURL()"/>
+	<button label="Remove URL" oncommand="gleebox_Options.removeURL()"/>
+	</hbox>
+<hbox align="center" style="margin-top:5px">
 <label width="90" value="Search Engine:"/>
 <textbox id="search_engine_textbox" preference="pref_search_engine" width="230" />
 						</hbox>
@@ -52,20 +59,12 @@
 <label class="text-link" value="Yahoo" onclick="gleebox_Options.updateSearchEngine(this.value);"  />
 </hbox>
 						<hbox align="center" style="margin-top:10px">
-							<label value="Disabled URLs: " width="90"/> 
-	<tree id="disabled_urls_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true" preference="pref_disabled_urls" preference-editable="true" onsynctopreference="return gleebox_Options.getDisabledURLList();">
-	<treecols>
-	<treecol id="url_name" flex="1" label="URL" />
-	</treecols> 
-	<treechildren id="disabled_urls_list" >
-	</treechildren>
-	</tree>
+		  					<checkbox preference="pref_bookmark_search" flex="1" label="Enable Bookmark Search" tabindex="1" oncommand="" />
+						</hbox>
+						<hbox align="center" style="margin-top:10px" >
+		  					<checkbox preference="pref_scroll" flex="1" label="Enable Scrolling Animation" tabindex="1" oncommand="" />
+						</hbox>
 
-	</hbox>
-	<hbox flex="1" align="right">
-	<button label="Add URL" oncommand="gleebox_Options.addURL()"/>
-	<button label="Remove URL" oncommand="gleebox_Options.removeURL()"/>
-	</hbox>
 					</vbox>
 					<vbox>
 						<hbox align="center">
@@ -80,7 +79,7 @@
 								</menulist>
 							</hbox> 
 						</hbox>
-						<hbox align="center" style="margin-top:5px">
+						<hbox align="center" style="margin-top:10px">
 							<label control="symbol" value="Size: " width="90"/>
 							<hbox>
 								<menulist label="Size" preference="pref_size">
@@ -92,7 +91,7 @@
 								</menulist> 
 							</hbox>
 						</hbox>
-						<hbox align="center" style="margin-top:5px">
+						<hbox align="center" style="margin-top:10px">
 							<label control="symbol" value="Theme: " width="90"/>
 							<hbox>
 								<menulist label="Theme" preference="pref_theme">
@@ -125,11 +124,11 @@
 	<button label="Add scraper" oncommand="gleebox_Options.addScraper()"/>
 	<button label="Remove scraper" oncommand="gleebox_Options.removeScraper()"/>
 	</hbox>
-						<hbox align="center">
+						<hbox align="center" style="margin-top:15px">
 		  					<checkbox preference="pref_esp_status" flex="1" label="Enable ESP Mode (in this mode, a jQuery selector is run on a page as soon as gleeBox is opened)" tabindex="1" oncommand="" />
 						</hbox>
 
-						<hbox align="center" style="margin-top:5px">
+						<hbox align="center" style="margin-top:10px">
 							<label width="90">ESP Visions (specify page URLs and selectors for ESP Mode):</label>
 	<tree id="esp_visions_tree" rows="4" flex="1" hidecolumnpicker="true" seltype="single" editable="true"  preference="pref_esp_visions" preference-editable="true" onsynctopreference="return gleebox_Options.getESPVisions();">
 	<treecols>
@@ -148,7 +147,7 @@
 </vbox>
 					<vbox>
 						<hbox style="float:left">
-							<text value="For the complete list of gleeBox commands, please refer the " /><label class="text-link" value="user manual" onclick="gleebox_Common.openInNewTab('http://thegleebox.com/manual.html');"/>. <text value="You can also share and find tips, commands and more on " /><label class="text-link" value="tipjar" onclick="gleebox_Common.openInNewTab('http://tipjar.thegleebox.com');"/>.
+							<text value="For the complete list of gleeBox commands, please refer the " /><label class="text-link" value="user manual" onclick="gleebox_Common.openInNewTab('http://thegleebox.com/manual.html');"/>. <text value="You can also share and find tips, commands and more on " /><label class="text-link" value="TipJar" onclick="gleebox_Common.openInNewTab('http://tipjar.thegleebox.com');"/>.
 						</hbox>
 						<separator flex="thin" />
 						<hbox style="float:left">
@@ -157,7 +156,7 @@
 						</hbox>
 						<separator flex="thin" />
 	<hbox style="float:left">
-	<text value="gleeBox was created by " /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://ankitahuja.com');" value="Ankit Ahuja" />(<label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/ahujaankit');" value="@ahujaankit" /><text value=") and " /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://sameerahuja.com');" value="Sameer Ahuja" />(<label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/sam33r');" value="@sam33r" /><text value=")" />. <text value="To promote further development of gleeBox, contribute by making a " /><label class="text-link" value="donation" onclick="gleebox_Common.openInNewTab('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=10478979');" />.
+	<text value="gleeBox was created by " /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://ankitahuja.com');" value="Ankit Ahuja" />(<label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/ahujaankit');" value="@ahujaankit" /><text value=") and " /><label class="text-link" onclick="gleebox_Common.openInNewTab('http://sameerahuja.com');" value="Sameer Ahuja" />(<label class="text-link" onclick="gleebox_Common.openInNewTab('http://twitter.com/sam33r');" value="@sam33r" /><text value=")" />. <text value="To promote further development of gleeBox, consider making a " /><label class="text-link" value="donation" onclick="gleebox_Common.openInNewTab('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=10478979');" />.
 						</hbox>
 					</vbox>
 				</tabpanels>
