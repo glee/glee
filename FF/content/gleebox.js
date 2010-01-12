@@ -122,7 +122,7 @@ jQuery(document).ready(function(){
 						Glee.setSubText(Glee.selectedElement,"el");
 						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
-					},300);
+					},350);
 				}
 				//else command mode
 				else {
@@ -377,7 +377,8 @@ var Glee = {
 	//URLs for which gleeBox should be disabled
 	domainsToBlock:[
 		"mail.google.com",
-		"wave.google.com"
+		"wave.google.com",
+		"mail.yahoo.com"
 	],
 	// !commands
 	commands:[

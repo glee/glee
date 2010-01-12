@@ -346,7 +346,7 @@ var Glee = {
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1,
 	//used to enable/disabled ESP (default scrapers)
-	espStatus:false,
+	espStatus:true,
 	//Currently selected element
 	selectedElement:null,
 	//current URL where gleeBox should go
@@ -370,7 +370,8 @@ var Glee = {
 	//URLs for which gleeBox should be disabled
 	domainsToBlock:[
 		"mail.google.com",
-		"wave.google.com"
+		"wave.google.com",
+		"mail.yahoo.com"
 	],
 	// !commands
 	commands:[

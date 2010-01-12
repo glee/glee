@@ -8,9 +8,9 @@ var gleeboxPreferences = {
 	theme:"GleeThemeDefault",
 	bookmark_search:0,
 	scroll_animation:1,
-	esp_status:0,
+	esp_status:1,
 	scrapers:[],
-	disabledUrls:["mail.google.com","wave.google.com"],
+	disabledUrls:["mail.google.com","wave.google.com","mail.yahoo.com"],
 	esp:[{
 		url:"google.com/search",
 		selector:"h3:not(ol.nobr>li>h3)"

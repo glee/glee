@@ -7,13 +7,13 @@ function getDefaultPreferences(){
 		theme:"GleeThemeDefault",
 		bookmark_search:0,
 		scroll_animation:1,
-		esp_status:0
+		esp_status:1
 	};
 	return prefs;
 }
 
 function getDefaultDisabledUrls(){
-	return ["mail.google.com", "wave.google.com"];
+	return ["mail.google.com", "wave.google.com", "mail.yahoo.com"];
 }
 
 function getDefaultESP(){

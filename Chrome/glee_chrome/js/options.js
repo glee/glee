@@ -91,10 +91,10 @@ function save_options(close_tab) {
 	}
 	
 	//saving the ESP Status
-	if(document.getElementsByName("glee_esp_status")[0].checked)
-		espStatus = 1; //enabled
+	if(document.getElementsByName("glee_esp_status")[1].checked)
+		espStatus = 0; //disabled
 	else
-		espStatus = 0;
+		espStatus = 1;
  	prefs.esp_status = espStatus;
 
 	//saving the ESP Modifiers
@@ -241,10 +241,10 @@ function restore_options(prefs)
 	//getting ESP Status
 	var espStatus = prefs.esp_status;
 
-	if(espStatus == 1)
-		document.getElementsByName("glee_esp_status")[0].checked = true;
+	if(espStatus == 0)
+		document.getElementsByName("glee_esp_status")[1].checked = true;
 	else
-		document.getElementsByName("glee_esp_status")[1].checked = true; //default
+		document.getElementsByName("glee_esp_status")[0].checked = true; //default i.e. enabled
 	
 	//getting ESP Modifiers
 	var espList = document.getElementById("esp-modifiers");
