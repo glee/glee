@@ -72,11 +72,13 @@ input{
 	border:0;
 	background-color:#ccc;
 	border:1px solid #aaa;
-	font-size:13px;
 	border-radius:2px;
 	padding:2px 3px;
 	color:#333;
+	font-size:13px;
+	font-family:"Lucida Grande", "Trebuchet MS", sans-serif;
 }
+
 .button:hover{
 	cursor:pointer;
 	background-color:#777;
@@ -124,7 +126,7 @@ input{
 	text-align:center;
 	color:#555;
 }
-li.esp, #scraper-commands li {
+#esp-modifiers li, #scraper-commands li {
 	width:410px;
 	float:left;
 }
