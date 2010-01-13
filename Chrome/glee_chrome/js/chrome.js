@@ -1,10 +1,4 @@
 Glee.Chrome = {};
-Glee.Chrome.openNewTab = function(selected){
-	//sending request to background.html to create a new tab
-	chrome.extension.sendRequest({value:"createTab",url:Glee.URL,selected:selected},function(response){
-	});
-}
-
 Glee.Chrome.isBookmark = function(text){
 	//send request to search the bookmark tree for the bookmark whose title matches text
 	chrome.extension.sendRequest({value:"getBookmarks",text:text},function(response){
@@ -152,17 +146,15 @@ Glee.Chrome.applyOptions = function(response){
 }
 
 Glee.Chrome.displayOptionsPage = function(){
-	Glee.searchField.attr('value','');
-	Glee.setSubText(null);
-	Glee.URL = chrome.extension.getURL("options.html");
-	Glee.Chrome.openNewTab(true);
+	Glee.Chrome.openPageInNewTab(chrome.extension.getURL("options.html"),true);
 }
 
-Glee.Chrome.openPageInNewTab = function(url){
+Glee.Chrome.openPageInNewTab = function(url,selected){
 	Glee.searchField.attr('value','');
 	Glee.setSubText(null);
-	Glee.URL = url;
-	Glee.Chrome.openNewTab(true);
+	//sending request to background.html to create a new tab
+	chrome.extension.sendRequest({value:"createTab",url:url,selected:selected},function(response){
+	});
 }
 
 Glee.Chrome.setOptionValue = function(){
