@@ -280,7 +280,7 @@ jQuery(document).ready(function(){
 					Glee.URL = Glee.makeURLAbsolute(Glee.URL, location.href);
 					if(e.shiftKey)
 					{
-						Glee.Chrome.openPageInNewTab(Glee.URL,false);
+						Glee.Chrome.openNewTab(Glee.URL,false);
 						return false;
 					}
 					else
@@ -1041,7 +1041,7 @@ var Glee = {
 					+document.title
 					+"&body="
 					+location.href
-					+mailDesc, true);
+					+mailDesc);
 				break;
 			case "m":
 			case "mail":
@@ -1050,13 +1050,13 @@ var Glee = {
 					+document.title
 					+"&body="
 					+location.href
-					+mailDesc,true);
+					+mailDesc);
 				break;
 			case "fb":
 			case "facebook":
 				Glee.Chrome.openPageInNewTab(
 					"http://www.facebook.com/share.php?u="
-					+location.href,true);
+					+location.href);
 				break;
 			case "deli":
 			case "delicious":
@@ -1066,12 +1066,12 @@ var Glee = {
 					+"&url="
 					+location.href
 					+"&notes="
-					+desc,true);
+					+desc);
 				break;
 			case "digg":
 				Glee.Chrome.openPageInNewTab(
 					"http://digg.com/submit/?url="
-					+location.href,true);
+					+location.href);
 				break;
 			case "t":
 			case "twitter":
@@ -1081,7 +1081,7 @@ var Glee = {
 			case "stumbleupon":
 				Glee.Chrome.openPageInNewTab(
 					"http://www.stumbleupon.com/submit?url="
-					+location.href,true);
+					+location.href);
 				break;
 			default:
 				break;
@@ -1113,10 +1113,10 @@ var Glee = {
  		 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 	},
 	help: function(){
-		Glee.Chrome.openPageInNewTab("http://thegleebox.com/manual.html",true);
+		Glee.Chrome.openPageInNewTab("http://thegleebox.com/manual.html");
 	},
 	tipjar: function(){
-		Glee.Chrome.openPageInNewTab("http://tipjar.thegleebox.com",true);
+		Glee.Chrome.openPageInNewTab("http://tipjar.thegleebox.com");
 	}
 }
 

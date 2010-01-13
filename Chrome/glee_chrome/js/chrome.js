@@ -145,16 +145,20 @@ Glee.Chrome.applyOptions = function(response){
 	Glee.initOptions();
 }
 
-Glee.Chrome.displayOptionsPage = function(){
-	Glee.Chrome.openPageInNewTab(chrome.extension.getURL("options.html"),true);
-}
-
-Glee.Chrome.openPageInNewTab = function(url,selected){
-	Glee.searchField.attr('value','');
-	Glee.setSubText(null);
+Glee.Chrome.openNewTab = function(url,selected){
 	//sending request to background.html to create a new tab
 	chrome.extension.sendRequest({value:"createTab",url:url,selected:selected},function(response){
-	});
+	});	
+}
+
+Glee.Chrome.displayOptionsPage = function(){
+	Glee.Chrome.openPageInNewTab(chrome.extension.getURL("options.html"));
+}
+
+Glee.Chrome.openPageInNewTab = function(url){
+	Glee.searchField.attr('value','');
+	Glee.setSubText(null);
+	Glee.Chrome.openNewTab(url, true);
 }
 
 Glee.Chrome.setOptionValue = function(){
