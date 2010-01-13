@@ -158,6 +158,13 @@ Glee.Chrome.displayOptionsPage = function(){
 	Glee.Chrome.openNewTab(true);
 }
 
+Glee.Chrome.openPageInNewTab = function(url){
+	Glee.searchField.attr('value','');
+	Glee.setSubText(null);
+	Glee.URL = url;
+	Glee.Chrome.openNewTab(true);
+}
+
 Glee.Chrome.setOptionValue = function(){
 	var valid = true;
 	var validOptions = [

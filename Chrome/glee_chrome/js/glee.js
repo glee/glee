@@ -426,7 +426,7 @@ var Glee = {
 		{
 			name: "share",
 			method:"Glee.sharePage",
-			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, deli(cious), digg, and su/stumbleupon."
+			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, t(witter), deli(cious), digg, and su/stumbleupon."
 		}
 	],
 	
@@ -707,7 +707,7 @@ var Glee = {
 				if(this.isURL(text))
 				{
 					this.subText.html(this.truncate("Go to "+text));
-					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
+					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
 					this.URL = text;
@@ -963,7 +963,7 @@ var Glee = {
 		}
 	},
 	isURL:function(url){
-		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in))");
+		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in|ly))");
 		return url.match(regex);
 	},
 	checkDomain:function(){
@@ -980,7 +980,6 @@ var Glee = {
 			return false;
 		else
 		{
-			// TODO: A more efficient way needed, but is there one?
 			var parents = el.parents();
 			for(var i=0;i<parents.length;i++)
 			{
@@ -1025,40 +1024,64 @@ var Glee = {
 	sharePage: function(){
 		var site = Glee.searchField.attr('value').substring(6).replace(" ","");
 		//Try to get description
-		var desc = jQuery('meta[name=description],meta[name=Downescription]').attr("content");
-		if(!desc)
-			desc = "";
+		var desc = jQuery('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
+		if((!desc) || (desc == ""))
+			{
+				mailDesc = "";
+				desc = "";
+			}
+		else
+			mailDesc = "  -  " + desc;
 		switch(site) 
 		{
 			case "g":
 			case "gmail":
-				location.href="https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
-					+document.title+"&body="+location.href+"  -  "+desc;
+				Glee.Chrome.openPageInNewTab(
+					"https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
+					+document.title
+					+"&body="
+					+location.href
+					+mailDesc);
 				break;
 			case "m":
 			case "mail":
-				location.href="mailto:?subject="
-					+document.title+"&body="+location.href+"  -  "+desc;
+				Glee.Chrome.openPageInNewTab(
+					"mailto:?subject="
+					+document.title
+					+"&body="
+					+location.href
+					+mailDesc);
 				break;
 			case "fb":
 			case "facebook":
-				location.href="http://www.facebook.com/share.php?u="+location.href;
+				Glee.Chrome.openPageInNewTab(
+					"http://www.facebook.com/share.php?u="
+					+location.href);
 				break;
 			case "deli":
 			case "delicious":
-				location.href="http://delicious.com/save?title="
-				+document.title
-				+"&url="
-				+location.href
-				+"&notes="
-				+desc;
+				Glee.Chrome.openPageInNewTab(
+					"http://delicious.com/save?title="
+					+document.title
+					+"&url="
+					+location.href
+					+"&notes="
+					+desc);
 				break;
 			case "digg":
-				location.href="http://digg.com/submit/?url="+location.href;
+				Glee.Chrome.openPageInNewTab(
+					"http://digg.com/submit/?url="
+					+location.href);
+				break;
+			case "t":
+			case "twitter":
+				Glee.sendTweet();
 				break;
 			case "su":
 			case "stumbleupon":
-				location.href="http://www.stumbleupon.com/submit?url="+location.href;
+				Glee.Chrome.openPageInNewTab(
+					"http://www.stumbleupon.com/submit?url="
+					+location.href);
 				break;
 			default:
 				break;
@@ -1090,10 +1113,10 @@ var Glee = {
  		 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 	},
 	help: function(){
-		window.location = "http://thegleebox.com/manual.html";
+		Glee.Chrome.openPageInNewTab("http://thegleebox.com/manual.html");
 	},
 	tipjar: function(){
-		window.location = "http://tipjar.thegleebox.com";
+		Glee.Chrome.openPageInNewTab("http://tipjar.thegleebox.com");
 	}
 }
 
