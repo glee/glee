@@ -408,7 +408,7 @@ var Glee = {
 		{
 			name: "tipjar",
 			method:"Glee.tipjar",
-			description:"Got to the gleeBox TipJar",
+			description:"Go to the gleeBox TipJar",
 			statusText:"Opening TipJar..."
 		},
 		{
