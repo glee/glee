@@ -74,9 +74,12 @@ input{
 	border:1px solid #aaa;
 	border-radius:2px;
 	padding:2px 3px;
+	display:inline;
 	color:#333;
 	font-size:13px;
+	line-height:17px;
 	font-family:"Lucida Grande", "Trebuchet MS", sans-serif;
+	margin:0;
 }
 
 .button:hover{
