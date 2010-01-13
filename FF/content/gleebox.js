@@ -415,8 +415,14 @@ var Glee = {
 		{
 			name: "tipjar",
 			method:"Glee.tipjar",
-			description:"Got to the gleeBox TipJar",
+			description:"Go to the gleeBox TipJar",
 			statusText:"Opening TipJar..."
+		},
+		{
+			name: "options",
+			method:"Glee.displayOptionsPage",
+			description:"View gleeBox options",
+			statusText:"Opening options dialog..."
 		},
 		{
 			name: "set",
@@ -427,7 +433,7 @@ var Glee = {
 		{
 			name: "share",
 			method:"Glee.sharePage",
-			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, deli(cious), digg, and su/stumbleupon."
+			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, t(witter), deli(cious), digg, and su/stumbleupon."
 		}
 	],
 	
@@ -780,7 +786,7 @@ var Glee = {
 				if(this.isURL(text))
 				{
 					this.subText.html(this.truncate("Go to "+text));
-					var regex = new RegExp("((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+)");
+					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
 					this.URL = text;
@@ -1032,7 +1038,7 @@ var Glee = {
 		}
 	},
 	isURL:function(url){
-		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in))");
+		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in|ly))");
 		return url.match(regex);
 	},
 	checkDomain:function(){
@@ -1111,40 +1117,49 @@ var Glee = {
 	sharePage: function(){
 		var site = Glee.searchField.attr('value').substring(6).replace(" ","");
 		//Try to get description
-		var desc = jQuery('meta[name=description],meta[name=Downescription]').attr("content");
-		if(!desc)
-			desc = "";
+		var desc = jQuery('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
+		if((!desc) || (desc == ""))
+			{
+				mailDesc = "";
+				desc = "";
+			}
+		else
+			mailDesc = "  -  " + desc;
 		switch(site) 
 		{
 			case "g":
 			case "gmail":
-				location.href="https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
-					+document.title+"&body="+location.href+"  -  "+desc;
+				Glee.openPageInNewTab("https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
+					+document.title+"&body="+location.href+"  -  "+desc);
 				break;
 			case "m":
 			case "mail":
-				location.href="mailto:?subject="
-					+document.title+"&body="+location.href+"  -  "+desc;
+				Glee.openPageInNewTab("mailto:?subject="
+					+document.title+"&body="+location.href+"  -  "+desc);
 				break;
 			case "fb":
 			case "facebook":
-				location.href="http://www.facebook.com/share.php?u="+location.href;
+				Glee.openPageInNewTab("http://www.facebook.com/share.php?u="+location.href);
 				break;
 			case "deli":
 			case "delicious":
-				location.href="http://delicious.com/save?title="
+				Glee.openPageInNewTab("http://delicious.com/save?title="
 				+document.title
 				+"&url="
 				+location.href
 				+"&notes="
-				+desc;
+				+desc);
 				break;
 			case "digg":
-				location.href="http://digg.com/submit/?url="+location.href;
+				Glee.openPageInNewTab("http://digg.com/submit/?url="+location.href);
+				break;
+			case "t":
+			case "twitter":
+				Glee.sendTweet();
 				break;
 			case "su":
 			case "stumbleupon":
-				location.href="http://www.stumbleupon.com/submit?url="+location.href;
+				Glee.openPageInNewTab("http://www.stumbleupon.com/submit?url="+location.href);
 				break;
 			default:
 				break;
@@ -1176,7 +1191,24 @@ var Glee = {
  		 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 	},
 	help: function(){
-		window.location = "http://thegleebox.com/manual.html";
+		Glee.openPageInNewTab("http://thegleebox.com/manual.html");
+	},
+	tipjar: function(){
+		Glee.openPageInNewTab("http://tipjar.thegleebox.com");
+	},
+	displayOptionsPage: function(){
+		setTimeout(function(){
+			Glee.searchField.attr('value','');
+			Glee.setSubText(null);
+			GM_openOptions();
+		},0);
+	},
+	openPageInNewTab: function(url){
+		setTimeout(function(){
+			Glee.searchField.attr('value','');
+			Glee.setSubText(null);
+			GM_openInTabAndFocus(url);
+		},0);
 	},
 	setOptionValue: function(){
 		var valid = true;

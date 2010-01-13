@@ -92,6 +92,8 @@ injectScript: function(script, url, unsafeContentWin) {
 	sandbox.GM_getValue=gleebox_gmCompiler.hitch(storage, "getValue");
 	sandbox.GM_getBookmarks=gleebox_gmCompiler.hitch(this,"getBookmarks");
 	sandbox.GM_openInTab=gleebox_gmCompiler.hitch(this, "openInTab", unsafeContentWin);
+	sandbox.GM_openInTabAndFocus=gleebox_gmCompiler.hitch(this, "openInTabAndFocus", unsafeContentWin);
+	sandbox.GM_openOptions=gleebox_gmCompiler.hitch(this,"openOptions");	
 	sandbox.GM_xmlhttpRequest=gleebox_gmCompiler.hitch(
 		xmlhttpRequester, "contentStartRequest"
 	);
@@ -131,7 +133,11 @@ evalInSandbox: function(code, codebase, sandbox) {
 		throw new Error("Could not create sandbox.");
 	}
 },
-
+openOptions: function(){
+	var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"].getService(Components.interfaces["nsIExtensionManager"]);
+    openDialog("chrome://gleebox/content/options.xul", "gleeBox Options",
+        "", "urn:mozilla:item:gleebox@ankit.ahuja.and.sameer.ahuja", extensionManager.datasource);	
+},
 getBookmarks: function(searchQuery){
 	var bookmarks = Components.classes["@mozilla.org/browser/nav-bookmarks-service;1"]
 	                .getService(Ci.nsINavBookmarksService);
@@ -167,6 +173,26 @@ getBookmarks: function(searchQuery){
 	return results;
 },
 
+openInTabAndFocus: function(unsafeContentWin, url){
+	var tabBrowser = getBrowser(), browser, isMyWindow = false;
+	for (var i = 0; browser = tabBrowser.browsers[i]; i++)
+		if (browser.contentWindow == unsafeContentWin) {
+			isMyWindow = true;
+			break;
+		}
+	if (!isMyWindow) return;
+ 
+	var loadInBackground, sendReferrer, referrer = null;
+	loadInBackground = false;
+	sendReferrer = tabBrowser.mPrefs.getIntPref("network.http.sendRefererHeader");
+	if (sendReferrer) {
+		var ios = Components.classes["@mozilla.org/network/io-service;1"]
+							.getService(Components.interfaces.nsIIOService);
+		referrer = ios.newURI(content.document.location.href, null, null);
+	 }
+	 tabBrowser.loadOneTab(url, referrer, null, null, loadInBackground);
+},
+
 openInTab: function(unsafeContentWin, url) {
 	var tabBrowser = getBrowser(), browser, isMyWindow = false;
 	for (var i = 0; browser = tabBrowser.browsers[i]; i++)
@@ -185,7 +211,7 @@ openInTab: function(unsafeContentWin, url) {
 		referrer = ios.newURI(content.document.location.href, null, null);
 	 }
 	 tabBrowser.loadOneTab(url, referrer, null, null, loadInBackground);
- },
+},
  
 hitch: function(obj, meth) {
 	var unsafeTop = new XPCNativeWrapper(unsafeContentWin, "top").top;
