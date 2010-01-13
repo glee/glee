@@ -1129,29 +1129,42 @@ var Glee = {
 		{
 			case "g":
 			case "gmail":
-				Glee.openPageInNewTab("https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
-					+document.title+"&body="+location.href+"  -  "+desc);
+				Glee.openPageInNewTab(
+					"https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
+					+document.title
+					+"&body="
+					+location.href
+					+mailDesc);
 				break;
 			case "m":
 			case "mail":
-				Glee.openPageInNewTab("mailto:?subject="
-					+document.title+"&body="+location.href+"  -  "+desc);
+				Glee.openPageInNewTab(
+					"mailto:?subject="
+					+document.title
+					+"&body="
+					+location.href
+					+mailDesc);
 				break;
 			case "fb":
 			case "facebook":
-				Glee.openPageInNewTab("http://www.facebook.com/share.php?u="+location.href);
+				Glee.openPageInNewTab(
+					"http://www.facebook.com/share.php?u="
+					+location.href);
 				break;
 			case "deli":
 			case "delicious":
-				Glee.openPageInNewTab("http://delicious.com/save?title="
-				+document.title
-				+"&url="
-				+location.href
-				+"&notes="
-				+desc);
+				Glee.openPageInNewTab(
+					"http://delicious.com/save?title="
+					+document.title
+					+"&url="
+					+location.href
+					+"&notes="
+					+desc);
 				break;
 			case "digg":
-				Glee.openPageInNewTab("http://digg.com/submit/?url="+location.href);
+				Glee.openPageInNewTab(
+					"http://digg.com/submit/?url="
+					+location.href);
 				break;
 			case "t":
 			case "twitter":
@@ -1159,7 +1172,9 @@ var Glee = {
 				break;
 			case "su":
 			case "stumbleupon":
-				Glee.openPageInNewTab("http://www.stumbleupon.com/submit?url="+location.href);
+				Glee.openPageInNewTab(
+					"http://www.stumbleupon.com/submit?url="
+					+location.href);
 				break;
 			default:
 				break;
