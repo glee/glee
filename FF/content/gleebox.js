@@ -27,7 +27,7 @@ jQuery(document).ready(function(){
 	Glee.initBox();
 	
 	// Crash and burn. This won't work because the loading has probably not finished yet.
-	if(Glee.status == 0)
+	if(Glee.status == false)
 		return;
 	
 	// Setup cache for global jQuery objects
@@ -484,6 +484,9 @@ var Glee = {
 	},
 	
 	initBox: function(){
+		this.getOptions();
+		if(Glee.status == false)
+			return;
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
 		this.subText = jQuery("<div id=\"gleeSubText\">"+Glee.nullStateMessage+"</div>");
@@ -494,8 +497,7 @@ var Glee = {
 		this.sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
-		this.getOptions();
-		this.checkDomain();
+		Glee.initOptions();
 	},
 	getOptions:function(){
 		//gleeBox status
@@ -567,8 +569,7 @@ var Glee = {
 				}
 			}
 		}
-		
-		Glee.initOptions();	
+		Glee.checkDomain();
 	},
 	initOptions:function(){
 		// Setup the theme
