@@ -487,6 +487,10 @@ var Glee = {
 		this.getOptions();
 		if(Glee.status == false)
 			return;
+		
+		if(window != window.top)
+			return;
+		
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
 		this.subText = jQuery("<div id=\"gleeSubText\">"+Glee.nullStateMessage+"</div>");
