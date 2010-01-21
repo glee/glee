@@ -1302,6 +1302,7 @@ var Glee = {
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
 			Glee.getOptions();
+			Glee.initOptions();
 		},0);
 	}
 }
