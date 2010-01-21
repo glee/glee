@@ -489,7 +489,10 @@ var Glee = {
 			return;
 		
 		if(window != window.top)
+		{
+			Glee.status = false;
 			return;
+		}
 		
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
