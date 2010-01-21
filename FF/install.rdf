@@ -5,7 +5,7 @@
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>gleebox@ankit.ahuja.and.sameer.ahuja</em:id>
 		<em:name>gleeBox</em:name>
-		<em:version>1.0.1</em:version>
+		<em:version>1.0.2</em:version>
 		<em:description>Keyboard glee for your web</em:description>
 		<em:creator>Ankit Ahuja and Sameer Ahuja</em:creator>
 		<em:contributor>Greasemonkey Compiler by Anthony Lieuallen;</em:contributor>
