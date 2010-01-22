@@ -244,7 +244,6 @@ jQuery(document).ready(function(){
 					url = Glee.URL.url;
 					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
 					location.href = url;
-					// eval(unescape(url.substring(11))); //get rid of javascript:
 					setTimeout(function(){
 						Glee.closeBox();
 					},0);
