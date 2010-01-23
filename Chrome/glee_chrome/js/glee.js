@@ -61,10 +61,26 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			Glee.closeBox();
 		}
-		else if(e.keyCode == 9)
+		else if(e.keyCode == 9) //if TAB is pressed
 		{
 			e.stopPropagation();
 			e.preventDefault();
+			if(Glee.selectedElement)
+			{
+				if(e.shiftKey)
+					Glee.selectedElement = LinkReaper.getPrev();
+				else
+					Glee.selectedElement = LinkReaper.getNext();
+				Glee.setSubText(Glee.selectedElement,"el");
+				Glee.scrollToElement(Glee.selectedElement);
+			}
+			else if(Glee.bookmarks.length != 0)
+			{
+				if(e.shiftKey)
+					Glee.getPrevBookmark();
+				else
+					Glee.getNextBookmark();
+			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
@@ -72,7 +88,6 @@ jQuery(document).ready(function(){
 			Glee.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
 	});
-
 	Glee.searchField.bind('keyup',function(e){
 		var value = Glee.searchField.attr('value');
 		//check if the content of the text field has changed
@@ -175,26 +190,6 @@ jQuery(document).ready(function(){
 			}
 			Glee.searchText = value;
 			Glee.lastQuery = null;
-		}
-		else if(e.keyCode == 9)  //if TAB is pressed
-		{
-			e.preventDefault();
-			if(Glee.selectedElement)
-			{
-				if(e.shiftKey)
-					Glee.selectedElement = LinkReaper.getPrev();
-				else
-					Glee.selectedElement = LinkReaper.getNext();
-				Glee.setSubText(Glee.selectedElement,"el");
-				Glee.scrollToElement(Glee.selectedElement);
-			}
-			else if(Glee.bookmarks.length != 0)
-			{
-				if(e.shiftKey)
-					Glee.getPrevBookmark();
-				else
-					Glee.getNextBookmark();
-			}
 		}
 		//if ENTER is pressed
 		else if(e.keyCode == 13)
