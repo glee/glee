@@ -144,9 +144,9 @@ jQuery(document).ready(function(){
 					{
 						c = value.substring(1);
 						c = c.replace("$", location.href);
-						Glee.subText.html(Glee.truncate("Run yubnub command (press enter to execute): " + c));
+						Glee.subText.html(Glee.filter("Run yubnub command (press enter to execute): " + c));
 						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
-						Glee.subURL.html(Glee.truncate(Glee.URL));
+						Glee.subURL.html(Glee.filter(Glee.URL));
 					}
 					else if(value[0] == '*')// Any jQuery selector
 					{
@@ -627,16 +627,16 @@ var Glee = {
 				
 				if(jQueryVal[0].tagName != "A") //if the selected element is not a link
 				{
-					this.subText.html(this.truncate(jQueryVal.text()));
 					var a_el = null;
+					this.subText.html(this.filter(jQueryVal.text()));
 					if(jQueryVal[0].tagName == "IMG") //if it is an image
 					{
 						a_el = jQuery(jQueryVal.parents('a'));
 						var value = jQueryVal.attr('alt');
 						if(value)
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else if(value = jQueryVal.parent('a').attr('title'))
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else
 							this.subText.html("Linked Image");
 					}
@@ -644,7 +644,7 @@ var Glee = {
 					{
 						var value = jQueryVal.attr("value");
 						if(value)
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else
 							this.subText.html("Input "+jQueryVal.attr("type"));
 					}
@@ -652,19 +652,19 @@ var Glee = {
 					{
 						var value = jQueryVal.attr("name");
 						if(value)
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else
 							this.subText.html("Textarea");
 					}
 					else
 						a_el = jQuery(jQueryVal.find('a'));
-
+					
 					if(a_el)
 					{
 						if(a_el.length != 0)
 						{
 							this.URL = a_el.attr("href");
-							this.subURL.html(this.truncate(this.URL));
+							this.subURL.html(this.filter(this.URL));
 						}
 					}
 					else
@@ -673,10 +673,10 @@ var Glee = {
 				else if(jQueryVal.find("img").length != 0) //it is a link containing an image
 				{
 					this.URL = jQueryVal.attr("href");
-					this.subURL.html(this.truncate(this.URL));
+					this.subURL.html(this.filter(this.URL));
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title != "")
-						this.subText.html(this.truncate(title));
+						this.subText.html(this.filter(title));
 					else
 						this.subText.html("Linked Image");
 				}	
@@ -685,30 +685,30 @@ var Glee = {
 					var title = jQueryVal.attr('title');
 					var text = jQueryVal.text();
 
-					this.subText.html(this.truncate(text));
+					this.subText.html(this.filter(text));
 					if(title !="" && title != text)
-						this.subText.html(this.truncate(this.subText.html()+" -- "+title));
+						this.subText.html(this.filter(this.subText.html()+" -- "+title));
 					this.URL = jQueryVal.attr('href');
-					this.subURL.html(this.truncate(this.URL));
+					this.subURL.html(this.filter(this.URL));
 				}
 			}
 			else if(Glee.commandMode == true)
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //go to URL ,search for bookmarks or google
+			else //go to URL, search for bookmarks or search the web
 			{
 				var text = this.searchField.attr("value");
 				this.selectedElement = null;
 				//if it is a URL
 				if(this.isURL(text))
 				{
-					this.subText.html(this.truncate("Go to "+text));
+					this.subText.html(this.filter("Go to "+text));
 					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
 					this.URL = text;
-					this.subURL.html(this.truncate(text));
+					this.subURL.html(this.filter(text));
 				}
 				else if(this.bookmarkSearchStatus) //is bookmark search enabled?
 				{
@@ -722,9 +722,9 @@ var Glee = {
 		}
 		else if(type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
 		{
-			this.subText.html(this.truncate("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
+			this.subText.html(this.filter("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
 			this.URL = this.bookmarks[val].url;
-			this.subURL.html(this.truncate(this.URL));
+			this.subURL.html(this.filter(this.URL));
 		}
 		else if(type == "bookmarklet") // here val is the bookmarklet returned
 		{
@@ -734,9 +734,9 @@ var Glee = {
 		}
 		else if(type == "search") // here val is the text query
 		{
-			this.subText.html(this.truncate("Search for "+val));
+			this.subText.html(this.filter("Search for "+val));
 			this.URL = Glee.searchEngineUrl+val;
-			this.subURL.html(this.URL);	
+			this.subURL.html(this.filter(this.URL));
 		}
 		else if(type == "msg") // here val is the message to be displayed
 		{
@@ -950,9 +950,11 @@ var Glee = {
 
 		return hparts.join('/') + '/' + newlinkparts.join('/');
 	},
-	truncate:function(text){
+	filter:function(text){
 		if(text && typeof(text) != "undefined")
 		{
+			//replace < with &lt; and > with &gt;
+			text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 			if(text.length > 75)
 				return text.substr(0,73)+"...";
 			else
