@@ -187,6 +187,8 @@ jQuery(document).ready(function(){
 				Glee.setSubText(null);
 				Glee.selectedElement = null;
 				Glee.toggleActivity(0);
+				if(Glee.espStatus)
+					Glee.fireEsp();
 			}
 			Glee.searchText = value;
 			Glee.lastQuery = null;
