@@ -60,6 +60,7 @@
 
 #gleeBox{ 
 	line-height:20px;
+	height:auto !important;
 	z-index:100000;
 	position:fixed;
 	left:5%;
@@ -85,6 +86,7 @@
 	padding:0;
 	margin:3px 0;
 	border:none;
+	height:auto !important;
 	font-size:100px;
 	color:#fff;
 }
