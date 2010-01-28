@@ -220,6 +220,7 @@ jQuery(document).ready(function(){
 				{
 					url = Glee.URL.url;
 					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
+					//for some reason, setting location.href does not work properly for bookmarklets in Chrome
 					eval(unescape(url.substring(11))); //get rid of javascript:
 					setTimeout(function(){
 						Glee.closeBox();
@@ -374,55 +375,55 @@ var Glee = {
 	commands:[
 		{
 			name: "tweet",
-			method:"Glee.sendTweet",
+			method:"sendTweet",
 			description:"Tweet this page",
 			statusText:"Redirecting to twitter homepage..."
 		},
 		{
 			name: "shorten",
-			method:"Glee.shortenURL",
+			method:"shortenURL",
 			description:"Shorten the URL of this page using bit.ly",
 			statusText:"Shortening URL via bit.ly..."
 		},
 		{
 			name: "read",
-			method:"Glee.makeReadable",
+			method:"makeReadable",
 			description:"Make your page readable using Readability",
 			statusText:"Please wait while Glee+Readability work up the magic..."
 		},
 		{
 			name: "rss",
-			method:"Glee.getRSSLink",
+			method:"getRSSLink",
 			description:"Open the RSS feed of this page in GReader",
 			statusText:"Opening feed in Google Reader..."
 		},
 		{
 			name: "help",
-			method:"Glee.help",
+			method:"help",
 			description:"View user manual",
 			statusText:"Loading help page..."
 		},
 		{
 			name: "tipjar",
-			method:"Glee.tipjar",
+			method:"tipjar",
 			description:"Go to the gleeBox TipJar",
 			statusText:"Opening TipJar..."
 		},
 		{
 			name: "options",
-			method:"Glee.Chrome.displayOptionsPage",
+			method:"Chrome.displayOptionsPage",
 			description:"View gleeBox options",
 			statusText:"Opening options page..."
 		},
 		{
 			name: "set",
-			method:"Glee.Chrome.setOptionValue",
+			method:"Chrome.setOptionValue",
 			description:"Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help",
 			statusText:"Setting option..."
 		},
 		{
 			name: "share",
-			method:"Glee.sharePage",
+			method:"sharePage",
 			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, t(witter), deli(cious), digg, and su/stumbleupon."
 		}
 	],
@@ -1001,11 +1002,16 @@ var Glee = {
 	},
 	execCommand: function(command){
 		//call the method
-		//not sure if eval is the way to go here
-		var method = command.method+"()";
+		var method = command.method;
 		//setting the status
 		this.setSubText(command.statusText,"msg");
-		eval(method);
+		if(method.indexOf("Chrome.") == 0)
+		{
+			method = method.slice(7);
+			Glee.Chrome[method]();
+		}
+		else
+			Glee[method]();
 	},
 	makeReadable: function(){
 		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
