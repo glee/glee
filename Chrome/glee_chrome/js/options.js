@@ -233,7 +233,7 @@ function restore_options(prefs)
 			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+i+")'/>";
 			newLI.className = "scraper";
 			newLI.id = "scraper"+i;
-			newLI.innerHTML = "<span><strong>?"+prefs.scrapers[i].name+"</strong></span> : <span>"+prefs.scrapers[i].selector+"</span>"+inputBt;
+			newLI.innerHTML = "<span><strong>?"+prefs.scrapers[i].command+"</strong></span> : <span>"+prefs.scrapers[i].selector+"</span>"+inputBt;
 			scraperList.insertBefore(newLI,document.getElementById("addScraper"));
 		}
 	}	

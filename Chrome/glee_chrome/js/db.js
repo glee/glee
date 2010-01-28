@@ -353,8 +353,7 @@ function loadScrapers(callback){
 				var scrapers = [];
 				var len = F.rows.length;
 				for(var i=0;i<len;i++)
-					scrapers[i] = {name:F.rows.item(i)["name"], selector:F.rows.item(i)["selector"]};
-
+					scrapers[i] = {command:F.rows.item(i)["name"], selector:F.rows.item(i)["selector"], nullMessage: "Could not find any matching elements on the page", cssStyle: "GleeReaped"};
 				callback(scrapers);
 			},
 			function(E,F){console.log(F);})

@@ -514,6 +514,7 @@ var Glee = {
 		if(Glee.status != 0 && Glee.hyperMode == true) {
 			Glee.getHyperized();
 		}
+		
 	},
 	getHyperized: function(){
 		Glee.searchField.attr('value','');
