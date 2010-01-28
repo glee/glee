@@ -90,10 +90,20 @@
 	font-size:100px;
 	color:#fff;
 }
+#gleeSub{
+	font-size:15px !important;
+	font-family:inherit !important;
+	font-weight:normal !important;
+	height:auto !important;
+	line-height:normal !important;
+}
+
 #gleeSubText, #gleeSubURL, #gleeSubActivity{
-	font-size:15px;
-	width:auto;
-	font-weight: normal;
+	width:auto !important;
+	font-size:15px !important;
+	font-family:inherit !important;
+	line-height:20px !important;
+	font-weight:normal !important;
 }
 #gleeSubText{
 	float:left;
