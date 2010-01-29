@@ -1,14 +1,9 @@
 var response = {};
-var status;
 
 //set the status value and update the browser action
 function setStatus(value)
 {
-	if(!value)
-		status = 1;
-	else
-		status = value;
-	if(status == 0)
+	if(value == 0)
 	{
 		chrome.browserAction.setBadgeText({text:"OFF"});
 		chrome.browserAction.setTitle({title:"Turn gleeBox ON"});
@@ -40,14 +35,13 @@ function initStatus(){
 
 
 //Toggle status value and store it in local storage
-function toggleStatus(tab){
-	if(status == 1)
-		status = 0;
+function toggleStatus(){
+	if(gleeboxPreferences.status == 1)
+		gleeboxPreferences.status = 0;
 	else
-		status = 1;
-
-	savePreference("status",status);
-	setStatus(status);
+		gleeboxPreferences.status = 1;
+	savePreference("status",gleeboxPreferences.status);
+	setStatus(gleeboxPreferences.status);
 	
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
@@ -56,7 +50,7 @@ function toggleStatus(tab){
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"initStatus",status:status},function(response){
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"initStatus",status:gleeboxPreferences.status},function(response){
 				});
 			}
 		}
@@ -65,7 +59,7 @@ function toggleStatus(tab){
 
 //React when a browser action's icon is clicked 
 chrome.browserAction.onClicked.addListener(function(tab) {
-	toggleStatus(tab);
+	toggleStatus();
 });
 
 //Add listener to respond to requests from content script

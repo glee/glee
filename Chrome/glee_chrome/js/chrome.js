@@ -146,6 +146,7 @@ Glee.Chrome.applyOptions = function(response){
 		Glee.status = 1;
 	else
 		Glee.status = 0;
+
 	Glee.initOptions();
 }
 
