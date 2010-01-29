@@ -1,3 +1,37 @@
+1.1 (29/01/2010)
+
+* Input elements of type button/submit added to default link search
+* Text field input is now escaped for HTML tags
+* Fixed CSS issues
+* [Chrome] Keeping TAB pressed results in continuous scrolling
+* [Chrome] Title text for browser action changes on click
+* [Chrome] Changes to disabled urls in options are spread properly
+* [Chrome] Fixed toggle of status using browser action
+* [Chrome] Custom scrapers work properly when browser is first run
+
+1.0.3 [Firefox Only]
+* Replaced occurrences of eval with alternatives
+
+1.0.2 [Firefox Only]
+* Completely resolved the iframe issue where textfield/textarea inside an iframe wasn't accepting text input
+* Fixed set command
+
+1.0.1 [Firefox Only]
+* Partly solved iframe issue where gleeBox was inserting HTML inside iframes
+
+1.0
+
+* Custom scraper commands
+* ESP mode
+* Custom search engine option
+* Better traversing
+* Better scrolling
+* Fully functional jQuery mode
+* Storage using DB in Chrome (instead of localStorage)
+* New commands - !set, !tipjar, !options
+* CSS Bugfixes
+* Performance improvements (reduced jQuery calls)
+
 0.6.1 (16/12/2009)
 
 Minor bug fixes - CSS theme fix and subtext not getting set for ?img
