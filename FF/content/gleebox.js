@@ -37,7 +37,7 @@ jQuery(document).ready(function(){
 	
 	var themesCSS = '.GleeThemeDefault{ background-color:#333 !important; color:#fff !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; }.GleeThemeWhite{ background-color:#fff !important; color:#000 !important; opacity: 0.85 !important; border: 1px solid #939393 !important; -moz-border-radius: 10px !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; }.GleeThemeRuby{ background-color: #530000 !important; color: #f6b0ab !important; font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important; }.GleeThemeGreener{ background-color: #2e5c4f !important; color: #d3ff5a !important; font-family: Georgia, "Times New Roman", Times, serif !important; }.GleeThemeConsole{ font-family: Monaco, Consolas, "Courier New", Courier, mono !important; color: #eafef6 !important; background-color: #111 !important; }.GleeThemeGlee{ background-color: #eb1257 !important; color: #fff300 !important; -moz-box-shadow: #eb1257 0px 0px 8px !important; -moz-box-shadow: #eb1257 0px 0px 8px !important; opacity: 0.8 !important; font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important; }';
 	
-	var gleeCSS = '#gleeBox{ line-height:20px; z-index:100000; position:fixed; left:5%; top:35%; display:none; overflow:auto; width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif; padding:4px 6px; text-align:left; /*rounded corners*/ -moz-border-radius:7px; } #gleeSearchField{ outline:none; width:90%; margin:0; padding:0; margin:3px 0; border:none; font-size:100px; background:none !important; color:#fff; } #gleeSubText, #gleeSubURL, #gleeSubActivity{ font-size:15px; width:auto; font-weight: normal; } #gleeSubText{ float:left; } #gleeSubURL{ display:inline; float:right; } #gleeSubActivity{ color:#ccc; height:10px; display:inline; float:left; padding-left:5px; }';
+	var gleeCSS = '#gleeBox{ line-height:20px; height:auto !important;z-index:100000; position:fixed; left:5%; top:35%; display:none; overflow:auto; width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif; padding:4px 6px; text-align:left; /*rounded corners*/ -moz-border-radius:7px; } #gleeSearchField{ outline:none; width:90%; margin:0; padding:0; margin:3px 0; border:none; height:auto !important;font-size:100px; background:none !important; color:#fff; } #gleeSub{ margin:0 !important; padding:0 !important; font-size:15px !important;font-family:inherit !important;font-weight:normal !important; height:auto !important;line-height:normal !important; } #gleeSubText, #gleeSubURL, #gleeSubActivity{ font-size:15px !important; width:auto !important; font-weight: normal !important; line-height:20px !important; font-family:inherit !important; } #gleeSubText{ float:left; } #gleeSubURL{ display:inline; float:right; } #gleeSubActivity{ color:#ccc; height:10px; display:inline; float:left; padding-left:5px; }';
 	
 	GM_addStyle(reaperCSS + themesCSS + gleeCSS);
 
@@ -85,6 +85,22 @@ jQuery(document).ready(function(){
 		{
 			e.stopPropagation();
 			e.preventDefault();
+			if(Glee.selectedElement)
+			{	
+				if(e.shiftKey)
+					Glee.selectedElement = LinkReaper.getPrev();
+				else
+					Glee.selectedElement = LinkReaper.getNext();
+				Glee.setSubText(Glee.selectedElement,"el");
+				Glee.scrollToElement(Glee.selectedElement);
+			}
+			else if(Glee.bookmarks.length != 0)
+			{
+				if(e.shiftKey)
+					Glee.getPrevBookmark();
+				else
+					Glee.getNextBookmark();
+			}
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
@@ -149,9 +165,9 @@ jQuery(document).ready(function(){
 					{
 						c = value.substring(1);
 						c = c.replace("$", location.href);
-						Glee.subText.html(Glee.truncate("Run yubnub command (press enter to execute): " + c));
+						Glee.subText.html(Glee.filter("Run yubnub command (press enter to execute): " + c));
 						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
-						Glee.subURL.html(Glee.truncate(Glee.URL));
+						Glee.subURL.html(Glee.filter(Glee.URL));
 					}
 					else if(value[0] == '*')// Any jQuery selector
 					{
@@ -192,29 +208,11 @@ jQuery(document).ready(function(){
 				Glee.setSubText(null);
 				Glee.selectedElement = null;
 				Glee.toggleActivity(0);
+				if(Glee.espStatus)
+					Glee.fireEsp();
 			}
 			Glee.searchText = value;
 			Glee.lastQuery = null;
-		}
-		else if(e.keyCode == 9)  //if TAB is pressed
-		{
-			e.preventDefault();
-			if(Glee.selectedElement)
-			{	
-				if(e.shiftKey)
-					Glee.selectedElement = LinkReaper.getPrev();
-				else
-					Glee.selectedElement = LinkReaper.getNext();
-				Glee.setSubText(Glee.selectedElement,"el");
-				Glee.scrollToElement(Glee.selectedElement);
-			}
-			else if(Glee.bookmarks.length != 0)
-			{
-				if(e.shiftKey)
-					Glee.getPrevBookmark();
-				else
-					Glee.getNextBookmark();
-			}
 		}
 		//if ENTER is pressed
 		else if(e.keyCode == 13)
@@ -717,16 +715,16 @@ var Glee = {
 				
 				if(jQueryVal[0].tagName != "A") //if the selected element is not a link
 				{
-					this.subText.html(this.truncate(jQueryVal.text()));
+					this.subText.html(this.filter(jQueryVal.text()));
 					var a_el = null;
 					if(jQueryVal[0].tagName == "IMG") //if it is an image
 					{
 						a_el = jQuery(jQueryVal.parents('a'));
 						var value = jQueryVal.attr('alt');
 						if(value)
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else if(value = jQueryVal.parent('a').attr('title'))
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else
 							this.subText.html("Linked Image");
 					}
@@ -734,7 +732,7 @@ var Glee = {
 					{
 						var value = jQueryVal.attr("value");
 						if(value)
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else
 							this.subText.html("Input "+jQueryVal.attr("type"));
 					}
@@ -742,7 +740,7 @@ var Glee = {
 					{
 						var value = jQueryVal.attr("name");
 						if(value)
-							this.subText.html(this.truncate(value));
+							this.subText.html(this.filter(value));
 						else
 							this.subText.html("Textarea");
 					}
@@ -754,7 +752,7 @@ var Glee = {
 						if(a_el.length != 0)
 						{
 							this.URL = a_el.attr("href");
-							this.subURL.html(this.truncate(this.URL));
+							this.subURL.html(this.filter(this.URL));
 						}
 					}
 					else
@@ -763,10 +761,10 @@ var Glee = {
 				else if(jQueryVal.find("img").length != 0) //it is a link containing an image
 				{
 					this.URL = jQueryVal.attr("href");
-					this.subURL.html(this.truncate(this.URL));
+					this.subURL.html(this.filter(this.URL));
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title != "")
-						this.subText.html(this.truncate(title));
+						this.subText.html(this.filter(title));
 					else
 						this.subText.html("Linked Image");
 				}	
@@ -775,30 +773,30 @@ var Glee = {
 					var title = jQueryVal.attr('title');
 					var text = jQueryVal.text();
 
-					this.subText.html(this.truncate(text));
+					this.subText.html(this.filter(text));
 					if(title !="" && title != text)
-						this.subText.html(this.truncate(this.subText.html()+" -- "+title));
+						this.subText.html(this.filter(this.subText.html()+" -- "+title));
 					this.URL = jQueryVal.attr('href');
-					this.subURL.html(this.truncate(this.URL));
+					this.subURL.html(this.filter(this.URL));
 				}
 			}
 			else if(Glee.commandMode == true)
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //go to URL ,search for bookmarks or google
+			else //go to URL, search for bookmarks or search the web
 			{
 				var text = this.searchField.attr("value");
 				this.selectedElement = null;
 				//if it is a URL
 				if(this.isURL(text))
 				{
-					this.subText.html(this.truncate("Go to "+text));
+					this.subText.html(this.filter("Go to "+text));
 					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
 					this.URL = text;
-					this.subURL.html(this.truncate(text));
+					this.subURL.html(this.filter(text));
 				}
 				else if(this.bookmarkSearchStatus) //is bookmark search enabled?
 				{
@@ -812,9 +810,9 @@ var Glee = {
 		}
 		else if(type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
 		{
-			this.subText.html(this.truncate("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
+			this.subText.html(this.filter("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
 			this.URL = this.bookmarks[val].url;
-			this.subURL.html(this.truncate(this.URL));
+			this.subURL.html(this.filter(this.URL));
 		}
 		else if(type == "bookmarklet") // here val is the bookmarklet returned
 		{
@@ -824,9 +822,9 @@ var Glee = {
 		}
 		else if(type == "search") // here val is the text query
 		{
-			this.subText.html(this.truncate("Search for "+val));
+			this.subText.html(this.filter("Search for "+val));
 			this.URL = Glee.searchEngineUrl+val;
-			this.subURL.html(this.URL);	
+			this.subURL.html(this.filter(this.URL));	
 		}
 		else if(type == "msg") // here val is the message to be displayed
 		{
@@ -1036,9 +1034,11 @@ var Glee = {
 
 		return hparts.join('/') + '/' + newlinkparts.join('/');
 	},
-	truncate:function(text){
+	filter:function(text){
 		if(text && typeof(text) != "undefined")
 		{
+			//replace < with &lt; and > with &gt;
+			text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 			if(text.length > 75)
 				return text.substr(0,73)+"...";
 			else
@@ -1347,7 +1347,7 @@ var LinkReaper = {
 			else
 			{
 				newList = [];
-				jQuery('a, a > img').each(function(){
+				jQuery('a, a > img, input[type=button], input[type=submit]').each(function(){
 					if(!LinkReaper.reapALink(jQuery(this), term))
 						LinkReaper.unreapLink(jQuery(this));
 					else
@@ -1366,6 +1366,8 @@ var LinkReaper = {
 			index = el.text().toLowerCase().indexOf(term.toLowerCase());
 		else if(el[0].tagName == "IMG")
 			index = el.attr('alt').toLowerCase().indexOf(term.toLowerCase());
+		else if(el[0].tagName == "INPUT" && (el[0].type == "button" || el[0].type == "submit"))
+			index = el.attr('value').toLowerCase().indexOf(term.toLowerCase());
 		if(index != -1 && Glee.isVisible(el)) {
 			el.addClass('GleeReaped');
 			Glee.setSubText(el,"el");
