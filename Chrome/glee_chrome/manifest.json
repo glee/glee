@@ -21,7 +21,7 @@
 	],
 	"browser_action":{
 		"default_icon":"images/icon_19.png",
-		"default_title":"gleeBox:Switch state"
+		"default_title":"Turn gleeBox OFF"
 	},
 	"update_url": "http://thegleebox.com/chrome/updates.xml"
 }
