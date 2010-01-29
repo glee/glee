@@ -81,7 +81,6 @@ Glee.Chrome.applyOptions = function(response){
 	{
 		Glee.domainsToBlock.splice(0,Glee.domainsToBlock.length);
 		var len = prefs.disabledUrls.length;
-		alert(len);
 		for(var i=0;i<len;i++)
 			Glee.domainsToBlock[i] = prefs.disabledUrls[i];
 	}
