@@ -425,6 +425,11 @@ var Glee = {
 			name: "share",
 			method:"sharePage",
 			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, t(witter), deli(cious), digg, and su/stumbleupon."
+		},
+		{
+			name: "inspect",
+			method:"inspectPage",
+			description:"Inspect an element on the page. Entering text and pressing enter will return the selector for first matched element."
 		}
 	],
 	
@@ -1092,6 +1097,40 @@ var Glee = {
 			default:
 				break;
 		}
+	},
+	inspectPage: function(){
+		var query = Glee.searchField.attr("value").substring(9);
+		LinkReaper.reapLinks(query);
+		Glee.selectedElement = LinkReaper.getFirst();
+		Glee.scrollToElement(Glee.selectedElement);
+		Glee.selectedElement = jQuery(Glee.selectedElement);
+		result = Glee.inspectElement(Glee.selectedElement);
+		Glee.searchField.attr("value",result);
+		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
+		Glee.toggleActivity(0);
+	},
+	inspectElement: function(el){
+		var elId = el.attr("id");
+		var elClass = el.attr("class");
+		if(elId.length != 0)
+		{
+			return "#"+elId;
+		}
+		if(elClass.length != 0)
+		{
+			var classes = elClass.split(" ");
+			var len = classes.length - 1;
+			if(len != 0)
+			{
+				var response = el[0].tagName.toLowerCase();
+				for(var i=0; i<len ;i ++)
+				{
+					response += "."+classes[i];
+				}
+				return response;
+			}
+		}
+		return Glee.inspectElement(el.parent())+">"+el[0].tagName.toLowerCase();
 	},
 	sendTweet: function(){
 		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
