@@ -175,7 +175,8 @@ Glee.Chrome.setOptionValue = function(){
 		"pos", "position",
 		"theme",
 		"bsearch",
-		"esp"
+		"esp",
+		"vision"
 	];
 	
 	/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
@@ -188,6 +189,15 @@ Glee.Chrome.setOptionValue = function(){
 	{
 		var option = input.substring(0,eqPos);
 		var value = input.substring(eqPos+1);
+	}
+	if(option == "vision"){
+		//removing protocol so that esp works for both caseswhen www is present/not present in URL
+		//TODO: implement for all protocols
+		var url = location.href.replace("http://","");
+		//remove trailing / (if present)
+		if(url[url.length - 1] == "/")
+			url = url.substring(0,url.length - 1);
+		value = {url:url, selector:value};
 	}
 	
 	if(option=="" || jQuery.inArray(option,validOptions) == -1)

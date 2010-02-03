@@ -185,6 +185,11 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 							  response.esp_status = value;
 							  gleeboxPreferences.esp_status = value;
 							  break;
+			
+			case "vision"	: gleeboxPreferences.espModifiers[gleeboxPreferences.espModifiers.length]= {url:request.option_value.url, selector:request.option_value.selector};
+							  saveESP(gleeboxPreferences.espModifiers,function(){});
+							  response.espModifiers = gleeboxPreferences.espModifiers;
+							  break;
 		}
 		sendResponse({preferences:response});
 	}

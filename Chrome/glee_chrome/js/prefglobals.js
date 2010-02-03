@@ -11,7 +11,7 @@ var gleeboxPreferences = {
 	esp_status:1,
 	scrapers:[],
 	disabledUrls:["mail.google.com","wave.google.com","mail.yahoo.com"],
-	esp:[{
+	espModifiers:[{
 		url:"google.com/search",
 		selector:"h3:not(ol.nobr>li>h3)"
 	},
