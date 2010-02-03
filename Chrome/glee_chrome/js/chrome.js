@@ -191,7 +191,7 @@ Glee.Chrome.setOptionValue = function(){
 		var value = input.substring(eqPos+1);
 	}
 	if(option == "vision"){
-		//removing protocol so that esp works for both caseswhen www is present/not present in URL
+		//removing protocol so that esp works for both cases when www is present/not present in URL
 		//TODO: implement for all protocols
 		var url = location.href.replace("http://","");
 		//remove trailing / (if present)

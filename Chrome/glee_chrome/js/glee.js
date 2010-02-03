@@ -1104,12 +1104,12 @@ var Glee = {
 		Glee.selectedElement = LinkReaper.getFirst();
 		Glee.scrollToElement(Glee.selectedElement);
 		Glee.selectedElement = jQuery(Glee.selectedElement);
-		result = Glee.inspectElement(Glee.selectedElement);
+		result = Glee.inspectElement(Glee.selectedElement, 0);
 		Glee.searchField.attr("value",result);
 		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 		Glee.toggleActivity(0);
 	},
-	inspectElement: function(el){
+	inspectElement: function(el,level){
 		var elId = el.attr("id");
 		var elClass = el.attr("class");
 		if(elId.length != 0)
@@ -1119,7 +1119,10 @@ var Glee = {
 		if(elClass.length != 0)
 		{
 			var classes = elClass.split(" ");
-			var len = classes.length - 1;
+			var len = classes.length;
+			
+			if(level == 0)
+				len = len - 1; //get rid of GleeHL class
 			if(len != 0)
 			{
 				var response = el[0].tagName.toLowerCase();
@@ -1130,7 +1133,11 @@ var Glee = {
 				return response;
 			}
 		}
-		return Glee.inspectElement(el.parent())+">"+el[0].tagName.toLowerCase();
+		// don't go beyond 2 levels up
+		if(level<2)
+			return Glee.inspectElement(el.parent(),level+1)+">"+el[0].tagName.toLowerCase();
+		else
+			return el[0].tagName.toLowerCase();
 	},
 	sendTweet: function(){
 		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
