@@ -85,7 +85,7 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
 			// 38 is keyCode for UP Arrow key
-			Glee.simulateScroll((e.keyCode == 38 ? 1:-1));
+			Glee.Utils.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
 	});
 	Glee.searchField.bind('keyup',function(e){
@@ -144,9 +144,9 @@ jQuery(document).ready(function(){
 					{
 						c = value.substring(1);
 						c = c.replace("$", location.href);
-						Glee.subText.html(Glee.filter("Run yubnub command (press enter to execute): " + c));
+						Glee.subText.html(Glee.Utils.filter("Run yubnub command (press enter to execute): " + c));
 						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
-						Glee.subURL.html(Glee.filter(Glee.URL));
+						Glee.subURL.html(Glee.Utils.filter(Glee.URL));
 					}
 					else if(value[0] == '*')// Any jQuery selector
 					{
@@ -201,7 +201,7 @@ jQuery(document).ready(function(){
 			{
 				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
 					jQuery(Glee.selectedElement).removeClass('GleeHL');
-				Glee.reapWhatever(value.substring(1));
+				LinkReaper.reapWhatever(value.substring(1));
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
@@ -254,7 +254,7 @@ jQuery(document).ready(function(){
 							//resetting target attribute of link
 							a_el.attr("target","_self");
 							//simulating a click on the link
-							anythingOnClick = Glee.simulateClick(a_el,target);
+							anythingOnClick = Glee.Utils.simulateClick(a_el,target);
 					
 							//if opening the link on the same page, close the gleeBox
 							if(!target)
@@ -275,7 +275,7 @@ jQuery(document).ready(function(){
 				if(Glee.URL)
 				{
 					//if the URL is relative, make it absolute
-					Glee.URL = Glee.makeURLAbsolute(Glee.URL, location.href);
+					Glee.URL = Glee.Utils.makeURLAbsolute(Glee.URL, location.href);
 					if(e.shiftKey)
 					{
 						Glee.Chrome.openNewTab(Glee.URL,false);
@@ -296,7 +296,7 @@ jQuery(document).ready(function(){
 						if(el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
 						{
 							setTimeout(function(){
-								Glee.simulateClick(Glee.selectedElement,false);
+								Glee.Utils.simulateClick(Glee.selectedElement,false);
 							},0);
 						}
 						else if(el.tagName == "INPUT" || el.tagName == "TEXTAREA")
@@ -326,7 +326,7 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when UP/DOWN arrow keys are released
 		{
-			Glee.simulateScroll(0);
+			Glee.Utils.simulateScroll(0);
 		}
 	});
 });
@@ -554,7 +554,7 @@ var Glee = {
 	initScraper: function(scraper){
 		this.nullMessage = scraper.nullMessage;
 		LinkReaper.selectedLinks = jQuery(scraper.selector);
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
+		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
 		//sort the elements
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
@@ -566,40 +566,9 @@ var Glee = {
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
-	mergeSort: function(els){
-
-		var mid = Math.floor(els.length/2);
-		if(mid < 1)
-			return els;
-		var left = [];
-		var right = [];
-
-		while(els.length > mid)
-			left.push(els.shift());
-
-		while(els.length > 0)
-			right.push(els.shift());
-
-		left = this.mergeSort(left);
-		right = this.mergeSort(right);
-		
-		while( (left.length > 0) && (right.length > 0) )
-		{
-			//merging order based on top offet value
-			if(jQuery(right[0]).offset().top < jQuery(left[0]).offset().top)
-				els.push(right.shift());
-			else 
-				els.push(left.shift());
-		}
-		while(left.length > 0)
-			els.push(left.shift());
-		while(right.length > 0)
-			els.push(right.shift());
-		return els;
-	},
 	sortElementsByPosition: function(elements){
 		//sort the elements using merge sort
-		var sorted_els = this.mergeSort(elements);
+		var sorted_els = Glee.Utils.mergeSort(elements);
 		
 		//begin the array from the element closest to the current position
 		var len = sorted_els.length;
@@ -635,15 +604,15 @@ var Glee = {
 				if(jQueryVal[0].tagName != "A") //if the selected element is not a link
 				{
 					var a_el = null;
-					this.subText.html(this.filter(jQueryVal.text()));
+					this.subText.html(Glee.Utils.filter(jQueryVal.text()));
 					if(jQueryVal[0].tagName == "IMG") //if it is an image
 					{
 						a_el = jQuery(jQueryVal.parents('a'));
 						var value = jQueryVal.attr('alt');
 						if(value)
-							this.subText.html(this.filter(value));
+							this.subText.html(Glee.Utils.filter(value));
 						else if(value = jQueryVal.parent('a').attr('title'))
-							this.subText.html(this.filter(value));
+							this.subText.html(Glee.Utils.filter(value));
 						else
 							this.subText.html("Linked Image");
 					}
@@ -651,7 +620,7 @@ var Glee = {
 					{
 						var value = jQueryVal.attr("value");
 						if(value)
-							this.subText.html(this.filter(value));
+							this.subText.html(Glee.Utils.filter(value));
 						else
 							this.subText.html("Input "+jQueryVal.attr("type"));
 					}
@@ -659,7 +628,7 @@ var Glee = {
 					{
 						var value = jQueryVal.attr("name");
 						if(value)
-							this.subText.html(this.filter(value));
+							this.subText.html(Glee.Utils.filter(value));
 						else
 							this.subText.html("Textarea");
 					}
@@ -671,7 +640,7 @@ var Glee = {
 						if(a_el.length != 0)
 						{
 							this.URL = a_el.attr("href");
-							this.subURL.html(this.filter(this.URL));
+							this.subURL.html(Glee.Utils.filter(this.URL));
 						}
 					}
 					else
@@ -680,10 +649,10 @@ var Glee = {
 				else if(jQueryVal.find("img").length != 0) //it is a link containing an image
 				{
 					this.URL = jQueryVal.attr("href");
-					this.subURL.html(this.filter(this.URL));
+					this.subURL.html(Glee.Utils.filter(this.URL));
 					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
 					if(title != "")
-						this.subText.html(this.filter(title));
+						this.subText.html(Glee.Utils.filter(title));
 					else
 						this.subText.html("Linked Image");
 				}	
@@ -692,11 +661,11 @@ var Glee = {
 					var title = jQueryVal.attr('title');
 					var text = jQueryVal.text();
 
-					this.subText.html(this.filter(text));
+					this.subText.html(Glee.Utils.filter(text));
 					if(title !="" && title != text)
-						this.subText.html(this.filter(this.subText.html()+" -- "+title));
+						this.subText.html(Glee.Utils.filter(this.subText.html()+" -- "+title));
 					this.URL = jQueryVal.attr('href');
-					this.subURL.html(this.filter(this.URL));
+					this.subURL.html(Glee.Utils.filter(this.URL));
 				}
 			}
 			else if(Glee.commandMode == true)
@@ -708,14 +677,14 @@ var Glee = {
 				var text = this.searchField.attr("value");
 				this.selectedElement = null;
 				//if it is a URL
-				if(this.isURL(text))
+				if(this.Utils.isURL(text))
 				{
-					this.subText.html(this.filter("Go to "+text));
+					this.subText.html(Glee.Utils.filter("Go to "+text));
 					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://"+text;
 					this.URL = text;
-					this.subURL.html(this.filter(text));
+					this.subURL.html(Glee.Utils.filter(text));
 				}
 				else if(this.bookmarkSearchStatus) //is bookmark search enabled?
 				{
@@ -729,9 +698,9 @@ var Glee = {
 		}
 		else if(type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
 		{
-			this.subText.html(this.filter("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
+			this.subText.html(Glee.Utils.filter("Open bookmark ("+(val+1)+" of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
 			this.URL = this.bookmarks[val].url;
-			this.subURL.html(this.filter(this.URL));
+			this.subURL.html(Glee.Utils.filter(this.URL));
 		}
 		else if(type == "bookmarklet") // here val is the bookmarklet returned
 		{
@@ -741,9 +710,9 @@ var Glee = {
 		}
 		else if(type == "search") // here val is the text query
 		{
-			this.subText.html(this.filter("Search for "+val));
+			this.subText.html(Glee.Utils.filter("Search for "+val));
 			this.URL = Glee.searchEngineUrl+val;
-			this.subURL.html(this.filter(this.URL));
+			this.subURL.html(Glee.Utils.filter(this.URL));
 		}
 		else if(type == "msg") // here val is the message to be displayed
 		{
@@ -872,138 +841,9 @@ var Glee = {
 			},0);
 		}
 	},
-	simulateScroll: function(val){
-		if(val == 0) {
-			Glee.Cache.jBody.stop(true);
-			Glee.scrollState = 0;
-			Glee.userPosBeforeGlee = window.pageYOffset;
-		}
-		else if(Glee.scrollState == 0) {
-			Glee.scrollState = val;
-			Glee.infiniteScroll();
-		}
-	},
-	infiniteScroll: function() {
-		if(Glee.scrollState < 0) {
-			loc = jQuery(document).height();
-			duration = 2*(loc - window.pageYOffset)/Glee.pageScrollSpeed;
-		}
-		else {
-			loc = 0;
-			duration = 2*(window.pageYOffset/Glee.pageScrollSpeed);
-		}
-		Glee.Cache.jBody.animate(
-			{scrollTop:loc},
-			duration);
-	},
-	simulateClick: function(el,target){
-		var evt = document.createEvent("MouseEvents");
-		//on Mac, pass target as e.metaKey
-		if(navigator.platform.indexOf("Mac") != -1)
-			evt.initMouseEvent("click",true,true,window,0,0,0,0,0,false,false,false,target,0,null);
-		else //otherwise, pass target as e.ctrlKey	
-			evt.initMouseEvent("click",true,true,window,0,0,0,0,0,target,false,false,false,0,null);
-		return el[0].dispatchEvent(evt);
-	},
 	resetTimer: function(){
 		if(typeof(this.timer) != "undefined")
 			clearTimeout(this.timer);
-	},
-	makeURLAbsolute: function(link,host){
-		//check if its a bookmarklet meant to execute JS
-		if(link.indexOf("javascript:") == 0)
-			return link;
-		//code from http://github.com/stoyan/etc/blob/master/toAbs/absolute.html
-		var lparts = link.split('/');
-		if (/http:|https:|ftp:/.test(lparts[0])) {
-			// already abs, return
-			return link;
-		}
-
-		var i, hparts = host.split('/');
-		if (hparts.length > 3) {
-			hparts.pop(); // strip trailing thingie, either scriptname or blank 
-		}
-
-		if (lparts[0] === '') { // like "/here/dude.png"
-			host = hparts[0] + '//' + hparts[2];
-			hparts = host.split('/'); // re-split host parts from scheme and domain only
-	        delete lparts[0];
-		}
-
-		for(i = 0; i < lparts.length; i++) {
-			if (lparts[i] === '..') {
-				// remove the previous dir level, if exists
-				if (typeof lparts[i - 1] !== 'undefined') { 
-					delete lparts[i - 1];
-				} 
-				else if (hparts.length > 3) { // at least leave scheme and domain
-					hparts.pop(); // stip one dir off the host for each /../
-				}
-				delete lparts[i];
-			}
-			if(lparts[i] === '.') {
-				delete lparts[i];
-			}
-		}
-
-		// remove deleted
-		var newlinkparts = [];
-		for (i = 0; i < lparts.length; i++) {
-			if (typeof lparts[i] !== 'undefined') {
-				newlinkparts[newlinkparts.length] = lparts[i];
-			}
-		}
-
-		return hparts.join('/') + '/' + newlinkparts.join('/');
-	},
-	filter:function(text){
-		if(text && typeof(text) != "undefined")
-		{
-			//replace < with &lt; and > with &gt;
-			text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-			if(text.length > 75)
-				return text.substr(0,73)+"...";
-			else
-				return text;
-		}
-	},
-	isURL:function(url){
-		var regex = new RegExp("(\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|in|ly))");
-		return url.match(regex);
-	},
-	checkDomain:function(){
-		for(var i=0; i<Glee.domainsToBlock.length; i++)
-		{
-			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
-				return 0;
-		}
-		return 1;
-	},
-	isVisible:function(el){
-		el = jQuery(el);
-		if(el.css('display') == "none" || el.css('visibility') == "hidden")
-			return false;
-		else
-		{
-			var parents = el.parents();
-			for(var i=0;i<parents.length;i++)
-			{
-				if(jQuery(parents[i]).css("display") == "none")
-					return false;
-			}
-		}
-		return true;
-	},
-	reapWhatever: function(selector){
-		LinkReaper.selectedLinks = jQuery(selector);
-		LinkReaper.selectedLinks.each(function(){
-			jQuery(this).addClass('GleeReaped');
-		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.isVisible);
-		LinkReaper.selectedLinks = this.sortElementsByPosition(LinkReaper.selectedLinks);
-		LinkReaper.traversePosition = 0;
-		LinkReaper.searchTerm = "";
 	},
 	execCommand: function(command){
 		//call the method
@@ -1017,312 +857,5 @@ var Glee = {
 		}
 		else
 			Glee[method]();
-	},
-	makeReadable: function(){
-		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
-		location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
-	},
-	
-	shortenURL: function(){
-		this.Chrome.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
-		function(data){
-			var json = JSON.parse("["+data+"]");
-			var shortenedURL = json[0].results[location.href].shortUrl;
-			Glee.searchField.attr("value",shortenedURL);
-			Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
-		});
-	},
-	sharePage: function(){
-		var site = Glee.searchField.attr('value').substring(6).replace(" ","");
-		//Try to get description
-		var desc = jQuery('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
-		if((!desc) || (desc == ""))
-			{
-				mailDesc = "";
-				desc = "";
-			}
-		else
-			mailDesc = "  -  " + desc;
-		switch(site) 
-		{
-			case "g":
-			case "gmail":
-				Glee.Chrome.openPageInNewTab(
-					"https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
-					+document.title
-					+"&body="
-					+location.href
-					+mailDesc);
-				break;
-			case "m":
-			case "mail":
-				Glee.Chrome.openPageInNewTab(
-					"mailto:?subject="
-					+document.title
-					+"&body="
-					+location.href
-					+mailDesc);
-				break;
-			case "fb":
-			case "facebook":
-				Glee.Chrome.openPageInNewTab(
-					"http://www.facebook.com/share.php?u="
-					+location.href);
-				break;
-			case "deli":
-			case "delicious":
-				Glee.Chrome.openPageInNewTab(
-					"http://delicious.com/save?title="
-					+document.title
-					+"&url="
-					+location.href
-					+"&notes="
-					+desc);
-				break;
-			case "digg":
-				Glee.Chrome.openPageInNewTab(
-					"http://digg.com/submit/?url="
-					+location.href);
-				break;
-			case "t":
-			case "twitter":
-				Glee.sendTweet();
-				break;
-			case "su":
-			case "stumbleupon":
-				Glee.Chrome.openPageInNewTab(
-					"http://www.stumbleupon.com/submit?url="
-					+location.href);
-				break;
-			default:
-				break;
-		}
-	},
-	inspectPage: function(){
-		var query = Glee.searchField.attr("value").substring(9);
-		LinkReaper.reapLinks(query);
-		Glee.selectedElement = LinkReaper.getFirst();
-		Glee.scrollToElement(Glee.selectedElement);
-		Glee.selectedElement = jQuery(Glee.selectedElement);
-		result = Glee.inspectElement(Glee.selectedElement, 0);
-		Glee.searchField.attr("value",result);
-		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
-		Glee.toggleActivity(0);
-	},
-	inspectElement: function(el,level){
-		var elId = el.attr("id");
-		var elClass = el.attr("class");
-		if(elId.length != 0)
-		{
-			return "#"+elId;
-		}
-		if(elClass.length != 0)
-		{
-			var classes = elClass.split(" ");
-			var len = classes.length;
-			
-			if(level == 0)
-				len = len - 1; //get rid of GleeHL class
-			if(len != 0)
-			{
-				var response = el[0].tagName.toLowerCase();
-				for(var i=0; i<len ;i ++)
-				{
-					response += "."+classes[i];
-				}
-				return response;
-			}
-		}
-		// don't go beyond 2 levels up
-		if(level<2)
-			return Glee.inspectElement(el.parent(),level+1)+">"+el[0].tagName.toLowerCase();
-		else
-			return el[0].tagName.toLowerCase();
-	},
-	sendTweet: function(){
-		//if the url is longer than 30 characters, send request to bitly to get the shortened URL
-		var url = location.href;
-		if(url.length > 30)
-		{
-			this.Chrome.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
-			function(data){
-				var json = JSON.parse("["+data+"]");
-				var shortenedURL = json[0].results[location.href].shortUrl;
-				var encodedURL = encodeURIComponent(shortenedURL);
-				//redirect to twitter homepage
-				location.href = "http://twitter.com/?status="+encodedURL;
-			});
-		}
-		else
-		{
-			//redirect to twitter without shortening the URL
-			var encodedURL = encodeURIComponent(location.href);
-			location.href =  "http://twitter.com/?status="+encodedURL;
-		}
-	},
-	getRSSLink:function(){
-		//code via bookmark for google reader
- 		 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
-	},
-	help: function(){
-		Glee.Chrome.openPageInNewTab("http://thegleebox.com/manual.html");
-	},
-	tipjar: function(){
-		Glee.Chrome.openPageInNewTab("http://tipjar.thegleebox.com");
-	}
-}
-
-var LinkReaper = {
-	
-	searchTerm: "",
-	selectedLinks: [],
-	traversePosition: 0,
-	
-	reapAllLinks:function(){
-		this.selectedLinks = jQuery("a");
-		//get rid of the hidden links
-		this.selectedLinks = jQuery.grep(this.selectedLinks, Glee.isVisible);
-		//get rid of the linked images. we only want textual links
-		var hasImage = function(el){
-			return (jQuery(el).find('img').length == 0);
-		};
-		this.selectedLinks = jQuery(jQuery.grep(this.selectedLinks,hasImage));
-		this.selectedLinks.each(function(){
-			jQuery(this).addClass('GleeReaped');
-		});
-		this.traversePosition = 0;
-		//can't figure out what value to set of searchTerm here
-		LinkReaper.searchTerm = "";
-	},
-	
-	reapLinks: function(term) {
-		if((term != "") && (LinkReaper.searchTerm != term))
-		{
-			// If this term is a specialization of the last term
-			if((term.indexOf(LinkReaper.searchTerm) == 0) &&
-			(LinkReaper.searchTerm != ""))
-			{
-				jQuery(LinkReaper.selectedLinks).each(function(){
-					if(!LinkReaper.reapALink(jQuery(this), term))
-					{
-						LinkReaper.unreapLink(jQuery(this));
-					}
-				});
-			}
-			// Else search the whole page
-			else
-			{
-				newList = [];
-				jQuery('a, a > img, input[type=button], input[type=submit]').each(function(){
-					if(!LinkReaper.reapALink(jQuery(this), term))
-						LinkReaper.unreapLink(jQuery(this));
-					else
-						newList.push(jQuery(this));
-				});
-				LinkReaper.selectedLinks = newList;
-			}
-			this.searchTerm = term;
-			this.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
-			this.traversePosition = 0;
-		}
-	},
-	
-	reapALink: function(el, term) {
-		if(el[0].tagName == "A")
-			index = el.text().toLowerCase().indexOf(term.toLowerCase());
-		else if(el[0].tagName == "IMG")
-			index = el.attr('alt').toLowerCase().indexOf(term.toLowerCase());
-		else if(el[0].tagName == "INPUT" && (el[0].type == "button" || el[0].type == "submit"))
-			index = el.attr('value').toLowerCase().indexOf(term.toLowerCase());
-		if(index != -1 && Glee.isVisible(el)) {
-			el.addClass('GleeReaped');
-			Glee.setSubText(el,"el");
-			return true;
-		}
-		else {
-			return false;
-		}
-	},
-	
-	unreapLink: function(el) {
-		// TODO: What if there are multiple links with different names and same URL?
-		var isNotEqual = function(element){
-			element = jQuery(element);
-			if(element.attr('href') == el.attr('href') )
-				return false;
-			else
-				return true;
-		};
-		this.selectedLinks = this.selectedLinks.filter(isNotEqual);
-		el.removeClass('GleeReaped').removeClass('GleeHL');
-	},
-	
-	unreapAllLinks: function() {
-		jQuery(this.selectedLinks).each(function(){
-			jQuery(this).removeClass('GleeReaped').removeClass('GleeHL');
-		});
-		
-		// TODO: Isn't there a better way to empty an array?
-		this.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
-		this.searchTerm = "";
-		this.traversePosition = 0;
-	},
-	
-	getNext: function(){
-		if(this.selectedLinks.length == 0)
-			return null;
-		else if(this.traversePosition < this.selectedLinks.length - 1)
-		{
-			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
-			var hlItem = this.selectedLinks[++this.traversePosition];
-			this.highlight(jQuery(hlItem));
-			return jQuery(hlItem);
-		}
-		else
-		{
-			//Un-highlight the last item. This might be a loopback.
-			this.unHighlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
-			this.traversePosition = 0;
-			this.highlight(jQuery(this.selectedLinks[0]));
-			return jQuery(this.selectedLinks[0]);	
-		}
-		
-	},
-	
-	getPrev: function(){
-		if(this.selectedLinks.length == 0)
-			return null;
-		else if(this.traversePosition > 0)
-		{
-			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
-			var hlItem = this.selectedLinks[--this.traversePosition];
-			this.highlight(jQuery(hlItem));
-			return jQuery(hlItem);
-		}
-		else
-		{
-			//Un-highlight the first item. This might be a reverse loopback.
-			this.unHighlight(jQuery(this.selectedLinks[0]));
-			this.traversePosition = this.selectedLinks.length - 1;
-			this.highlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
-			return jQuery(this.selectedLinks[this.selectedLinks.length - 1]);
-		}
-		
-	},
-	
-	getFirst: function(){
-		this.highlight(jQuery(this.selectedLinks[0]));
-		this.traversePosition = 0;
-		return this.selectedLinks[0];
-	},
-	
-	highlight: function(el){
-		el.removeClass("GleeReaped");
-		el.addClass("GleeHL");
-	},
-	
-	unHighlight: function(el){
-		el.removeClass("GleeHL");
-		el.addClass("GleeReaped");
 	}
 }

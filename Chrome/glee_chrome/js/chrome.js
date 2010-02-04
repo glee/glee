@@ -1,3 +1,5 @@
+/* Chrome specific methods */
+
 Glee.Chrome = {};
 Glee.Chrome.isBookmark = function(text){
 	//send request to search the bookmark tree for the bookmark whose title matches text
@@ -137,12 +139,12 @@ Glee.Chrome.applyOptions = function(response){
 	//check if it is a disabled domain
 	if(prefs.status != undefined)
 	{
-		if(Glee.checkDomain() == 1 && prefs.status == 1)
+		if(Glee.Utils.checkDomain() == 1 && prefs.status == 1)
 			Glee.status = 1;
 		else
 			Glee.status = 0;
 	}
-	else if(Glee.checkDomain() == 1)
+	else if(Glee.Utils.checkDomain() == 1)
 		Glee.status = 1;
 	else
 		Glee.status = 0;
