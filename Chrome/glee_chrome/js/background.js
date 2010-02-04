@@ -186,7 +186,21 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 							  gleeboxPreferences.esp_status = value;
 							  break;
 			
-			case "vision"	: gleeboxPreferences.espModifiers[gleeboxPreferences.espModifiers.length]= {url:request.option_value.url, selector:request.option_value.selector};
+			case "vision"	: // search to check if vision for url already exists. if yes, overwrite it instead of adding a new vision
+							  var len = gleeboxPreferences.espModifiers.length;
+							  var flag = 0;
+							  for(var i=0; i<len; i++)
+							  {
+								if(gleeboxPreferences.espModifiers[i].url == request.option_value.url)
+								{
+								    gleeboxPreferences.espModifiers[i].selector = request.option_value.selector;
+									flag = 1;
+									break;
+								}
+							  }
+							  if(!flag)
+								gleeboxPreferences.espModifiers[gleeboxPreferences.espModifiers.length] = {url:request.option_value.url, selector:request.option_value.selector};
+							  
 							  saveESP(gleeboxPreferences.espModifiers,function(){});
 							  response.espModifiers = gleeboxPreferences.espModifiers;
 							  break;
