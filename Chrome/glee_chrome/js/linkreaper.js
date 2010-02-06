@@ -78,7 +78,7 @@ var LinkReaper = {
 			jQuery(this).addClass('GleeReaped');
 		});
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
-		LinkReaper.selectedLinks = this.sortElementsByPosition(LinkReaper.selectedLinks);
+		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
 	},
