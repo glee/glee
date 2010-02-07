@@ -47,7 +47,7 @@ Glee.inspectPage = function(){
 	Glee.scrollToElement(Glee.selectedElement);
 	Glee.selectedElement = jQuery(Glee.selectedElement);
 	result = Glee.inspectElement(Glee.selectedElement, 0);
-	Glee.searchField.attr("value",result);
+	Glee.searchField.attr("value", result);
 	Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 	Glee.toggleActivity(0);
 }
@@ -62,11 +62,13 @@ Glee.inspectElement = function(el,level){
 	}
 	if(elClass.length != 0)
 	{
-		var classes = elClass.split(" ");
-		var len = classes.length;
-		
-		if(level == 0)
-			len = len - 1; //get rid of GleeHL class
+		elClass = jQuery.trim(elClass.replace("GleeHL",""));
+		var len = 0;
+		if(elClass != "")
+		{
+			var classes = elClass.split(" ");
+			len = classes.length;
+		}
 		if(len != 0)
 		{
 			var response = el[0].tagName.toLowerCase();

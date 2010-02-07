@@ -1,5 +1,5 @@
 /**
- * gleeBox: Keyboard goodness for your web.
+ * gleeBox: Keyboard glee for your web
  * 
  * Licensed under the GPL license (http://www.gnu.org/licenses/gpl.html)
  * Copyright (c) 2009 Ankit Ahuja
