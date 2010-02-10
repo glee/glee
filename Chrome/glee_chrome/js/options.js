@@ -146,9 +146,9 @@ function restore_options(prefs)
 		for (var i=0; i<len; i++)
 		{
 			var newLI = document.createElement('li');
-			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+i+")'/>";
-			newLI.className = "rdomain";
-			newLI.id = "rdomain"+i;
+			var inputBt = "<input type='button' class='button' style='float:right' value='Remove' onclick='removeItem(\"domain\","+ i +")' />";
+			newLI.className = "domain";
+			newLI.id = "domain"+i;
 			newLI.innerHTML = "<span class='domain-name'>" + prefs.disabledUrls[i] + "</span>" + inputBt;
 			domainList.insertBefore(newLI,lastChild);
 		}
@@ -221,7 +221,7 @@ function restore_options(prefs)
 		for (var i=0; i<len; i++)
 		{
 			var newLI = document.createElement('li');
-			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+i+")'/>";
+			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"scraper\","+i+")'/>";
 			newLI.className = "scraper";
 			newLI.id = "scraper"+i;
 			newLI.innerHTML = "<strong>?</strong><span class='scraper-name'>"+prefs.scrapers[i].command+"</span> : <span class='scraper-sel'>"+prefs.scrapers[i].selector+"</span>"+inputBt;
@@ -245,7 +245,7 @@ function restore_options(prefs)
 		for (var i=0; i<len; i++)
 		{
 			var newLI = document.createElement('li');
-			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier("+i+")'/>";
+			var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\","+i+")'/>";
 			newLI.className = "esp";
 			newLI.id = "esp"+i;
 			newLI.innerHTML = "<span class='esp-url'>"+prefs.espModifiers[i].url+"</span> : <span class='esp-sel'>"+prefs.espModifiers[i].selector+"</span>"+inputBt;
@@ -256,14 +256,14 @@ function restore_options(prefs)
 	{
 		//adding a couple of default examples
 		var newLI = document.createElement('li');
-		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(0)'/>";
+		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\",0)'/>";
 		newLI.className = "esp";
 		newLI.id = "esp0";
 		newLI.innerHTML = "<span class='esp-url'>google.com/search</span> : <span class='esp-sel'>h3:not(ol.nobr>li>h3)</span>"+inputBt;
 		espList.insertBefore(newLI,document.getElementById("addEspModifier"));
 
 		var newLI_2 = document.createElement('li');
-		var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier(1)'/>";
+		var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\",1)'/>";
 		newLI_2.className = "esp";
 		newLI_2.id = "esp1";
 		newLI_2.innerHTML = "<span class='esp-url'>bing.com/search</span> : <span class='esp-sel'>div.sb_tlst</span>"+inputBt_2;
@@ -280,13 +280,8 @@ function makeItemsEditable(){
 		if(e.target != editableField)
 		{
 			if(editableField)
-			{
-				var val = editableField.value;
-				var parent = editableField.parentNode;
-				parent.removeChild(editableField);
-				parent.className = parent.className.slice(0, parent.className.length - 2);
-				parent.innerHTML = val;
-			}
+				replaceEditableField(editableField);
+
 			var textField = document.createElement("input");
 			textField.type = "text";
 			textField.value = this.innerHTML;
@@ -299,11 +294,7 @@ function makeItemsEditable(){
 			textField.addEventListener("keydown",function(e){
 				if(e.keyCode == 13 || e.keyCode == 27)
 				{
-					var parent = this.parentNode;
-					var val = textField.value;
-					parent.className = parent.className.slice(0, parent.className.length - 2);
-					parent.removeChild(this);
-					parent.innerHTML = val;
+					replaceEditableField(this);
 				}
 			},false);
 			return false;
@@ -364,69 +355,99 @@ function makeItemsEditable(){
 		function(e){
 			var editableField = document.getElementById("temporary-edit-field");
 			if(editableField && e.target != editableField)
-			{
-				var val = editableField.value;
-				var parent = editableField.parentNode;
-				parent.removeChild(editableField);
-				parent.className = parent.className.slice(0, parent.className.length - 2);
-				parent.innerHTML = val;
-			}
+				replaceEditableField(editableField);
 		}, 
-		false);
+	false);
 }
 
-//Adds a domain to the restricted domain list
-function addDomain() {
-	var newDomain = document.getElementById("add_domain");
-	var lastChild = document.getElementById("addDomainLI");
-	//TODO: create a validate() method with more strict validation
-	if(newDomain.value != "")
-	{
-		var domainList = document.getElementById("domains");
-		var newLI = document.createElement('li');
-		var no = domainList.children.length+1;
-		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeDomain("+no+")'/>";
-		newLI.className = "rdomain";
-		newLI.id = "rdomain"+no;
-		newLI.innerHTML = "<span class='domain-name'>" + newDomain.value + "</span>" + inputBt;
-		domainList.insertBefore(newLI,lastChild);
-		newDomain.value = "";
+function makeItemEditable(item){
+	
+}
+
+function replaceEditableField(el){
+	var val = el.value;
+	var parent = el.parentNode;
+	parent.removeChild(el);
+	parent.className = parent.className.slice(0, parent.className.length - 2);
+	parent.innerHTML = val;
+}
+
+function addItem(type){
+	var listOfItems;
+	var lastEl;
+	var content;
+	switch(type){
+
+		case "domain":
+			var domainName = document.getElementById("add_domain");
+			
+			if(domainName.value != "")
+			{
+				listOfItems = document.getElementById("domains");
+				lastEl = document.getElementById("addDomainLI");
+ 				content = "<span class='domain-name'>" + domainName.value + "</span>";
+				domainName.value = "";
+			}
+			else
+				return false;
+			break;
+
+		case "scraper":
+		
+			var scraperName = document.getElementById("scraper-name");
+			var scraperSel = document.getElementById("scraper-selector");
+
+			if(validateScraper(scraperName.value,scraperSel.value))
+			{
+ 				listOfItems = document.getElementById("scraper-commands");
+				lastEl = document.getElementById("addScraper");
+ 				content = "<strong>?</strong><span class='scraper-name'>"+scraperName.value+"</span> : <span class='scraper-sel'>"+scraperSel.value+"</span>";
+				scraperName.value="";
+				scraperSel.value="";
+			}
+			else
+				return false;
+			break;
+
+		case "esp":
+			var espURL = document.getElementById("add-esp-url");
+			var espSel = document.getElementById("add-esp-selector");
+			if(validateEspModifier(espURL.value,espSel.value))
+			{
+ 				listOfItems = document.getElementById("esp-modifiers");
+				lastEl = document.getElementById("addEspModifier");
+ 				content = "<span class='esp-url'>"+espURL.value+"</span> : <span class='esp-sel'>"+espSel.value+"</span>";
+				espURL.value="";
+				espSel.value="";
+			}
+			else
+				return false;
 	}
+	
+	var newEl = document.createElement("li");
+	var	no = listOfItems.children.length + 1;	
+	var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"" + type + "\"," + no + ")'/>";
+	newEl.id = type + no;
+	newEl.className = type;
+	newEl.innerHTML = content + inputBt;
+	listOfItems.insertBefore(newEl, lastEl);
 }
 
-function removeDomain(i){
-	var el = document.getElementById("rdomain"+i);
-	var domainList = document.getElementById("domains");
-	domainList.removeChild(el);
-	//remove the domain from the list
-
-	return 0;
-}
-
-function addScraper(){
-	var scraperName = document.getElementById("scraper-name");
-	var scraperSel = document.getElementById("scraper-selector");
-
-	if(validateScraper(scraperName.value,scraperSel.value))
-	{
-		var scraperList = document.getElementById("scraper-commands");
-		var newLI = document.createElement("li");
-		var no = scraperList.children.length+1;
-		newLI.className = "scraper";
-		newLI.id = "scraper"+no;
-		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeScraper("+no+")'/>";
-		newLI.innerHTML = "<strong>?</strong><span class='scraper-name'>"+scraperName.value+"</span> : <span class='scraper-sel'>"+scraperSel.value+"</span>"+inputBt;
-		scraperList.insertBefore(newLI,document.getElementById("addScraper"));
-		scraperName.value="";
-		scraperSel.value="";
+function removeItem(type, i){
+	var listOfItems;
+	switch(type){
+		case "domain":
+ 			listOfItems = document.getElementById("domains");
+			break;
+		case "scraper":
+ 			listOfItems = document.getElementById("scraper-commands");
+			break;
+		case "esp":
+ 			listOfItems = document.getElementById("esp-modifiers");
 	}
-}
-
-function removeScraper(i){
-	var el = document.getElementById("scraper"+i);
-	var scraperList = document.getElementById("scraper-commands");
-	scraperList.removeChild(el);
-	//remove the domain from the list
+	
+	var el = document.getElementById(type+i);
+	listOfItems.removeChild(el);
 	return 0;
 }
 
@@ -441,32 +462,6 @@ function validateScraper(name,selector)
 	if(name.indexOf('`')!=-1 || selector.indexOf('`')!= -1)
 		return false;
 	return true;
-}
-
-function addEspModifier(){
-	var espURL = document.getElementById("add-esp-url");
-	var espSel = document.getElementById("add-esp-selector");
-	
-	if(validateEspModifier(espURL.value,espSel.value))
-	{
-		var espList = document.getElementById("esp-modifiers");
-		var newLI = document.createElement("li");
-		var no = espList.children.length+1;
-		newLI.className = "esp";
-		newLI.id = "esp"+no;
-		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeEspModifier("+no+")'/>";
-		newLI.innerHTML = "<span class='esp-url'>"+espURL.value+"</span> : <span class='esp-sel'>"+espSel.value+"</span>"+inputBt;
-		espList.insertBefore(newLI,document.getElementById("addEspModifier"));
-		espURL.value="";
-		espSel.value="";
-	}
-}
-
-function removeEspModifier(i){
-	var el = document.getElementById("esp"+i);
-	var espList = document.getElementById("esp-modifiers");
-	espList.removeChild(el);
-	return 0;
 }
 
 function validateEspModifier(name,selector)

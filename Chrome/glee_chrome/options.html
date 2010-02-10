@@ -18,7 +18,7 @@
 			<label class="option-label">Disabled URLs<br/><span class="subtext">Enter part of a URL to disable gleeBox on all pages with matching URLs</span></label>
 			<ul id="domains" class="option-field">
 				<li>chrome.google.com/extensions <span style="float:right;font-size:14px;color:gray">Disabled by Google</span></li>
-				<li id="addDomainLI"><form onsubmit="addDomain();return false;"><input id="add_domain" type="text" value="" size=50 />&nbsp;<input type="submit" value="Add" class="button"/></form></li>
+				<li id="addDomainLI"><form onsubmit="addItem('domain');return false;"><input id="add_domain" type="text" value="" size=50 />&nbsp;<input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 		<li>
@@ -94,7 +94,7 @@
 				<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?h</strong> : H1, H2 and H3 Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
 				<li><strong>?a</strong> : Links<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-				<li id="addScraper"><form onsubmit="addScraper();return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" value="Name" style="float:left;margin-right:5px;width:10em" /><span style="float:left;line-height:20px"> : </span><input id="scraper-selector" type="text" value="jQuery Selector" style="float:left;margin-left:5px;width:16.76em" /><input style="float:right;" type="submit" value="Add" class="button"/></form></li>
+				<li id="addScraper"><form onsubmit="addItem('scraper');return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" value="Name" style="float:left;margin-right:5px;width:10em" /><span style="float:left;line-height:20px"> : </span><input id="scraper-selector" type="text" value="jQuery Selector" style="float:left;margin-left:5px;width:16.76em" /><input style="float:right;" type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 		<li>
@@ -107,7 +107,7 @@
 		<li>
 			<label class="option-label">ESP Visions<br/><span class="subtext">Specify part of a page's URL and the default jQuery selector to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is set to On.</span></label>
 			<ul id="esp-modifiers" class="option-field">
-				<li id="addEspModifier"><form onsubmit="addEspModifier();return false;"><input id="add-esp-url" type="text" value="Page URL" style="width:14em;float:left;margin-right:5px;" /><span style="float:left;line-height:20px"> : </span><input id="add-esp-selector" type="text" value="jQuery Selector" style="width:13.38em;float:left;margin-left:5px"/><input type="submit" value="Add" style="float:right;" class="button"/></form></li>
+				<li id="addEspModifier"><form onsubmit="addItem('esp');return false;"><input id="add-esp-url" type="text" value="Page URL" style="width:14em;float:left;margin-right:5px;" /><span style="float:left;line-height:20px"> : </span><input id="add-esp-selector" type="text" value="jQuery Selector" style="width:13.38em;float:left;margin-left:5px"/><input type="submit" value="Add" style="float:right;" class="button"/></form></li>
 			</ul>
 		</li>
 	</ul>
