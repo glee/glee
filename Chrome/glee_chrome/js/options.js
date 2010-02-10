@@ -302,7 +302,7 @@ function makeItemEditable(el){
 
 			var textField = document.createElement("input");
 			textField.type = "text";
-			textField.value = this.innerHTML;
+			textField.value = filter(this.innerHTML);
 			textField.id = "temporary-edit-field";
 			this.innerHTML = "";
 			//invalidate the class name to avoid CSS
@@ -433,6 +433,18 @@ function removeItem(type, i){
 	var el = document.getElementById(type+i);
 	listOfItems.removeChild(el);
 	return 0;
+}
+
+function filter(text){
+	var index1 = 0;
+	var index2 = 0;
+	while(index1 != -1 || index2 != -1)
+	{
+		text = text.replace("&lt;", "<").replace("&gt;", ">");
+		index1 = text.indexOf("&lt;");
+		index2 = text.indexOf("&gt;");
+	}
+	return text;
 }
 
 function validateScraper(name,selector)
