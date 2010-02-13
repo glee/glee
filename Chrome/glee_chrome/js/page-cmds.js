@@ -46,9 +46,8 @@ Glee.inspectPage = function(){
 	Glee.selectedElement = LinkReaper.getFirst();
 	Glee.scrollToElement(Glee.selectedElement);
 	Glee.selectedElement = jQuery(Glee.selectedElement);
-	result = Glee.inspectElement(Glee.selectedElement, 0);
-	Glee.searchField.attr("value", result);
-	Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
+	Glee.setSubText("Tab through and select the matching element you want to inspect and press Enter", "msg");
+	Glee.inspectMode = true;
 	Glee.toggleActivity(0);
 }
 
@@ -56,10 +55,10 @@ Glee.inspectPage = function(){
 Glee.inspectElement = function(el,level){
 	var elId = el.attr("id");
 	var elClass = el.attr("class");
-	if(elId.length != 0)
-	{
-		return "#"+elId;
-	}
+	// if(elId.length != 0)
+	// {
+	// 	return "#"+elId;
+	// }
 	if(elClass.length != 0)
 	{
 		elClass = jQuery.trim(elClass.replace("GleeHL",""));

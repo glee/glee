@@ -186,6 +186,7 @@ jQuery(document).ready(function(){
 				LinkReaper.unreapAllLinks();
 				Glee.setSubText(null);
 				Glee.selectedElement = null;
+				Glee.inspectMode = false;
 				Glee.toggleActivity(0);
 				if(Glee.espStatus)
 					Glee.fireEsp();
@@ -209,6 +210,14 @@ jQuery(document).ready(function(){
 			}
 			else if(value[0] == "!" && value.length > 1)
 			{
+				if(Glee.inspectMode)
+				{
+					Glee.inspectMode = false;
+					result = Glee.inspectElement(Glee.selectedElement, 0);
+					Glee.searchField.attr("value", result);
+					Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
+					return;
+				}
 				//check if it is a command
 				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 				if(typeof(Glee.URL.name) != "undefined")
@@ -338,6 +347,7 @@ var Glee = {
 	//State of scrolling. 0=None, 1=Up, -1=Down.
 	scrollState: 0,
 	hyperMode: false,
+	inspectMode: false,
 	//last query executed in jQuery mode
 	lastQuery:null,
 	commandMode: false,
@@ -541,6 +551,7 @@ var Glee = {
 		});
 		this.searchText = "";
 		this.selectedElement = null;
+		this.inspectMode = false;
 	},
 	closeBoxWithoutBlur: function(){
 		this.searchBox.fadeOut(150,function(){
@@ -550,6 +561,7 @@ var Glee = {
 		LinkReaper.unreapAllLinks();
 		this.searchText = "";
 		this.selectedElement = null;
+		this.inspectMode = false;
 	},
 	initScraper: function(scraper){
 		this.nullMessage = scraper.nullMessage;
