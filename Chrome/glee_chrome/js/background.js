@@ -69,6 +69,26 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		chrome.tabs.create({url:request.url,selected:request.selected},null);
 		sendResponse({});
 	}
+	else if(request.value == "getTabs")
+	{
+		chrome.windows.getCurrent(function(currWindow){
+			chrome.tabs.getAllInWindow(currWindow.id, function(tabs){
+				sendResponse({tabs:tabs});
+			});
+		});
+	}
+	else if(request.value == "removeTab")
+	{
+		chrome.tabs.remove(request.id, function(){
+			sendResponse({});
+		});
+	}
+	else if(request.value == "moveToTab")
+	{
+		chrome.tabs.update(request.id, {selected:true},function(){
+			sendResponse({});
+		});
+	}
 	else if(request.value == "sendRequest")
 	{
 		var req = new XMLHttpRequest();

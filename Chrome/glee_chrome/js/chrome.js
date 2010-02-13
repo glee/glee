@@ -230,6 +230,18 @@ Glee.Chrome.getOptions = function(){
 	chrome.extension.sendRequest({value:"getOptions"},Glee.Chrome.applyOptions);
 }
 
+Glee.Chrome.getTabs = function(callback){
+	chrome.extension.sendRequest({value:"getTabs"}, callback);
+}
+
+Glee.Chrome.removeTab = function(tabId, callback){
+	chrome.extension.sendRequest({value:"removeTab", id:tabId}, callback);
+}
+
+Glee.Chrome.moveToTab = function(tabId){
+	chrome.extension.sendRequest({value:"moveToTab", id:tabId}, function(){});
+}
+
 //adding a listener to respond to requests from background.html to update the status/settings
 chrome.extension.onRequest.addListener(
 	function(request,sender,sendResponse){

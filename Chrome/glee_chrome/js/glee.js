@@ -444,6 +444,11 @@ var Glee = {
 			name: "inspect",
 			method:"inspectPage",
 			description:"Inspect an element on the page. Enter text and press enter to search for elements and return their jQuery selector."
+		},
+		{
+			name: "tabs",
+			method:"manageTabs",
+			description:"Displays a vertical list of currently open tabs."
 		}
 	],
 	
