@@ -49,7 +49,7 @@ Glee.inspectPage = function(){
 	Glee.selectedElement = jQuery(Glee.selectedElement);
 	if(LinkReaper.selectedLinks.length > 1)
 	{
-		Glee.setSubText("Tab through and select the matching element you want to inspect and press Enter", "msg");
+		Glee.setSubText("Tab through and select the element you want to inspect and press Enter", "msg");
 		Glee.inspectMode = true;
 	}
 	else

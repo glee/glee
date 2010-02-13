@@ -71,8 +71,11 @@ jQuery(document).ready(function(){
 					Glee.selectedElement = LinkReaper.getPrev();
 				else
 					Glee.selectedElement = LinkReaper.getNext();
-				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
+				// do not update subtext in case of inspect command
+				if(Glee.commandMode && Glee.inspectMode)
+					return;
+				Glee.setSubText(Glee.selectedElement,"el");
 			}
 			else if(Glee.bookmarks.length != 0)
 			{
@@ -123,6 +126,7 @@ jQuery(document).ready(function(){
 				else {
 					LinkReaper.unreapAllLinks();
 					Glee.commandMode = true;
+					Glee.inspectMode = false;
 					Glee.selectedElement = null; //reset selected element
 					if(Glee.bookmarkSearchStatus)
 						Glee.bookmarks = []; //empty the bookmarks array
@@ -148,7 +152,7 @@ jQuery(document).ready(function(){
 						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
 						Glee.subURL.html(Glee.Utils.filter(Glee.URL));
 					}
-					else if(value[0] == '*')// Any jQuery selector
+					else if(value[0] == '*') // Any jQuery selector
 					{
 						Glee.nullMessage = "Nothing found for your selector.";
 						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
@@ -186,7 +190,7 @@ jQuery(document).ready(function(){
 				LinkReaper.unreapAllLinks();
 				Glee.setSubText(null);
 				Glee.selectedElement = null;
-				Glee.inspectMode = false;
+				Glee.commandMode = false;
 				Glee.toggleActivity(0);
 				if(Glee.espStatus)
 					Glee.fireEsp();

@@ -426,23 +426,3 @@ function savePreference(prefname,value){
 		});
 	}
 }
-
-// 
-// function initPreference(prefname, value, callback){
-// 	var A = opendb();
-// 	createPrefsTable(A);
-// 	if(A)
-// 	{
-// 		A.transaction(function(B){
-// 			B.executeSql("INSERT INTO preferences (prefname,prefvalue) VALUES (?, ?)",
-// 			[prefname,value],
-// 			function(C,D){
-// 				callback(value);
-// 			},
-// 			function(C,D){
-// 				console.log(D);
-// 				callback(null);
-// 			});
-// 		});
-// 	}	
-// }
