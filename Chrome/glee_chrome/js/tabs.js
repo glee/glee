@@ -25,6 +25,14 @@ Glee.Tabs = {
 				else
 					Glee.Tabs.getNext();
 			}
+			else if(e.keyCode == 40 || e.keyCode == 38) //up/down arrow keys
+			{
+				e.preventDefault();
+				if(e.keyCode == 40)
+					Glee.Tabs.getNext();
+				else
+					Glee.Tabs.getPrevious();
+			}
 			else if(e.keyCode == 8 || e.keyCode == 67) //delete on mac/backspace or c
 			{
 				e.preventDefault();
@@ -32,6 +40,7 @@ Glee.Tabs = {
 			}
 			else if(e.keyCode == 13) //enter
 			{
+				e.preventDefault();
 				Glee.Tabs.open();
 			}
 		});
