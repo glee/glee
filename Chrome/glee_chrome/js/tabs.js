@@ -81,7 +81,7 @@ Glee.Tabs = {
 			if(Glee.Tabs.currentIndex == 0)
 				Glee.Tabs.currentIndex = Glee.Tabs.tabs.length - 1;
 			else
-				Glee.Tabs.currentIndex -= 2;
+				Glee.Tabs.currentIndex -= 1;
 			Glee.Tabs.getNext();
 		});
 	},

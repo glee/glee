@@ -517,7 +517,8 @@ var Glee = {
 		// Setup the theme
 		Glee.searchBox.addClass(Glee.ThemeOption);
 		Glee.searchField.addClass(Glee.ThemeOption);
-
+		if(Glee.Tabs.box)
+			Glee.Tabs.box.addClass(Glee.ThemeOption);
 		//setting gleeBox position
 		if(Glee.position == "top")
 			topSpace = 0;
