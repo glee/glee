@@ -104,7 +104,8 @@ jQuery(document).ready(function(){
 				if(value[0] != "?"
 					&& value[0] != "!"
 					&& value[0] != ":"
-					&& value[0] != '*')
+					&& value[0] != '*'
+					&& value[0] != '/')
 				{
 					if(Glee.commandMode)
 						LinkReaper.unreapAllLinks();
@@ -156,6 +157,11 @@ jQuery(document).ready(function(){
 					{
 						Glee.nullMessage = "Nothing found for your selector.";
 						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
+					}
+					else if(value[0] == '/')
+					{
+						Glee.manageTabs();
+						return;
 					}
 					else if(value[0] == "!" && value.length > 1) //Searching through page commands
 					{
@@ -444,11 +450,6 @@ var Glee = {
 			name: "inspect",
 			method:"inspectPage",
 			description:"Inspect an element on the page. Enter text and press enter to search for elements and return their jQuery selector."
-		},
-		{
-			name: "tabs",
-			method:"manageTabs",
-			description:"Displays a vertical list of currently open tabs."
 		}
 	],
 	
@@ -878,5 +879,26 @@ var Glee = {
 		}
 		else
 			Glee[method]();
+	},
+	manageTabs: function(){
+		var onGetTabs = function(response){
+			Glee.Tabs.tabs = response.tabs;
+			Glee.closeBoxWithoutBlur();
+
+			if(!Glee.Tabs.box)
+				Glee.Tabs.createBox();
+			else
+				Glee.Tabs.box.html('');
+
+			Glee.Tabs.createList();
+			Glee.Tabs.initKeyBindings();
+
+			Glee.Tabs.box.fadeIn(150,function(){
+				Glee.Tabs.currentIndex = 0;
+				Glee.Tabs.select(0);
+			});
+		};
+		Glee.setSubText("Displays a vertical list of currently open tabs.", "msg");
+		Glee.Chrome.getTabs(onGetTabs);
 	}
 }

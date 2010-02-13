@@ -180,25 +180,3 @@ Glee.shortenURL = function(){
 		Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
 	});
 }
-
-/* tabs: Displays a vertical list of currently open Tabs. User can open/close tabs */
-Glee.manageTabs = function(){
-	var onGetTabs = function(response){
-		Glee.Tabs.tabs = response.tabs;
-		Glee.closeBoxWithoutBlur();
-
-		if(!Glee.Tabs.box)
-			Glee.Tabs.createBox();
-		else
-			Glee.Tabs.box.html('');
-		
-		Glee.Tabs.createList();
-		Glee.Tabs.initKeyBindings();
-		
-		Glee.Tabs.box.fadeIn(250,function(){
-			Glee.Tabs.currentIndex = 0;
-			Glee.Tabs.select(0);
-		});
-	};
-	Glee.Chrome.getTabs(onGetTabs);
-}
