@@ -39,15 +39,26 @@ Glee.sendTweet = function(){
 	}
 }
 
-/* inspect: Displays the jQuery selector of the first matching element for query in gleeBox */
+/* inspect: Displays the jQuery selector if only one matching element is returned or if more are returned,
+			allows the user tab through and press enter to inspect a single element */
 Glee.inspectPage = function(){
 	var query = Glee.searchField.attr("value").substring(9);
 	LinkReaper.reapLinks(query);
 	Glee.selectedElement = LinkReaper.getFirst();
 	Glee.scrollToElement(Glee.selectedElement);
 	Glee.selectedElement = jQuery(Glee.selectedElement);
-	Glee.setSubText("Tab through and select the matching element you want to inspect and press Enter", "msg");
-	Glee.inspectMode = true;
+	if(LinkReaper.selectedLinks.length > 1)
+	{
+		Glee.setSubText("Tab through and select the matching element you want to inspect and press Enter", "msg");
+		Glee.inspectMode = true;
+	}
+	else
+	{
+		result = Glee.inspectElement(Glee.selectedElement, 0);
+		Glee.searchField.attr("value", result);
+		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
+		return;
+	}
 	Glee.toggleActivity(0);
 }
 

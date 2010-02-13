@@ -439,7 +439,7 @@ var Glee = {
 		{
 			name: "inspect",
 			method:"inspectPage",
-			description:"Inspect an element on the page. Entering text and pressing enter will return the selector for first matched element."
+			description:"Inspect an element on the page. Enter text and press enter to search for elements and return their jQuery selector."
 		}
 	],
 	
