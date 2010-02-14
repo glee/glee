@@ -119,7 +119,7 @@ jQuery(document).ready(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);
+						Glee.scrollToElement(Glee.selectedElement, false);
 						Glee.toggleActivity(0);
 					},300);
 				}
@@ -804,10 +804,19 @@ var Glee = {
 	},
 	//end of ESP
 	scrollToElement: function(el){
-		var target;
-		if(typeof(el) != "undefined" && el)
+		//scrollIfVisible = typeof(scrollIfVisible) != "undefined" ? scrollIfVisible : true;
+		var target = jQuery(el);
+		var targetOffsetTop = target.offset().top;
+		if((window.pageYOffset > targetOffsetTop) ||
+			(window.innerHeight + window.pageYOffset < targetOffsetTop))
+				scroll = true;
+		else
+				scroll = false;
+		
+		//TODO: Set scroll to true if the element is overlapping with gleeBox
+		
+		if(typeof(el) != "undefined" && el && scroll)
 		{
-			target = jQuery(el);
 			if(target.length != 0)
 			{
 				// We keep the scroll such that the element stays a little away from
