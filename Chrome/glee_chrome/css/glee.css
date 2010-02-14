@@ -114,11 +114,32 @@ a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTa
 	cursor:normal !important;
 }
 a.gleeTabHover{
-	background-color:#005f81 !important;
-	color:#fff !important;
+	background-color: #ededed !important;
+	color: #454545 !important;
 /*	text-shadow:1px 1px 2px #ccc;*/
 	outline:none !important;
 }
+
+div.GleeThemeRuby a.gleeTabHover{
+	background-color: #e8c1cd !important;
+	color: #580d2b !important;
+}
+
+div.GleeThemeWhite a.gleeTabHover{
+	background-color: #c5c9d1 !important;
+	color: #1b1b1b !important;
+}
+
+div.GleeThemeGreener a.gleeTabHover{
+	background-color: #4ad051 !important;
+	color: #093b21 !important;
+}
+
+div.GleeThemeConsole a.gleeTabHover{
+	background-color:#005f81 !important;
+	color: #fffff !important;
+}
+
 #gleeSearchField{
 	outline:none;
 	width:90%;
