@@ -27,29 +27,41 @@ jQuery(document).ready(function(){
 		if(Glee.status != 0)
 		{
 			//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
-			if(e.keyCode == 71 && !e.metaKey && !e.ctrlKey && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey))
+			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div') || e.altKey)
 			{
-				e.preventDefault();
-				Glee.userPosBeforeGlee = window.pageYOffset;
-				//set default subtext
-				Glee.subText.html(Glee.nullStateMessage);
-				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
-					Glee.userFocusBeforeGlee = target;
-				else
-					Glee.userFocusBeforeGlee = null;
-				if(Glee.searchBox.css('display') == "none")
+				if(e.keyCode == 71 && !e.metaKey && !e.ctrlKey)
 				{
-					//reseting value of searchField
-					Glee.searchField.attr('value','');
-					Glee.searchBox.fadeIn(150);
-					Glee.searchField.focus();
-					if(Glee.espStatus)
-						Glee.fireEsp();
+					e.preventDefault();
+					Glee.userPosBeforeGlee = window.pageYOffset;
+					//set default subtext
+					Glee.subText.html(Glee.nullStateMessage);
+					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
+						Glee.userFocusBeforeGlee = target;
+					else
+						Glee.userFocusBeforeGlee = null;
+					if(Glee.searchBox.css('display') == "none")
+					{
+						//reseting value of searchField
+						Glee.searchField.attr('value','');
+						Glee.searchBox.fadeIn(150);
+						Glee.searchField.focus();
+						if(Glee.espStatus)
+							Glee.fireEsp();
+					}
+					else
+					{
+						//If gleeBox is already visible, focus is returned to it
+						Glee.searchField.focus();
+					}
 				}
-				else
+				else if(e.keyCode == 191 && Glee.tabShortcutStatus)
 				{
-					//If gleeBox is already visible, focus is returned to it
-					Glee.searchField.focus();
+					e.preventDefault();
+					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
+						Glee.userFocusBeforeGlee = target;
+					else
+						Glee.userFocusBeforeGlee = null;
+					Glee.manageTabs();
 				}
 			}
 		}
@@ -363,6 +375,8 @@ var Glee = {
 	commandMode: false,
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1,
+	//used to enable/disable global shortcut for tab manager
+	tabShortcutStatus:true,
 	//used to enable/disabled ESP (default scrapers)
 	espStatus:true,
 	//Currently selected element

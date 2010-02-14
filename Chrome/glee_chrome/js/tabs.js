@@ -12,6 +12,7 @@ Glee.Tabs = {
 		this.box.addClass(Glee.ThemeOption);
 		jQuery(document.body).append(Glee.Tabs.box);
 	},
+	
 	initKeyBindings: function(){
 		jQuery('#gleeTabSearchField, .gleeTabListItem').bind('keydown',function(e){
 			if(e.keyCode == 27) //esc
@@ -56,10 +57,12 @@ Glee.Tabs = {
 			}
 		});
 	},
+	
 	createSearchField: function(){
 		this.searchField = jQuery("<input id='gleeTabSearchField' type='text' />");
 		this.box.append(this.searchField);
 	},
+	
 	createList: function(){
 		this.tabList = jQuery('<div id="gleeTabList"></div>');
 		var len = this.tabs.length;
@@ -72,52 +75,55 @@ Glee.Tabs = {
 		}
 		this.box.append(this.tabList);
 	},
+	
+	updateList: function(){
+		
+	},
+	
 	refreshList: function(){
 		var query = this.searchField.attr("value");
-		var len = this.tabs.length;
+		var visibleItems = jQuery('.gleeTabListItem');
+		var len = visibleItems.length;
 		for(var i=0;i<len;i++)
 		{
-			if(this.tabs[i].title.toLowerCase().indexOf(query.toLowerCase()) == -1)
-				this.removeFromList(i);
+			if(visibleItems[i].innerText.toLowerCase().indexOf(query.toLowerCase()) == -1)
+				this.hideFromList(i);
 			else
-				this.addToList(i);
+				this.showInList(i);
 		}
 		this.currentIndex = -1;
 		this.selected = jQuery('.gleeTabListItem:visible')[0];
 	},
-	removeFromList: function(index){
+	
+	getSelectedTabIndex: function(){
+		var idString = this.selected.id;
+		return idString.substring(7,idString.length);
+	},
+	
+	hideFromList: function(index){
 		jQuery(jQuery('.gleeTabListItem')[index]).css("display","none");
 	},
-	addToList: function(index){
+	
+	showInList: function(index){
 		jQuery(jQuery('.gleeTabListItem')[index]).css("display","block");
 	},
-	selectCurrentTab: function(){
-		var len = this.tabs.length;
-		var index;
-		for(var i=0;i<len;i++)
-		{
-			if(this.tabs[i].url == location.href)
-			{
-				index = i;
-				break;
-			}
-		}
-		this.currentIndex = index;
-		this.select(index);
-	},
+	
 	selectSearchField: function(){
 		this.selected = jQuery('.gleeTabListItem:visible')[0];
 		setTimeout(function(){
 				Glee.Tabs.searchField.focus();
 		},0);
 	},
+	
 	select: function(index){
+		if(index == -1) return;
  		this.selected = jQuery('.gleeTabListItem:visible')[index];
 		setTimeout(function(){
 				Glee.Tabs.selected.focus();
 		},0);
 		jQuery(this.selected).addClass("gleeTabHover");
 	},
+	
 	getNext: function(){
 		this.deselect(this.currentIndex);
 		var listLen = jQuery('.gleeTabListItem:visible').length;
@@ -132,6 +138,7 @@ Glee.Tabs = {
 			this.select(this.currentIndex);
 		}
 	},
+	
 	getPrevious: function(){
 		this.deselect(this.currentIndex);
 		var listLen = jQuery('.gleeTabListItem:visible').length;
@@ -152,27 +159,28 @@ Glee.Tabs = {
 		}
 		
 	},
+	
 	deselect: function(index){
+		if(index == -1) return;
 		jQuery(jQuery('.gleeTabListItem:visible')[index]).removeClass('gleeTabHover');
 	},
+	
 	destroy: function(){
-		Glee.Chrome.removeTab(this.tabs[this.currentIndex].id, function(){
-			Glee.Tabs.tabs.splice(Glee.Tabs.currentIndex, 1);
-			jQuery(jQuery('.gleeTabListItem')[Glee.Tabs.currentIndex]).remove();
-			if(Glee.Tabs.currentIndex == 0)
-				Glee.Tabs.currentIndex = Glee.Tabs.tabs.length - 1;
-			else
-				Glee.Tabs.currentIndex -= 1;
-			Glee.Tabs.getNext();
+		var tabIndex = this.getSelectedTabIndex();
+		var tabId = this.tabs[tabIndex].id;
+		jQuery(Glee.Tabs.selected).remove();
+		Glee.Tabs.currentIndex -= 1;
+		Glee.Tabs.getNext();
+		Glee.Chrome.removeTab(tabId, function(){
 		});
 	},
+	
 	open:function(){
-		var idString = this.selected.id;
-		var tabIndex = idString.substring(7,idString.length);
-		tabId = this.tabs[tabIndex].id;
+		tabId = this.tabs[Glee.Tabs.getSelectedTabIndex()].id;
 		this.closeBox(true);
-		Glee.Chrome.moveToTab(tabId)
+		Glee.Chrome.moveToTab(tabId);
 	},
+	
 	closeBox: function(returnFocus, callback){
 		this.box.fadeOut(150,function(){
 			Glee.Tabs.box.html('');
