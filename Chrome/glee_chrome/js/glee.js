@@ -582,7 +582,7 @@ var Glee = {
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
 		this.setSubText(Glee.selectedElement,"el");
-		this.scrollToElement(Glee.selectedElement);
+		this.scrollToElement(Glee.selectedElement, false);
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(scraper.cssStyle);
 		});
@@ -803,15 +803,16 @@ var Glee = {
 		return false;
 	},
 	//end of ESP
-	scrollToElement: function(el){
-		//scrollIfVisible = typeof(scrollIfVisible) != "undefined" ? scrollIfVisible : true;
+	scrollToElement: function(el, scrollIfVisible){
+		scroll = typeof(scrollIfVisible) != "undefined" ? scrollIfVisible : true;
 		var target = jQuery(el);
 		var targetOffsetTop = target.offset().top;
-		if((window.pageYOffset > targetOffsetTop) ||
-			(window.innerHeight + window.pageYOffset < targetOffsetTop))
-				scroll = true;
-		else
-				scroll = false;
+		if(!scroll)
+		{
+			if((window.pageYOffset > targetOffsetTop) ||
+				(window.innerHeight + window.pageYOffset < targetOffsetTop))
+					scroll = true;
+		}
 		
 		//TODO: Set scroll to true if the element is overlapping with gleeBox
 		
