@@ -119,7 +119,7 @@ jQuery(document).ready(function(){
 						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
 						Glee.selectedElement = LinkReaper.getFirst();
 						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement, false);
+						Glee.scrollToElement(Glee.selectedElement);
 						Glee.toggleActivity(0);
 					},300);
 				}
@@ -582,7 +582,7 @@ var Glee = {
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
 		this.setSubText(Glee.selectedElement,"el");
-		this.scrollToElement(Glee.selectedElement, false);
+		this.scrollToElement(Glee.selectedElement);
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(scraper.cssStyle);
 		});
@@ -803,17 +803,16 @@ var Glee = {
 		return false;
 	},
 	//end of ESP
-	scrollToElement: function(el, scrollIfVisible){
-		scroll = typeof(scrollIfVisible) != "undefined" ? scrollIfVisible : true;
+	scrollToElement: function(el){
 		var target = jQuery(el);
+		var scroll = false;
 		var targetOffsetTop = target.offset().top;
-		if(!scroll)
+		if((targetOffsetTop - window.pageYOffset > Glee.getOffsetFromTop()) ||
+			(window.innerHeight + window.pageYOffset < targetOffsetTop) || 
+			(window.pageYOffset > targetOffsetTop))
 		{
-			if((window.pageYOffset > targetOffsetTop) ||
-				(window.innerHeight + window.pageYOffset < targetOffsetTop))
-					scroll = true;
+			scroll = true;
 		}
-		
 		//TODO: Set scroll to true if the element is overlapping with gleeBox
 		
 		if(typeof(el) != "undefined" && el && scroll)
@@ -822,7 +821,8 @@ var Glee = {
 			{
 				// We keep the scroll such that the element stays a little away from
 				// the top.
-				var targetOffset = target.offset().top - Glee.getOffsetFromTop();
+				var targetOffset = targetOffsetTop - Glee.getOffsetFromTop();
+				
 				//stop any previous scrolling to prevent queueing
 				Glee.Cache.jBody.stop(true);
 				Glee.Cache.jBody.animate(
