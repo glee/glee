@@ -13,7 +13,7 @@ Glee.Tabs = {
 		jQuery(document.body).append(Glee.Tabs.box);
 	},
 	initKeyBindings: function(){
-		jQuery('.gleeTabListItem, #gleeTabSearchField').bind('keydown',function(e){
+		jQuery('#gleeTabSearchField, .gleeTabListItem').bind('keydown',function(e){
 			if(e.keyCode == 27) //esc
 			{
 				Glee.Tabs.closeBox(true);
@@ -40,6 +40,9 @@ Glee.Tabs = {
 				Glee.Tabs.open();
 			}
 		});
+		jQuery('#gleeTabSearchField').bind('keyup',function(e){
+			Glee.Tabs.refreshList();
+		});
 		jQuery('.gleeTabListItem').bind('keydown',function(e){
 			if(e.keyCode == 8 || e.keyCode == 67) //delete on mac/backspace or c
 			{
@@ -63,11 +66,30 @@ Glee.Tabs = {
 		var tabListItem;
 		for(var i=0; i<len; i++)
 		{
- 			tabListItem = jQuery('<a href="#" class="gleeTabListItem"></a>');
+ 			tabListItem = jQuery('<a href="#" id="gleeTab'+i+'" class="gleeTabListItem"></a>');
 			tabListItem.html(this.tabs[i].title);
 			this.tabList.append(tabListItem);
 		}
 		this.box.append(this.tabList);
+	},
+	refreshList: function(){
+		var query = this.searchField.attr("value");
+		var len = this.tabs.length;
+		for(var i=0;i<len;i++)
+		{
+			if(this.tabs[i].title.toLowerCase().indexOf(query.toLowerCase()) == -1)
+				this.removeFromList(i);
+			else
+				this.addToList(i);
+		}
+		this.currentIndex = -1;
+		this.selected = jQuery('.gleeTabListItem:visible')[0];
+	},
+	removeFromList: function(index){
+		jQuery(jQuery('.gleeTabListItem')[index]).css("display","none");
+	},
+	addToList: function(index){
+		jQuery(jQuery('.gleeTabListItem')[index]).css("display","block");
 	},
 	selectCurrentTab: function(){
 		var len = this.tabs.length;
@@ -84,14 +106,13 @@ Glee.Tabs = {
 		this.select(index);
 	},
 	selectSearchField: function(){
-		this.selected = jQuery('.gleeTabListItem')[0];
+		this.selected = jQuery('.gleeTabListItem:visible')[0];
 		setTimeout(function(){
 				Glee.Tabs.searchField.focus();
 		},0);
-		// jQuery(this.selected).addClass("gleeTabHover");
 	},
 	select: function(index){
- 		this.selected = jQuery('.gleeTabListItem')[index];
+ 		this.selected = jQuery('.gleeTabListItem:visible')[index];
 		setTimeout(function(){
 				Glee.Tabs.selected.focus();
 		},0);
@@ -99,7 +120,8 @@ Glee.Tabs = {
 	},
 	getNext: function(){
 		this.deselect(this.currentIndex);
-		if(this.currentIndex >= (this.tabs.length - 1))
+		var listLen = jQuery('.gleeTabListItem:visible').length;
+		if(this.currentIndex >= (listLen - 1))
 		{
 			this.currentIndex = -1;
 			this.selectSearchField();
@@ -112,6 +134,7 @@ Glee.Tabs = {
 	},
 	getPrevious: function(){
 		this.deselect(this.currentIndex);
+		var listLen = jQuery('.gleeTabListItem:visible').length;
 		if(this.currentIndex == 0)
 		{
 			this.currentIndex = -1;
@@ -119,7 +142,7 @@ Glee.Tabs = {
 		}	
 		else if(this.currentIndex == -1)
 		{
-			this.currentIndex = this.tabs.length - 1;
+			this.currentIndex = listLen - 1;
 			this.select(this.currentIndex);
 		}
 		else
@@ -130,7 +153,7 @@ Glee.Tabs = {
 		
 	},
 	deselect: function(index){
-		jQuery(jQuery('.gleeTabListItem')[index]).removeClass('gleeTabHover');
+		jQuery(jQuery('.gleeTabListItem:visible')[index]).removeClass('gleeTabHover');
 	},
 	destroy: function(){
 		Glee.Chrome.removeTab(this.tabs[this.currentIndex].id, function(){
@@ -144,11 +167,9 @@ Glee.Tabs = {
 		});
 	},
 	open:function(){
-		var tabId;
-		if(this.currentIndex == -1)
-			tabId = this.tabs[0].id;
-		else
-			tabId = this.tabs[this.currentIndex].id;
+		var idString = this.selected.id;
+		var tabIndex = idString.substring(7,idString.length);
+		tabId = this.tabs[tabIndex].id;
 		this.closeBox(true);
 		Glee.Chrome.moveToTab(tabId)
 	},
