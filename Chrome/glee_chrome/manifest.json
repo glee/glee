@@ -10,7 +10,7 @@
 	"content_scripts":[
 	{
 		"matches":["http://*/*","https://*/*"],
-		"css":["css/glee.css"],
+		"css":["css/glee.css","css/tabs.css"],
 		"js":["js/jquery.js","js/glee.js","js/chrome.js","js/page-cmds.js","js/utils.js","js/linkreaper.js","js/tabs.js"],
 		"run_at":"document_start"
 	}],

@@ -78,68 +78,6 @@
 	/*rounded corners*/
 	border-radius:7px;
 }
-#gleeTabBox{
-	line-height:20px;
-	left:25%;
-	display:none;
-	top:15%;
-	overflow:auto;
-	position:fixed;
-	width:50%;
-	z-index:100000;
-	opacity:0.85;
-	height:400px;
-	border-radius:7px;
-}
-#gleeTabList{
-	padding:0 !important;
-	width:auto !important;
-	margin:5px 0 0 5px !important;
-	font-size:16px !important;
-	color:inherit !important;
-	text-align:left !important;
-	font-family:inherit !important;
-}
-
-a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
-	margin:0px !important;
-	padding:5px !important;
-	color:inherit !important;
-	text-decoration:none !important;
-	font-family:inherit !important;
-	font-size:inherit !important;
-	float:left !important;
-	outline: none !important;
-	width:98% !important;
-	cursor:normal !important;
-}
-a.gleeTabHover{
-	background-color: #ededed !important;
-	color: #454545 !important;
-/*	text-shadow:1px 1px 2px #ccc;*/
-	outline:none !important;
-}
-
-div.GleeThemeRuby a.gleeTabHover{
-	background-color: #e8c1cd !important;
-	color: #580d2b !important;
-}
-
-div.GleeThemeWhite a.gleeTabHover{
-	background-color: #c5c9d1 !important;
-	color: #1b1b1b !important;
-}
-
-div.GleeThemeGreener a.gleeTabHover{
-	background-color: #4ad051 !important;
-	color: #093b21 !important;
-}
-
-div.GleeThemeConsole a.gleeTabHover{
-	background-color:#005f81 !important;
-	color: #fffff !important;
-}
-
 #gleeSearchField{
 	outline:none;
 	width:90%;

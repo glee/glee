@@ -901,12 +901,15 @@ var Glee = {
 			else
 				Glee.Tabs.box.html('');
 
+			Glee.Tabs.createSearchField();
 			Glee.Tabs.createList();
 			Glee.Tabs.initKeyBindings();
 
 			Glee.Tabs.box.fadeIn(150,function(){
-				Glee.Tabs.currentIndex = 0;
-				Glee.Tabs.select(0);
+				setTimeout(function(){
+					Glee.Tabs.currentIndex = -1;
+					Glee.Tabs.selectSearchField();
+				},0);
 			});
 		};
 		Glee.setSubText("Displays a vertical list of currently open tabs.", "msg");
