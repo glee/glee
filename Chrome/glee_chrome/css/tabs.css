@@ -38,8 +38,9 @@
 
 a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
 	margin:0px !important;
+	border-radius:2px !important;
 	padding:5px !important;
-	color:inherit !important;
+	color:inherit;
 	text-decoration:none !important;
 	font-family:inherit !important;
 	font-size:inherit !important;

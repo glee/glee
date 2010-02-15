@@ -48,7 +48,7 @@ Glee.Tabs = {
 			if(e.keyCode == 8 || e.keyCode == 67) //delete on mac/backspace or c
 			{
 				e.preventDefault();
-				Glee.Tabs.destroy();
+				Glee.Tabs.remove();
 			}
 			else if(e.keyCode == 71)
 			{
@@ -76,17 +76,13 @@ Glee.Tabs = {
 		this.box.append(this.tabList);
 	},
 	
-	updateList: function(){
-		
-	},
-	
 	refreshList: function(){
 		var query = this.searchField.attr("value");
-		var visibleItems = jQuery('.gleeTabListItem');
-		var len = visibleItems.length;
+		var listItems = jQuery('.gleeTabListItem');
+		var len = listItems.length;
 		for(var i=0;i<len;i++)
 		{
-			if(visibleItems[i].innerText.toLowerCase().indexOf(query.toLowerCase()) == -1)
+			if(listItems[i].innerText.toLowerCase().indexOf(query.toLowerCase()) == -1)
 				this.hideFromList(i);
 			else
 				this.showInList(i);
@@ -124,6 +120,11 @@ Glee.Tabs = {
 		jQuery(this.selected).addClass("gleeTabHover");
 	},
 	
+	deselect: function(index){
+		if(index == -1) return;
+		jQuery(jQuery('.gleeTabListItem:visible')[index]).removeClass('gleeTabHover');
+	},
+	
 	getNext: function(){
 		this.deselect(this.currentIndex);
 		var listLen = jQuery('.gleeTabListItem:visible').length;
@@ -146,37 +147,27 @@ Glee.Tabs = {
 		{
 			this.currentIndex = -1;
 			this.selectSearchField();
+			return;
 		}	
 		else if(this.currentIndex == -1)
-		{
 			this.currentIndex = listLen - 1;
-			this.select(this.currentIndex);
-		}
 		else
-		{
 			this.currentIndex -= 1;
-			this.select(this.currentIndex);
-		}
-		
+			
+		this.select(this.currentIndex);
 	},
 	
-	deselect: function(index){
-		if(index == -1) return;
-		jQuery(jQuery('.gleeTabListItem:visible')[index]).removeClass('gleeTabHover');
-	},
-	
-	destroy: function(){
+	remove: function(){
 		var tabIndex = this.getSelectedTabIndex();
 		var tabId = this.tabs[tabIndex].id;
 		jQuery(Glee.Tabs.selected).remove();
 		Glee.Tabs.currentIndex -= 1;
 		Glee.Tabs.getNext();
-		Glee.Chrome.removeTab(tabId, function(){
-		});
+		Glee.Chrome.removeTab(tabId, function(){} );
 	},
 	
 	open:function(){
-		tabId = this.tabs[Glee.Tabs.getSelectedTabIndex()].id;
+		var tabId = this.tabs[Glee.Tabs.getSelectedTabIndex()].id;
 		this.closeBox(true);
 		Glee.Chrome.moveToTab(tabId);
 	},
