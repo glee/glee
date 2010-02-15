@@ -40,7 +40,7 @@ a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTa
 	margin:0px !important;
 	border-radius:2px !important;
 	padding:5px !important;
-	color:inherit;
+	color:inherit !important;
 	text-decoration:none !important;
 	font-family:inherit !important;
 	font-size:inherit !important;
