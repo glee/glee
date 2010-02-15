@@ -51,28 +51,28 @@ a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTa
 	cursor:normal !important;
 }
 
-a.gleeTabHover{
+a.gleeTabHover.gleeTabListItem{
 	background-color: #ededed !important;
 	color: #454545 !important;
 	outline:none !important;
 }
 
-div.GleeThemeRuby a.gleeTabHover{
+div.GleeThemeRuby a.gleeTabHover.gleeTabListItem{
 	background-color: #e8c1cd !important;
 	color: #580d2b !important;
 }
 
-div.GleeThemeWhite a.gleeTabHover{
+div.GleeThemeWhite a.gleeTabHover.gleeTabListItem{
 	background-color: #c5c9d1 !important;
 	color: #1b1b1b !important;
 }
 
-div.GleeThemeGreener a.gleeTabHover{
+div.GleeThemeGreener a.gleeTabHover.gleeTabListItem{
 	background-color: #4ad051 !important;
 	color: #093b21 !important;
 }
 
-div.GleeThemeConsole a.gleeTabHover{
+div.GleeThemeConsole a.gleeTabHover.gleeTabListItem{
 	background-color:#005f81 !important;
-	color: #fffff !important;
+	color: #ffffff !important;
 }

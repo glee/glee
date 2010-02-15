@@ -22,6 +22,7 @@ Glee.Tabs = {
 			else if(e.keyCode == 9) //tab
 			{
 				e.preventDefault();
+				e.stopPropagation();
 				if(e.shiftKey)
 					Glee.Tabs.getPrevious();
 				else
@@ -30,6 +31,7 @@ Glee.Tabs = {
 			else if(e.keyCode == 40 || e.keyCode == 38) //up/down arrow keys
 			{
 				e.preventDefault();
+				e.stopPropagation();
 				if(e.keyCode == 40)
 					Glee.Tabs.getNext();
 				else
