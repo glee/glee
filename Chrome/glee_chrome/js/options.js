@@ -73,6 +73,14 @@ function save_options(close_tab) {
 		animation = 0;
 
 	prefs.scroll_animation = animation;
+	
+	//saving tab manager shortcut status
+	if(document.getElementsByName("glee_tab_shortcut_status")[0].checked)
+		tab_shortcut_status = 1;
+	else
+		tab_shortcut_status = 0;
+		
+	prefs.tab_shortcut_status = tab_shortcut_status;
 
 	//saving the custom scraper commands
 	var scraperNames = document.getElementsByClassName("scraper-name");
@@ -203,6 +211,14 @@ function restore_options(prefs)
 		document.getElementsByName("glee_scrolling_animation")[1].checked = true;
 	else
 		document.getElementsByName("glee_scrolling_animation")[0].checked = true;
+		
+	//getting the tab shortcut status pref
+	var tab_shortcut_status = prefs.tab_shortcut_status;
+	
+	if(tab_shortcut_status == 0)
+		document.getElementsByName("glee_tab_shortcut_status")[1].checked = true;
+	else
+		document.getElementsByName("glee_tab_shortcut_status")[0].checked = true;
 
 	//getting the custom scraper commands
 	var len = prefs.scrapers.length;

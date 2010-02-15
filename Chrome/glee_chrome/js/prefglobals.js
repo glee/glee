@@ -8,6 +8,7 @@ var gleeboxPreferences = {
 	theme:"GleeThemeDefault",
 	bookmark_search:0,
 	scroll_animation:1,
+	tab_shortcut_status:1,
 	esp_status:1,
 	scrapers:[],
 	disabledUrls:["mail.google.com","wave.google.com","mail.yahoo.com"],

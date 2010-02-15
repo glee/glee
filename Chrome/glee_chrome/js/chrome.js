@@ -78,6 +78,15 @@ Glee.Chrome.applyOptions = function(response){
 			Glee.scrollingSpeed = 750; //enabled
 	}
 	
+	//Tab Shortcut status
+	if(prefs.tab_shortcut_status != undefined)
+	{
+		if(prefs.tab_shortcut_status == 0)
+			Glee.tabShortcutStatus = false;
+		else
+			Glee.tabShortcutStatus = true;
+	}
+	
 	//getting the restricted domains
 	if(prefs.disabledUrls != undefined)
 	{
