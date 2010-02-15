@@ -162,20 +162,23 @@ Glee.Tabs = {
 	remove: function(){
 		var tabIndex = this.getSelectedTabIndex();
 		var tabId = this.tabs[tabIndex].id;
-		jQuery(Glee.Tabs.selected).remove();
-		Glee.Tabs.currentIndex -= 1;
-		Glee.Tabs.getNext();
+		jQuery(Glee.Tabs.selected).animate({height:"0px",opacity:0}, 100, function(){
+			jQuery(Glee.Tabs.selected).remove();
+			Glee.Tabs.currentIndex -= 1;
+			Glee.Tabs.getNext();
+		});
 		Glee.Chrome.removeTab(tabId, function(){} );
 	},
 	
 	open:function(){
 		var tabId = this.tabs[Glee.Tabs.getSelectedTabIndex()].id;
-		this.closeBox(true);
-		Glee.Chrome.moveToTab(tabId);
+		this.closeBox(true, function(){
+			Glee.Chrome.moveToTab(tabId);
+		});
 	},
 	
 	closeBox: function(returnFocus, callback){
-		this.box.fadeOut(150,function(){
+		this.box.animate({marginTop:"5px" , opacity:0}, 125, function(){
 			Glee.Tabs.box.html('');
 			Glee.Tabs.tabs = null;
 			Glee.Tabs.tabList = null;
@@ -184,7 +187,9 @@ Glee.Tabs = {
 			if(returnFocus)
 				Glee.getBackInitialState();
 			if(callback)
+			{
 				callback();
+			}
 		});
 	}
 }
