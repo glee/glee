@@ -106,13 +106,18 @@ jQuery(document).ready(function(){
 	Glee.searchField.bind('keyup',function(e){
 		var value = Glee.searchField.attr('value');
 		//check if the content of the text field has changed
-		if(Glee.searchText != value)
+		if(Glee.lastQuery != value)
 		{
 			e.preventDefault();
+
+			if(value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
+				Glee.isDOMSearchRequired = false;
+			else
+				Glee.isDOMSearchRequired = true;
+
 			if(value != "")
 			{
 				Glee.toggleActivity(1);
-
 				if(value[0] != "?"
 					&& value[0] != "!"
 					&& value[0] != ":"
@@ -127,13 +132,21 @@ jQuery(document).ready(function(){
 					Glee.resetTimer();
 
 					// start the timer
-					Glee.timer = setTimeout(function(){
-						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);
+					if(Glee.isDOMSearchRequired)
+					{
+						Glee.timer = setTimeout(function(){
+							LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+							Glee.selectedElement = LinkReaper.getFirst();
+							Glee.setSubText(Glee.selectedElement,"el");
+							Glee.scrollToElement(Glee.selectedElement);
+							Glee.toggleActivity(0);
+						},300);
+					}
+					else
+					{
+						Glee.setSubText(null,"el");
 						Glee.toggleActivity(0);
-					},300);
+					}
 				}
 				//else command mode
 				else {
@@ -201,9 +214,8 @@ jQuery(document).ready(function(){
 					}
 				}
 			}
-			else
+			else //when searchField is empty
 			{
-				//when searchField is empty
 				Glee.resetTimer();
 				LinkReaper.unreapAllLinks();
 				Glee.setSubText(null);
@@ -213,8 +225,7 @@ jQuery(document).ready(function(){
 				if(Glee.espStatus)
 					Glee.fireEsp();
 			}
-			Glee.searchText = value;
-			Glee.lastQuery = null;
+			Glee.lastQuery = value;
 		}
 		//if ENTER is pressed
 		else if(e.keyCode == 13)
@@ -364,14 +375,15 @@ jQuery(document).ready(function(){
 
 
 var Glee = {
-	searchText:"",
 	nullStateMessage:"Nothing selected",
 	//State of scrolling. 0=None, 1=Up, -1=Down.
 	scrollState: 0,
 	hyperMode: false,
 	inspectMode: false,
-	//last query executed in jQuery mode
+	// last query executed in gleeBox
 	lastQuery:null,
+	isSearching:false,
+	isDOMSearchRequired:true,
 	commandMode: false,
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1,
@@ -870,9 +882,16 @@ var Glee = {
 	},
 	toggleActivity: function(toggle){
 		if(toggle == 1)
+		{
+			Glee.isSearching = true;
 			jQuery("#gleeSubActivity").html("searching");
+		}
+			
 		else
+		{
+			Glee.isSearching = false;
 			jQuery("#gleeSubActivity").html("");
+		}
 	},
 	getBackInitialState: function(){
 		Glee.Cache.jBody.stop(true);
