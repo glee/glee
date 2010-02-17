@@ -1,7 +1,7 @@
 #gleeTabBox{
 	line-height:20px;
 	left:25%;
-	margin-top:5px;
+	margin-top:2px;
 	top:15%;
 	overflow:auto;
 	position:fixed;
@@ -38,7 +38,7 @@
 
 a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
 	margin:0px !important;
-	border-radius:2px !important;
+/*	border-radius:2px !important;*/
 	padding:5px !important;
 	color:inherit !important;
 	text-decoration:none !important;

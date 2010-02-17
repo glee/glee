@@ -162,7 +162,7 @@ Glee.Tabs = {
 	remove: function(){
 		var tabIndex = this.getSelectedTabIndex();
 		var tabId = this.tabs[tabIndex].id;
-		jQuery(Glee.Tabs.selected).animate({height:"0px",opacity:0}, 100, function(){
+		jQuery(Glee.Tabs.selected).animate({opacity:"0", height:"0"}, 100, function(){
 			jQuery(Glee.Tabs.selected).remove();
 			Glee.Tabs.currentIndex -= 1;
 			Glee.Tabs.getNext();
@@ -178,7 +178,7 @@ Glee.Tabs = {
 	},
 	
 	closeBox: function(returnFocus, callback){
-		this.box.animate({marginTop:"5px" , opacity:0}, 125, function(){
+		this.box.animate({marginTop:"2px" , opacity:0}, 125, function(){
 			Glee.Tabs.box.html('');
 			Glee.Tabs.tabs = null;
 			Glee.Tabs.tabList = null;
