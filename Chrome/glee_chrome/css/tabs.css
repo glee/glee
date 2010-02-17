@@ -38,7 +38,7 @@
 	font-family:inherit !important;
 }
 
-div#gleeTabList a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
+#gleeTabBox a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
 	margin:0px !important;
 	padding:5px;
 	border-radius:2px !important;
@@ -53,28 +53,28 @@ div#gleeTabList a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:
 	cursor:normal !important;
 }
 
-a.gleeTabHover.gleeTabListItem{
+#gleeTabBox a.gleeTabHover.gleeTabListItem{
 	background-color: #ededed !important;
 	color: #454545 !important;
 	outline:none !important;
 }
 
-div.GleeThemeRuby a.gleeTabHover.gleeTabListItem{
+#gleeTabBox.GleeThemeRuby a.gleeTabHover.gleeTabListItem{
 	background-color: #e8c1cd !important;
 	color: #580d2b !important;
 }
 
-div.GleeThemeWhite a.gleeTabHover.gleeTabListItem{
+#gleeTabBox.GleeThemeWhite a.gleeTabHover.gleeTabListItem{
 	background-color: #c5c9d1 !important;
 	color: #1b1b1b !important;
 }
 
-div.GleeThemeGreener a.gleeTabHover.gleeTabListItem{
+#gleeTabBox.GleeThemeGreener a.gleeTabHover.gleeTabListItem{
 	background-color: #4ad051 !important;
 	color: #093b21 !important;
 }
 
-div.GleeThemeConsole a.gleeTabHover.gleeTabListItem{
+#gleeTabBox.GleeThemeConsole a.gleeTabHover.gleeTabListItem{
 	background-color:#005f81 !important;
 	color: #ffffff !important;
 }

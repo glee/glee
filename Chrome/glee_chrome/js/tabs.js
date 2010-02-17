@@ -178,7 +178,7 @@ Glee.Tabs = {
 	},
 	
 	closeBox: function(returnFocus, callback){
-		this.box.fadeOut(200 ,function(){
+		this.box.fadeOut(150 ,function(){
 			Glee.Tabs.box.html('');
 			Glee.Tabs.tabs = null;
 			Glee.Tabs.tabList = null;

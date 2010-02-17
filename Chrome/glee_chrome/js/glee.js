@@ -919,7 +919,7 @@ var Glee = {
 			Glee.Tabs.createList();
 			Glee.Tabs.initKeyBindings();
 
-			Glee.Tabs.box.fadeIn(200, function(){
+			Glee.Tabs.box.fadeIn(150, function(){
 				setTimeout(function(){
 					Glee.Tabs.currentIndex = -1;
 					Glee.Tabs.selectSearchField();
