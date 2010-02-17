@@ -178,7 +178,7 @@ Glee.Tabs = {
 	},
 	
 	closeBox: function(returnFocus, callback){
-		this.box.animate({marginTop:"2px" , opacity:0}, 125, function(){
+		this.box.animate({opacity:0}, 125, function(){
 			Glee.Tabs.box.html('');
 			Glee.Tabs.tabs = null;
 			Glee.Tabs.tabList = null;

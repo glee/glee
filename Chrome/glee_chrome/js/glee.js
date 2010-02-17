@@ -820,23 +820,23 @@ var Glee = {
 	scrollToElement: function(el){
 		var target = jQuery(el);
 		var scroll = false;
-		var targetOffsetTop = target.offset().top;
-		if((targetOffsetTop - window.pageYOffset > Glee.getOffsetFromTop()) ||
-			(window.innerHeight + window.pageYOffset < targetOffsetTop) || 
-			(window.pageYOffset > targetOffsetTop))
+		if(target.length != 0)
 		{
-			scroll = true;
-		}
-		//TODO: Set scroll to true if the element is overlapping with gleeBox
-		
-		if(typeof(el) != "undefined" && el && scroll)
-		{
-			if(target.length != 0)
+			var targetOffsetTop = target.offset().top;
+			if((targetOffsetTop - window.pageYOffset > Glee.getOffsetFromTop()) ||
+				(window.innerHeight + window.pageYOffset < targetOffsetTop) || 
+				(window.pageYOffset > targetOffsetTop))
+			{
+				scroll = true;
+			}
+			//TODO: Set scroll to true if the element is overlapping with gleeBox
+
+			if(scroll)
 			{
 				// We keep the scroll such that the element stays a little away from
 				// the top.
 				var targetOffset = targetOffsetTop - Glee.getOffsetFromTop();
-				
+
 				//stop any previous scrolling to prevent queueing
 				Glee.Cache.jBody.stop(true);
 				Glee.Cache.jBody.animate(
@@ -847,7 +847,7 @@ var Glee = {
 					Glee.updateUserPosition);
 				return false;
 			}
-		}
+		} 
 	},
 	getOffsetFromTop: function(){
 		if(Glee.position == "top")
@@ -919,7 +919,7 @@ var Glee = {
 			Glee.Tabs.createList();
 			Glee.Tabs.initKeyBindings();
 
-			Glee.Tabs.box.animate({marginTop:"-2px" , opacity:0.85}, 150, function(){
+			Glee.Tabs.box.animate({opacity:0.85}, 150, function(){
 				setTimeout(function(){
 					Glee.Tabs.currentIndex = -1;
 					Glee.Tabs.selectSearchField();

@@ -9,7 +9,7 @@
 	z-index:100000;
 	opacity:0.85;
 	height:400px;
-	font-size:16px;
+	font-size:15px;
 	border-radius:7px;
 }
 
@@ -38,7 +38,7 @@
 
 a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
 	margin:0px !important;
-/*	border-radius:2px !important;*/
+	border-radius:2px !important;
 	padding:5px !important;
 	color:inherit !important;
 	text-decoration:none !important;
