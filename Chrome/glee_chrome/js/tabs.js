@@ -162,7 +162,7 @@ Glee.Tabs = {
 	remove: function(){
 		var tabIndex = this.getSelectedTabIndex();
 		var tabId = this.tabs[tabIndex].id;
-		jQuery(Glee.Tabs.selected).animate({opacity:"0", height:"0"}, 100, function(){
+		jQuery(Glee.Tabs.selected).animate({height:"0", paddingTop:0, paddingBottom:0}, 200, function(){
 			jQuery(Glee.Tabs.selected).remove();
 			Glee.Tabs.currentIndex -= 1;
 			Glee.Tabs.getNext();

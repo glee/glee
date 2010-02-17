@@ -38,9 +38,9 @@
 	font-family:inherit !important;
 }
 
-a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
+div#gleeTabList a.gleeTabListItem, a.gleeTabListItem:visited, a.gleeTabListItem:active, a.gleeTabListItem:hover{
 	margin:0px !important;
-	padding:5px !important;
+	padding:5px;
 	border-radius:2px !important;
 	color:inherit !important;
 	text-decoration:none !important;
