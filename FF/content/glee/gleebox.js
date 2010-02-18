@@ -118,6 +118,12 @@ jQuery(document).ready(function(){
 		if(Glee.lastQuery != value)
 		{
 			e.preventDefault();
+			
+			if(value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
+				Glee.isDOMSearchRequired = false;
+			else
+				Glee.isDOMSearchRequired = true;
+			
 			if(value != "")
 			{
 				Glee.toggleActivity(1);
@@ -135,13 +141,21 @@ jQuery(document).ready(function(){
 					Glee.resetTimer();
 
 					// start the timer
-					Glee.timer = setTimeout(function(){
-						LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
-						Glee.selectedElement = LinkReaper.getFirst();
-						Glee.setSubText(Glee.selectedElement,"el");
-						Glee.scrollToElement(Glee.selectedElement);
+					if(Glee.isDOMSearchRequired)
+					{
+						Glee.timer = setTimeout(function(){
+							LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+							Glee.selectedElement = LinkReaper.getFirst();
+							Glee.setSubText(Glee.selectedElement,"el");
+							Glee.scrollToElement(Glee.selectedElement);
+							Glee.toggleActivity(0);
+						},350);
+					}
+					else
+					{
+						Glee.setSubText(null,"el");
 						Glee.toggleActivity(0);
-					},350);
+					}
 				}
 				//else command mode
 				else {
@@ -886,15 +900,25 @@ var Glee = {
 	},
 	//end of ESP
 	scrollToElement: function(el){
-		var target;
-		if(typeof(el) != "undefined" && el)
+		var target = jQuery(el);
+		var scroll = false;
+		if(target.length != 0)
 		{
-			target = jQuery(el);
-			if(target.length != 0)
+			var targetOffsetTop = target.offset().top;
+			if((targetOffsetTop - window.pageYOffset > Glee.getOffsetFromTop()) ||
+				(window.innerHeight + window.pageYOffset < targetOffsetTop) || 
+				(window.pageYOffset > targetOffsetTop))
+			{
+				scroll = true;
+			}
+			//TODO: Set scroll to true if the element is overlapping with gleeBox
+
+			if(scroll)
 			{
 				// We keep the scroll such that the element stays a little away from
 				// the top.
-				var targetOffset = target.offset().top - Glee.getOffsetFromTop();
+				var targetOffset = targetOffsetTop - Glee.getOffsetFromTop();
+
 				//stop any previous scrolling to prevent queueing
 				Glee.Cache.jBody.stop(true);
 				Glee.Cache.jBody.animate(
@@ -928,9 +952,15 @@ var Glee = {
 	},
 	toggleActivity: function(toggle){
 		if(toggle == 1)
+		{
+			Glee.isSearching = true;
 			jQuery("#gleeSubActivity").html("searching");
+		}
 		else
+		{
+			Glee.isSearching = false;
 			jQuery("#gleeSubActivity").html("");
+		}
 	},
 	getBackInitialState: function(){
 		Glee.Cache.jBody.stop(true);

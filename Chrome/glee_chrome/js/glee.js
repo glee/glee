@@ -889,7 +889,6 @@ var Glee = {
 			Glee.isSearching = true;
 			jQuery("#gleeSubActivity").html("searching");
 		}
-			
 		else
 		{
 			Glee.isSearching = false;
