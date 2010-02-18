@@ -231,7 +231,7 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 13)
 		{
 			e.preventDefault();
-			if(value[0] == "*" && value != Glee.lastQuery)
+			if(value[0] == "*" && value != Glee.lastjQuery)
 			{
 				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
 					jQuery(Glee.selectedElement).removeClass('GleeHL');
@@ -239,7 +239,7 @@ jQuery(document).ready(function(){
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
-				Glee.lastQuery = value;
+				Glee.lastjQuery = value;
 			}
 			else if(value[0] == "!" && value.length > 1)
 			{
@@ -382,6 +382,8 @@ var Glee = {
 	inspectMode: false,
 	// last query executed in gleeBox
 	lastQuery:null,
+	// last query executed in jQuery mode
+	lastjQuery:null,
 	isSearching:false,
 	isDOMSearchRequired:true,
 	commandMode: false,
