@@ -240,10 +240,10 @@ jQuery(document).ready(function(){
 				else
 				{
 					url = Glee.URL.url;
-					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
 					location.href = url;
+					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
 					setTimeout(function(){
-						Glee.closeBox();
+						Glee.closeBoxWithoutBlur();
 					},0);
 				}
 			}
@@ -290,9 +290,10 @@ jQuery(document).ready(function(){
 					else
 					{
 						url = Glee.URL;
-						Glee.closeBoxWithoutBlur();
-						window.location = url;
-						Glee.searchField.blur();
+ 						location.href = url;
+						setTimeout(function(){
+							Glee.closeBoxWithoutBlur();
+						}, 0);
 					}
 				}
 				else //if it is an input element or text field, set focus to it, else bring back focus to document
