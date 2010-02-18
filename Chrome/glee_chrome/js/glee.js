@@ -226,6 +226,7 @@ jQuery(document).ready(function(){
 					Glee.fireEsp();
 			}
 			Glee.lastQuery = value;
+			Glee.lastjQuery = null;
 		}
 		//if ENTER is pressed
 		else if(e.keyCode == 13)
@@ -588,7 +589,7 @@ var Glee = {
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
 		});
-		this.searchText = "";
+		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
 	},
@@ -598,7 +599,7 @@ var Glee = {
 			Glee.setSubText(null);
 		});
 		LinkReaper.unreapAllLinks();
-		this.searchText = "";
+		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
 	},
