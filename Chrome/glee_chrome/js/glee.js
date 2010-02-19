@@ -342,6 +342,13 @@ jQuery(document).ready(function(){
 								Glee.Utils.simulateClick(Glee.selectedElement,false);
 							},0);
 						}
+						else if(el.tagName == "BUTTON")
+						{
+							setTimeout(function(){
+								Glee.Utils.simulateClick(Glee.selectedElement,false);
+								Glee.searchField.blur();
+							},0);
+						}
 						else if(el.tagName == "INPUT" || el.tagName == "TEXTAREA")
 						{
 							setTimeout(function(){
