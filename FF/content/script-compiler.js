@@ -61,16 +61,16 @@ contentLoad: function(e) {
 		var firefox = gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/glee/firefox.js'
 		);
-		var script=gleebox_gmCompiler.getUrlContents(
+		var script = gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/glee/gleebox.js'
 		);
-		var pageCmds=gleebox_gmCompiler.getUrlContents(
+		var pageCmds = gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/glee/page-cmds.js'
 		);
-		var linkreaper=gleebox_gmCompiler.getUrlContents(
+		var linkreaper = gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/glee/linkreaper.js'
 		);
-		var utils=gleebox_gmCompiler.getUrlContents(
+		var utils = gleebox_gmCompiler.getUrlContents(
 			'chrome://gleebox/content/glee/utils.js'
 		);
 		gleebox_gmCompiler.injectScript(jquery+script+linkreaper+pageCmds+utils+firefox, href, unsafeWin);

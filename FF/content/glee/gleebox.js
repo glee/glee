@@ -144,7 +144,7 @@ jQuery(document).ready(function(){
 					if(Glee.isDOMSearchRequired)
 					{
 						Glee.timer = setTimeout(function(){
-							LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+							LinkReaper.reapLinks(Glee.searchField.attr('value'));
 							Glee.selectedElement = LinkReaper.getFirst();
 							Glee.setSubText(Glee.selectedElement,"el");
 							Glee.scrollToElement(Glee.selectedElement);
@@ -378,7 +378,7 @@ var Glee = {
 	lastjQuery:null,
 	isSearching:false,
 	isDOMSearchRequired:true,
-	commandMode: false,
+	commandMode:false,
 	//used to enable/disable gleeBox
 	status:true,
 	//used to enable/disabled ESP (default scrapers)
