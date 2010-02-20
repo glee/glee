@@ -936,7 +936,12 @@ var Glee = {
 	manageTabs: function(){
 		var onGetTabs = function(response){
 			Glee.closeBoxWithoutBlur();
-			Glee.ListManager.openBox(response.tabs);
+			Glee.ListManager.openBox(response.tabs, function(action, item){
+				if(action == "open")
+					Glee.Chrome.moveToTab(item);
+				else if(action == "remove")
+					Glee.Chrome.removeTab(item);
+			});
 		};
 		Glee.setSubText("Displays a vertical list of currently open tabs.", "msg");
 		Glee.Chrome.getTabs(onGetTabs);

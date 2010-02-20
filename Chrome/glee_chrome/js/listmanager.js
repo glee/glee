@@ -6,8 +6,11 @@ Glee.ListManager = {
 	searchField:null,
 	selected:null,
 	currentIndex:null,
+	//method to be called once an action is executed on any item
+	callback:null,
 	
-	openBox: function(data){
+	openBox: function(data, callback){
+		this.callback = callback;
 		this.items = data;
 		if(!this.box)
 			this.createBox();
@@ -200,13 +203,13 @@ Glee.ListManager = {
 			Glee.ListManager.currentIndex -= 1;
 			Glee.ListManager.getNextItem();
 		});
-		Glee.Chrome.removeTab(item, function(){} );
+		this.callback("remove", item);
 	},
 	
 	openItem:function(){
 		var item = this.items[Glee.ListManager.getSelectedItemIndex()];
 		this.closeBox(true, function(){
-			Glee.Chrome.moveToTab(item);
+			Glee.ListManager.callback("open", item);
 		});
 	}
 }
