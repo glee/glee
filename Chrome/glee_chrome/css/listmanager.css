@@ -1,0 +1,168 @@
+#gleeListManager{
+	line-height:20px;
+	left:25%;
+	display:none;
+	margin:0;
+	padding:2px !important;
+	top:15%;
+	overflow:auto;
+	position:fixed;
+	width:50%;
+	z-index:100000;
+	opacity:0.85;
+	height:400px;
+	font-size:15px;
+	border-radius:7px !important;
+}
+
+#gleeListSearchField{
+	line-height:20px !important;
+	margin:0 !important;
+	padding:5px !important;
+	border:none !important;
+	color:inherit !important;
+	outline:none !important;
+	font-size:inherit !important;
+	font-family:inherit !important;
+	background-color:inherit !important;
+	width:97% !important;
+}
+
+#gleeList{
+	padding:0 !important;
+	width:auto !important;
+	margin:0 !important;
+	font-size:inherit !important;
+	color:inherit !important;
+	text-align:left !important;
+	font-family:inherit !important;
+}
+
+#gleeListManager a.gleeListItem, a.gleeListItem:visited, a.gleeListItem:active, a.gleeListItem:hover{
+	margin:0px !important;
+	padding:5px;
+	border-radius:2px !important;
+	color:inherit !important;
+	text-decoration:none !important;
+	font-family:inherit !important;
+	font-size:inherit !important;
+	float:left !important;
+	outline: none !important;
+	width:98% !important;
+	font-weight:inherit !important;
+	cursor:normal !important;
+}
+
+#gleeListManager a.gleeListItemHover.gleeListItem{
+	background-color: #ededed !important;
+	color: #454545 !important;
+	outline:none !important;
+}
+
+#gleeListManager.GleeThemeRuby a.gleeListItemHover.gleeListItem{
+	background-color: #e8c1cd !important;
+	color: #580d2b !important;
+}
+
+#gleeListManager.GleeThemeWhite a.gleeListItemHover.gleeListItem{
+	background-color: #c5c9d1 !important;
+	color: #1b1b1b !important;
+}
+
+#gleeListManager.GleeThemeGreener a.gleeListItemHover.gleeListItem{
+	background-color: #4ad051 !important;
+	color: #093b21 !important;
+}
+
+#gleeListManager.GleeThemeConsole a.gleeListItemHover.gleeListItem{
+	background-color:#005f81 !important;
+	color: #ffffff !important;
+}
+
+/* Styled scrollbars ;) */
+#gleeListManager::-webkit-scrollbar {
+	width: 13px;
+	height: 13px;
+}
+
+#gleeListManager::-webkit-scrollbar-button:start:decrement,
+#gleeListManager::-webkit-scrollbar-button:end:increment{
+	display:none;
+}
+
+#gleeListManager::-webkit-scrollbar-button:start:increment,
+#gleeListManager::-webkit-scrollbar-button:end:decrement {
+    display: none;
+}
+
+#gleeListManager::-webkit-scrollbar-button:vertical{
+}
+
+#gleeListManager::-webkit-scrollbar-button:start:decrement {
+}
+
+#gleeListManager::-webkit-scrollbar-button:end:increment {
+}
+
+#gleeListManager::-webkit-scrollbar-track-piece {
+	border-radius:7px;
+	background-color: #ededed;
+}
+
+#gleeListManager::-webkit-scrollbar-thumb:vertical {
+    height: 100px;
+	border-radius:7px;
+	background-color: #454545;
+}
+#gleeListManager::-webkit-scrollbar-corner:vertical, #gleeListManager::-webkit-scrollbar-resizer:vertical {
+    background-color: #ededed;
+}
+
+/* theme specific styling for scrollbar in list manager*/
+
+/* Greener */
+#gleeListManager.GleeThemeGreener::-webkit-scrollbar-track-piece {
+    background-color: #4ad051;
+}
+#gleeListManager.GleeThemeGreener::-webkit-scrollbar-thumb:vertical {
+    background-color: #093b21;
+}
+#gleeListManager.GleeThemeGreener::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeGreener::-webkit-scrollbar-resizer:vertical {
+    background-color: #4ad051;
+}
+
+/* Ruby */
+#gleeListManager.GleeThemeRuby::-webkit-scrollbar-track-piece {
+	background-color: #e8c1cd;
+}
+#gleeListManager.GleeThemeRuby::-webkit-scrollbar-thumb:vertical {
+    background-color: #580d2b;
+}
+#gleeListManager.GleeThemeRuby::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeRuby::-webkit-scrollbar-resizer:vertical {
+    background-color: #e8c1cd;
+}
+
+/* White */
+#gleeListManager.GleeThemeWhite::-webkit-scrollbar-track-piece {
+	background-color: #c5c9d1;
+}
+#gleeListManager.GleeThemeWhite::-webkit-scrollbar-thumb:vertical {
+    background-color: #1b1b1b;
+}
+#gleeListManager.GleeThemeWhite::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeWhite::-webkit-scrollbar-resizer:vertical {
+    background-color: #c5c9d1;
+}
+
+/* Console */
+#gleeListManager.GleeThemeConsole::-webkit-scrollbar-track-piece {
+	background-color: #005f81;
+	border:1px solid #333;
+}
+#gleeListManager.GleeThemeConsole::-webkit-scrollbar-thumb:vertical {
+    background-color: #ffffff;
+	border:1px solid #111;
+}
+#gleeListManager.GleeThemeConsole::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeConsole::-webkit-scrollbar-resizer:vertical {
+    background-color: #005f81;
+}
+/* end of theme-specific style for scrollbar */

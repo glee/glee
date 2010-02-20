@@ -14,50 +14,6 @@
 	color: #1c3249 !important;
 }
 
-/* Themes */
-/* Setting the color and font is mandatory */
-.GleeThemeDefault{ 
-	background-color:#333 !important;
-	color:#fff !important;
-	font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important;
-}
-
-.GleeThemeWhite{ 
-	background-color:#fff !important;
-	color:#000 !important;
-	opacity: 0.85 !important;
-	border: 1px solid #939393 !important;
-	border-radius: 10px !important;
-	font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important;
-}
-
-.GleeThemeRuby{
-	background-color: #530000 !important;
-	color: #f6b0ab !important;
-	font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important;
-}
-
-.GleeThemeGreener{
-	background-color: #2e5c4f !important;
-	color: #d3ff5a !important;
-	font-family: Georgia, "Times New Roman", Times, serif !important;
-}
-
-.GleeThemeConsole{
-	font-family: Monaco, Consolas, "Courier New", Courier, mono !important;
-	color: #eafef6 !important;
-	background-color: #111 !important;
-}
-
-.GleeThemeGlee{ 
-	background-color: #eb1257 !important;
-	color: #fff300 !important;
-	-webkit-box-shadow: #eb1257 0px 0px 8px !important;
-	-moz-box-shadow: #eb1257 0px 0px 8px !important;
-	opacity: 0.8 !important;
-	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important;
-}
-
 #gleeBox{ 
 	line-height:20px;
 	height:auto !important;

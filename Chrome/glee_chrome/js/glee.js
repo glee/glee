@@ -553,8 +553,8 @@ var Glee = {
 		// Setup the theme
 		Glee.searchBox.addClass(Glee.ThemeOption);
 		Glee.searchField.addClass(Glee.ThemeOption);
-		if(Glee.Tabs.box)
-			Glee.Tabs.box.addClass(Glee.ThemeOption);
+		if(Glee.ListManager.box)
+			Glee.ListManager.box.addClass(Glee.ThemeOption);
 		//setting gleeBox position
 		if(Glee.position == "top")
 			topSpace = 0;
@@ -935,24 +935,8 @@ var Glee = {
 	},
 	manageTabs: function(){
 		var onGetTabs = function(response){
-			Glee.Tabs.tabs = response.tabs;
 			Glee.closeBoxWithoutBlur();
-
-			if(!Glee.Tabs.box)
-				Glee.Tabs.createBox();
-			else
-				Glee.Tabs.box.html('');
-
-			Glee.Tabs.createSearchField();
-			Glee.Tabs.createList();
-			Glee.Tabs.initKeyBindings();
-
-			Glee.Tabs.box.fadeIn(150, function(){
-				setTimeout(function(){
-					Glee.Tabs.currentIndex = -1;
-					Glee.Tabs.selectSearchField();
-				},0);
-			});
+			Glee.ListManager.openBox(response.tabs);
 		};
 		Glee.setSubText("Displays a vertical list of currently open tabs.", "msg");
 		Glee.Chrome.getTabs(onGetTabs);
