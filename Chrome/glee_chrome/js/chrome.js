@@ -104,9 +104,9 @@ Glee.Chrome.applyOptions = function(response){
 		{
 			Glee.searchBox.removeClass(Glee.ThemeOption);
 			Glee.searchField.removeClass(Glee.ThemeOption);
-			if(Glee.Tabs.box)
+			if(Glee.ListManager.box)
 			{
-				Glee.Tabs.box.removeClass(Glee.ThemeOption);
+				Glee.ListManager.box.removeClass(Glee.ThemeOption);
 			}
 		}
 		Glee.ThemeOption = prefs.theme;

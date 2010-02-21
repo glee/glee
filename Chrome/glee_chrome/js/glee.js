@@ -57,6 +57,7 @@ jQuery(document).ready(function(){
 				else if(e.keyCode == 191 && Glee.tabShortcutStatus)
 				{
 					e.preventDefault();
+					Glee.userPosBeforeGlee = window.pageYOffset;
 					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
 						Glee.userFocusBeforeGlee = target;
 					else
