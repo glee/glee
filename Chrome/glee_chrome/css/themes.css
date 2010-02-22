@@ -9,10 +9,13 @@
 .GleeThemeWhite{ 
 	background-color:#fff !important;
 	color:#000 !important;
-	opacity: 0.85 !important;
 	border: 1px solid #939393 !important;
 	border-radius: 10px !important;
 	font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important;
+}
+
+#gleeBox.GleeThemeWhite{
+	opacity:0.75;
 }
 
 .GleeThemeRuby{
