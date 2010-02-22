@@ -37,14 +37,14 @@ Glee.sendTweet = function(){
 			var shortenedURL = json[0].results[location.href].shortUrl;
 			var encodedURL = encodeURIComponent(shortenedURL);
 			//redirect to twitter homepage
-			location.href = "http://twitter.com/?status="+encodedURL;
+			location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
 		});
 	}
 	else
 	{
 		//redirect to twitter without shortening the URL
 		var encodedURL = encodeURIComponent(location.href);
-		location.href =  "http://twitter.com/?status="+encodedURL;
+		location.href =  "http://twitter.com/?status="+document.title+" "+encodedURL;
 	}
 }
 
