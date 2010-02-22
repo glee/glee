@@ -79,7 +79,9 @@ jQuery(document).ready(function(){
 		if(e.keyCode == 27)
 		{
 			e.preventDefault();
-			Glee.closeBox();
+			setTimeout(function(){
+				Glee.closeBox();
+			}, 0);
 		}
 		else if(e.keyCode == 9) //if TAB is pressed
 		{
@@ -108,7 +110,7 @@ jQuery(document).ready(function(){
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
 			// 38 is keyCode for UP Arrow key
-			Glee.simulateScroll((e.keyCode == 38 ? 1:-1));
+			Glee.Utils.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
 	});
 
@@ -342,14 +344,14 @@ jQuery(document).ready(function(){
 						else
 						{
 							setTimeout(function(){
-								Glee.searchField.blur();
+								Glee.searchField[0].blur();
 							},0);
 						}
 					}
 					else
 					{
 						setTimeout(function(){
-							Glee.searchField.blur();
+							Glee.searchField[0].blur();
 						},0);
 					}
 				}
@@ -650,8 +652,10 @@ var Glee = {
 		});
 	},
 	closeBox: function(){
+		setTimeout(function(){
+			Glee.getBackInitialState();
+		}, 0);
 		LinkReaper.unreapAllLinks();
-		this.getBackInitialState();
 		this.searchBox.fadeOut(150,function(){
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
@@ -722,8 +726,8 @@ var Glee = {
 				
 				if(jQueryVal[0].tagName != "A") //if the selected element is not a link
 				{
-					this.subText.html(this.Utils.filter(jQueryVal.text()));
 					var a_el = null;
+					this.subText.html(Glee.Utils.filter(jQueryVal.text()));
 					if(jQueryVal[0].tagName == "IMG") //if it is an image
 					{
 						a_el = jQuery(jQueryVal.parents('a'));
@@ -829,9 +833,9 @@ var Glee = {
 		}
 		else if(type == "search") // here val is the text query
 		{
-			this.subText.html(this.Utils.filter("Search for "+val));
+			this.subText.html(Glee.Utils.filter("Search for "+val));
 			this.URL = Glee.searchEngineUrl+val;
-			this.subURL.html(this.filter(this.URL));
+			this.subURL.html(Glee.Utils.filter(this.URL));
 		}
 		else if(type == "msg") // here val is the message to be displayed
 		{
@@ -964,17 +968,14 @@ var Glee = {
 	},
 	getBackInitialState: function(){
 		Glee.Cache.jBody.stop(true);
-		if(this.userPosBeforeGlee != window.pageYOffset)
-			Glee.Cache.jBody.animate({scrollTop:Glee.userPosBeforeGlee},Glee.scrollingSpeed);
-		if(this.userFocusBeforeGlee != null)
-			this.userFocusBeforeGlee.focus();
-		else
-		{
-			//wait till the thread is free
-			setTimeout(function(){
-				Glee.searchField.blur();
-			},0);
-		}
+		if(Glee.userPosBeforeGlee != window.pageYOffset)
+			Glee.Cache.jBody.animate({scrollTop:Glee.userPosBeforeGlee}, Glee.scrollingSpeed);
+		setTimeout(function(){
+			if(Glee.userFocusBeforeGlee != null)
+				Glee.userFocusBeforeGlee.focus();
+			else
+				Glee.searchField[0].blur();
+		}, 0);
 	},
 	resetTimer: function(){
 		if(typeof(this.timer) != "undefined")

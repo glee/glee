@@ -44,14 +44,14 @@ jQuery(document).ready(function(){
 						//reseting value of searchField
 						Glee.searchField.attr('value','');
 						Glee.searchBox.fadeIn(150);
-						Glee.searchField.focus();
+						Glee.searchField[0].focus();
 						if(Glee.espStatus)
 							Glee.fireEsp();
 					}
 					else
 					{
 						//If gleeBox is already visible, focus is returned to it
-						Glee.searchField.focus();
+						Glee.searchField[0].focus();
 					}
 				}
 				else if(e.keyCode == 191 && Glee.tabShortcutStatus)
@@ -136,7 +136,7 @@ jQuery(document).ready(function(){
 					if(Glee.isDOMSearchRequired)
 					{
 						Glee.timer = setTimeout(function(){
-							LinkReaper.reapLinks(jQuery(Glee.searchField).attr('value'));
+							LinkReaper.reapLinks(Glee.searchField.attr('value'));
 							Glee.selectedElement = LinkReaper.getFirst();
 							Glee.setSubText(Glee.selectedElement,"el");
 							Glee.scrollToElement(Glee.selectedElement);

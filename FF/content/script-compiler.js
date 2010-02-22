@@ -145,16 +145,17 @@ evalInSandbox: function(code, codebase, sandbox) {
 openOptions: function(){
 	var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"].getService(Components.interfaces["nsIExtensionManager"]);
     openDialog("chrome://gleebox/content/options.xul", "gleeBox Options",
-        "", "urn:mozilla:item:gleebox@ankit.ahuja.and.sameer.ahuja", extensionManager.datasource);	
+        "", "urn:mozilla:item:gleebox@ankit.ahuja.and.sameer.ahuja", extensionManager.datasource);
 },
 getBookmarks: function(searchQuery){
 	var bookmarks = Components.classes["@mozilla.org/browser/nav-bookmarks-service;1"]
-	                .getService(Ci.nsINavBookmarksService);
-	var history = Cc["@mozilla.org/browser/nav-history-service;1"]
-	              .getService(Ci.nsINavHistoryService);
+	                	.getService(Components.interfaces["nsINavBookmarksService"]);
+
+	var history = Components.classes["@mozilla.org/browser/nav-history-service;1"]
+	              .getService(Components.interfaces["nsINavHistoryService"]);
 
 	var query = history.getNewQuery();
-	
+
 	// Specify folders to be searched
 	var folders = [bookmarks.toolbarFolder, bookmarks.bookmarksMenuFolder,
 	               bookmarks.unfiledBookmarksFolder];
