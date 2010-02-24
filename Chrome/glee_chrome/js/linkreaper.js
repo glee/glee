@@ -126,7 +126,7 @@ var LinkReaper = {
 			this.unHighlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			this.traversePosition = 0;
 			this.highlight(jQuery(this.selectedLinks[0]));
-			return jQuery(this.selectedLinks[0]);	
+			return jQuery(this.selectedLinks[0]);
 		}
 		
 	},
@@ -153,9 +153,11 @@ var LinkReaper = {
 	},
 	
 	getFirst: function(){
+		if(this.selectedLinks.length == 0)
+			return null;
 		this.highlight(jQuery(this.selectedLinks[0]));
 		this.traversePosition = 0;
-		return this.selectedLinks[0];
+		return jQuery(this.selectedLinks[0]);
 	},
 	
 	highlight: function(el){

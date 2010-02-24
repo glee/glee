@@ -46,7 +46,6 @@ Glee.inspectPage = function(){
 	LinkReaper.reapLinks(query);
 	Glee.selectedElement = LinkReaper.getFirst();
 	Glee.scrollToElement(Glee.selectedElement);
-	Glee.selectedElement = jQuery(Glee.selectedElement);
 	if(LinkReaper.selectedLinks.length > 1)
 	{
 		Glee.setSubText("Tab through and select the element you want to inspect and press Enter", "msg");
@@ -108,7 +107,7 @@ Glee.sharePage = function(){
 		}
 	else
 		mailDesc = "  -  " + desc;
-	switch(site) 
+	switch(site)
 	{
 		case "g":
 		case "gmail":

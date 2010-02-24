@@ -235,8 +235,8 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			if(value[0] == "*" && value != Glee.lastjQuery)
 			{
-				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
-					jQuery(Glee.selectedElement).removeClass('GleeHL');
+				if(Glee.selectedElement)
+					Glee.selectedElement.removeClass('GleeHL');
 				LinkReaper.reapWhatever(value.substring(1));
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setSubText(Glee.selectedElement,"el");
@@ -274,17 +274,17 @@ jQuery(document).ready(function(){
 			else
 			{
 				var anythingOnClick = true;
-				if(Glee.selectedElement != null && typeof(Glee.selectedElement) != "undefined") //if the element exists
+				if(Glee.selectedElement) //if the element exists
 				{
 					//check to see if an anchor element is associated with the selected element
 					//currently only checking for headers and images
 					var a_el = null;
-					if (jQuery(Glee.selectedElement)[0].tagName == "A")
-						a_el = jQuery(Glee.selectedElement);
-					else if (jQuery(Glee.selectedElement)[0].tagName[0] == "H")
-						a_el = jQuery(Glee.selectedElement).find('a');
-					else if (jQuery(Glee.selectedElement)[0].tagName == "IMG")
-						a_el = jQuery(Glee.selectedElement).parents('a');
+					if (Glee.selectedElement[0].tagName == "A")
+						a_el = Glee.selectedElement;
+					else if (Glee.selectedElement[0].tagName[0] == "H")
+						a_el = Glee.selectedElement.find('a');
+					else if (Glee.selectedElement[0].tagName == "IMG")
+						a_el = Glee.selectedElement.parents('a');
 
 					if(a_el) //if an anchor element is associated with the selected element
 					{
@@ -332,11 +332,11 @@ jQuery(document).ready(function(){
 						window.location = url;
 					}
 				}
-				else //if it is an input element or text field, set focus to it, else bring back focus to document
+				else //if it is an input element/textarea/button, set focus/click it, else bring back focus to document
 				{
-					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
+					if(Glee.selectedElement)
 					{
-						var el = jQuery(Glee.selectedElement)[0];
+						var el = Glee.selectedElement[0];
 						if(el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
 						{
 							setTimeout(function(){
@@ -353,7 +353,7 @@ jQuery(document).ready(function(){
 						else if(el.tagName == "INPUT" || el.tagName == "TEXTAREA")
 						{
 							setTimeout(function(){
-								Glee.selectedElement.focus();
+								Glee.selectedElement[0].focus();
 							},0);
 						}
 						else
@@ -662,7 +662,7 @@ var Glee = {
 		this.URL = null;
 		if(type == "el") // here val is the element or maybe null if no element is found for a search
 		{
-			if(val && typeof val!= "undefined")
+			if(val && typeof val != "undefined")
 			{
 				jQueryVal = jQuery(val);
 				
