@@ -180,3 +180,37 @@ Glee.shortenURL = function(){
 		Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
 	});
 }
+
+/* v: Play/Pause YouTube videos */
+Glee.controlVideo = function(){
+	var yPlayer = document.getElementById("movie_player"); //for YouTube
+	var func = Glee.searchField.attr('value').substring(2).replace(" ","");
+	if(yPlayer)
+	{
+		setTimeout(function(){
+			Glee.scrollToElement(yPlayer);
+		}, 0);
+		var playerState = yPlayer.getPlayerState();
+		if(func == "") // default function is to toggle video state (play/pause)
+		{
+			if ( playerState == 1 || playerState == 3)
+				yPlayer.pauseVideo();
+			else if( playerState == 2 )
+				yPlayer.playVideo();
+			else if( playerState == 0 )
+			{
+				yPlayer.seekTo(0,0);
+				yPlayer.playVideo();
+			}
+		}
+		// else if(func == "-")
+		// {
+		// 	yPlayer.setVolume(yPlayer.getVolume() - 10);
+		// }
+		// else if(func == "+")
+		// {
+		// 	yPlayer.setVolume(yPlayer.getVolume() + 10);
+		// }
+	}
+	Glee.closeBox();
+}

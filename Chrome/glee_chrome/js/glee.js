@@ -191,11 +191,11 @@ jQuery(document).ready(function(){
 					}
 					else if(value[0] == "!" && value.length > 1) //Searching through page commands
 					{
-						trimVal = value.substr(1);
+						trimVal = value.split(" ")[0].substr(1);
 						Glee.URL = null;
 						for(var i=0; i<Glee.commands.length; i++)
 						{
-							if(trimVal.indexOf(Glee.commands[i].name) == 0)
+							if(trimVal == Glee.commands[i].name)
 							{
 								Glee.setSubText(Glee.commands[i].description,"msg");
 								Glee.URL = Glee.commands[i];
@@ -487,6 +487,11 @@ var Glee = {
 			name: "inspect",
 			method:"inspectPage",
 			description:"Inspect an element on the page. Enter text and press enter to search for elements and return their jQuery selector."
+		},
+		{
+			name: "v",
+			method:"controlVideo",
+			description:"Play/Pause video (currently only supports videos on YouTube)"
 		}
 	],
 	
