@@ -802,6 +802,7 @@ var Glee = {
 				//if it is a URL
 				if(this.Utils.isURL(text))
 				{
+					this.toggleActivity(0);
 					this.subText.html(this.Utils.filter("Go to "+text));
 					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if(!text.match(regex))
@@ -833,6 +834,7 @@ var Glee = {
 		}
 		else if(type == "search") // here val is the text query
 		{
+			this.toggleActivity(0);
 			this.subText.html(Glee.Utils.filter("Search for "+val));
 			this.URL = Glee.searchEngineUrl+val;
 			this.subURL.html(Glee.Utils.filter(this.URL));
