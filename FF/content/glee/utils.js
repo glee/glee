@@ -15,7 +15,11 @@ Glee.Utils = {
 			// already abs, return
 			return link;
 		}
-
+		if(link.indexOf("#") == 0) {
+			// link is an anchor link
+			var hparts = host.split('#');
+			return hparts[0] + link;
+		}
 		var i, hparts = host.split('/');
 		if (hparts.length > 3) {
 			hparts.pop(); // strip trailing thingie, either scriptname or blank 
