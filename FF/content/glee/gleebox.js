@@ -888,23 +888,29 @@ var Glee = {
 	fireEsp: function(){
 		var url = document.location.href;
 		var len = Glee.espModifiers.length;
+		var sel = [];
 		for(var i=0; i<len; i++)
 		{
 			if(url.indexOf(Glee.espModifiers[i].url) != -1)
-			{
-				var sel = Glee.espModifiers[i].selector;
-				//creating a new temporary scraper object
-				var tempScraper = {
-					nullMessage : "Could not find any elements on the page",
-					selector : sel,
-					cssStyle : "GleeReaped"
-				};
-				Glee.commandMode = true;
-				Glee.initScraper(tempScraper);
-				return true;
-			}
+				sel[sel.length] = Glee.espModifiers[i].selector;
 		}
-		return false;
+		var selStr;
+		if(sel.length != 0)
+			selStr = sel.join(",");
+		else //search for any default selector defined by current page
+			selStr = jQuery('meta[name="gleebox-default-selector"]').attr("content");
+		if(selStr)
+		{
+			//creating a new temporary scraper object
+			var tempScraper = {
+				nullMessage : "Could not find any elements on the page",
+				selector : selStr,
+				cssStyle : "GleeReaped"
+			};
+			Glee.commandMode = true;
+			Glee.initScraper(tempScraper);
+		}
+		return ;
 	},
 	//end of ESP
 	scrollToElement: function(el){
