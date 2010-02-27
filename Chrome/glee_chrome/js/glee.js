@@ -54,7 +54,7 @@ jQuery(document).ready(function(){
 						Glee.searchField[0].focus();
 					}
 				}
-				else if(e.keyCode == 190 && Glee.tabShortcutStatus) //launch tab manager on pressing .
+				else if(e.keyCode == 190 && !e.metaKey && !e.ctrlKey && Glee.tabShortcutStatus) //launch tab manager on pressing .
 				{
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
@@ -263,9 +263,8 @@ jQuery(document).ready(function(){
 				else
 				{
 					url = Glee.URL.url;
+					location.href = url;
 					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
-					//for some reason, setting location.href does not work properly for bookmarklets in Chrome
-					eval(unescape(url.substring(11))); //get rid of javascript:
 					setTimeout(function(){
 						Glee.closeBox();
 					},0);
