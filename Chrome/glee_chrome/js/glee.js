@@ -299,7 +299,6 @@ jQuery(document).ready(function(){
 							a_el.attr("target","_self");
 							//simulating a click on the link
 							anythingOnClick = Glee.Utils.simulateClick(a_el,target);
-					
 							//if opening the link on the same page, close the gleeBox
 							if(!target)
 							{
@@ -308,6 +307,9 @@ jQuery(document).ready(function(){
 								},0);
 								Glee.closeBoxWithoutBlur();
 							}
+							//if link is to be opened in a new tab & it isn't a scraper command, clear gleebox
+							else if(Glee.searchField.attr('value').indexOf("?") == -1)
+								Glee.searchField.attr('value','');
 							return false;
 						}
 					}
@@ -323,6 +325,9 @@ jQuery(document).ready(function(){
 					if(e.shiftKey)
 					{
 						Glee.Chrome.openNewTab(Glee.URL,false);
+						//if it is not a scraper command, clear gleebox
+						if(Glee.searchField.attr('value').indexOf("?") == -1)
+							Glee.searchField.attr('value','');
 						return false;
 					}
 					else

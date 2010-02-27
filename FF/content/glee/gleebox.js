@@ -306,13 +306,15 @@ jQuery(document).ready(function(){
 				if(Glee.URL)
 					Glee.URL = Glee.Utils.makeURLAbsolute(Glee.URL, location.href);
 					
-				//check that preventDefault() is not called and destURL exists
+				//check that preventDefault() is not called and Glee.URL exists
 				if(Glee.URL && anythingOnClick)
 				{
 					if(e.shiftKey)
 					{
-						//another method from the GM API
 						GM_openInTab(Glee.URL);
+						//if link is to be opened in a new tab & it isn't a scraper command, clear gleebox
+						if(Glee.searchField.attr('value').indexOf("?") == -1)
+							Glee.searchField.attr('value','');
 						return false;
 					}
 					else
