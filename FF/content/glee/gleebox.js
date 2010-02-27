@@ -285,11 +285,10 @@ jQuery(document).ready(function(){
 					var a_el = null;
 					if (jQuery(Glee.selectedElement)[0].tagName == "A")
 						a_el = jQuery(Glee.selectedElement);
-					else if (jQuery(Glee.selectedElement)[0].tagName[0] == "H")
-						a_el = jQuery(Glee.selectedElement).find('a');
 					else if (jQuery(Glee.selectedElement)[0].tagName == "IMG")
 						a_el = jQuery(Glee.selectedElement).parents('a');
-
+					else
+						a_el = jQuery(Glee.selectedElement).find('a');
 					if(a_el) //if an anchor element is associated with the selected element
 					{
 						if(a_el.length != 0)
