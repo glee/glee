@@ -54,7 +54,7 @@ jQuery(document).ready(function(){
 						Glee.searchField[0].focus();
 					}
 				}
-				else if(e.keyCode == 191 && Glee.tabShortcutStatus)
+				else if(e.keyCode == 190 && Glee.tabShortcutStatus) //launch tab manager on pressing .
 				{
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
@@ -123,7 +123,7 @@ jQuery(document).ready(function(){
 					&& value[0] != "!"
 					&& value[0] != ":"
 					&& value[0] != '*'
-					&& value[0] != '/')
+					&& value[0] != '.')
 				{
 					if(Glee.commandMode)
 						LinkReaper.unreapAllLinks();
@@ -184,7 +184,7 @@ jQuery(document).ready(function(){
 						Glee.nullMessage = "Nothing found for your selector.";
 						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
 					}
-					else if(value[0] == '/')
+					else if(value[0] == '.')
 					{
 						Glee.manageTabs();
 						return;
