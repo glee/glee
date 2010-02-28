@@ -8,7 +8,9 @@ function getDefaultPreferences(){
 		bookmark_search:0,
 		scroll_animation:1,
 		tab_shortcut_status:1,
-		esp_status:1
+		esp_status:1,
+		meta_key:"none",
+		shortcut_key:71
 	};
 	return prefs;
 }

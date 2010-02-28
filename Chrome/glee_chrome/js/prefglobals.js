@@ -10,6 +10,8 @@ var gleeboxPreferences = {
 	scroll_animation:1,
 	tab_shortcut_status:1,
 	esp_status:1,
+	meta_key:"none",
+	shortcut_key:71,
 	scrapers:[],
 	disabledUrls:["mail.google.com","wave.google.com","mail.yahoo.com"],
 	espModifiers:[{

@@ -16,29 +16,26 @@ function save_options(close_tab) {
 	if(document.getElementsByName("glee_search")[0].value 
 		&& document.getElementsByName("glee_search")[0].value != "")
 		{
-			search = document.getElementsByName("glee_search")[0].value;
+			prefs.search_engine = document.getElementsByName("glee_search")[0].value;
 		}
 	else
-		search = "http://www.google.com/search?q=";
-	prefs.search_engine = search;
+		prefs.search_engine = "http://www.google.com/search?q=";
 		
 	//saving the gleeBox position
 	if(document.getElementsByName("glee_pos")[0].checked) //top
-		pos = 0;
+		prefs.position = 0;
 	else if(document.getElementsByName("glee_pos")[1].checked) //middle
-		pos = 1;
+		prefs.position = 1;
 	else 	//bottom
-		pos = 2;
-	prefs.position = pos;
+		prefs.position = 2;
 	
 	//saving the gleeBox size
 	if(document.getElementsByName("glee_size")[0].checked) //small
-		size = 0;
+		prefs.size = 0;
 	else if(document.getElementsByName("glee_size")[2].checked) //large
-		size = 2;
+		prefs.size = 2;
 	else 	//medium
-		size = 1;
-	prefs.size = size;
+		prefs.size = 1;
 
 	//save theme
 	tRadios = document.getElementsByName("glee_theme");
@@ -47,7 +44,6 @@ function save_options(close_tab) {
 		if (tRadios[i].checked)
 		{
  			prefs.theme = tRadios[i].value;
-			theme = tRadios[i].value;
 			break;
 		}
 	}
@@ -60,27 +56,21 @@ function save_options(close_tab) {
 
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
-		bookmark_search = 1; //1 indicates enabled
+		prefs.bookmark_search = 1; //1 indicates enabled
 	else
-		bookmark_search = 0;
-
-	prefs.bookmark_search = bookmark_search;
+		prefs.bookmark_search = 0;
 	
 	//saving scrolling animation pref
 	if(document.getElementsByName("glee_scrolling_animation")[0].checked)
-		animation = 1; //enabled
+		prefs.scroll_animation = 1; //enabled
 	else
-		animation = 0;
-
-	prefs.scroll_animation = animation;
+		prefs.scroll_animation = 0;
 	
 	//saving tab manager shortcut status
 	if(document.getElementsByName("glee_tab_shortcut_status")[0].checked)
-		tab_shortcut_status = 1;
+		prefs.tab_shortcut_status = 1;
 	else
-		tab_shortcut_status = 0;
-		
-	prefs.tab_shortcut_status = tab_shortcut_status;
+		prefs.tab_shortcut_status = 0;
 
 	//saving the custom scraper commands
 	var scraperNames = document.getElementsByClassName("scraper-name");
@@ -95,10 +85,9 @@ function save_options(close_tab) {
 	
 	//saving the ESP Status
 	if(document.getElementsByName("glee_esp_status")[1].checked)
-		espStatus = 0; //disabled
+		prefs.esp_status = 0; //disabled
 	else
-		espStatus = 1;
- 	prefs.esp_status = espStatus;
+		prefs.esp_status = 1;
 
 	//saving the ESP Modifiers
 
@@ -111,6 +100,26 @@ function save_options(close_tab) {
 		var sel = espSels[i].innerText;
 		espModifiers[espModifiers.length] = { url:url, selector:sel };
 	}
+	
+	//saving shortcut key
+	
+	//first saving meta key preference
+	mRadios = document.getElementsByName("glee_meta_key");
+	for (var i=0; i < mRadios.length; i++)
+	{
+		if (mRadios[i].checked)
+		{
+ 			prefs.meta_key = mRadios[i].value;
+			break;
+		}
+	}
+	//saving shortcut key
+	var shortcutKey = document.getElementsByName("glee_shortcut_key")[0].value;
+	if(shortcutKey)
+		prefs.shortcut_key = shortcutKey;
+	else
+		prefs.shortcut_key = 71;
+
 	saveAllPrefs(prefs,scrapers,disabledUrls,espModifiers,function(){
 		prefs.scrapers = scrapers;
 		prefs.disabledUrls = disabledUrls;
@@ -265,6 +274,30 @@ function restore_options(prefs)
 		espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
 	}
 	makeItemsEditable();
+	KeyCombo.init(document.getElementsByName("glee_shortcut_key")[0]);
+	
+	//getting the shortcut key
+	var metaKey = prefs.meta_key;
+	var shortcut = prefs.shortcut_key;
+	if(shortcut)
+	{
+		var mRadios = document.getElementsByName("glee_meta_key");
+		for (var i=0; i < mRadios.length; i++)
+		{
+			if (metaKey == mRadios[i].value)
+			{
+				mRadios[i].checked = true;
+				break;
+			}
+		}
+		document.getElementsByName("glee_shortcut_key")[0].value = shortcut;
+	}
+	else
+	{
+		//default
+		document.getElementsByName("glee_meta_key")[0].checked = true;
+		document.getElementsByName("glee_shortcut_key")[0].value = 71;
+	}
 }
 
 function makeItemsEditable(){

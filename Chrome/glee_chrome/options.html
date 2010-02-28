@@ -3,9 +3,10 @@
 	<title>gleeBox Options</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="css/options.css" type="text/css" media="screen" title="no title" charset="utf-8">
-<script type="text/javascript" src="js/options.js"></script>
-<script type="text/javascript" src="js/db.js"></script>
-<script type="text/javascript" src="js/defaults.js"></script>
+	<script type="text/javascript" src="js/key-combo.js"></script>
+	<script type="text/javascript" src="js/options.js"></script>
+	<script type="text/javascript" src="js/db.js"></script>
+	<script type="text/javascript" src="js/defaults.js"></script>
 </head>
 <body onload="loadAllPrefs(restore_options);">
 <div id="wrap">
@@ -20,6 +21,17 @@
 				<li>chrome.google.com/extensions <span style="float:right;font-size:14px;color:gray">Disabled by Google</span></li>
 				<li id="addDomainLI"><form onsubmit="addItem('domain');return false;"><input id="add_domain" type="text" value="" size=50 />&nbsp;<input type="submit" value="Add" class="button"/></form></li>
 			</ul>
+		</li>
+		<li>
+			<label class="option-label">Shortcut to launch gleeBox<br/><span class="subtext">Type a letter in text field to display its key code. For text fields, use Alt+your shortcut.</span></label>
+			<div class="option-field">
+					 <input name="glee_meta_key" value="none" type="radio"> None&nbsp;
+				   <input name="glee_meta_key" value="shift" type="radio"> Shift&nbsp;&nbsp;
+					 <input name="glee_meta_key" value="ctrl" type="radio"> Ctrl&nbsp;&nbsp;
+					 +&nbsp;&nbsp;<input name="glee_shortcut_key" size="5" type="text" />
+					<br/>
+					<a href="#" onclick='javascript:document.getElementsByName("glee_shortcut_key")[0].value = "71";document.getElementsByName("glee_meta_key")[0].checked = true;'>Revert to default</a>
+			</div>
 		</li>
 		<li>
 			<label class="option-label">Search Engine</label>

@@ -149,6 +149,12 @@ Glee.Chrome.applyOptions = function(response){
 	if(prefs.espModifiers != undefined)
 		Glee.espModifiers = prefs.espModifiers;
 	
+	// Shortcut key
+	if(prefs.shortcut_key != undefined)
+		Glee.shortcutKey = prefs.shortcut_key;
+	if(prefs.meta_key != undefined)
+		Glee.metaKey = prefs.meta_key;
+	
 	//check if it is a disabled domain
 	if(prefs.status != undefined)
 	{
