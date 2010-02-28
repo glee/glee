@@ -158,7 +158,8 @@ jQuery(document).ready(function(){
 						Glee.bookmarks = []; //empty the bookmarks array
 					Glee.resetTimer();
 					Glee.toggleActivity(0);
-					if(value[0]=='?' && value.length > 1)
+					var foundScraper = false;
+					if(value[0] == '?' && value.length > 1)
 					{
 						trimVal = value.substr(1);
 						for(var i=0; i<Glee.scrapers.length; i++)
@@ -166,9 +167,12 @@ jQuery(document).ready(function(){
 							if(Glee.scrapers[i].command == trimVal)
 							{
 								Glee.initScraper(Glee.scrapers[i]);
+								foundScraper = true;
 								break;
 							}
 						}
+						if(!foundScraper)
+							Glee.setSubText(null);
 					}
 					else if(value[0] == ':') //Run a yubnub command
 					{

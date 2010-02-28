@@ -78,8 +78,8 @@ function save_options(close_tab) {
 	var len = scraperNames.length;
 	for(var i=0;i<len;i++)
 	{
-		var name = scraperNames[i].innerHTML;
-		var sel = scraperSels[i].innerHTML;
+		var name = scraperNames[i].innerText;
+		var sel = scraperSels[i].innerText;
 		scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
 	}
 	
