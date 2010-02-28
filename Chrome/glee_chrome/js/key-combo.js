@@ -2,18 +2,16 @@
 var KeyCombo = {
 	lastValue: "",
 	lastCode:0,
-	init: function(el, status){
-		// el.value = KeyCombo.mapKeyDownCode(status.innerText);
+	init: function(el, codeEl){
+		el.value = KeyCombo.mapKeyDownCode(codeEl.innerText);
 		el.addEventListener(
 			"keydown",
 			function(e){
 				KeyCombo.lastValue = el.value;
 				if(KeyCombo.filterKeyCode(e.keyCode))
 				{
-					e.preventDefault();
-					el.value = e.keyCode;
-					// el.value = "";
-					// status.innerText = e.keyCode;
+					codeEl.innerText = e.keyCode;
+					el.value = "";
 				}
 				if(e.keyCode == 27)
 					el.blur();
@@ -23,15 +21,17 @@ var KeyCombo = {
 			"focus",
 			function(e){
 				KeyCombo.lastValue = el.value;
-				// KeyCombo.lastCode = status.innerText;
+				KeyCombo.lastCode = codeEl.innerText;
 			},
 		false);
 		el.addEventListener(
 			"blur",
 			function(e){
 				if(el.value == "")
+				{
 					el.value = KeyCombo.oldValue;
-					// status.innerText = KeyCombo.lastCode;
+					codeEl.innerText = KeyCombo.lastCode;
+				}
 			},
 		false);
 	},
@@ -44,7 +44,25 @@ var KeyCombo = {
 			return false;
 		return true;
 	},
-	mapKeyDownCode: function(){
-		return "a";
+	mapKeyDownCode: function(code){
+		if((code >= 65 && code <= 90) || (code >= 48 && code <= 57))
+		{
+			return String.fromCharCode(code).toLowerCase();
+		}
+		switch(code)
+		{
+			case "186": return ";";
+			case "187": return "=";
+			case "188": return ",";
+			case "189": return "-";
+			case "190": return ".";
+			case "191": return "/";
+			case "192": return "`";
+			case "219": return "[";
+			case "220": return "\\";
+			case "221": return "]";
+			case "222": return "'";
+		}
+		return String.fromCharCode(code).toLowerCase();
 	}
 }

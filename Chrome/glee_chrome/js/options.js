@@ -114,7 +114,7 @@ function save_options(close_tab) {
 		}
 	}
 	//saving shortcut key
-	var shortcutKey = document.getElementsByName("glee_shortcut_key")[0].value;
+	var shortcutKey = document.getElementsByName("glee_shortcut_key")[0].innerText;
 	if(shortcutKey)
 		prefs.shortcut_key = shortcutKey;
 	else
@@ -274,7 +274,6 @@ function restore_options(prefs)
 		espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
 	}
 	makeItemsEditable();
-	KeyCombo.init(document.getElementsByName("glee_shortcut_key")[0]);
 	
 	//getting the shortcut key
 	var metaKey = prefs.meta_key;
@@ -290,14 +289,15 @@ function restore_options(prefs)
 				break;
 			}
 		}
-		document.getElementsByName("glee_shortcut_key")[0].value = shortcut;
+		document.getElementsByName("glee_shortcut_key")[0].innerText = shortcut;
 	}
 	else
 	{
 		//default
 		document.getElementsByName("glee_meta_key")[0].checked = true;
-		document.getElementsByName("glee_shortcut_key")[0].value = 71;
+		document.getElementsByName("glee_shortcut_key")[0].innerText = 71;
 	}
+	KeyCombo.init(document.getElementsByName("glee_shortcut_key_field")[0], document.getElementsByName("glee_shortcut_key")[0]);
 }
 
 function makeItemsEditable(){
@@ -556,4 +556,4 @@ function initDefaultTexts() {
             }
         }
 	}
-}	
+}

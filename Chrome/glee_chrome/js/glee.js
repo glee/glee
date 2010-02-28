@@ -29,11 +29,7 @@ jQuery(document).ready(function(){
 			//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
 			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey)
 			{
-				if(Glee.metaKey == "ctrl" && !e.ctrlKey)
-					return false;
-				if(Glee.metaKey == "shift" && !e.shiftKey)
-					return false;
-				if(e.keyCode == Glee.shortcutKey)
+				if(e.keyCode == Glee.shortcutKey && !(Glee.metaKey == "ctrl" && !e.ctrlKey) && !(Glee.metaKey == "shift" && !e.shiftKey))
 				{
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
@@ -407,7 +403,7 @@ var Glee = {
 	status:1,
 	//keydown code of shortcut key to launch gleeBox
 	shortcutKey:71,
-	//meta key to use in combination with the shortcut key
+	//meta key to use in combination with the shortcut key. valid values are none, shift or ctrl
 	metaKey:'none',
 	//used to enable/disable global shortcut for tab manager
 	tabShortcutStatus:true,
