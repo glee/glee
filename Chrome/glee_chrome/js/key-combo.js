@@ -1,13 +1,13 @@
 // Code for detecting and validating keypresses in a field
 var KeyCombo = {
-	lastValue: "",
-	lastCode:0,
 	init: function(el, codeEl){
 		el.value = KeyCombo.mapKeyDownCode(codeEl.innerText);
 		el.addEventListener(
 			"keydown",
 			function(e){
 				KeyCombo.lastValue = el.value;
+				if(e.keyCode == 8)
+					e.preventDefault();
 				if(KeyCombo.filterKeyCode(e.keyCode))
 				{
 					codeEl.innerText = e.keyCode;
@@ -17,23 +17,6 @@ var KeyCombo = {
 					el.blur();
 			},
 			false);
-		el.addEventListener(
-			"focus",
-			function(e){
-				KeyCombo.lastValue = el.value;
-				KeyCombo.lastCode = codeEl.innerText;
-			},
-		false);
-		el.addEventListener(
-			"blur",
-			function(e){
-				if(el.value == "")
-				{
-					el.value = KeyCombo.oldValue;
-					codeEl.innerText = KeyCombo.lastCode;
-				}
-			},
-		false);
 	},
 	filterKeyCode: function(code){
 		//filter tab/shift/enter/esc/arrow keys

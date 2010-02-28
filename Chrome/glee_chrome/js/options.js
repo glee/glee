@@ -104,7 +104,7 @@ function save_options(close_tab) {
 	//saving shortcut key
 	
 	//first saving meta key preference
-	mRadios = document.getElementsByName("glee_meta_key");
+	var mRadios = document.getElementsByName("glee_meta_key");
 	for (var i=0; i < mRadios.length; i++)
 	{
 		if (mRadios[i].checked)
@@ -119,6 +119,24 @@ function save_options(close_tab) {
 		prefs.shortcut_key = shortcutKey;
 	else
 		prefs.shortcut_key = 71;
+	
+	//saving tab manager shortcut key
+	
+	mRadios = document.getElementsByName("glee_tab_meta_key");
+	for (var i=0; i < mRadios.length; i++)
+	{
+		if (mRadios[i].checked)
+		{
+ 			prefs.tab_meta_key = mRadios[i].value;
+			break;
+		}
+	}
+	
+	var tabShortcutKey = document.getElementsByName("glee_tab_shortcut_key")[0].innerText;
+	if(tabShortcutKey)
+		prefs.tab_shortcut_key = tabShortcutKey;
+	else
+		prefs.tab_shortcut_key = 190;
 
 	saveAllPrefs(prefs,scrapers,disabledUrls,espModifiers,function(){
 		prefs.scrapers = scrapers;
@@ -298,6 +316,30 @@ function restore_options(prefs)
 		document.getElementsByName("glee_shortcut_key")[0].innerText = 71;
 	}
 	KeyCombo.init(document.getElementsByName("glee_shortcut_key_field")[0], document.getElementsByName("glee_shortcut_key")[0]);
+	
+	//getting the tab manager shortcut key
+	var tabMetaKey = prefs.tab_meta_key;
+	var tabShortcut = prefs.tab_shortcut_key;
+	if(tabShortcut)
+	{
+		mRadios = document.getElementsByName("glee_tab_meta_key");
+		for (var i=0; i < mRadios.length; i++)
+		{
+			if (tabMetaKey == mRadios[i].value)
+			{
+				mRadios[i].checked = true;
+				break;
+			}
+		}
+		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = tabShortcut;
+	}
+	else
+	{
+		//default
+		document.getElementsByName("glee_tab_meta_key")[0].checked = true;
+		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190;
+	}
+	KeyCombo.init(document.getElementsByName("glee_tab_shortcut_key_field")[0], document.getElementsByName("glee_tab_shortcut_key")[0]);
 }
 
 function makeItemsEditable(){

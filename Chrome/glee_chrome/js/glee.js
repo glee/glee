@@ -26,7 +26,6 @@ jQuery(document).ready(function(){
 		var target = e.target || e.srcElement;
 		if(Glee.status != 0)
 		{
-			//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
 			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey)
 			{
 				if(e.keyCode == Glee.shortcutKey && !(Glee.metaKey == "ctrl" && !e.ctrlKey) && !(Glee.metaKey == "shift" && !e.shiftKey))
@@ -54,7 +53,7 @@ jQuery(document).ready(function(){
 						Glee.searchField[0].focus();
 					}
 				}
-				else if(e.keyCode == 190 && !e.metaKey && !e.ctrlKey && Glee.tabShortcutStatus) //launch tab manager on pressing .
+				else if(e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus && !(Glee.tabMetaKey == "ctrl" && !e.ctrlKey) && !(Glee.tabMetaKey == "shift" && !e.shiftKey))
 				{
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
@@ -405,6 +404,10 @@ var Glee = {
 	shortcutKey:71,
 	//meta key to use in combination with the shortcut key. valid values are none, shift or ctrl
 	metaKey:'none',
+	//keydown code of shortcut key to launch tab manager
+	tabShortcutKey:190,
+	//meta key for tab manager.
+	tabMetaKey:'none',
 	//used to enable/disable global shortcut for tab manager
 	tabShortcutStatus:true,
 	//used to enable/disabled ESP (default scrapers)

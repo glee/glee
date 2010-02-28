@@ -23,7 +23,7 @@
 			</ul>
 		</li>
 		<li>
-			<label class="option-label">Shortcut to launch gleeBox<br/><span class="subtext">Type a letter in text field to display its key code. For text fields, use Alt+your shortcut.</span></label>
+			<label class="option-label">Shortcut to launch gleeBox<br/><span class="subtext">Enter a single character in the text field. When in textfields/textareas, use alt + your combo.</span></label>
 			<div class="option-field">
 					 <input name="glee_meta_key" value="none" type="radio"> None&nbsp;
 				   <input name="glee_meta_key" value="shift" type="radio"> Shift&nbsp;&nbsp;
@@ -63,6 +63,18 @@
 				<input name="glee_tab_shortcut_status" type="radio"> Off
 			</div>
 		</li>
+		<li>
+			<label class="option-label">Shortcut to launch Glee Tab Manager<br/><span class="subtext">Enter a single character in the text field. When in textfields/textareas, use alt + your combo.</span></label>
+			<div class="option-field">
+					 <input name="glee_tab_meta_key" value="none" type="radio"> None&nbsp;
+				   <input name="glee_tab_meta_key" value="shift" type="radio"> Shift&nbsp;&nbsp;
+					 <input name="glee_tab_meta_key" value="ctrl" type="radio"> Ctrl&nbsp;&nbsp;
+					 +&nbsp;&nbsp;<input name="glee_tab_shortcut_key_field" size="5" type="text" /><span name="glee_tab_shortcut_key" style="display:none"></span>
+					<br/>
+					<a href="#" onclick='javascript:document.getElementsByName("glee_shortcut_key")[0].innerText = "190";document.getElementsByName("glee_tab_shortcut_key_field")[0].value = ".";document.getElementsByName("glee_tab_meta_key")[0].checked = true;'>Revert to default</a>
+			</div>
+		</li>
+
 		<!-- <li>
 			<label class="option-label">HyperGlee<br/><span class="subtext">In the HyperGlee mode, gleeBox is visible by default when a page loads.</span></label>
 			<div class="option-field">
