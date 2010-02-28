@@ -405,8 +405,8 @@ var Glee = {
 	commandMode: false,
 	//used to enable/disable gleeBox (1 = enabled, 0 = disabled)
 	status:1,
-	//shortcut key to launch gleeBox
-	shortcutKey:'g',
+	//keydown code of shortcut key to launch gleeBox
+	shortcutKey:71,
 	//meta key to use in combination with the shortcut key
 	metaKey:'none',
 	//used to enable/disable global shortcut for tab manager

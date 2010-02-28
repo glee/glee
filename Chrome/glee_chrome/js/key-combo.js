@@ -1,4 +1,4 @@
-
+// Code for detecting and validating keypresses in a field
 var KeyCombo = {
 	lastValue: "",
 	lastCode:0,
