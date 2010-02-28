@@ -1,7 +1,7 @@
 var response = {};
 
 //set the status value and update the browser action
-function setStatus(value)
+function refreshIcon(value)
 {
 	if(value == 0)
 	{
@@ -30,7 +30,7 @@ function init(){
 
 //initialize the status value on load of background.html
 function initStatus(){
-	setStatus(gleeboxPreferences.status);
+	refreshIcon(gleeboxPreferences.status);
 }
 
 
@@ -40,8 +40,8 @@ function toggleStatus(){
 		gleeboxPreferences.status = 0;
 	else
 		gleeboxPreferences.status = 1;
-	savePreference("status",gleeboxPreferences.status);
-	setStatus(gleeboxPreferences.status);
+	savePreference("status", gleeboxPreferences.status);
+	refreshIcon(gleeboxPreferences.status);
 	
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){

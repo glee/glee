@@ -259,7 +259,12 @@ Glee.Chrome.moveToTab = function(tab){
 chrome.extension.onRequest.addListener(
 	function(request,sender,sendResponse){
 		if(request.value == "initStatus")
-			Glee.status = request.status;
+		{
+			if(request.status && Glee.Utils.checkDomain())
+				Glee.status = 1;
+			else
+				Glee.status = 0;
+		}
 		else if(request.value == "updateOptions")
 			Glee.Chrome.applyOptions(request);
 		sendResponse({});

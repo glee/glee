@@ -107,8 +107,11 @@ Glee.ListManager = {
 		var item;
 		for(var i=0; i<len; i++)
 		{
-			item = jQuery('<a href="#" id="gleeList'+i+'" class="gleeListItem"></a>');
-			item.html(this.items[i].title);
+			item = jQuery('<a href="#" id="gleeList' + i + '" class="gleeListItem"></a>');
+			if(this.items[i].title)
+				item.html(this.items[i].title);
+			else
+				item.html("Untitled");
 			listDIV.append(item);
 		}
 		this.box.append(listDIV);
