@@ -32,14 +32,12 @@ jQuery(document).ready(function(){
 	
 	// Setup cache for global jQuery objects
 	Glee.Cache.jBody = jQuery('html,body');
-
-	var reaperCSS = '.GleeReaped{ background-color: #fbee7e !important; border: 1px dotted #818181 !important; } .GleeHL{ background-color: #d7fe65 !important; -moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important; -moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important; padding: 3px !important; color: #1c3249 !important; border: 1px solid #818181 !important; } .GleeHL a{ color: #1c3249 !important; }';
 	
-	var themesCSS = '.GleeThemeDefault{ background-color:#333 !important; color:#fff !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; }.GleeThemeWhite{ background-color:#fff !important; color:#000 !important; opacity: 0.85 !important; border: 1px solid #939393 !important; -moz-border-radius: 10px !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; }.GleeThemeRuby{ background-color: #530000 !important; color: #f6b0ab !important; font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important; }.GleeThemeGreener{ background-color: #2e5c4f !important; color: #d3ff5a !important; font-family: Georgia, "Times New Roman", Times, serif !important; }.GleeThemeConsole{ font-family: Monaco, Consolas, "Courier New", Courier, mono !important; color: #eafef6 !important; background-color: #111 !important; }.GleeThemeGlee{ background-color: #eb1257 !important; color: #fff300 !important; -moz-box-shadow: #eb1257 0px 0px 8px !important; -moz-box-shadow: #eb1257 0px 0px 8px !important; opacity: 0.8 !important; font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important; }';
+	var themesCSS = '.GleeThemeDefault{ background-color:#333 !important; color:#fff !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; } .GleeThemeWhite{ background-color:#fff !important; color:#000 !important; border: 1px solid #939393 !important; -moz-border-radius: 10px !important; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important; } #gleeBox.GleeThemeWhite{ opacity:0.75; } .GleeThemeRuby{ background-color: #530000 !important; color: #f6b0ab !important; font-family: "Lucida Grande", Lucida, Verdana, sans-serif !important; } .GleeThemeGreener{ background-color: #2e5c4f !important; color: #d3ff5a !important; font-family: Georgia, "Times New Roman", Times, serif !important; } .GleeThemeConsole{ font-family: Monaco, Consolas, "Courier New", Courier, mono !important; color: #eafef6 !important; background-color: #111 !important; } .GleeThemeGlee{ background-color: #eb1257 !important; color: #fff300 !important; -webkit-box-shadow: #eb1257 0px 0px 8px !important; -moz-box-shadow: #eb1257 0px 0px 8px !important; opacity: 0.8 !important; font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif !important; }';
 	
-	var gleeCSS = '#gleeBox{ line-height:20px; height:auto !important;z-index:100000; position:fixed; left:5%; top:35%; display:none; overflow:auto; width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif; padding:4px 6px; text-align:left; /*rounded corners*/ -moz-border-radius:7px; } #gleeSearchField{ outline:none; width:90%; margin:0; padding:0; margin:3px 0; border:none; height:auto !important;font-size:100px; background:none !important; color:#fff; } #gleeSub{ margin:0 !important; padding:0 !important; font-size:15px !important;font-family:inherit !important;font-weight:normal !important; height:auto !important;line-height:normal !important; } #gleeSubText, #gleeSubURL, #gleeSubActivity{ font-size:15px !important; width:auto !important; font-weight: normal !important; line-height:20px !important; font-family:inherit !important; } #gleeSubText{ float:left; } #gleeSubURL{ display:inline; float:right; } #gleeSubActivity{ color:#ccc; height:10px; display:inline; float:left; padding-left:5px; }';
+	var gleeCSS = '.GleeReaped{ background-color: #fbee7e !important; border: 1px dotted #818181 !important; } .GleeHL{ background-color: #d7fe65 !important; -webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important; -moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important; padding: 3px !important; color: #1c3249 !important; border: 1px solid #818181 !important; } .GleeHL a{ color: #1c3249 !important; }#gleeBox{ line-height:20px; height:auto !important; z-index:100000; position:fixed; left:5%; top:35%; display:none; overflow:auto; width:90%; background-color:#333; opacity:0.65; color:#fff; margin:0; font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif; padding:4px 6px; text-align:left; /*rounded corners*/ -moz-border-radius:7px; } #gleeSearchField{ outline:none; width:90%; margin:0; background:none !important; padding:0; margin:3px 0; border:none; height:auto !important; font-size:100px; color:#fff; } #gleeSub{ font-size:15px !important; font-family:inherit !important; font-weight:normal !important; height:auto !important; margin:0 !important; padding:0 !important; color:inherit !important; line-height:normal !important; }#gleeSubText, #gleeSubURL, #gleeSubActivity{ width:auto !important; font-size:inherit !important; color:inherit !important; font-family:inherit !important; line-height:20px !important; font-weight:normal !important; } #gleeSubText{ float:left; } #gleeSubURL{ display:inline; float:right; } #gleeSubActivity{ height:10px; display:inline; float:left; padding-left:5px; }';
 	
-	GM_addStyle(reaperCSS + themesCSS + gleeCSS);
+	GM_addStyle(themesCSS + gleeCSS);
 
 	// Bind Keys
 	jQuery(window).bind('keydown',function(e){
@@ -196,11 +194,11 @@ jQuery(document).ready(function(){
 					}
 					else if(value[0] == "!" && value.length > 1) //Searching through page commands
 					{
-						trimVal = value.substr(1);
+						trimVal = value.split(" ")[0].substr(1);
 						Glee.URL = null;
 						for(var i=0; i<Glee.commands.length; i++)
 						{
-							if(trimVal.indexOf(Glee.commands[i].name) == 0)
+							if(trimVal == Glee.commands[i].name)
 							{
 								Glee.setSubText(Glee.commands[i].description,"msg");
 								Glee.URL = Glee.commands[i];
@@ -240,8 +238,8 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			if(value[0] == "*" && value != Glee.lastjQuery)
 			{
-				if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement != null)
-					jQuery(Glee.selectedElement).removeClass('GleeHL');
+				if(Glee.selectedElement)
+					Glee.selectedElement.removeClass('GleeHL');
 				LinkReaper.reapWhatever(value.substring(1));
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setSubText(Glee.selectedElement,"el");
@@ -278,17 +276,17 @@ jQuery(document).ready(function(){
 			else
 			{
 				var anythingOnClick = true;
-				if(Glee.selectedElement != null && typeof(Glee.selectedElement) != "undefined") //if the element exists
+				if(Glee.selectedElement) //if the element exists
 				{
 					//check to see if an anchor element is associated with the selected element
 					//currently only checking for headers and images
 					var a_el = null;
-					if (jQuery(Glee.selectedElement)[0].tagName == "A")
-						a_el = jQuery(Glee.selectedElement);
-					else if (jQuery(Glee.selectedElement)[0].tagName == "IMG")
-						a_el = jQuery(Glee.selectedElement).parents('a');
+					if (Glee.selectedElement[0].tagName == "A")
+						a_el = Glee.selectedElement;
+					else if (Glee.selectedElement[0].tagName == "IMG")
+						a_el = Glee.selectedElement.parents('a');
 					else
-						a_el = jQuery(Glee.selectedElement).find('a');
+						a_el = Glee.selectedElement.find('a');
 					if(a_el) //if an anchor element is associated with the selected element
 					{
 						if(a_el.length != 0)
@@ -325,21 +323,28 @@ jQuery(document).ready(function(){
 						}, 0);
 					}
 				}
-				else //if it is an input element or text field, set focus to it, else bring back focus to document
+				else //if it is an input element/textarea/button, set focus/click it, else bring back focus to document
 				{
-					if(typeof(Glee.selectedElement) != "undefined" && Glee.selectedElement)
+					if(Glee.selectedElement)
 					{
-						var el = jQuery(Glee.selectedElement)[0];
+						var el = Glee.selectedElement[0];
 						if(el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
 						{
 							setTimeout(function(){
 								Glee.Utils.simulateClick(Glee.selectedElement,false);
 							},0);
 						}
+						else if(el.tagName == "BUTTON")
+						{
+							setTimeout(function(){
+								Glee.Utils.simulateClick(Glee.selectedElement,false);
+								Glee.searchField.blur();
+							},0);
+						}
 						else if(el.tagName == "INPUT" || el.tagName == "TEXTAREA")
 						{
 							setTimeout(function(){
-								Glee.selectedElement.focus();
+								Glee.selectedElement[0].focus();
 							},0);
 						}
 						else

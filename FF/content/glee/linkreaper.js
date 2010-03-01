@@ -39,7 +39,7 @@ var LinkReaper = {
 			else
 			{
 				newList = [];
-				jQuery('a, a > img, input[type=button], input[type=submit]').each(function(){
+				jQuery('a, a > img, input[type=button], input[type=submit], button').each(function(){
 					if(!LinkReaper.reapALink(jQuery(this), term))
 						LinkReaper.unreapLink(jQuery(this));
 					else
@@ -60,6 +60,9 @@ var LinkReaper = {
 			index = el.attr('alt').toLowerCase().indexOf(term.toLowerCase());
 		else if(el[0].tagName == "INPUT" && (el[0].type == "button" || el[0].type == "submit"))
 			index = el.attr('value').toLowerCase().indexOf(term.toLowerCase());
+		else if(el[0].tagName == "BUTTON")
+			index = el.text().toLowerCase().indexOf(term.toLowerCase());
+
 		if(index != -1 && Glee.Utils.isVisible(el)) {
 			el.addClass('GleeReaped');
 			Glee.setSubText(el,"el");
@@ -121,9 +124,8 @@ var LinkReaper = {
 			this.unHighlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			this.traversePosition = 0;
 			this.highlight(jQuery(this.selectedLinks[0]));
-			return jQuery(this.selectedLinks[0]);	
+			return jQuery(this.selectedLinks[0]);
 		}
-		
 	},
 	
 	getPrev: function(){
@@ -144,13 +146,14 @@ var LinkReaper = {
 			this.highlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
 			return jQuery(this.selectedLinks[this.selectedLinks.length - 1]);
 		}
-		
 	},
 	
 	getFirst: function(){
+		if(this.selectedLinks.length == 0)
+			return null;
 		this.highlight(jQuery(this.selectedLinks[0]));
 		this.traversePosition = 0;
-		return this.selectedLinks[0];
+		return jQuery(this.selectedLinks[0]);
 	},
 	
 	highlight: function(el){
