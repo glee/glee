@@ -102,7 +102,7 @@ jQuery(document).ready(function(){
 			// 38 is keyCode for UP Arrow key
 			Glee.Utils.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
-		else if(e.keyCode == Glee.tabShortcutKey)
+		else if(e.keyCode == Glee.tabShortcutKey && Glee.searchField.attr("value").length == 0)
 		{
 			Glee.manageTabs();
 			return;
