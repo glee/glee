@@ -21,12 +21,14 @@
 			<preference id="pref_bookmark_search" name="extensions.gleebox.bookmark_search" type="bool"/>
 			<preference id="pref_esp_status" name="extensions.gleebox.esp_status" type="bool"/>
 			<preference id="pref_disabled_urls" name="extensions.gleebox.disabledurls" type="string" />
-			<preference id="pref_custom_scrapers" name="extensions.gleebox.custom_scrapers" type="string" /> 
-			<preference id="pref_esp_visions" name="extensions.gleebox.esp_visions" type="string" /> 
-			<preference id="pref_search_engine" name="extensions.gleebox.search_engine" type="string" /> 
+			<preference id="pref_custom_scrapers" name="extensions.gleebox.custom_scrapers" type="string" />
+			<preference id="pref_esp_visions" name="extensions.gleebox.esp_visions" type="string" />
+			<preference id="pref_search_engine" name="extensions.gleebox.search_engine" type="string" />
+			<preference id="pref_meta_key" name="extensions.gleebox.meta_key" type="string" />
+			<preference id="pref_shortcut_key" name="extensions.gleebox.shortcut_key" type="string" />
 		</preferences>
 
-		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="500"  > 
+		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="550"  >
 			<tabbox flex="1" >
 				<tabs>
 					<tab label="Features" />
@@ -53,11 +55,25 @@
 <hbox align="center" style="margin-top:5px">
 <label width="90" value="Search Engine:"/>
 <textbox id="search_engine_textbox" preference="pref_search_engine" width="230" />
-						</hbox>
+</hbox>
 <hbox align="center" style="margin-left:105px">
 <label class="text-link" style="margin-right:5px;" value="Google" onclick="gleebox_Options.updateSearchEngine(this.value);" />
 <label class="text-link" style="margin-right:5px;" value="Bing" onclick="gleebox_Options.updateSearchEngine(this.value);"  />
 <label class="text-link" value="Yahoo" onclick="gleebox_Options.updateSearchEngine(this.value);"  />
+</hbox>
+<hbox align="center" style="margin-top:5px">
+<label width="90" >Shortcut to launch gleeBox:</label>
+ <radiogroup id="meta_key_radiogroup" orient="horizontal" preference="pref_meta_key">
+       <radio label="None" value="none" selected="true"/>
+       <radio label="Shift" value="shift" />
+       <radio label="Ctrl" value="ctrl" />
+</radiogroup>
+<label value="+" />
+<textbox id="shortcut_key_textbox" preference="pref_shortcut_key" width="50" />
+<label width="150">Enter keycode (for keydown event). Get keycode from <label class="text-link" onclick="gleebox_Common.openInNewTab('http://asquare.net/javascript/tests/KeyCode.html');" value="here" /></label>
+</hbox>
+<hbox align="center" style="margin-left:105px">
+<label class="text-link" value="Revert to default" onclick="gleebox_Options.revertShortcutKey();"  />
 </hbox>
 						<hbox align="center" style="margin-top:10px">
 		  					<checkbox preference="pref_bookmark_search" flex="1" label="Enable Bookmark Search" tabindex="1" oncommand="" />

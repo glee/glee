@@ -44,30 +44,32 @@ jQuery(document).ready(function(){
 		var target = e.target || e.srcElement;
 		if(Glee.status)
 		{
-			//pressing 'g' if an input field is not focussed or alt+g(option+g on mac) anytime toggles the gleeBox
-			if(e.keyCode == 71 && ((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey))
+			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey)
 			{
-				e.preventDefault();
-				Glee.userPosBeforeGlee = window.pageYOffset;
-				//set default subtext
-				Glee.subText.html(Glee.nullStateMessage);
-				if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
-					Glee.userFocusBeforeGlee = target;
-				else
-					Glee.userFocusBeforeGlee = null;
-				if(Glee.searchBox.css('display') == "none")
+				if(e.keyCode == Glee.shortcutKey && !(Glee.metaKey == "ctrl" && !e.ctrlKey) && !(Glee.metaKey == "shift" && !e.shiftKey))
 				{
-					//reseting value of searchField
-					Glee.searchField.attr('value','');
-					Glee.searchBox.fadeIn(150);
-					Glee.searchField[0].focus();
-					if(Glee.espStatus)
-						Glee.fireEsp();
-				}
-				else
-				{
-					//If gleeBox is already visible, focus is returned to it
-					Glee.searchField.focus();
+					e.preventDefault();
+					Glee.userPosBeforeGlee = window.pageYOffset;
+					//set default subtext
+					Glee.subText.html(Glee.nullStateMessage);
+					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
+						Glee.userFocusBeforeGlee = target;
+					else
+						Glee.userFocusBeforeGlee = null;
+					if(Glee.searchBox.css('display') == "none")
+					{
+						//reseting value of searchField
+						Glee.searchField.attr('value','');
+						Glee.searchBox.fadeIn(150);
+						Glee.searchField[0].focus();
+						if(Glee.espStatus)
+							Glee.fireEsp();
+					}
+					else
+					{
+						//If gleeBox is already visible, focus is returned to it
+						Glee.searchField.focus();
+					}
 				}
 			}
 		}
@@ -389,6 +391,10 @@ var Glee = {
 	commandMode:false,
 	//used to enable/disable gleeBox
 	status:true,
+	//keydown code of shortcut key to launch gleeBox
+	shortcutKey:71,
+	//meta key to use in combination with the shortcut key. valid values are none, shift or ctrl
+	metaKey:'none',
 	//used to enable/disabled ESP (default scrapers)
 	espStatus:true,
 	//Currently selected element
@@ -618,6 +624,11 @@ var Glee = {
 				}
 			}
 		}
+		
+		//get the shortcut key combination
+ 		Glee.shortcutKey = GM_getValue('shortcut_key', '71');
+		Glee.metaKey = GM_getValue('meta_key', 'none');
+
 		Glee.Utils.checkDomain();
 	},
 	initOptions:function(){

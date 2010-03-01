@@ -248,5 +248,13 @@ var gleebox_Options = {
 			case "Yahoo"	: textbox.value = "http://search.yahoo.com/search?p="; break;
 		}
 		this.prefs.setValue('search_engine', textbox.value);
+	},
+	revertShortcutKey: function(){
+		var shortcutKey = document.getElementById("shortcut_key_textbox");
+		shortcutKey.value = "71";
+		var metaKey = document.getElementById("meta_key_radiogroup");
+		metaKey.value = "none";
+		this.prefs.setValue('shortcut_key', shortcutKey.value);
+		this.prefs.setValue('meta_key', metaKey.value);
 	}
 };
