@@ -88,7 +88,7 @@ Glee.ListManager = {
 				e.preventDefault();
 				Glee.ListManager.removeItem();
 			}
-			else if(e.keyCode == 71)
+			else if(e.keyCode == Glee.shortcutKey)
 			{
 				e.preventDefault();
 				Glee.ListManager.closeBox(false);

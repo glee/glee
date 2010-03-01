@@ -102,6 +102,11 @@ jQuery(document).ready(function(){
 			// 38 is keyCode for UP Arrow key
 			Glee.Utils.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
+		else if(e.keyCode == Glee.tabShortcutKey)
+		{
+			Glee.manageTabs();
+			return;
+		}
 	});
 	Glee.searchField.bind('keyup',function(e){
 		var value = Glee.searchField.attr('value');
@@ -121,8 +126,7 @@ jQuery(document).ready(function(){
 				if(value[0] != "?"
 					&& value[0] != "!"
 					&& value[0] != ":"
-					&& value[0] != '*'
-					&& value[0] != '.')
+					&& value[0] != '*')
 				{
 					if(Glee.commandMode)
 						LinkReaper.unreapAllLinks();
@@ -186,11 +190,6 @@ jQuery(document).ready(function(){
 					{
 						Glee.nullMessage = "Nothing found for your selector.";
 						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
-					}
-					else if(value[0] == '.')
-					{
-						Glee.manageTabs();
-						return;
 					}
 					else if(value[0] == "!" && value.length > 1) //Searching through page commands
 					{
