@@ -265,7 +265,14 @@ jQuery(document).ready(function(){
 				else
 				{
 					url = Glee.URL.url;
-					location.href = url;
+					var len = url.length;
+					//for some reason, location.href = url doesn't work properly for all bookmarklets in Chrome
+					//hence, using this hack
+					if(url.substring(len - 3, len) == "();")
+						location.href = url;
+					else 
+						eval(unescape(url.substring(11)));
+
 					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
 					setTimeout(function(){
 						Glee.closeBox();
