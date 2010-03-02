@@ -28,8 +28,15 @@ jQuery(document).ready(function(){
 		{
 			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey)
 			{
-				if(e.keyCode == Glee.shortcutKey && !(Glee.metaKey == "ctrl" && !e.ctrlKey) && !(Glee.metaKey == "shift" && !e.shiftKey))
+				if(e.keyCode == Glee.shortcutKey)
 				{
+					if(e.metaKey && !e.ctrlKey) //if cmd is pressed
+						return true;
+					if((Glee.metaKey == "ctrl" && !e.ctrlKey) || (Glee.metaKey != "ctrl" && e.ctrlKey))
+						return true;
+					if((Glee.metaKey == "shift" && !e.shiftKey) || (Glee.metaKey != "shift" && e.shiftKey))
+						return true;
+
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
 					//set default subtext
@@ -53,8 +60,15 @@ jQuery(document).ready(function(){
 						Glee.searchField[0].focus();
 					}
 				}
-				else if(e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus && !(Glee.tabMetaKey == "ctrl" && !e.ctrlKey) && !(Glee.tabMetaKey == "shift" && !e.shiftKey))
+				else if(e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus)
 				{
+					if(e.metaKey && !e.ctrlKey)
+						return true;
+					if((Glee.tabMetaKey == "ctrl" && !e.ctrlKey) || (Glee.tabMetaKey != "ctrl" && e.ctrlKey))
+						return true;
+					if((Glee.tabMetaKey == "shift" && !e.shiftKey) || (Glee.tabMetaKey != "shift" && e.shiftKey))
+						return true;
+					
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
 					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
