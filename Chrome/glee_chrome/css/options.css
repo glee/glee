@@ -132,9 +132,11 @@ input{
 #esp-modifiers li, #scraper-commands li {
 	width:410px;
 	float:left;
+	word-wrap:break-word;
 }
 .scraper-name:hover, .scraper-sel:hover, .domain-name:hover, .esp-url:hover, .esp-sel:hover{
 	background-color:#eee;
+	border-radius:2px;
 	padding:1px 2px;
 	border:1px solid #777;
 }

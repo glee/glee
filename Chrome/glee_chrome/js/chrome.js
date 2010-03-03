@@ -203,22 +203,22 @@ Glee.Chrome.setOptionValue = function(){
 		"theme",
 		"bsearch",
 		"esp",
-		"vision"
+		"vision",
+		"visions+",
+		"scrapers+"
 	];
 	
-	/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
-	var input = Glee.searchField.attr('value').substring(4).replace(" ","");
+	/* Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
+	var input = Glee.searchField.attr('value').substring(4);
 	var eqPos = input.indexOf("=");
-	
 	if(eqPos == -1)
 		valid = false;
 	else
 	{
-		var option = input.substring(0,eqPos);
-		var value = input.substring(eqPos+1);
+		var option = input.substring(0,eqPos).replace(/\s+|\s+/g, '');
+		var value = jQuery.trim(input.substring(eqPos+1));
 	}
 	if(option == "vision"){
-		//removing protocol so that esp works for both cases when www is present/not present in URL
 		//TODO: implement for all protocols
 		var url = location.href.replace("http://","");
 		//remove trailing / (if present)
@@ -226,8 +226,27 @@ Glee.Chrome.setOptionValue = function(){
 			url = url.substring(0,url.length - 1);
 		value = {url:url, selector:value};
 	}
-	
-	if(option=="" || jQuery.inArray(option,validOptions) == -1)
+	if(option == "visions+")
+	{
+		var separator = value.indexOf(":");
+		var url = value.substring(0, separator);
+		var sel = value.substring(separator+1, value.length);
+		if(url == "$")
+		{
+			url = location.href.replace("http://","");
+			url = (url[url.length - 1] == "/") ? url.substring(0,url.length - 1) : url;
+		}
+		value = {url:url, selector:sel};
+	}
+	if(option == "scrapers+")
+	{
+		var separator = value.indexOf(":");
+		var cmd = value.substring(0, separator);
+		var sel = value.substring(separator+1, value.length);
+		value = {command:cmd, selector:sel};
+	}
+
+	if(option == "" || jQuery.inArray(option, validOptions) == -1)
 		valid = false;
 	else if( (option == "scroll" || option == "hyper" || option == "bsearch" || option == "esp") && jQuery.inArray(value,['on','off']) == -1)
 		valid = false;

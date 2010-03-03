@@ -206,7 +206,9 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 							  gleeboxPreferences.esp_status = value;
 							  break;
 			
-			case "vision"	: // search to check if vision for url already exists. if yes, overwrite it instead of adding a new vision
+			case "vision"	: 
+			
+			case "visions+"	: // search to check if vision for url already exists. if yes, overwrite it instead of adding a new vision
 							  var len = gleeboxPreferences.espModifiers.length;
 							  var flag = 0;
 							  for(var i=0; i<len; i++)
@@ -220,9 +222,29 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 							  }
 							  if(!flag)
 								gleeboxPreferences.espModifiers[gleeboxPreferences.espModifiers.length] = {url:request.option_value.url, selector:request.option_value.selector};
-							  
 							  saveESP(gleeboxPreferences.espModifiers,function(){});
 							  response.espModifiers = gleeboxPreferences.espModifiers;
+							  break;
+
+			case "scrapers+": var len = gleeboxPreferences.scrapers.length;
+							  var flag = 0;
+							  for(var i=0; i<len; i++)
+							  {
+								if(gleeboxPreferences.scrapers[i].command == request.option_value.command)
+								{
+								    gleeboxPreferences.scrapers[i].selector = request.option_value.selector;
+									flag = 1;
+									break;
+								}
+							  }
+							  if(!flag)
+								gleeboxPreferences.scrapers[gleeboxPreferences.scrapers.length] = {command:request.option_value.command, 
+									selector:request.option_value.selector,
+									cssStyle: "GleeReaped",
+									nullMessage : "Could not find any matching elements on the page."
+									};
+							  saveScrapers(gleeboxPreferences.scrapers,function(){});
+							  response.scrapers = gleeboxPreferences.scrapers;
 							  break;
 		}
 		sendResponse({preferences:response});

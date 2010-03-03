@@ -202,14 +202,6 @@ Glee.controlVideo = function(){
 				yPlayer.playVideo();
 			}
 		}
-		// else if(func == "-")
-		// {
-		// 	yPlayer.setVolume(yPlayer.getVolume() - 10);
-		// }
-		// else if(func == "+")
-		// {
-		// 	yPlayer.setVolume(yPlayer.getVolume() + 10);
-		// }
 	}
 	Glee.closeBox();
 }
