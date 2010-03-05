@@ -4,14 +4,14 @@
 * Customizable launch key for gleeBox
 * gleeBox is cleared on executing yubnub commands and links via default search
 * Added ability for sites to define their own ESP
-* !v command to play/pause videos on YouTube
+* !v command to play/pause videos on YouTube [Chrome only]
 * Editable items on Options page [Chrome only]
 * Support for <button> element
 * Updated to use jQuery 1.4.1
 * Lots of CSS Fixes
 * Improvements to scrolling
 * !inspect command to get the jQuery selector for specific elements
-* !set vision command to set the vision for a page from within gleeBox
+* Ability to add visions/scrapers via set command
 
 1.1 (29/01/2010)
 
