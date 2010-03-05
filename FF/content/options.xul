@@ -6,7 +6,7 @@
 						defaultButton=""
 						xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 						onload="gleebox_Options.initOptions()"
-						title="gleeBox Options" >
+						title="gleeBox Options">
 
 	<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
 	<script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
@@ -28,8 +28,8 @@
 			<preference id="pref_shortcut_key" name="extensions.gleebox.shortcut_key" type="string" />
 		</preferences>
 
-		<vbox flex="1" style="overflow:auto;font-size:11px" title="gleeBox Options" width="550"  >
-			<tabbox flex="1" >
+		<vbox flex="1" style="font-size:11px" title="gleeBox Options" width="550"  height="415">
+			<tabbox flex="1">
 				<tabs>
 					<tab label="Features" />
 					<tab label="Appearance" />
@@ -61,7 +61,7 @@
 <label class="text-link" style="margin-right:5px;" value="Bing" onclick="gleebox_Options.updateSearchEngine(this.value);"  />
 <label class="text-link" value="Yahoo" onclick="gleebox_Options.updateSearchEngine(this.value);"  />
 </hbox>
-<hbox align="center" style="margin-top:5px">
+<hbox align="center" style="margin-top:10px">
 <label width="90" >Shortcut to launch gleeBox:</label>
  <radiogroup id="meta_key_radiogroup" orient="horizontal" preference="pref_meta_key">
        <radio label="None" value="none" selected="true"/>
@@ -70,12 +70,12 @@
 </radiogroup>
 <label value="+" />
 <textbox id="shortcut_key_textbox" preference="pref_shortcut_key" width="50" />
-<label width="150">Enter keycode (for keydown event). Get keycode from <label class="text-link" onclick="gleebox_Common.openInNewTab('http://asquare.net/javascript/tests/KeyCode.html');" value="here" /></label>
+<label width="180">Enter keycode (for keydown event). Get keycode from <label class="text-link" onclick="gleebox_Common.openInNewTab('http://asquare.net/javascript/tests/KeyCode.html');" value="here" />. Use alt+your combo when in textfields/textareas</label>
 </hbox>
 <hbox align="center" style="margin-left:105px">
 <label class="text-link" value="Revert to default" onclick="gleebox_Options.revertShortcutKey();"  />
 </hbox>
-						<hbox align="center" style="margin-top:10px">
+						<hbox align="center" style="margin-top:20px">
 		  					<checkbox preference="pref_bookmark_search" flex="1" label="Enable Bookmark Search" tabindex="1" oncommand="" />
 						</hbox>
 						<hbox align="center" style="margin-top:10px" >

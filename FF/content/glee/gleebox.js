@@ -44,10 +44,17 @@ jQuery(document).ready(function(){
 		var target = e.target || e.srcElement;
 		if(Glee.status)
 		{
-			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey)
+			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object' && target.nodeName.toLowerCase() != 'select') || e.altKey)
 			{
-				if(e.keyCode == Glee.shortcutKey && !(Glee.metaKey == "ctrl" && !e.ctrlKey) && !(Glee.metaKey == "shift" && !e.shiftKey))
+				if(e.keyCode == Glee.shortcutKey)
 				{
+					if(e.metaKey && !e.ctrlKey) //if cmd is pressed
+						return true;
+					if((Glee.metaKey == "ctrl" && !e.ctrlKey) || (Glee.metaKey != "ctrl" && e.ctrlKey))
+						return true;
+					if((Glee.metaKey == "shift" && !e.shiftKey) || (Glee.metaKey != "shift" && e.shiftKey))
+						return true;
+
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
 					//set default subtext
@@ -186,7 +193,7 @@ jQuery(document).ready(function(){
 						c = value.substring(1);
 						c = c.replace("$", location.href);
 						Glee.subText.html(Glee.Utils.filter("Run yubnub command (press enter to execute): " + c));
-						Glee.URL = "http://yubnub.org/parser/parse?command=" + escape(c);
+						Glee.URL = "http://yubnub.org/parser/parse?command=" + encodeURIComponent(c);
 						Glee.subURL.html(Glee.Utils.filter(Glee.URL));
 					}
 					else if(value[0] == '*')// Any jQuery selector
@@ -1043,22 +1050,44 @@ var Glee = {
 			"pos", "position",
 			"theme",
 			"bsearch",
-			"esp"
+			"esp",
+			"visions+",
+			"scrapers+"
 		];
 		
 		/*Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
-		var input = Glee.searchField.attr('value').substring(4).replace(" ","");
+		var input = Glee.searchField.attr('value').substring(4);
 		var eqPos = input.indexOf("=");
 		
 		if(eqPos == -1)
 			valid = false;
 		else
 		{
-			var option = input.substring(0,eqPos);
-			var value = input.substring(eqPos+1);
+			var option = input.substring(0, eqPos).replace(/\s+|\s+/g, '');
+			var value = jQuery.trim(input.substring(eqPos+1));
+		}
+
+		if(option == "visions+")
+		{
+			var separator = value.indexOf(":");
+			var url = value.substring(0, separator);
+			var sel = value.substring(separator+1, value.length);
+			if(url == "$")
+			{
+				url = location.href.replace("http://","");
+				url = (url[url.length - 1] == "/") ? url.substring(0,url.length - 1) : url;
+			}
+			value = {id:url, selector:sel};
+		}
+		if(option == "scrapers+")
+		{
+			var separator = value.indexOf(":");
+			var cmd = value.substring(0, separator);
+			var sel = value.substring(separator+1, value.length);
+			value = {id:cmd, selector:sel};
 		}
 		
-		if(option=="" || jQuery.inArray(option,validOptions) == -1)
+		if(option == "" || jQuery.inArray(option, validOptions) == -1)
 			valid = false;
 		else if( (option == "scroll" || option == "bsearch" || option == "esp") && jQuery.inArray(value,['on','off']) == -1)
 			valid = false;
@@ -1081,6 +1110,7 @@ var Glee = {
 			case "pos"		: option = "position";break;
 			case "bsearch"	: option = "bookmark_search";break;
 			case "esp"		: option = "esp_status";break;
+			case "visions+"	: 
 		}
 		switch(value)
 		{
@@ -1099,8 +1129,19 @@ var Glee = {
 			case 'ruby'		: 
 			case 'glee'		: value = value.charAt(0).toUpperCase() + value.slice(1); break;
 		}
+		if(option == "visions+")
+		{
+			Glee.Firefox.saveToCollection(value, "esp_visions");
+		}
+		else if(option == "scrapers+")
+			Glee.Firefox.saveToCollection(value, "custom_scrapers");
+		else
+		{
+			setTimeout(function(){
+				GM_setValue(option, value);
+			},0);
+		}
 		setTimeout(function(){
-			GM_setValue(option, value);
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
 			Glee.getOptions();
