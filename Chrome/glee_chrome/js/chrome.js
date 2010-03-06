@@ -229,7 +229,7 @@ Glee.Chrome.setOptionValue = function(){
 	if(option == "visions+")
 	{
 		var separator = value.indexOf(":");
-		var url = value.substring(0, separator);
+		var url = jQuery.trim(value.substring(0, separator));
 		var sel = value.substring(separator+1, value.length);
 		if(url == "$")
 		{
@@ -241,7 +241,7 @@ Glee.Chrome.setOptionValue = function(){
 	if(option == "scrapers+")
 	{
 		var separator = value.indexOf(":");
-		var cmd = value.substring(0, separator);
+		var cmd = jQuery.trim(value.substring(0, separator));
 		var sel = value.substring(separator+1, value.length);
 		value = {command:cmd, selector:sel};
 	}
