@@ -266,6 +266,7 @@ Glee.Chrome.setOptionValue = function(){
 		Glee.searchField.attr('value','');
 		Glee.setSubText(null);
 		Glee.Chrome.applyOptions(response);
+        Glee.searchField.keyup();
 	});
 }
 

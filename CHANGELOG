@@ -12,6 +12,7 @@
 * Improvements to scrolling
 * !inspect command to get the jQuery selector for specific elements
 * Ability to add visions/scrapers via set command
+* Modified !tweet command so it also includes title of page being shared
 
 1.1 (29/01/2010)
 

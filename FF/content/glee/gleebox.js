@@ -1070,7 +1070,7 @@ var Glee = {
 		if(option == "visions+")
 		{
 			var separator = value.indexOf(":");
-			var url = value.substring(0, separator);
+			var url = jQuery.trim(value.substring(0, separator));
 			var sel = value.substring(separator+1, value.length);
 			if(url == "$")
 			{
@@ -1082,7 +1082,7 @@ var Glee = {
 		if(option == "scrapers+")
 		{
 			var separator = value.indexOf(":");
-			var cmd = value.substring(0, separator);
+			var cmd = jQuery.trim(value.substring(0, separator));
 			var sel = value.substring(separator+1, value.length);
 			value = {id:cmd, selector:sel};
 		}
@@ -1144,8 +1144,11 @@ var Glee = {
 		setTimeout(function(){
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
-			Glee.getOptions();
-			Glee.initOptions();
+			setTimeout(function(){
+			    Glee.getOptions();
+                Glee.initOptions();
+                Glee.searchField.keyup();
+			}, 0);
 		},0);
 	}
 };

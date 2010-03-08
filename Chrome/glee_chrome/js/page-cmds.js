@@ -28,14 +28,20 @@ Glee.sendTweet = function(){
 			var shortenedURL = json[0].results[location.href].shortUrl;
 			var encodedURL = encodeURIComponent(shortenedURL);
 			//redirect to twitter homepage
-			location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
+			if(document.title.length <= 90)
+			    location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
+			else
+			    location.href = "http://twitter.com/?status="+encodedURL;
 		});
 	}
 	else
 	{
 		//redirect to twitter without shortening the URL
 		var encodedURL = encodeURIComponent(location.href);
-		location.href =  "http://twitter.com/?status="+document.title+" "+encodedURL;
+		if(document.title.length <= 90)
+		    location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
+		else
+		    location.href = "http://twitter.com/?status="+encodedURL;
 	}
 }
 
@@ -65,10 +71,7 @@ Glee.inspectPage = function(){
 Glee.inspectElement = function(el,level){
 	var elId = el.attr("id");
 	var elClass = el.attr("class");
-	// if(elId.length != 0)
-	// {
-	// 	return "#"+elId;
-	// }
+
 	if(elClass.length != 0)
 	{
 		elClass = jQuery.trim(elClass.replace("GleeHL",""));
