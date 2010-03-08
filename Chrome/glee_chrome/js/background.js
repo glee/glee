@@ -1,5 +1,20 @@
 var response = {};
 
+function checkVersion(){
+    loadPreference('version',function(version){
+        if(version == null || version < 1.5)
+        {
+            //open the releases page
+            chrome.tabs.create({url:"http://thegleebox.com/releases.html", selected:true}, null);
+            //update version
+            if(version == null)
+                createPreference('version', 1.5);
+            else
+                savePreference('version', 1.5);
+        }
+    });
+}
+
 //set the status value and update the browser action
 function refreshIcon(value)
 {
@@ -26,6 +41,7 @@ function init(){
 			initStatus();
 		});
 	}
+	checkVersion();
 }
 
 //initialize the status value on load of background.html

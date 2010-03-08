@@ -5,7 +5,7 @@ function opendb(){
 		return glee_db;
 	if(window.openDatabase)
 	{
-		glee_db = openDatabase("gleebox","1.0","gleeBox Local Database",200000);
+		glee_db = openDatabase("gleebox", "1.0", "gleeBox Local Database", 200000);
 		if(!glee_db)
 		{
 			console.log("Failed to open gleeBox DB");
@@ -419,6 +419,25 @@ function savePreference(prefname,value){
 			B.executeSql("UPDATE preferences SET prefvalue = ? WHERE prefname=?",
 			[value,prefname],
 			function(C,D){
+                
+			},
+			function(C,D){
+				console.log(D);
+			});
+		});
+	}
+}
+
+function createPreference(prefname,value){
+	var A = opendb();
+	createPrefsTable(A);
+	if(A)
+	{
+		A.transaction(function(B){
+			B.executeSql("INSERT INTO preferences VALUES (?, ?)",
+			[prefname,value],
+			function(C,D){
+                
 			},
 			function(C,D){
 				console.log(D);
