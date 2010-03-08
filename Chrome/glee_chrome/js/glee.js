@@ -563,7 +563,7 @@ var Glee = {
 	espModifiers: [
 		{
 			url : "google.com/search",
-			selector : "h3:not(ol.nobr>li>h3)"
+			selector : "h3:not(ol.nobr>li>h3),a:contains(Next)"
 		},
 		{
 			url : "bing.com/search",
