@@ -38,6 +38,7 @@ jQuery(document).ready(function(){
 						return true;
 
 					e.preventDefault();
+					
 					Glee.userPosBeforeGlee = window.pageYOffset;
 					//set default subtext
 					Glee.subText.html(Glee.nullStateMessage);
@@ -280,6 +281,8 @@ jQuery(document).ready(function(){
 				{
 					url = Glee.URL.url;
 					var len = url.length;
+					//replace occurences of window.open in bookmarklet JS so that Chrome does not block it as a popup
+					url = url.replace('window.open','Glee.Chrome.openPageInNewTab');
 					//for some reason, location.href = url doesn't work properly for all bookmarklets in Chrome
 					//hence, using this hack
 					if(url.substring(len - 3, len) == "();")
