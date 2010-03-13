@@ -1,6 +1,7 @@
+var prefs = {};
+
 // Saves options to clientside DB
-function save_options(close_tab) {
-	var prefs = {};
+function saveSettings(close_tab) {
 	var scrapers = [];
 	var espModifiers = [];
 	var disabledUrls = [];
@@ -80,7 +81,7 @@ function save_options(close_tab) {
 	{
 		var name = scraperNames[i].innerText;
 		var sel = scraperSels[i].innerText;
-		scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
+		scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements" };
 	}
 	
 	//saving the ESP Status
@@ -166,8 +167,9 @@ function propagateChanges(prefs)
 }
 
 // Restores select box state to saved value from DB
-function restore_options(prefs)
+function initSettings(response)
 {
+    prefs = response;
 	initDefaultTexts();
 	//getting the user defined restricted domains
 	var len = prefs.disabledUrls.length;
@@ -490,7 +492,7 @@ function addItem(type, value1, value2){
 	}
 	
 	var newEl = document.createElement("li");
-	var	no = listOfItems.children.length + 1;	
+	var	no = listOfItems.children.length;
 	var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"" + type + "\"," + no + ")'/>";
 	newEl.id = type + no;
 	newEl.className = type;
@@ -598,4 +600,42 @@ function initDefaultTexts() {
             }
         }
 	}
+}
+
+function exportSettings(id){
+    var field = document.getElementById(id);
+    field.innerText = JSON.stringify(prefs);
+    field.value = JSON.stringify(prefs);
+}
+
+function importSettings(id){
+    var jsonString = document.getElementById(id).value;
+    try{
+        var tempPref = JSON.parse(jsonString);
+        clearSettings();
+        initSettings(tempPref);
+    }
+    catch(e){
+        alert("The import format is incorrect!");
+    }
+}
+
+function clearSettings(){
+    //clearing disabled urls
+    var parent = document.getElementById("domains");
+    var len = parent.children.length;
+    for(var i=2; i<len; i++)
+        parent.removeChild(document.getElementById("domain"+i));
+    
+    //clearing scrapers
+    parent = document.getElementById("scraper-commands");
+    len = parent.children.length;
+    for(var i=5; i<len; i++)
+        parent.removeChild(document.getElementById("scraper"+i));
+    
+    //clearing visions
+    parent = document.getElementById("esp-modifiers");
+    len = parent.children.length;
+    for(var i=1; i<len; i++)
+        parent.removeChild(document.getElementById("esp"+i));
 }
