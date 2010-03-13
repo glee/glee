@@ -48,11 +48,7 @@ jQuery(document).ready(function(){
 			{
 				if(e.keyCode == Glee.shortcutKey)
 				{
-					if(e.metaKey && !e.ctrlKey) //if cmd is pressed
-						return true;
-					if((Glee.metaKey == "ctrl" && !e.ctrlKey) || (Glee.metaKey != "ctrl" && e.ctrlKey))
-						return true;
-					if((Glee.metaKey == "shift" && !e.shiftKey) || (Glee.metaKey != "shift" && e.shiftKey))
+					if(e.metaKey || e.ctrlKey || e.shiftKey)
 						return true;
 
 					e.preventDefault();
@@ -400,8 +396,6 @@ var Glee = {
 	status:true,
 	//keydown code of shortcut key to launch gleeBox
 	shortcutKey:71,
-	//meta key to use in combination with the shortcut key. valid values are none, shift or ctrl
-	metaKey:'none',
 	//used to enable/disabled ESP (default scrapers)
 	espStatus:true,
 	//Currently selected element
@@ -634,7 +628,6 @@ var Glee = {
 		
 		//get the shortcut key combination
  		Glee.shortcutKey = GM_getValue('shortcut_key', '71');
-		Glee.metaKey = GM_getValue('meta_key', 'none');
 
 		Glee.Utils.checkDomain();
 	},

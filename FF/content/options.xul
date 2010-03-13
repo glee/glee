@@ -63,16 +63,11 @@
 </hbox>
 <hbox align="center" style="margin-top:10px">
 <label width="90" >Shortcut to launch gleeBox:</label>
- <radiogroup id="meta_key_radiogroup" orient="horizontal" preference="pref_meta_key">
-       <radio label="None" value="none" selected="true"/>
-       <radio label="Shift" value="shift" />
-       <radio label="Ctrl" value="ctrl" />
-</radiogroup>
-<label value="+" />
+
 <textbox id="shortcut_key_textbox" preference="pref_shortcut_key" width="50" />
-<label width="180">Enter keycode (for keydown event). Get keycode from <label class="text-link" onclick="gleebox_Common.openInNewTab('http://asquare.net/javascript/tests/KeyCode.html');" value="here" />. Use alt+your combo when in textfields/textareas</label>
+<label width="300">Enter keycode (for keydown event). Get keycode from <label class="text-link" onclick="gleebox_Common.openInNewTab('http://asquare.net/javascript/tests/KeyCode.html');" value="here" />. Use alt+shortcut when in textfields/textareas.</label>
 </hbox>
-<hbox align="center" style="margin-left:105px">
+<hbox align="center" style="margin-left:105px;margin-top:5px">
 <label class="text-link" value="Revert to default" onclick="gleebox_Options.revertShortcutKey();"  />
 </hbox>
 						<hbox align="center" style="margin-top:20px">
