@@ -100,38 +100,15 @@ function save_options(close_tab) {
 		var sel = espSels[i].innerText;
 		espModifiers[espModifiers.length] = { url:url, selector:sel };
 	}
-	
-	//saving shortcut key
-	
-	//first saving meta key preference
-	var mRadios = document.getElementsByName("glee_meta_key");
-	for (var i=0; i < mRadios.length; i++)
-	{
-		if (mRadios[i].checked)
-		{
- 			prefs.meta_key = mRadios[i].value;
-			break;
-		}
-	}
+
 	//saving shortcut key
 	var shortcutKey = document.getElementsByName("glee_shortcut_key")[0].innerText;
 	if(shortcutKey)
 		prefs.shortcut_key = shortcutKey;
 	else
 		prefs.shortcut_key = 71;
-	
-	//saving tab manager shortcut key
-	
-	mRadios = document.getElementsByName("glee_tab_meta_key");
-	for (var i=0; i < mRadios.length; i++)
-	{
-		if (mRadios[i].checked)
-		{
- 			prefs.tab_meta_key = mRadios[i].value;
-			break;
-		}
-	}
-	
+
+    //saving tab manager shortcut key
 	var tabShortcutKey = document.getElementsByName("glee_tab_shortcut_key")[0].innerText;
 	if(tabShortcutKey)
 		prefs.tab_shortcut_key = tabShortcutKey;
@@ -294,51 +271,21 @@ function restore_options(prefs)
 	makeItemsEditable();
 	
 	//getting the shortcut key
-	var metaKey = prefs.meta_key;
 	var shortcut = prefs.shortcut_key;
 	if(shortcut)
-	{
-		var mRadios = document.getElementsByName("glee_meta_key");
-		for (var i=0; i < mRadios.length; i++)
-		{
-			if (metaKey == mRadios[i].value)
-			{
-				mRadios[i].checked = true;
-				break;
-			}
-		}
 		document.getElementsByName("glee_shortcut_key")[0].innerText = shortcut;
-	}
 	else
-	{
-		//default
-		document.getElementsByName("glee_meta_key")[0].checked = true;
-		document.getElementsByName("glee_shortcut_key")[0].innerText = 71;
-	}
+		document.getElementsByName("glee_shortcut_key")[0].innerText = 71; //default is g
+
 	KeyCombo.init(document.getElementsByName("glee_shortcut_key_field")[0], document.getElementsByName("glee_shortcut_key")[0]);
 	
 	//getting the tab manager shortcut key
-	var tabMetaKey = prefs.tab_meta_key;
 	var tabShortcut = prefs.tab_shortcut_key;
 	if(tabShortcut)
-	{
-		mRadios = document.getElementsByName("glee_tab_meta_key");
-		for (var i=0; i < mRadios.length; i++)
-		{
-			if (tabMetaKey == mRadios[i].value)
-			{
-				mRadios[i].checked = true;
-				break;
-			}
-		}
 		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = tabShortcut;
-	}
 	else
-	{
-		//default
-		document.getElementsByName("glee_tab_meta_key")[0].checked = true;
-		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190;
-	}
+		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190; //default is .
+		
 	KeyCombo.init(document.getElementsByName("glee_tab_shortcut_key_field")[0], document.getElementsByName("glee_tab_shortcut_key")[0]);
 }
 

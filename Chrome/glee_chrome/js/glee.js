@@ -30,11 +30,7 @@ jQuery(document).ready(function(){
 			{
 				if(e.keyCode == Glee.shortcutKey)
 				{
-					if(e.metaKey && !e.ctrlKey) //if cmd is pressed
-						return true;
-					if((Glee.metaKey == "ctrl" && !e.ctrlKey) || (Glee.metaKey != "ctrl" && e.ctrlKey))
-						return true;
-					if((Glee.metaKey == "shift" && !e.shiftKey) || (Glee.metaKey != "shift" && e.shiftKey))
+					if(e.metaKey || e.ctrlKey || e.shiftKey)
 						return true;
 
 					e.preventDefault();
@@ -63,13 +59,9 @@ jQuery(document).ready(function(){
 				}
 				else if(e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus)
 				{
-					if(e.metaKey && !e.ctrlKey)
+					if(e.metaKey || e.ctrlKey || e.shiftKey)
 						return true;
-					if((Glee.tabMetaKey == "ctrl" && !e.ctrlKey) || (Glee.tabMetaKey != "ctrl" && e.ctrlKey))
-						return true;
-					if((Glee.tabMetaKey == "shift" && !e.shiftKey) || (Glee.tabMetaKey != "shift" && e.shiftKey))
-						return true;
-					
+
 					e.preventDefault();
 					Glee.userPosBeforeGlee = window.pageYOffset;
 					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
@@ -429,12 +421,8 @@ var Glee = {
 	status:1,
 	//keydown code of shortcut key to launch gleeBox
 	shortcutKey:71,
-	//meta key to use in combination with the shortcut key. valid values are none, shift or ctrl
-	metaKey:'none',
 	//keydown code of shortcut key to launch tab manager
 	tabShortcutKey:190,
-	//meta key for tab manager.
-	tabMetaKey:'none',
 	//used to enable/disable global shortcut for tab manager
 	tabShortcutStatus:true,
 	//used to enable/disabled ESP (default scrapers)
