@@ -4,8 +4,8 @@ function checkVersion(){
     loadPreference('version',function(version){
         if(version == null || version < 1.5)
         {
-            //open the releases page
-            chrome.tabs.create({url:"http://thegleebox.com/releases.html", selected:true}, null);
+            //open the update page
+            chrome.tabs.create({url:"http://thegleebox.com/update.html", selected:true}, null);
             //update version
             if(version == null)
                 createPreference('version', 1.5);

@@ -15,7 +15,7 @@
 				<menuseparator />
 				<menuitem id="gleeboxMenuItem_options" label="Options..." oncommand="gleebox_Menus.openOptionsDialog();" />
 				<menuseparator />
-				<menuitem id="gleeboxMenuItem_about" label="About... 1.1" oncommand="gleebox_Menus.openAboutDialog();" />
+				<menuitem id="gleeboxMenuItem_about" label="About... 1.5" oncommand="gleebox_Menus.openAboutDialog();" />
 			</menupopup>
 		</menu>
 	</menupopup>
