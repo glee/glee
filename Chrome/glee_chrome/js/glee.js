@@ -427,6 +427,7 @@ var Glee = {
 	tabShortcutStatus:true,
 	//used to enable/disabled ESP (default scrapers)
 	espStatus:true,
+	autoEsp: true,
 	//Currently selected element
 	selectedElement:null,
 	//current URL where gleeBox should go
@@ -862,6 +863,11 @@ var Glee = {
 			selStr = sel.join(",");
 		else //search for any default selector defined by current page
 			selStr = jQuery('meta[name="gleebox-default-selector"]').attr("content");
+        
+        if(!selStr && Glee.autoEsp)
+        {
+            selStr = Glee.ESP.find();
+        }    
 		if(selStr)
 		{
 			//creating a new temporary scraper object

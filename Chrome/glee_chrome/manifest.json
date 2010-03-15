@@ -11,7 +11,7 @@
 	{
 		"matches":["http://*/*","https://*/*"],
 		"css":["css/glee.css","css/listmanager.css", "css/themes.css"],
-		"js":["js/jquery.js","js/glee.js","js/chrome.js","js/page-cmds.js","js/utils.js","js/linkreaper.js","js/listmanager.js"],
+		"js":["js/jquery.js","js/glee.js","js/chrome.js","js/page-cmds.js","js/utils.js","js/linkreaper.js","js/listmanager.js","js/esp.js"],
 		"run_at":"document_start"
 	}],
 	"permissions":[
