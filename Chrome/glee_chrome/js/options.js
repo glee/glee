@@ -1,6 +1,7 @@
+var prefs = {};
+
 // Saves options to clientside DB
-function save_options(close_tab) {
-	var prefs = {};
+function saveSettings(close_tab) {
 	var scrapers = [];
 	var espModifiers = [];
 	var disabledUrls = [];
@@ -80,7 +81,7 @@ function save_options(close_tab) {
 	{
 		var name = scraperNames[i].innerText;
 		var sel = scraperSels[i].innerText;
-		scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements"};
+		scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements" };
 	}
 	
 	//saving the ESP Status
@@ -143,8 +144,9 @@ function propagateChanges(prefs)
 }
 
 // Restores select box state to saved value from DB
-function restore_options(prefs)
+function initSettings(response)
 {
+    prefs = response;
 	initDefaultTexts();
 	//getting the user defined restricted domains
 	var len = prefs.disabledUrls.length;
@@ -437,7 +439,7 @@ function addItem(type, value1, value2){
 	}
 	
 	var newEl = document.createElement("li");
-	var	no = listOfItems.children.length + 1;	
+	var	no = listOfItems.children.length;
 	var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"" + type + "\"," + no + ")'/>";
 	newEl.id = type + no;
 	newEl.className = type;
@@ -545,4 +547,104 @@ function initDefaultTexts() {
             }
         }
 	}
+}
+
+function exportSettings(){
+    var text = 'Copy text that appears in the field and paste it into a file.';
+    showBackupPopup(text, false);
+    $("#settingsText").text(JSON.stringify(prefs));
+}
+
+function importSettings(){
+    var text = 'Paste text in the field and hit import';
+    showBackupPopup(text, true);
+    $("#settingsText").text('');
+}
+
+function showBackupPopup(infoText, showButton){
+    
+    var popup = $('#popup');
+    if(popup.length == 0)
+        initBackupPopup();
+        
+    if(showButton)
+        $('#backupImportButton').css('display','block');
+    else
+        $('#backupImportButton').css('display','none');
+
+    $('#backupInfo').text(infoText);
+    $('#popup').fadeIn(200);
+    setTimeout(function(){
+        $('#settingsText')[0].focus();
+    }, 0);
+}
+
+function initBackupPopup()
+{
+    var popup = $('<div/>',{
+        id:"popup"
+    });
+    $('<div id="backupInfo"></div>').appendTo(popup);
+    $('<textarea rows="15" cols="60" id="settingsText"></textarea>').appendTo(popup);
+    var importBtn = $('<input type="button" class="button" value="Import Settings" id="backupImportButton" />');
+    importBtn.appendTo(popup);
+    
+    $('body').append(popup);
+    
+    //add events
+    $(document).keyup(function(e){
+        if(e.keyCode == 27)
+        {
+            var backupPopup = $('#popup');
+            if(backupPopup.length != 0)
+                hideBackupPopup();
+        }
+    });
+    
+    $(document).click(function(e){
+        if(e.target.id == "popup" || e.target.id == "settingsText" || e.target.id == "backupInfo" || e.target.type == "button")
+            return true;
+        var backupPopup = $('#popup');
+        if(backupPopup.length != 0)
+            hideBackupPopup();
+    });
+    
+    importBtn.click(function(e){
+        try{
+            var jsonString = $('#settingsText')[0].value;
+            var tempPref = JSON.parse(jsonString);
+            clearSettings();
+            initSettings(tempPref);
+            $('#backupInfo').text("Settings successfully imported!");
+            hideBackupPopup();
+        }
+        catch(e){
+            $('#backupInfo').text("The import format is incorrect!");
+            $('#settingsText')[0].focus();
+        }
+    });
+}
+
+function hideBackupPopup(){
+    $('#popup').fadeOut(200);
+}
+
+function clearSettings(){
+    //clearing disabled urls
+    var parent = document.getElementById("domains");
+    var len = parent.children.length;
+    for(var i=2; i<len; i++)
+        parent.removeChild(document.getElementById("domain"+i));
+    
+    //clearing scrapers
+    parent = document.getElementById("scraper-commands");
+    len = parent.children.length;
+    for(var i=5; i<len; i++)
+        parent.removeChild(document.getElementById("scraper"+i));
+    
+    //clearing visions
+    parent = document.getElementById("esp-modifiers");
+    len = parent.children.length;
+    for(var i=1; i<len; i++)
+        parent.removeChild(document.getElementById("esp"+i));
 }
