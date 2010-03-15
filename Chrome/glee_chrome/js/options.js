@@ -585,7 +585,7 @@ function initBackupPopup()
         id:"popup"
     });
     $('<div id="backupInfo"></div>').appendTo(popup);
-    $('<textarea rows="15" cols="60" id="settingsText"></textarea>').appendTo(popup);
+    $('<textarea id="settingsText"></textarea>').appendTo(popup);
     var importBtn = $('<input type="button" class="button" value="Import Settings" id="backupImportButton" />');
     importBtn.appendTo(popup);
     
