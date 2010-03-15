@@ -143,3 +143,29 @@ input, textarea{
 .scraper-name{
 	font-weight:bold;
 }
+
+/* Modal popup for backing up settings */
+#popup{
+    display:none;
+    position:fixed;
+    top:25%;
+    left:30%;
+    color:gray;
+    font-size:16px;
+    z-index:10000;
+    padding:5px;
+    background-color:#ccc;
+    border:1px solid gray;
+    border-radius:2px;
+}
+#popup textarea{
+    border:none;
+    outline:none;
+    display:block;
+    background-color:#ddd;
+}
+#backupImportButton{
+    float:right;
+    display:block;
+    margin-top:10px;
+}

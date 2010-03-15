@@ -602,22 +602,84 @@ function initDefaultTexts() {
 	}
 }
 
-function exportSettings(id){
-    var field = document.getElementById(id);
-    field.innerText = JSON.stringify(prefs);
-    field.value = JSON.stringify(prefs);
+function exportSettings(){
+    var text = 'Copy text that appears in the field and paste it into a file.';
+    showBackupPopup(text, false);
+    $("#settingsText").text(JSON.stringify(prefs));
 }
 
-function importSettings(id){
-    var jsonString = document.getElementById(id).value;
-    try{
-        var tempPref = JSON.parse(jsonString);
-        clearSettings();
-        initSettings(tempPref);
-    }
-    catch(e){
-        alert("The import format is incorrect!");
-    }
+function importSettings(){
+    var text = 'Paste text in the field and hit import';
+    showBackupPopup(text, true);
+    $("#settingsText").text('');
+}
+
+function showBackupPopup(infoText, showButton){
+    
+    var popup = $('#popup');
+    if(popup.length == 0)
+        initBackupPopup();
+        
+    if(showButton)
+        $('#backupImportButton').css('display','block');
+    else
+        $('#backupImportButton').css('display','none');
+
+    $('#backupInfo').text(infoText);
+    $('#popup').fadeIn(200);
+    setTimeout(function(){
+        $('#settingsText')[0].focus();
+    }, 0);
+}
+
+function initBackupPopup()
+{
+    var popup = $('<div/>',{
+        id:"popup"
+    });
+    $('<div id="backupInfo"></div>').appendTo(popup);
+    $('<textarea rows="15" cols="60" id="settingsText"></textarea>').appendTo(popup);
+    var importBtn = $('<input type="button" class="button" value="Import Settings" id="backupImportButton" />');
+    importBtn.appendTo(popup);
+    
+    $('body').append(popup);
+    
+    //add events
+    $(document).keyup(function(e){
+        if(e.keyCode == 27)
+        {
+            var backupPopup = $('#popup');
+            if(backupPopup.length != 0)
+                hideBackupPopup();
+        }
+    });
+    
+    $(document).click(function(e){
+        if(e.target.id == "popup" || e.target.id == "settingsText" || e.target.id == "backupInfo" || e.target.type == "button")
+            return true;
+        var backupPopup = $('#popup');
+        if(backupPopup.length != 0)
+            hideBackupPopup();
+    });
+    
+    importBtn.click(function(e){
+        try{
+            var jsonString = $('#settingsText')[0].value;
+            var tempPref = JSON.parse(jsonString);
+            clearSettings();
+            initSettings(tempPref);
+            $('#backupInfo').text("Settings successfully imported!");
+            hideBackupPopup();
+        }
+        catch(e){
+            $('#backupInfo').text("The import format is incorrect!");
+            $('#settingsText')[0].focus();
+        }
+    });
+}
+
+function hideBackupPopup(){
+    $('#popup').fadeOut(200);
 }
 
 function clearSettings(){
