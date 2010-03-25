@@ -80,15 +80,15 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			Glee.closeBox();
 		}
-		else if(e.keyCode == 9) //if TAB is pressed
+		else if(e.keyCode == 9 || ((e.keyCode == 40 || e.keyCode == 38) && !e.ctrlKey && Glee.selectedElement)) //if TAB/ARROW KEYS are pressed
 		{
 			e.stopPropagation();
 			e.preventDefault();
 			if(Glee.selectedElement)
 			{
-				if(e.shiftKey)
+				if((e.shiftKey && e.keyCode == 9) || e.keyCode == 38)
 					Glee.selectedElement = LinkReaper.getPrev();
-				else
+				else if(e.keyCode == 9 || e.keyCode == 40)
 					Glee.selectedElement = LinkReaper.getNext();
 				Glee.scrollToElement(Glee.selectedElement);
 				// do not update subtext in case of inspect command
@@ -106,6 +106,8 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
+		    e.stopPropagation();
+		    e.preventDefault();
 			// 38 is keyCode for UP Arrow key
 			Glee.Utils.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
