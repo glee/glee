@@ -36,12 +36,13 @@
 }
 #gleeSearchField{
 	outline:none;
+	-webkit-box-shadow:none;
 	width:90%;
 	margin:0;
 	background:none !important;
 	padding:0;
 	margin:3px 0;
-	border:none;
+	border:none !important;
 	height:auto !important;
 	font-size:100px;
 	color:#fff;
