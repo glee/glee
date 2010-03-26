@@ -1,9 +1,9 @@
 gleeBox
 --------
 
-gleeBox is an experimental project and is meant for a very niché audience (hackers mostly). It takes a keyboard-centric approach to navigating the web and provides alternatives to actions that are traditionally performed via the mouse. 
+gleeBox takes a keyboard-centric approach to navigating the web and provides alternatives to actions that are traditionally performed via the mouse. It is mostly meant for keyboard and command line lovers.
 
-See screencasts and more at [http://thegleebox.com](http://thegleebox.com "")
+See screencasts and more at [http://thegleebox.com](http://thegleebox.com "").
 
 
 Installation
