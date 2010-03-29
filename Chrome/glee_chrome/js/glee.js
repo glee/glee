@@ -621,6 +621,7 @@ var Glee = {
 		});
 	},
 	closeBox: function(){
+	    this.resetTimer();
 		LinkReaper.unreapAllLinks();
 		this.getBackInitialState();
 		this.searchBox.fadeOut(150,function(){
@@ -632,6 +633,7 @@ var Glee = {
 		this.inspectMode = false;
 	},
 	closeBoxWithoutBlur: function(){
+	    this.resetTimer();
 		this.searchBox.fadeOut(150,function(){
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
