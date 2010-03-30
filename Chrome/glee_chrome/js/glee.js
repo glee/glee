@@ -517,6 +517,16 @@ var Glee = {
 			name: "v",
 			method:"controlVideo",
 			description:"Play/Pause video (currently only supports videos on YouTube)"
+		},
+		{
+		    name: "ext",
+		    method:"viewExtensions",
+		    description:"View the Extensions page"
+		},
+		{
+		    name: "down",
+		    method:"viewDownloads",
+		    description:"View the Downloads page"
 		}
 	],
 	

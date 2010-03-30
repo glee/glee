@@ -189,6 +189,24 @@ Glee.Chrome.openPageInNewTab = function(url){
 	Glee.Chrome.openNewTab(url, true);
 }
 
+Glee.Chrome.openPageIfNotExist = function(url){
+    /* Check if a tab already exists for the url */
+    chrome.extension.sendRequest({value:"getTabs"},function(response){
+       var len = response.tabs.length;
+       for(var i=0; i<len; i++)
+       {
+           if(response.tabs[i].url == url)
+           {
+               Glee.searchField.attr('value','');
+               Glee.setSubText(null);
+               Glee.Chrome.moveToTab(response.tabs[i]);
+               return;
+           }
+       }
+       Glee.Chrome.openPageInNewTab(url);
+	});
+}
+
 Glee.Chrome.setOptionValue = function(){
 	var valid = true;
 	var validOptions = [

@@ -2,12 +2,12 @@
 
 /* help: Opens the gleeBox manual page in a new tab */
 Glee.help = function(){
-	Glee.Chrome.openPageInNewTab("http://thegleebox.com/manual.html");
+	Glee.Chrome.openPageIfNotExist("http://thegleebox.com/manual.html");
 }
 
 /* tipjar: Opens TipJar in a new tab */
 Glee.tipjar = function(){
-	Glee.Chrome.openPageInNewTab("http://tipjar.thegleebox.com");
+	Glee.Chrome.openPageIfNotExist("http://tipjar.thegleebox.com/");
 }
 
 /* rss: Opens the rss feed of page in google reader */
@@ -207,4 +207,14 @@ Glee.controlVideo = function(){
 		}
 	}
 	Glee.closeBox();
+}
+
+/* ext: Open the Extensions page in Chrome */
+Glee.viewExtensions = function(){
+    Glee.Chrome.openPageIfNotExist("chrome://extensions/");
+}
+
+/* down: Open the Downloads page in Chrome */
+Glee.viewDownloads = function(){
+    Glee.Chrome.openPageIfNotExist("chrome://downloads/");
 }
