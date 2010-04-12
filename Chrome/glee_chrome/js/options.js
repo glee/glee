@@ -624,6 +624,8 @@ function initBackupPopup()
         try{
             var jsonString = $('#settingsText')[0].value;
             var tempPref = JSON.parse(jsonString);
+            //set version to current
+            tempPref.version = prefs.version;
             clearSettings();
             initSettings(tempPref);
             $('#backupInfo').text("Settings successfully imported!");
