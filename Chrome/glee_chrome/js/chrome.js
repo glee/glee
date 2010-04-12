@@ -246,7 +246,11 @@ Glee.Chrome.setOptionValue = function(){
 	}
 	if(option == "visions+")
 	{
-		var separator = value.indexOf(":");
+	    var separator = value.indexOf(":");
+	    if(jQuery.inArray(jQuery.trim(value.substring(0, separator)), ["http", "https"]) != -1)
+	    {
+	        separator = separator + 1 + value.substring(separator+1, value.length).indexOf(":");
+	    }
 		var url = jQuery.trim(value.substring(0, separator));
 		var sel = value.substring(separator+1, value.length);
 		if(url == "$")

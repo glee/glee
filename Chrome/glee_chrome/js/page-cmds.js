@@ -8,7 +8,7 @@ Glee.help = function(newTab){
         location.href = "http://thegleebox.com/manual.html";
 }
 
-/* tipjar: Opens TipJar in a new tab */
+/* tipjar: Opens TipJar */
 Glee.tipjar = function(newTab){
     if(newTab)
 	    Glee.Chrome.openPageIfNotExist("http://tipjar.thegleebox.com/");
@@ -222,7 +222,7 @@ Glee.controlVideo = function(){
 	Glee.closeBox();
 }
 
-/* ext: Open the Extensions page in Chrome */
+/* ext: Open the Extensions page */
 Glee.viewExtensions = function(newTab){
     if(newTab)
         Glee.Chrome.openPageIfNotExist("chrome://extensions/");
@@ -230,7 +230,7 @@ Glee.viewExtensions = function(newTab){
         Glee.Chrome.openPageInThisTab("chrome://extensions/");
 }
 
-/* down: Open the Downloads page in Chrome */
+/* down: Open the Downloads page */
 Glee.viewDownloads = function(newTab){
     if(newTab)
         Glee.Chrome.openPageIfNotExist("chrome://downloads/");
