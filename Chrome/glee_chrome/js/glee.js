@@ -111,6 +111,8 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == Glee.tabShortcutKey && Glee.searchField.attr("value").length == 0)
 		{
+		    if(e.metaKey || e.ctrlKey || e.shiftKey)
+		        break;
 			Glee.manageTabs();
 			return;
 		}
