@@ -85,6 +85,12 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		chrome.tabs.create({url:request.url,selected:request.selected},null);
 		sendResponse({});
 	}
+	else if(request.value == "openInThisTab")
+	{
+	    chrome.tabs.getSelected(null, function(tab){
+	        chrome.tabs.update(tab.id, {url:request.url}, function(){});
+	    });
+	}
 	else if(request.value == "getTabs")
 	{
 		chrome.windows.getCurrent(function(currWindow){

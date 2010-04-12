@@ -179,10 +179,6 @@ Glee.Chrome.openNewTab = function(url,selected){
 	});	
 }
 
-Glee.Chrome.displayOptionsPage = function(){
-	Glee.Chrome.openPageInNewTab(chrome.extension.getURL("options.html"));
-}
-
 Glee.Chrome.openPageInNewTab = function(url){
 	Glee.searchField.attr('value','');
 	Glee.setSubText(null);
@@ -204,6 +200,14 @@ Glee.Chrome.openPageIfNotExist = function(url){
            }
        }
        Glee.Chrome.openPageInNewTab(url);
+	});
+}
+
+/* required for URLs beginning with 'chrome://' */
+Glee.Chrome.openPageInThisTab = function(url){
+	Glee.searchField.attr('value','');
+	Glee.setSubText(null);
+	chrome.extension.sendRequest({value:"openInThisTab",url:url},function(response){
 	});
 }
 

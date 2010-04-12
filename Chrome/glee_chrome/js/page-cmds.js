@@ -1,25 +1,32 @@
 /* All page commands go here */
 
 /* help: Opens the gleeBox manual page in a new tab */
-Glee.help = function(){
-	Glee.Chrome.openPageIfNotExist("http://thegleebox.com/manual.html");
+Glee.help = function(newTab){
+    if(newTab)
+	    Glee.Chrome.openPageIfNotExist("http://thegleebox.com/manual.html");
+	else
+        location.href = "http://thegleebox.com/manual.html";
 }
 
 /* tipjar: Opens TipJar in a new tab */
-Glee.tipjar = function(){
-	Glee.Chrome.openPageIfNotExist("http://tipjar.thegleebox.com/");
+Glee.tipjar = function(newTab){
+    if(newTab)
+	    Glee.Chrome.openPageIfNotExist("http://tipjar.thegleebox.com/");
+	else
+	    location.href = "http://tipjar.thegleebox.com/";
 }
 
 /* rss: Opens the rss feed of page in google reader */
-Glee.getRSSLink = function(){
+Glee.getRSSLink = function(newTab){
 	//code via bookmark for google reader
 	 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 }
 
 /* tweet: Opens the twitter page with the shortened URL of the current page in the text field used to post a tweet */
-Glee.sendTweet = function(){
+Glee.sendTweet = function(newTab){
 	//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 	var url = location.href;
+	var loc;
 	if(url.length > 30)
 	{
 		Glee.Chrome.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
@@ -29,9 +36,9 @@ Glee.sendTweet = function(){
 			var encodedURL = encodeURIComponent(shortenedURL);
 			//redirect to twitter homepage
 			if(document.title.length <= 90)
-			    location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
+			    loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 			else
-			    location.href = "http://twitter.com/?status="+encodedURL;
+			    loc = "http://twitter.com/?status="+encodedURL;
 		});
 	}
 	else
@@ -39,10 +46,14 @@ Glee.sendTweet = function(){
 		//redirect to twitter without shortening the URL
 		var encodedURL = encodeURIComponent(location.href);
 		if(document.title.length <= 90)
-		    location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
+            loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 		else
-		    location.href = "http://twitter.com/?status="+encodedURL;
+            loc = "http://twitter.com/?status="+encodedURL;
 	}
+	if(newTab)
+	    Glee.Chrome.openPageInNewTab(loc);
+	else
+	    location.href = loc;
 }
 
 /* inspect: Displays the jQuery selector if only one matching element is returned or if more are returned,
@@ -99,8 +110,9 @@ Glee.inspectElement = function(el,level){
 }
 
 /* share: Share current page via mail/gmail/twitter/facebook/stumbleupon/digg/delicious */
-Glee.sharePage = function(){
+Glee.sharePage = function(newTab){
 	var site = Glee.searchField.attr('value').substring(6).replace(" ","");
+	var loc = null;
 	//Try to get description
 	var desc = jQuery('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
 	if((!desc) || (desc == ""))
@@ -114,62 +126,63 @@ Glee.sharePage = function(){
 	{
 		case "g":
 		case "gmail":
-			Glee.Chrome.openPageInNewTab(
-				"https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
+			loc = "https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
 				+document.title
 				+"&body="
 				+location.href
-				+mailDesc);
+				+mailDesc;
 			break;
 		case "m":
 		case "mail":
-			Glee.Chrome.openPageInNewTab(
-				"mailto:?subject="
+            loc = "mailto:?subject="
 				+document.title
 				+"&body="
 				+location.href
-				+mailDesc);
+				+mailDesc;
 			break;
 		case "fb":
 		case "facebook":
-			Glee.Chrome.openPageInNewTab(
-				"http://www.facebook.com/share.php?u="
-				+location.href);
+            loc = "http://www.facebook.com/share.php?u="
+				+location.href;
 			break;
 		case "deli":
 		case "delicious":
-			Glee.Chrome.openPageInNewTab(
-				"http://delicious.com/save?title="
+            loc = "http://delicious.com/save?title="
 				+document.title
 				+"&url="
 				+location.href
 				+"&notes="
-				+desc);
+				+desc;
 			break;
 		case "digg":
-			Glee.Chrome.openPageInNewTab(
-				"http://digg.com/submit/?url="
-				+location.href);
+            loc = "http://digg.com/submit/?url="
+				+location.href;
 			break;
 		case "t":
 		case "twitter":
 			Glee.sendTweet();
-			break;
+            return;
 		case "su":
 		case "stumbleupon":
-			Glee.Chrome.openPageInNewTab(
-				"http://www.stumbleupon.com/submit?url="
-				+location.href);
+            loc = "http://www.stumbleupon.com/submit?url="
+				+location.href;
 			break;
 		default:
 			break;
+	}
+	if(loc)
+	{
+	    if(newTab)
+	        Glee.Chrome.openPageInNewTab(loc);
+	    else
+	        location.href = loc;
 	}
 }
 
 /* read: Make the current page readable using Readability */
 Glee.makeReadable = function(){
 	//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
-	location.href = "javascript:(function(){readStyle='style-athelas';readSize='size-medium';readMargin='margin-medium';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='all';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
+    location.href = "javascript:(function(){readStyle='style-athelas';readSize='size-medium';readMargin='margin-medium';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='all';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
 }
 
 /* shorten: Shortens the URL using bit.ly and displays it in gleeBox */
@@ -210,11 +223,26 @@ Glee.controlVideo = function(){
 }
 
 /* ext: Open the Extensions page in Chrome */
-Glee.viewExtensions = function(){
-    Glee.Chrome.openPageIfNotExist("chrome://extensions/");
+Glee.viewExtensions = function(newTab){
+    if(newTab)
+        Glee.Chrome.openPageIfNotExist("chrome://extensions/");
+    else
+        Glee.Chrome.openPageInThisTab("chrome://extensions/");
 }
 
 /* down: Open the Downloads page in Chrome */
-Glee.viewDownloads = function(){
-    Glee.Chrome.openPageIfNotExist("chrome://downloads/");
+Glee.viewDownloads = function(newTab){
+    if(newTab)
+        Glee.Chrome.openPageIfNotExist("chrome://downloads/");
+    else
+        Glee.Chrome.openPageInThisTab("chrome://downloads/");
+}
+
+/* options: Open the Options page for gleeBox */
+Glee.displayOptionsPage = function(newTab){
+    var url = chrome.extension.getURL("options.html");
+    if(newTab)
+	    Glee.Chrome.openPageIfNotExist(url);
+	else
+	    Glee.Chrome.openPageInThisTab(url);
 }

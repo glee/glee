@@ -266,7 +266,10 @@ jQuery(document).ready(function(){
 				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 				if(typeof(Glee.URL.name) != "undefined")
 				{
-					Glee.execCommand(Glee.URL);
+				    if(e.shiftKey)
+				        Glee.execCommand(Glee.URL, true);
+					else
+					    Glee.execCommand(Glee.URL, false);
 					return;
 				}
 				else
@@ -493,7 +496,7 @@ var Glee = {
 		},
 		{
 			name: "options",
-			method:"Chrome.displayOptionsPage",
+			method:"displayOptionsPage",
 			description:"View gleeBox options",
 			statusText:"Opening options page..."
 		},
@@ -969,7 +972,7 @@ var Glee = {
 		if(typeof(this.timer) != "undefined")
 			clearTimeout(this.timer);
 	},
-	execCommand: function(command){
+	execCommand: function(command, openInNewTab){
 		//call the method
 		var method = command.method;
 		//setting the status
@@ -977,10 +980,10 @@ var Glee = {
 		if(method.indexOf("Chrome.") == 0)
 		{
 			method = method.slice(7);
-			Glee.Chrome[method]();
+			Glee.Chrome[method](openInNewTab);
 		}
 		else
-			Glee[method]();
+			Glee[method](openInNewTab);
 	},
 	manageTabs: function(){
 		var onGetTabs = function(response){
