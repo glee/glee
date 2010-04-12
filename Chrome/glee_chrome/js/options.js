@@ -386,14 +386,16 @@ function addItem(type, value1, value2){
 		case "domain":
 			var domainName = document.getElementById("add_domain");
 			if(!value1)
+			{
 				value1 = domainName.value;
-			
-			if(value1 != "")
+			    domainName.value = domainName.defaultText;
+			}
+
+			if(validateURL(value1))
 			{
 				listOfItems = document.getElementById("domains");
 				lastEl = document.getElementById("addDomainLI");
  				content = "<span class='domain-name'>" + value1 + "</span>";
-				domainName.value = "";
 			}
 			else
 				return false;
@@ -407,6 +409,8 @@ function addItem(type, value1, value2){
 			{
 				value1 = scraperName.value;
 				value2 = scraperSel.value;
+				scraperName.value = scraperName.defaultText;
+				scraperSel.value = scraperSel.defaultText;
 			}
 
 			if(validateScraper(value1, value2))
@@ -414,8 +418,6 @@ function addItem(type, value1, value2){
  				listOfItems = document.getElementById("scraper-commands");
 				lastEl = document.getElementById("addScraper");
  				content = "<strong>?</strong><span class='scraper-name'>"+ value1 +"</span> : <span class='scraper-sel'>"+ value2 +"</span>";
-				scraperName.value="";
-				scraperSel.value="";
 			}
 			else
 				return false;
@@ -428,14 +430,14 @@ function addItem(type, value1, value2){
 			{
 				value1 = espUrl.value;
 				value2 = espSel.value;
+				espUrl.value = espUrl.defaultText;
+				espSel.value = espSel.defaultText;
 			}
 			if(validateEspModifier(value1, value2))
 			{
  				listOfItems = document.getElementById("esp-modifiers");
 				lastEl = document.getElementById("addEspModifier");
  				content = "<span class='esp-url'>" + value1 + "</span> : <span class='esp-sel'>" + value2 + "</span>";
-				espUrl.value="";
-				espSel.value="";
 			}
 			else
 				return false;
@@ -490,6 +492,12 @@ function filter(text){
 	return text;
 }
 
+function validateURL(url)
+{
+    if(url == "Page URL" || url == "")
+        return false;
+    return true;
+}
 function validateScraper(name,selector)
 {
 	//check that command name/selector should not be blank
