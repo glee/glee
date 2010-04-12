@@ -31,7 +31,6 @@ h2{
 	letter-spacing:1px;
 	margin: 20px 0px;
 	border-radius:5px;
-	-moz-border-radius:5px;	
 	padding-left: 7px;
 	padding-top: 5px;
 	padding-bottom: 3px;
@@ -130,9 +129,7 @@ input, textarea{
 	width:800px;
 	background-color: #fff;
 	border-radius:5px;
-	-moz-border-radius:5px;	
 	-webkit-box-shadow: #d3d3d3 0px 0px 8px;
-	-moz-box-shadow: #d3d3d3 0px 0px 8px;
 	padding:20px;
 	margin-bottom:20px;
 }

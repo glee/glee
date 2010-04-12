@@ -35,7 +35,6 @@ Glee.getRSSLink = function(){
 Glee.sendTweet = function(newTab){
 	//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 	var url = location.href;
-	var loc;
 	if(url.length > 30)
 	{
 		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
@@ -43,26 +42,32 @@ Glee.sendTweet = function(newTab){
 			var json = JSON.parse("["+data.responseText+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
 			var encodedURL = encodeURIComponent(shortenedURL);
+			var loc;
 			//redirect to twitter homepage
 			if(document.title.length <= 90)
 			    loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 			else
 			    loc = "http://twitter.com/?status="+encodedURL;
+			if(newTab)
+        	    Glee.openPageInNewTab(loc);
+        	else
+        	    location.href = loc;
 		});
 	}
 	else
 	{
 		//redirect to twitter without shortening the URL
 		var encodedURL = encodeURIComponent(location.href);
+		var loc;
 		if(document.title.length <= 90)
 		    loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 		else
 		    loc = "http://twitter.com/?status="+encodedURL;
+		if(newTab)
+    	    Glee.openPageInNewTab(loc);
+    	else
+    	    location.href = loc;
 	}
-	if(newTab)
-	    Glee.openPageInNewTab(loc);
-	else
-	    location.href = loc;
 }
 
 /* inspect: Displays the jQuery selector if only one matching element is returned or if more are returned,
