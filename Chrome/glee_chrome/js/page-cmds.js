@@ -160,7 +160,7 @@ Glee.sharePage = function(newTab){
 			break;
 		case "t":
 		case "twitter":
-			Glee.sendTweet();
+			Glee.sendTweet(newTab);
             return;
 		case "su":
 		case "stumbleupon":

@@ -265,7 +265,10 @@ jQuery(document).ready(function(){
 				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 				if(typeof(Glee.URL.name) != "undefined")
 				{
-					Glee.execCommand(Glee.URL);
+				    if(e.shiftKey)
+					    Glee.execCommand(Glee.URL, true);
+					else
+					    Glee.execCommand(Glee.URL, false);
 					return;
 				}
 				else
@@ -669,6 +672,7 @@ var Glee = {
 		});
 	},
 	closeBox: function(){
+	    this.resetTimer();
 		setTimeout(function(){
 			Glee.getBackInitialState();
 		}, 0);
@@ -682,6 +686,7 @@ var Glee = {
 		this.inspectMode = false;
 	},
 	closeBoxWithoutBlur: function(){
+	    this.resetTimer();
 		this.searchBox.fadeOut(150,function(){
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
@@ -1021,12 +1026,12 @@ var Glee = {
 		});
 		},0);
 	},
-	execCommand: function(command){
+	execCommand: function(command, openInNewTab){
 		//call the method
 		var method = command.method;
 		//setting the status
 		this.setSubText(command.statusText,"msg");
-		Glee[method]();
+		Glee[method](openInNewTab);
 	},
 	openPageInNewTab: function(url){
 		setTimeout(function(){
@@ -1063,6 +1068,10 @@ var Glee = {
 		if(option == "visions+")
 		{
 			var separator = value.indexOf(":");
+            if(jQuery.inArray(jQuery.trim(value.substring(0, separator)), ["http", "https"]) != -1)
+            {
+                separator = separator + 1 + value.substring(separator+1, value.length).indexOf(":");
+            }
 			var url = jQuery.trim(value.substring(0, separator));
 			var sel = value.substring(separator+1, value.length);
 			if(url == "$")
