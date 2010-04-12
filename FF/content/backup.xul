@@ -1,0 +1,20 @@
+<?xml version="1.0"?> 
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://gleebox/skin/classic/style.css" type="text/css"?>
+<window title="gleeBox Backup"
+				id="gleebox_backup"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+				onload="gleebox_Backup.init()"
+>
+<script type="application/x-javascript" src="chrome://gleebox/content/json.js" />
+<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
+<script type="application/x-javascript" src="chrome://gleebox/content/backup.js" />
+<vbox width="500" style="margin:10px;margin-bottom:30px; ">
+<label id="statusText" value="Copy text in field and paste it into a file" />
+<textbox id="settingsText" style="margin-top:20px" multiline="true" rows="10" cols="75" />
+<hbox align="right" >
+<button id="backupButton" label="Close" oncommand="gleebox_Backup.onButtonClick();"/>
+</hbox>
+</vbox> 
+</window>

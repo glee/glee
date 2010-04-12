@@ -253,5 +253,11 @@ var gleebox_Options = {
 		var shortcutKey = document.getElementById("shortcut_key_textbox");
 		shortcutKey.value = "71";
 		this.prefs.setValue('shortcut_key', shortcutKey.value);
+	},
+	openBackupDialog: function(func){
+		var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"].getService(Components.interfaces["nsIExtensionManager"]);
+        openDialog("chrome://gleebox/content/backup.xul", "gleeBox Backup",
+            "centerscreen", "urn:mozilla:item:gleebox@ankit.ahuja.and.sameer.ahuja", extensionManager.datasource, func);
+        initOptions();
 	}
 };

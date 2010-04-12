@@ -220,12 +220,13 @@ function initSettings(response)
 		
 	//getting the tab shortcut status pref
 	var tab_shortcut_status = prefs.tab_shortcut_status;
-	
-	if(tab_shortcut_status == 0)
-		document.getElementsByName("glee_tab_shortcut_status")[1].checked = true;
-	else
-		document.getElementsByName("glee_tab_shortcut_status")[0].checked = true;
-
+	if(tab_shortcut_status != undefined)
+	{
+	    if(tab_shortcut_status == 0)
+    		document.getElementsByName("glee_tab_shortcut_status")[1].checked = true;
+    	else
+    		document.getElementsByName("glee_tab_shortcut_status")[0].checked = true;
+	}
 	//getting the custom scraper commands
 	var len = prefs.scrapers.length;
 	if(len != 0)
@@ -283,11 +284,13 @@ function initSettings(response)
 	
 	//getting the tab manager shortcut key
 	var tabShortcut = prefs.tab_shortcut_key;
-	if(tabShortcut)
-		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = tabShortcut;
-	else
-		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190; //default is .
-		
+	if(tabShortcut != undefined)
+	{
+	    if(tabShortcut)
+    		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = tabShortcut;
+    	else
+    		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190; //default is .
+	}
 	KeyCombo.init(document.getElementsByName("glee_tab_shortcut_key_field")[0], document.getElementsByName("glee_tab_shortcut_key")[0]);
 }
 
@@ -556,7 +559,7 @@ function exportSettings(){
 }
 
 function importSettings(){
-    var text = 'Paste text in the field and hit import';
+    var text = 'Paste text in the field and hit Import Settings';
     showBackupPopup(text, true);
     $("#settingsText").text('');
 }
