@@ -172,6 +172,11 @@ Glee.sharePage = function(newTab){
             loc = "http://www.stumbleupon.com/submit?url="
 				+location.href;
 			break;
+		case "":
+			loc = "http://api.addthis.com/oexchange/0.8/offer?url="
+				+location.href
+				+"&title="
+				+document.title;
 		default:
 			break;
 	}
