@@ -561,13 +561,13 @@ function initDefaultTexts() {
 }
 
 function exportSettings(){
-    var text = 'Copy text that appears in the field and paste it into a file.';
+    var text = 'Copy the contents of this text field, and save them to a file for backup.';
     showBackupPopup(text, false);
     $("#settingsText").text(JSON.stringify(prefs));
 }
 
 function importSettings(){
-    var text = 'Paste text in the field and hit Import Settings';
+    var text = 'Paste exported settings here.';
     showBackupPopup(text, true);
     $("#settingsText").text('');
 }
