@@ -1,6 +1,6 @@
 1.6 (14/04/2010)
 * Backup: Export/Import your gleeBox settings (also between Firefox and Chrome)
-* More consistent Enter/Shift+Enter behavior for page commands
+* Consistent Enter/Shift+Enter behavior for page commands
 * Added support for AddThis
 * !ext and !down page commands [Chrome only]
 * Options page spruced up [Chrome only]
