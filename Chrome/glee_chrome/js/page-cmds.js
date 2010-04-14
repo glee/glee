@@ -128,21 +128,29 @@ Glee.sharePage = function(newTab){
 	else
 		mailDesc = "  -  " + desc;
 	
+	// Encode
+	enUrl = encodeURIComponent(location.href);
+	enTitle = encodeURIComponent(document.title);
+	enDesc = encodeURIComponent(desc);
+	enMailDesc = encodeURIComponent(mailDesc);
+	
 	// Short names of favorite services
 	if(site == "su")
 		site = "stumbleupon";
 	else if(site == "buzz")
 		site = "googlebuzz";
+	else if(site == "fb")
+		site = "facebook";
 	
 	switch(site)
 	{
 		case "g":
 		case "gmail":
 			loc = "https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
-				+document.title
+				+enTitle
 				+"&body="
-				+location.href
-				+mailDesc;
+				+enUrl
+				+enMailDesc;
 			break;
 		case "m":
 		case "mail":
@@ -152,19 +160,14 @@ Glee.sharePage = function(newTab){
 				+location.href
 				+mailDesc;
 			break;
-		case "fb":
-		case "facebook":
-            loc = "http://www.facebook.com/share.php?u="
-				+location.href;
-			break;
 		case "deli":
 		case "delicious":
             loc = "http://delicious.com/save?title="
-				+document.title
+				+enTitle
 				+"&url="
-				+location.href
+				+enUrl
 				+"&notes="
-				+desc;
+				+enDesc;
 			break;
 		case "t":
 		case "twitter":
@@ -172,17 +175,17 @@ Glee.sharePage = function(newTab){
             return;
 		case "":
 			loc = "http://api.addthis.com/oexchange/0.8/offer?url="
-				+location.href
+				+enUrl
 				+"&title="
-				+document.title;
+				+enTitle;
 				break;
 		default:
 			loc = "http://api.addthis.com/oexchange/0.8/forward/"
 				+site 
 				+"/offer?url="
-				+location.href
+				+enUrl
 				+"&title="
-				+document.title;
+				+enTitle;
 	}
 	if(loc)
 	{
