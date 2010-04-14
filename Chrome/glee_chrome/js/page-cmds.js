@@ -127,6 +127,13 @@ Glee.sharePage = function(newTab){
 		}
 	else
 		mailDesc = "  -  " + desc;
+	
+	// Short names of favorite services
+	if(site == "su")
+		site = "stumbleupon";
+	else if(site == "buzz")
+		site = "googlebuzz";
+	
 	switch(site)
 	{
 		case "g":
@@ -159,26 +166,23 @@ Glee.sharePage = function(newTab){
 				+"&notes="
 				+desc;
 			break;
-		case "digg":
-            loc = "http://digg.com/submit/?url="
-				+location.href;
-			break;
 		case "t":
 		case "twitter":
 			Glee.sendTweet(newTab);
             return;
-		case "su":
-		case "stumbleupon":
-            loc = "http://www.stumbleupon.com/submit?url="
-				+location.href;
-			break;
 		case "":
 			loc = "http://api.addthis.com/oexchange/0.8/offer?url="
 				+location.href
 				+"&title="
 				+document.title;
+				break;
 		default:
-			break;
+			loc = "http://api.addthis.com/oexchange/0.8/forward/"
+				+site 
+				+"/offer?url="
+				+location.href
+				+"&title="
+				+document.title;
 	}
 	if(loc)
 	{
