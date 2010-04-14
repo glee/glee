@@ -11,10 +11,11 @@
 <script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
 <script type="application/x-javascript" src="chrome://gleebox/content/backup.js" />
 <vbox width="500" style="margin:10px;margin-bottom:30px; ">
-<label id="statusText" value="Copy text in field and paste it into a file" />
+<label id="statusText" value="Copy the contents of this text field, and save them to a file for backup." />
 <textbox id="settingsText" style="margin-top:20px" multiline="true" rows="10" cols="75" />
 <hbox align="right" >
-<button id="backupButton" label="Close" oncommand="gleebox_Backup.onButtonClick();"/>
+<button style="display:none" id="importButton" label="Import Settings" oncommand="gleebox_Backup.import();"/>
+<button id="closeButton" label="Close" oncommand="gleebox_Backup.closeDialog();"/>
 </hbox>
 </vbox> 
 </window>

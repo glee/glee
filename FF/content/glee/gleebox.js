@@ -480,7 +480,7 @@ var Glee = {
 		{
 			name: "share",
 			method:"sharePage",
-			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, t(witter), deli(cious), digg, and su/stumbleupon."
+			description:"Share this page. Enter service name as param, eg.: !share facebook. Several services are supported, run !help to see a listing"
 		},
 		{
 			name: "inspect",

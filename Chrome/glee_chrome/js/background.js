@@ -2,15 +2,15 @@ var response = {};
 
 function checkVersion(){
     loadPreference('version',function(version){
-        if(version == null || version < 1.5)
+        if(version == null || version < 1.6)
         {
             //open the update page
             chrome.tabs.create({url:"http://thegleebox.com/update.html", selected:true}, null);
             //update version
             if(version == null)
-                createPreference('version', 1.5);
+                createPreference('version', 1.6);
             else
-                savePreference('version', 1.5);
+                savePreference('version', 1.6);
         }
     });
 }

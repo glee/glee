@@ -3,26 +3,21 @@ var gleebox_Backup = {
     init: function(){
         this.prefs = new gleebox_PrefManager();
 	    var settingsText = document.getElementById("settingsText");
-        var backup_bt = document.getElementById("backupButton");
         if(window.arguments[2] == 'export')
         {
             this.export();
-            document.getElementById("gleebox_backup").title = "Export gleeBox Settings";
         }
         else
         {
             var statusText = document.getElementById("statusText");
-            statusText.value = "Paste text into field and hit 'Import settings'";
-            backup_bt.label = "Import Settings";
-            document.getElementById("gleebox_backup").title = "Export gleeBox Settings";
+            statusText.value = "Paste exported settings here.";
+            var import_bt = document.getElementById("importButton");
+            import_bt.style.display = 'block';
         }
         settingsText.focus();
     },
-    onButtonClick: function(){
-        if(window.arguments[2] == 'export')
-            window.close();
-        else
-            this.import();
+    closeDialog: function(){
+        window.close();
     },
     export: function(){
 	    var settingsText = document.getElementById("settingsText");

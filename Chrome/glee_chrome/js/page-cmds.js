@@ -141,6 +141,8 @@ Glee.sharePage = function(newTab){
 		site = "googlebuzz";
 	else if(site == "fb")
 		site = "facebook";
+	else if(site == "reader")
+	    site = "googlereader";
 	
 	switch(site)
 	{
