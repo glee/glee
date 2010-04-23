@@ -28,47 +28,24 @@ jQuery(document).ready(function(){
 		{
 			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey)
 			{
-				if(e.keyCode == Glee.shortcutKey)
+			    if(target.id == "gleeSearchField")
+			        return true;
+				if(e.keyCode == Glee.shortcutKey || (e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus))
 				{
-					if(e.metaKey || e.ctrlKey || e.shiftKey)
+				    if(e.metaKey || e.ctrlKey || e.shiftKey)
 						return true;
-
 					e.preventDefault();
-					
-					Glee.userPosBeforeGlee = window.pageYOffset;
-					//set default subtext
-					Glee.subText.html(Glee.nullStateMessage);
-					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
-						Glee.userFocusBeforeGlee = target;
+				    Glee.userPosBeforeGlee = window.pageYOffset;
+            		//set default subtext
+            		Glee.subText.html(Glee.nullStateMessage);
+            		if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
+            			Glee.userFocusBeforeGlee = target;
+            		else
+            			Glee.userFocusBeforeGlee = null;
+					if(e.keyCode == Glee.shortcutKey)
+					    Glee.open();
 					else
-						Glee.userFocusBeforeGlee = null;
-					if(Glee.searchBox.css('display') == "none")
-					{
-						//reseting value of searchField
-						Glee.searchField.attr('value','');
-						Glee.searchBox.fadeIn(150);
-						Glee.searchField[0].focus();
-						if(Glee.espStatus)
-							Glee.fireEsp();
-					}
-					else
-					{
-						//If gleeBox is already visible, focus is returned to it
-						Glee.searchField[0].focus();
-					}
-				}
-				else if(e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus)
-				{
-					if(e.metaKey || e.ctrlKey || e.shiftKey)
-						return true;
-
-					e.preventDefault();
-					Glee.userPosBeforeGlee = window.pageYOffset;
-					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
-						Glee.userFocusBeforeGlee = target;
-					else
-						Glee.userFocusBeforeGlee = null;
-					Glee.manageTabs();
+                        Glee.openTabManager();
 				}
 			}
 		}
@@ -80,15 +57,15 @@ jQuery(document).ready(function(){
 			e.preventDefault();
 			Glee.closeBox();
 		}
-		else if(e.keyCode == 9 || ((e.keyCode == 40 || e.keyCode == 38) && !e.ctrlKey && Glee.selectedElement)) //if TAB/ARROW KEYS are pressed
+		else if(e.keyCode == 9) //if TAB is pressed
 		{
 			e.stopPropagation();
 			e.preventDefault();
 			if(Glee.selectedElement)
 			{
-				if((e.shiftKey && e.keyCode == 9) || e.keyCode == 38)
+				if(e.shiftKey)
 					Glee.selectedElement = LinkReaper.getPrev();
-				else if(e.keyCode == 9 || e.keyCode == 40)
+				else
 					Glee.selectedElement = LinkReaper.getNext();
 				Glee.scrollToElement(Glee.selectedElement);
 				// do not update subtext in case of inspect command
@@ -106,14 +83,14 @@ jQuery(document).ready(function(){
 		}
 		else if(e.keyCode == 40 || e.keyCode == 38) //when arrow keys are down
 		{
-		    e.stopPropagation();
-		    e.preventDefault();
 			// 38 is keyCode for UP Arrow key
 			Glee.Utils.simulateScroll((e.keyCode == 38 ? 1:-1));
 		}
 		else if(e.keyCode == Glee.tabShortcutKey && Glee.searchField.attr("value").length == 0)
 		{
-			Glee.manageTabs();
+		    if(e.metaKey || e.ctrlKey || e.shiftKey)
+		        break;
+			Glee.openTabManager();
 			return;
 		}
 	});
@@ -268,7 +245,10 @@ jQuery(document).ready(function(){
 				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 				if(typeof(Glee.URL.name) != "undefined")
 				{
-					Glee.execCommand(Glee.URL);
+				    if(e.shiftKey)
+				        Glee.execCommand(Glee.URL, true);
+					else
+					    Glee.execCommand(Glee.URL, false);
 					return;
 				}
 				else
@@ -405,12 +385,12 @@ jQuery(document).ready(function(){
 	});
 });
 
-
 var Glee = {
 	nullStateMessage:"Nothing selected",
 	//State of scrolling. 0=None, 1=Up, -1=Down.
 	scrollState: 0,
 	hyperMode: false,
+	hyperBlackList:["sixtyone.com"],
 	inspectMode: false,
 	// last query executed in gleeBox
 	lastQuery:null,
@@ -496,7 +476,7 @@ var Glee = {
 		},
 		{
 			name: "options",
-			method:"Chrome.displayOptionsPage",
+			method:"displayOptionsPage",
 			description:"View gleeBox options",
 			statusText:"Opening options page..."
 		},
@@ -509,7 +489,7 @@ var Glee = {
 		{
 			name: "share",
 			method:"sharePage",
-			description:"Share this page. Valid params are m(ail), g(mail), fb/facebook, t(witter), deli(cious), digg, and su/stumbleupon."
+			description:"Share this page. Enter service name as param, eg.: !share facebook. Several services are supported, run !help to see a listing"
 		},
 		{
 			name: "inspect",
@@ -520,6 +500,16 @@ var Glee = {
 			name: "v",
 			method:"controlVideo",
 			description:"Play/Pause video (currently only supports videos on YouTube)"
+		},
+		{
+		    name: "ext",
+		    method:"viewExtensions",
+		    description:"View the Extensions page"
+		},
+		{
+		    name: "down",
+		    method:"viewDownloads",
+		    description:"View the Downloads page"
 		}
 	],
 	
@@ -583,6 +573,22 @@ var Glee = {
 		Glee.userPosBeforeGlee = window.pageYOffset;
 		this.Chrome.getOptions();
 	},
+	open: function(){
+		if(Glee.searchBox.css('display') == "none")
+		{
+			//reseting value of searchField
+			Glee.searchField.attr('value','');
+			Glee.searchBox.fadeIn(150);
+			Glee.searchField[0].focus();
+			if(Glee.espStatus)
+				Glee.fireEsp();
+		}
+		else
+		{
+			//If gleeBox is already visible, focus is returned to it
+			Glee.searchField[0].focus();
+		}
+	},
 	initOptions:function(){
 		// Setup the theme
 		Glee.searchBox.addClass(Glee.ThemeOption);
@@ -614,16 +620,30 @@ var Glee = {
 		
 	},
 	getHyperized: function(){
-		Glee.searchField.attr('value','');
-		Glee.searchBox.fadeIn(100);
-		// TODO: Hack to steal focus from page's window onload. 
-		// We can't add this stuff to onload. See if there's another way.
-		jQuery(window).fadeTo(100, 1, function(){
-			Glee.fireEsp();
-			Glee.searchField.focus();
-		});
+	    var len = Glee.hyperBlackList.length;
+	    var isInBlackList = false;
+	    for(var i=0; i<len; i++)
+	    {
+	        if(location.href.indexOf(Glee.hyperBlackList[i]) != -1)
+	        {
+	            isInBlackList = true;
+	            break;
+	        }
+	    }
+	    if(!isInBlackList)
+	    {
+	        Glee.open();
+	        Glee.lastQuery = "";
+	    }
+        // TODO: Hack to steal focus from page's window onload. 
+        // We can't add this stuff to onload. See if there's another way.
+        // jQuery(window).fadeTo(100, 1, function(){
+        //     Glee.fireEsp();
+        //     Glee.searchField[0].focus();
+        // });
 	},
 	closeBox: function(){
+	    this.resetTimer();
 		LinkReaper.unreapAllLinks();
 		this.getBackInitialState();
 		this.searchBox.fadeOut(150,function(){
@@ -635,6 +655,7 @@ var Glee = {
 		this.inspectMode = false;
 	},
 	closeBoxWithoutBlur: function(){
+	    this.resetTimer();
 		this.searchBox.fadeOut(150,function(){
 			Glee.searchField.attr('value','');
 			Glee.setSubText(null);
@@ -965,7 +986,7 @@ var Glee = {
 		if(typeof(this.timer) != "undefined")
 			clearTimeout(this.timer);
 	},
-	execCommand: function(command){
+	execCommand: function(command, openInNewTab){
 		//call the method
 		var method = command.method;
 		//setting the status
@@ -973,12 +994,12 @@ var Glee = {
 		if(method.indexOf("Chrome.") == 0)
 		{
 			method = method.slice(7);
-			Glee.Chrome[method]();
+			Glee.Chrome[method](openInNewTab);
 		}
 		else
-			Glee[method]();
+			Glee[method](openInNewTab);
 	},
-	manageTabs: function(){
+	openTabManager: function(){
 		var onGetTabs = function(response){
 			Glee.closeBoxWithoutBlur();
 			Glee.ListManager.openBox(response.tabs, function(action, item){

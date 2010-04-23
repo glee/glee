@@ -1,13 +1,19 @@
 /* All page commands go here */
 
 /* help: Opens the gleeBox manual page in a new tab */
-Glee.help = function(){
-	Glee.openPageInNewTab("http://thegleebox.com/manual.html");
+Glee.help = function(newTab){
+    if(newTab)
+	    Glee.openPageInNewTab("http://thegleebox.com/manual.html");
+	else
+	    location.href = "http://thegleebox.com/manual.html";
 }
 
-/* tipjar: Opens TipJar in a new tab */
-Glee.tipjar = function(){
-	Glee.openPageInNewTab("http://tipjar.thegleebox.com");
+/* tipjar: Opens TipJar */
+Glee.tipjar = function(newTab){
+    if(newTab)
+	    Glee.openPageInNewTab("http://tipjar.thegleebox.com");
+	else
+	    location.href = "http://tipjar.thegleebox.com";
 }
 
 /* options: Display Options window */
@@ -26,7 +32,7 @@ Glee.getRSSLink = function(){
 }
 
 /* tweet: Opens the twitter page with the shortened URL of the current page in the text field used to post a tweet */
-Glee.sendTweet = function(){
+Glee.sendTweet = function(newTab){
 	//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 	var url = location.href;
 	if(url.length > 30)
@@ -36,21 +42,31 @@ Glee.sendTweet = function(){
 			var json = JSON.parse("["+data.responseText+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
 			var encodedURL = encodeURIComponent(shortenedURL);
+			var loc;
 			//redirect to twitter homepage
 			if(document.title.length <= 90)
-			    location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
+			    loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 			else
-			    location.href = "http://twitter.com/?status="+encodedURL;
+			    loc = "http://twitter.com/?status="+encodedURL;
+			if(newTab)
+        	    Glee.openPageInNewTab(loc);
+        	else
+        	    location.href = loc;
 		});
 	}
 	else
 	{
 		//redirect to twitter without shortening the URL
 		var encodedURL = encodeURIComponent(location.href);
+		var loc;
 		if(document.title.length <= 90)
-		    location.href = "http://twitter.com/?status="+document.title+" "+encodedURL;
+		    loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 		else
-		    location.href = "http://twitter.com/?status="+encodedURL;
+		    loc = "http://twitter.com/?status="+encodedURL;
+		if(newTab)
+    	    Glee.openPageInNewTab(loc);
+    	else
+    	    location.href = loc;
 	}
 }
 
@@ -109,8 +125,9 @@ Glee.inspectElement = function(el,level){
 }
 
 /* share: Share current page via mail/gmail/twitter/facebook/stumbleupon/digg/delicious */
-Glee.sharePage = function(){
+Glee.sharePage = function(newTab){
 	var site = Glee.searchField.attr('value').substring(6).replace(" ","");
+	var loc = null;
 	//Try to get description
 	var desc = jQuery('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
 	if((!desc) || (desc == ""))
@@ -120,59 +137,74 @@ Glee.sharePage = function(){
 		}
 	else
 		mailDesc = "  -  " + desc;
-	switch(site) 
+	
+	// Encode
+	enUrl = encodeURIComponent(location.href);
+	enTitle = encodeURIComponent(document.title);
+	enDesc = encodeURIComponent(desc);
+	enMailDesc = encodeURIComponent(mailDesc);
+	
+	// Short names of favorite services
+	if(site == "su")
+		site = "stumbleupon";
+	else if(site == "buzz")
+		site = "googlebuzz";
+	else if(site == "fb")
+		site = "facebook";
+	else if(site == "reader")
+	    site = "googlereader";
+	
+	switch(site)
 	{
 		case "g":
 		case "gmail":
-			Glee.openPageInNewTab(
-				"https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
-				+document.title
+			loc = "https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su="
+				+enTitle
 				+"&body="
-				+location.href
-				+mailDesc);
+				+enUrl
+				+enMailDesc;
 			break;
 		case "m":
 		case "mail":
-			Glee.openPageInNewTab(
-				"mailto:?subject="
+            loc = "mailto:?subject="
 				+document.title
 				+"&body="
 				+location.href
-				+mailDesc);
-			break;
-		case "fb":
-		case "facebook":
-			Glee.openPageInNewTab(
-				"http://www.facebook.com/share.php?u="
-				+location.href);
+				+mailDesc;
 			break;
 		case "deli":
 		case "delicious":
-			Glee.openPageInNewTab(
-				"http://delicious.com/save?title="
-				+document.title
+            loc = "http://delicious.com/save?title="
+				+enTitle
 				+"&url="
-				+location.href
+				+enUrl
 				+"&notes="
-				+desc);
-			break;
-		case "digg":
-			Glee.openPageInNewTab(
-				"http://digg.com/submit/?url="
-				+location.href);
+				+enDesc;
 			break;
 		case "t":
 		case "twitter":
-			Glee.sendTweet();
-			break;
-		case "su":
-		case "stumbleupon":
-			Glee.openPageInNewTab(
-				"http://www.stumbleupon.com/submit?url="
-				+location.href);
-			break;
+			Glee.sendTweet(newTab);
+            return;
+		case "":
+			loc = "http://api.addthis.com/oexchange/0.8/offer?url="
+				+enUrl
+				+"&title="
+				+enTitle;
+				break;
 		default:
-			break;
+			loc = "http://api.addthis.com/oexchange/0.8/forward/"
+				+site 
+				+"/offer?url="
+				+enUrl
+				+"&title="
+				+enTitle;
+	}
+	if(loc)
+	{
+	    if(newTab)
+	        Glee.openPageInNewTab(loc);
+	    else
+	        location.href = loc;
 	}
 }
 

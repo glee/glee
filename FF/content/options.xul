@@ -7,7 +7,6 @@
 						xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 						onload="gleebox_Options.initOptions()"
 						title="gleeBox Options">
-
 	<script type="application/x-javascript" src="chrome://gleebox/content/prefman.js" />
 	<script type="application/x-javascript" src="chrome://gleebox/content/preferences.js" />
 	<script type="application/x-javascript" src="chrome://gleebox/content/common.js" />
@@ -34,6 +33,7 @@
 					<tab label="Features" />
 					<tab label="Appearance" />
 					<tab label="Advanced" />
+                                        <tab label="Backup" />
 					<tab label="Help" />
 				</tabs>
 				<tabpanels flex="1" >
@@ -155,7 +155,16 @@
 	<button label="Add Vision" oncommand="gleebox_Options.addVision()"/>
 	<button label="Remove Vision" oncommand="gleebox_Options.removeVision()"/>
 	</hbox>
-
+</vbox>
+<vbox>
+<hbox style="float:left;margin-bottom:20px" >
+<text value="Export your current gleeBox settings to a file." />
+<text value="Or import previously backed up settings from a gleeBox installation." />
+</hbox> 
+<hbox align="right">
+<button label="Export" oncommand="gleebox_Options.openBackupDialog('export')"/>
+<button label="Import" oncommand="gleebox_Options.openBackupDialog('import')"/>
+</hbox>
 </vbox>
 					<vbox>
 						<hbox style="float:left">

@@ -220,12 +220,13 @@ function initSettings(response)
 		
 	//getting the tab shortcut status pref
 	var tab_shortcut_status = prefs.tab_shortcut_status;
-	
-	if(tab_shortcut_status == 0)
-		document.getElementsByName("glee_tab_shortcut_status")[1].checked = true;
-	else
-		document.getElementsByName("glee_tab_shortcut_status")[0].checked = true;
-
+	if(tab_shortcut_status != undefined)
+	{
+	    if(tab_shortcut_status == 0)
+    		document.getElementsByName("glee_tab_shortcut_status")[1].checked = true;
+    	else
+    		document.getElementsByName("glee_tab_shortcut_status")[0].checked = true;
+	}
 	//getting the custom scraper commands
 	var len = prefs.scrapers.length;
 	if(len != 0)
@@ -283,11 +284,13 @@ function initSettings(response)
 	
 	//getting the tab manager shortcut key
 	var tabShortcut = prefs.tab_shortcut_key;
-	if(tabShortcut)
-		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = tabShortcut;
-	else
-		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190; //default is .
-		
+	if(tabShortcut != undefined)
+	{
+	    if(tabShortcut)
+    		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = tabShortcut;
+    	else
+    		document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190; //default is .
+	}
 	KeyCombo.init(document.getElementsByName("glee_tab_shortcut_key_field")[0], document.getElementsByName("glee_tab_shortcut_key")[0]);
 }
 
@@ -383,14 +386,16 @@ function addItem(type, value1, value2){
 		case "domain":
 			var domainName = document.getElementById("add_domain");
 			if(!value1)
+			{
 				value1 = domainName.value;
-			
-			if(value1 != "")
+			    domainName.value = domainName.defaultText;
+			}
+
+			if(validateURL(value1))
 			{
 				listOfItems = document.getElementById("domains");
 				lastEl = document.getElementById("addDomainLI");
  				content = "<span class='domain-name'>" + value1 + "</span>";
-				domainName.value = "";
 			}
 			else
 				return false;
@@ -404,6 +409,8 @@ function addItem(type, value1, value2){
 			{
 				value1 = scraperName.value;
 				value2 = scraperSel.value;
+				scraperName.value = scraperName.defaultText;
+				scraperSel.value = scraperSel.defaultText;
 			}
 
 			if(validateScraper(value1, value2))
@@ -411,8 +418,6 @@ function addItem(type, value1, value2){
  				listOfItems = document.getElementById("scraper-commands");
 				lastEl = document.getElementById("addScraper");
  				content = "<strong>?</strong><span class='scraper-name'>"+ value1 +"</span> : <span class='scraper-sel'>"+ value2 +"</span>";
-				scraperName.value="";
-				scraperSel.value="";
 			}
 			else
 				return false;
@@ -425,14 +430,14 @@ function addItem(type, value1, value2){
 			{
 				value1 = espUrl.value;
 				value2 = espSel.value;
+				espUrl.value = espUrl.defaultText;
+				espSel.value = espSel.defaultText;
 			}
 			if(validateEspModifier(value1, value2))
 			{
  				listOfItems = document.getElementById("esp-modifiers");
 				lastEl = document.getElementById("addEspModifier");
  				content = "<span class='esp-url'>" + value1 + "</span> : <span class='esp-sel'>" + value2 + "</span>";
-				espUrl.value="";
-				espSel.value="";
 			}
 			else
 				return false;
@@ -487,6 +492,12 @@ function filter(text){
 	return text;
 }
 
+function validateURL(url)
+{
+    if(url == "Page URL" || url == "")
+        return false;
+    return true;
+}
 function validateScraper(name,selector)
 {
 	//check that command name/selector should not be blank
@@ -550,13 +561,13 @@ function initDefaultTexts() {
 }
 
 function exportSettings(){
-    var text = 'Copy text that appears in the field and paste it into a file.';
+    var text = 'Copy the contents of this text field, and save them to a file for backup.';
     showBackupPopup(text, false);
     $("#settingsText").text(JSON.stringify(prefs));
 }
 
 function importSettings(){
-    var text = 'Paste text in the field and hit import';
+    var text = 'Paste exported settings here.';
     showBackupPopup(text, true);
     $("#settingsText").text('');
 }
@@ -613,6 +624,8 @@ function initBackupPopup()
         try{
             var jsonString = $('#settingsText')[0].value;
             var tempPref = JSON.parse(jsonString);
+            //set version to current
+            tempPref.version = prefs.version;
             clearSettings();
             initSettings(tempPref);
             $('#backupInfo').text("Settings successfully imported!");

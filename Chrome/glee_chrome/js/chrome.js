@@ -179,14 +179,36 @@ Glee.Chrome.openNewTab = function(url,selected){
 	});	
 }
 
-Glee.Chrome.displayOptionsPage = function(){
-	Glee.Chrome.openPageInNewTab(chrome.extension.getURL("options.html"));
-}
-
 Glee.Chrome.openPageInNewTab = function(url){
 	Glee.searchField.attr('value','');
 	Glee.setSubText(null);
 	Glee.Chrome.openNewTab(url, true);
+}
+
+Glee.Chrome.openPageIfNotExist = function(url){
+    /* Check if a tab already exists for the url */
+    chrome.extension.sendRequest({value:"getTabs"},function(response){
+       var len = response.tabs.length;
+       for(var i=0; i<len; i++)
+       {
+           if(response.tabs[i].url == url)
+           {
+               Glee.searchField.attr('value','');
+               Glee.setSubText(null);
+               Glee.Chrome.moveToTab(response.tabs[i]);
+               return;
+           }
+       }
+       Glee.Chrome.openPageInNewTab(url);
+	});
+}
+
+/* required for URLs beginning with 'chrome://' */
+Glee.Chrome.openPageInThisTab = function(url){
+	Glee.searchField.attr('value','');
+	Glee.setSubText(null);
+	chrome.extension.sendRequest({value:"openInThisTab",url:url},function(response){
+	});
 }
 
 Glee.Chrome.setOptionValue = function(){
@@ -224,7 +246,11 @@ Glee.Chrome.setOptionValue = function(){
 	}
 	if(option == "visions+")
 	{
-		var separator = value.indexOf(":");
+	    var separator = value.indexOf(":");
+	    if(jQuery.inArray(jQuery.trim(value.substring(0, separator)), ["http", "https"]) != -1)
+	    {
+	        separator = separator + 1 + value.substring(separator+1, value.length).indexOf(":");
+	    }
 		var url = jQuery.trim(value.substring(0, separator));
 		var sel = value.substring(separator+1, value.length);
 		if(url == "$")

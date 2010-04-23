@@ -12,25 +12,25 @@
 </head>
 <body onload="loadAllPrefs(initSettings);">
 <div id="wrap">
-<h2>gleeBox Options</h2>
+<h1>gleeBox Options</h1>
 <!--Specifying different options available -->
 <div id="options">
-	<h3>Features</h3>
+	<h2>Features</h2>
 	<ul class="options">
 		<li>
 			<label class="option-label">Disabled URLs<br/><span class="subtext">Enter part of a URL to disable gleeBox on all pages with matching URLs</span></label>
 			<ul id="domains" class="option-field">
 				<li>chrome.google.com/extensions <span style="float:right;font-size:14px;color:gray">Disabled by Google</span></li>
-				<li id="addDomainLI"><form onsubmit="addItem('domain');return false;"><input id="add_domain" type="text" value="" size=50 />&nbsp;<input type="submit" value="Add" class="button"/></form></li>
+				<li id="addDomainLI"><form onsubmit="addItem('domain');return false;"><input id="add_domain" type="text" value="Page URL" size=50 />&nbsp;<input type="submit" value="Add" class="button"/></form></li>
 			</ul>
 		</li>
 		<li>
 			<label class="option-label">Search Engine</label>
 			<div class="option-field">
 				<input name="glee_search" type="text" size=56><br/>
-				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.google.com/search?q=";'>Google</a>&nbsp;&nbsp;
-				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.bing.com/search?q=";'>Bing</a>&nbsp;&nbsp;
-<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://search.yahoo.com/search?p=";'>Yahoo</a>
+				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.google.com/search?q=";return false;'>Google</a>&nbsp;&nbsp;
+				<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://www.bing.com/search?q=";return false;'>Bing</a>&nbsp;&nbsp;
+<a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://search.yahoo.com/search?p=";return false;'>Yahoo</a>
 			</div>
 		</li>
 		<li>
@@ -77,7 +77,7 @@
 			</div>
 		</li> -->
 	</ul>
-	<h3>Appearance</h3>
+	<h2>Appearance</h2>
 	<ul class="options">
 		<li>
 			<label class="option-label">Position</label>
@@ -107,7 +107,7 @@
 			</div>
 		</li>
 	</ul>
-	<h3>Advanced</h3>
+	<h2>Advanced</h2>
 	<ul class="options">
 		<li style="font-size:14px;color:gray">
 			Some of these options require an understanding of <a href="http://docs.jquery.com/Selectors">jQuery selectors</a>. Find and share advanced gleeBox tips at <a href="http://tipjar.thegleebox.com">TipJar</a>.
@@ -136,7 +136,7 @@
 			</ul>
 		</li>
 	</ul>
-	<h3>Backup</h3>
+	<h2>Backup</h2>
 			<ul class="options">
 				<!-- <li style="font-size:14px;color:gray;line-height:20px">
 					To export settings, hit Export and copy text that appears in the field and paste it into a file.<br>
@@ -147,8 +147,8 @@
 				</li>
 				<div style="clear:both">
 					<!-- <textarea rows="10" cols="60" id="settingsText">Paste Text Here</textarea><br> -->
-						<input type="button" class="button" value="Export" onclick= "exportSettings();"/>
-						<input type="button" class="button" value="Import" onclick= "importSettings()"/>
+						<input type="button" class="button" value="&nbsp;&nbsp;Export&nbsp;&nbsp;" onclick= "exportSettings();"/>&nbsp;&nbsp;
+						<input type="button" class="button" value="&nbsp;&nbsp;Import&nbsp;&nbsp;" onclick= "importSettings()"/>
 					</div><br><br>
 			</ul>
 			<br><br>
