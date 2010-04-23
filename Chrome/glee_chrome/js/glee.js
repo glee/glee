@@ -28,47 +28,22 @@ jQuery(document).ready(function(){
 		{
 			if((target.nodeName.toLowerCase() != 'input' && target.nodeName.toLowerCase() != 'textarea' && target.nodeName.toLowerCase() != 'div' && target.nodeName.toLowerCase() != 'object') || e.altKey)
 			{
-				if(e.keyCode == Glee.shortcutKey)
+				if(e.keyCode == Glee.shortcutKey || (e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus))
 				{
-					if(e.metaKey || e.ctrlKey || e.shiftKey)
+				    if(e.metaKey || e.ctrlKey || e.shiftKey)
 						return true;
-
 					e.preventDefault();
-					
-					Glee.userPosBeforeGlee = window.pageYOffset;
-					//set default subtext
-					Glee.subText.html(Glee.nullStateMessage);
-					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
-						Glee.userFocusBeforeGlee = target;
+				    Glee.userPosBeforeGlee = window.pageYOffset;
+            		//set default subtext
+            		Glee.subText.html(Glee.nullStateMessage);
+            		if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
+            			Glee.userFocusBeforeGlee = target;
+            		else
+            			Glee.userFocusBeforeGlee = null;
+					if(e.keyCode == Glee.shortcutKey)
+					    Glee.open();
 					else
-						Glee.userFocusBeforeGlee = null;
-					if(Glee.searchBox.css('display') == "none")
-					{
-						//reseting value of searchField
-						Glee.searchField.attr('value','');
-						Glee.searchBox.fadeIn(150);
-						Glee.searchField[0].focus();
-						if(Glee.espStatus)
-							Glee.fireEsp();
-					}
-					else
-					{
-						//If gleeBox is already visible, focus is returned to it
-						Glee.searchField[0].focus();
-					}
-				}
-				else if(e.keyCode == Glee.tabShortcutKey && Glee.tabShortcutStatus)
-				{
-					if(e.metaKey || e.ctrlKey || e.shiftKey)
-						return true;
-
-					e.preventDefault();
-					Glee.userPosBeforeGlee = window.pageYOffset;
-					if(target.nodeName.toLowerCase() == 'input' || target.nodeName.toLowerCase() == 'textarea' || target.nodeName.toLowerCase() == 'div')
-						Glee.userFocusBeforeGlee = target;
-					else
-						Glee.userFocusBeforeGlee = null;
-					Glee.manageTabs();
+                        Glee.openTabManager();
 				}
 			}
 		}
@@ -113,7 +88,7 @@ jQuery(document).ready(function(){
 		{
 		    if(e.metaKey || e.ctrlKey || e.shiftKey)
 		        break;
-			Glee.manageTabs();
+			Glee.openTabManager();
 			return;
 		}
 	});
@@ -408,7 +383,6 @@ jQuery(document).ready(function(){
 	});
 });
 
-
 var Glee = {
 	nullStateMessage:"Nothing selected",
 	//State of scrolling. 0=None, 1=Up, -1=Down.
@@ -595,6 +569,22 @@ var Glee = {
 		Glee.userPosBeforeGlee = window.pageYOffset;
 		this.Chrome.getOptions();
 	},
+	open: function(){
+		if(Glee.searchBox.css('display') == "none")
+		{
+			//reseting value of searchField
+			Glee.searchField.attr('value','');
+			Glee.searchBox.fadeIn(150);
+			Glee.searchField[0].focus();
+			if(Glee.espStatus)
+				Glee.fireEsp();
+		}
+		else
+		{
+			//If gleeBox is already visible, focus is returned to it
+			Glee.searchField[0].focus();
+		}
+	},
 	initOptions:function(){
 		// Setup the theme
 		Glee.searchBox.addClass(Glee.ThemeOption);
@@ -626,14 +616,14 @@ var Glee = {
 		
 	},
 	getHyperized: function(){
-		Glee.searchField.attr('value','');
-		Glee.searchBox.fadeIn(100);
-		// TODO: Hack to steal focus from page's window onload. 
-		// We can't add this stuff to onload. See if there's another way.
-		jQuery(window).fadeTo(100, 1, function(){
-			Glee.fireEsp();
-			Glee.searchField.focus();
-		});
+	    Glee.open();
+	    Glee.lastQuery = "";
+        // TODO: Hack to steal focus from page's window onload. 
+        // We can't add this stuff to onload. See if there's another way.
+        // jQuery(window).fadeTo(100, 1, function(){
+        //     Glee.fireEsp();
+        //     Glee.searchField[0].focus();
+        // });
 	},
 	closeBox: function(){
 	    this.resetTimer();
@@ -987,7 +977,7 @@ var Glee = {
 		else
 			Glee[method](openInNewTab);
 	},
-	manageTabs: function(){
+	openTabManager: function(){
 		var onGetTabs = function(response){
 			Glee.closeBoxWithoutBlur();
 			Glee.ListManager.openBox(response.tabs, function(action, item){
