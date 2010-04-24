@@ -390,7 +390,6 @@ var Glee = {
 	//State of scrolling. 0=None, 1=Up, -1=Down.
 	scrollState: 0,
 	hyperMode: false,
-	hyperBlackList:["sixtyone.com"],
 	inspectMode: false,
 	// last query executed in gleeBox
 	lastQuery:null,
@@ -557,7 +556,6 @@ var Glee = {
 	Cache: {
 		jBody: null
 	},
-	
 	initBox: function(){
 		// Creating the div to be displayed
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
@@ -619,21 +617,8 @@ var Glee = {
 		
 	},
 	getHyperized: function(){
-	    var len = Glee.hyperBlackList.length;
-	    var isInBlackList = false;
-	    for(var i=0; i<len; i++)
-	    {
-	        if(location.href.indexOf(Glee.hyperBlackList[i]) != -1)
-	        {
-	            isInBlackList = true;
-	            break;
-	        }
-	    }
-	    if(!isInBlackList)
-	    {
-	        Glee.open();
-	        Glee.lastQuery = "";
-	    }
+        Glee.open();
+        Glee.lastQuery = "";
         // TODO: Hack to steal focus from page's window onload. 
         // We can't add this stuff to onload. See if there's another way.
         // jQuery(window).fadeTo(100, 1, function(){

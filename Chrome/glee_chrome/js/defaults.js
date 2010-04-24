@@ -10,7 +10,8 @@ function getDefaultPreferences(){
 		tab_shortcut_status:1,
 		esp_status:1,
 		shortcut_key:71,
-		tab_shortcut_key:190
+		tab_shortcut_key:190,
+        hyper:0
 	};
 	return prefs;
 }

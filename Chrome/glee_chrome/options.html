@@ -68,14 +68,6 @@
 					<a href="#" onclick='javascript:document.getElementsByName("glee_shortcut_key")[0].innerText = "190";document.getElementsByName("glee_tab_shortcut_key_field")[0].value = ".";'>Revert to default</a>
 			</div>
 		</li>
-
-		<!-- <li>
-			<label class="option-label">HyperGlee<br/><span class="subtext">In the HyperGlee mode, gleeBox is visible by default when a page loads.</span></label>
-			<div class="option-field">
-				<input name="glee_hyper" value="enabled" type="radio"> Enabled
-				<input name="glee_hyper" value="disabled" type="radio"> Disabled
-			</div>
-		</li> -->
 	</ul>
 	<h2>Appearance</h2>
 	<ul class="options">
@@ -111,6 +103,13 @@
 	<ul class="options">
 		<li style="font-size:14px;color:gray">
 			Some of these options require an understanding of <a href="http://docs.jquery.com/Selectors">jQuery selectors</a>. Find and share advanced gleeBox tips at <a href="http://tipjar.thegleebox.com">TipJar</a>.
+		</li>
+		<li>
+			<label class="option-label">HyperGlee<br/><span class="subtext">In the HyperGlee mode, gleeBox is visible by default when a page finishes loading.</span></label>
+			<div class="option-field">
+				<input name="glee_hyper" value="enabled" type="radio"> On
+				<input name="glee_hyper" value="disabled" type="radio"> Off
+			</div>
 		</li>
 		<li>
 			<label class="option-label">Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label>

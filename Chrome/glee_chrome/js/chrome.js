@@ -117,15 +117,6 @@ Glee.Chrome.applyOptions = function(response){
 	{
 		Glee.searchEngineUrl = prefs.search_engine;
 	}
-
-	//getting the custom scraper commands
-	if(prefs.scrapers != undefined)
-	{
-		Glee.scrapers.splice(4,Glee.scrapers.length);
-		var len = prefs.scrapers.length;
-		for(i = 0;i < len;i ++)
-			Glee.scrapers[4+i] = prefs.scrapers[i];
-	}
 	
 	// Hyper Mode
 	if(prefs.hyper != undefined)
@@ -134,6 +125,15 @@ Glee.Chrome.applyOptions = function(response){
 			Glee.hyperMode = true;
 		else
 			Glee.hyperMode = false;
+	}
+
+	//getting the custom scraper commands
+	if(prefs.scrapers != undefined)
+	{
+		Glee.scrapers.splice(4,Glee.scrapers.length);
+		var len = prefs.scrapers.length;
+		for(i = 0;i < len;i ++)
+			Glee.scrapers[4+i] = prefs.scrapers[i];
 	}
 	
 	// ESP Status

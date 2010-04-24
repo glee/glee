@@ -49,15 +49,15 @@ function saveSettings(close_tab) {
 		}
 	}
 	
-	//save hyper
-	// if(document.getElementsByName("glee_hyper")[0].checked)
-	// 	hyper = localStorage["glee_hyper"] = 1; //1 indicates enabled
-	// else
-	// 	hyper = localStorage["glee_hyper"] = 0;
+    // save hyper
+    if(document.getElementsByName("glee_hyper")[0].checked)
+        prefs.hyper = 1; //1 indicates enabled
+    else
+        prefs.hyper = 0;
 
 	//saving bookmarks search option
 	if(document.getElementsByName("glee_bookmark_search")[0].checked)
-		prefs.bookmark_search = 1; //1 indicates enabled
+		prefs.bookmark_search = 1;
 	else
 		prefs.bookmark_search = 0;
 	
@@ -190,17 +190,17 @@ function initSettings(response)
 		}
 	}
 	// Getting HyperGlee
-	// var hyper = localStorage["glee_hyper"];
-	// hRadios = document.getElementsByName("glee_hyper");
-	// if(hyper != null)
-	// {
-	// 	if(hyper == 1)
-	// 		hRadios[0].checked = true;
-	// 	else
-	// 		hRadios[1].checked = true;
-	// }
-	// else
-	// 	hRadios[1].checked = true;
+    var hyper = prefs.hyper;
+    hRadios = document.getElementsByName("glee_hyper");
+    if(hyper != null)
+    {
+        if(hyper == 1)
+            hRadios[0].checked = true;
+        else
+            hRadios[1].checked = true;
+    }
+    else
+        hRadios[1].checked = true;
 
 	//getting the bookmark search status (enabled/disabled)
 	var bookmark_status = prefs.bookmark_search;
