@@ -617,14 +617,11 @@ var Glee = {
 		
 	},
 	getHyperized: function(){
-        Glee.open();
-        Glee.lastQuery = "";
-        // TODO: Hack to steal focus from page's window onload. 
-        // We can't add this stuff to onload. See if there's another way.
-        // jQuery(window).fadeTo(100, 1, function(){
-        //     Glee.fireEsp();
-        //     Glee.searchField[0].focus();
-        // });
+	    if(Glee.getEspSelector())
+	    {
+	        Glee.open();
+            Glee.lastQuery = "";
+	    }
 	},
 	closeBox: function(){
 	    this.resetTimer();
@@ -855,21 +852,22 @@ var Glee = {
 		else
 			return null;
 	},
-	//method for ESP
-	fireEsp: function(){
-		var url = document.location.href;
-		var len = Glee.espModifiers.length;
+    getEspSelector: function(){
+        var url = document.location.href;
+        var len = Glee.espModifiers.length;
 		var sel = [];
 		for(var i=0; i<len; i++)
 		{
 			if(url.indexOf(Glee.espModifiers[i].url) != -1)
 				sel[sel.length] = Glee.espModifiers[i].selector;
 		}
-		var selStr;
-		if(sel.length != 0)
-			selStr = sel.join(",");
-		else //search for any default selector defined by current page
-			selStr = jQuery('meta[name="gleebox-default-selector"]').attr("content");
+        if(sel.length != 0)
+            return sel.join(',');
+        else //search for any default selector defined by current page
+            return jQuery('meta[name="gleebox-default-selector"]').attr("content");
+	},
+	fireEsp: function(){
+        var selStr = Glee.getEspSelector();
 		if(selStr)
 		{
 			//creating a new temporary scraper object
@@ -883,7 +881,6 @@ var Glee = {
 		}
 		return ;
 	},
-	//end of ESP
 	scrollToElement: function(el){
 		var target = jQuery(el);
 		var scroll = false;
