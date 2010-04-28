@@ -15,44 +15,43 @@
 var GleeTouch = {
     theme: "GleeThemeWhite",
     init: function(){
-        this.addJQuery();
-        this.addGleeCSS();
         this.open();
     },
     addGleeCSS: function(){
-        var themeCSS = '.GleeThemeWhite{ background-color:#fff !important; box-shadow: 2px 2px 2px #333; border:1px solid #ccc;} .GleeThemeWhite a{border:1px solid #ccc; color: #1b1b1b !important;}';
-        var fontCSS = '#gleeTouch{ font-family:Tahoma, Arial, sans-serif !important; font-size:16px !important;}';
-        var optionCSS = 'a.gleeTouchOption {padding:5px; display:block; margin: 2px 0px; border-radius:2px; cursor:pointer}';
-        var boxCSS = '#gleeTouch{lineheight:20px; left:35%; top:15%; margin:0; padding:5px; opacity:0.9; width:30%; position:fixed; height:40%; border-radius:2px; display:none;}';
+        var boxCSS = '#gleeTouch{line-height:20px; left:35%; top:15%; margin:0; padding:5px; opacity:0.85; width:350px; position:fixed; height:250px; -webkit-border-radius:5px; display:none;z-index:100000;}';
+        var optionCSS = 'a.gleeTouchOption {padding:5px; display:block; margin: 2px 0px; -webkit-border-radius:2px; cursor:pointer; -webkit-box-shadow:#fff 0px 1px 1px;}';        
+        var fontCSS = '#gleeTouch{ font-family:Helvetica, Arial, serif !important; font-size:15px !important;text-shadow:#fff 0px 1px 0px;font-weight:normal !important;}';        
+        var themeCSS = '.GleeThemeWhite{ background-color:#f4f4f4 !important; -webkit-box-shadow: 0px 0px 10px #aaa; /*border: 1px solid #aaa;*/}.GleeThemeWhite a{ border:1px solid #ccc; color: #1b1b1b !important; }';
         var cssNode = document.createElement('style');
         cssNode.setAttribute('type','text/css');
         var textNode = document.createTextNode(themeCSS + fontCSS + optionCSS + boxCSS);
         cssNode.appendChild(textNode);
         document.getElementsByTagName('head')[0].appendChild(cssNode);
     },
-    addJQuery: function(){
-        var scriptNode = document.createElement('script');
-        scriptNode.type = 'text/javascript';
-        scriptNode.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js';
-        document.getElementsByTagName("head")[0].appendChild(scriptNode);
-    },
     open: function(){
-        this.create();
+        this.box = document.getElementById("gleeTouch");
+        if(this.box)
+            this.showMainMenu();
+        else
+        {
+            this.addGleeCSS();
+            this.create();
+            this.addEventHandlers();
+        }
         this.box.style.display = 'block';
-        this.addEventHandlers();
     },
     close: function(){
         // this.box.fadeOut(100);
         this.box.style.display = 'none';
     },
-    create: function(){
+    create: function(){    
         this.box = document.createElement('div');
         this.box.id = 'gleeTouch';
         this.box.className = GleeTouch.theme;
         document.body.appendChild(this.box);
         this.createOption('Share');
-        this.createOption('YubNub');
         this.createOption('Page Commands');
+        this.createOption('Custom');
     },
     createOption: function(name){
         var option = document.createElement('a');
@@ -72,8 +71,8 @@ var GleeTouch = {
         for(var i=0; i<len; i++)
         {
             els[i].addEventListener('click', function(e){
-                                GleeTouch.showSubMenu(e.target.innerHTML.toLowerCase());
-                            });
+                GleeTouch.showSubMenu(e.target.innerHTML.toLowerCase());
+            });
         }
     },
     showSubMenu: function(menu){
@@ -93,7 +92,19 @@ var GleeTouch = {
         }
     },
     showMainMenu: function(){
-        
+        var els = document.getElementsByClassName('gleeSubOption');
+        var len = els.length;
+        for(var i=0; i<len; i++)
+        {
+            GleeTouch.box.removeChild(els[i]);
+        }
+        els = [];
+        els = document.getElementsByClassName('gleeMainOption');
+        len = els.length;
+        for(var i=0; i<len; i++)
+        {
+            els[i].style.display = 'block';
+        }
     }
 };
 
@@ -106,7 +117,7 @@ var GleeTouch = {
          var len = this.services.length;
          for(var i=0; i<len; i++){
              var link = document.createElement('a');
-             link.className = 'gleeTouchOption gleeSubMenu';
+             link.className = 'gleeTouchOption gleeSubOption';
              link.innerHTML = GleeTouch.Share.services[i];
              link.addEventListener('click', function(e){
                  GleeTouch.Share.execute(e.target.innerHTML.toLowerCase());
@@ -202,7 +213,7 @@ GleeTouch.Page = {
         var len = this.services.length;
         for(var i=0; i<len; i++){
             var link = document.createElement('a');
-            link.className = 'gleeTouchOption gleeSubMenu';
+            link.className = 'gleeTouchOption gleeSubOption';
             link.innerHTML = GleeTouch.Page.services[i];
             link.addEventListener('click', function(e){
                 GleeTouch.Page[e.target.innerHTML.toLowerCase()]();
