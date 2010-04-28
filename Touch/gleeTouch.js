@@ -18,7 +18,7 @@ var GleeTouch = {
         this.open();
     },
     addGleeCSS: function(){
-        var boxCSS = '#gleeTouch{line-height:20px; left:35%; top:15%; margin:0; padding:5px; opacity:0.85; width:350px; position:fixed; height:250px; -webkit-border-radius:5px; display:none;z-index:100000;}';
+        var boxCSS = '#gleeTouch{line-height:20px; left:35%; top:15%; margin:0; padding:5px; opacity:0.85; width:350px; position:fixed; height:250px; -webkit-border-radius:5px; display:none;z-index:100000; text-align:left !important;}';
         var optionCSS = 'a.gleeTouchOption {padding:5px; display:block; margin: 2px 0px; -webkit-border-radius:2px; cursor:pointer; -webkit-box-shadow:#fff 0px 1px 1px;}';        
         var fontCSS = '#gleeTouch{ font-family:Helvetica, Arial, serif !important; font-size:15px !important;text-shadow:#fff 0px 1px 0px;font-weight:normal !important;}';        
         var themeCSS = '.GleeThemeWhite{ background-color:#f4f4f4 !important; -webkit-box-shadow: 0px 0px 10px #aaa; /*border: 1px solid #aaa;*/}.GleeThemeWhite a{ border:1px solid #ccc; color: #1b1b1b !important; }';
@@ -51,6 +51,7 @@ var GleeTouch = {
         document.body.appendChild(this.box);
         this.createOption('Share');
         this.createOption('Page Commands');
+        this.createOption('Shortcuts');
         this.createOption('Custom');
     },
     createOption: function(name){
@@ -90,6 +91,10 @@ var GleeTouch = {
         {
             GleeTouch.Page.open();
         }
+        else if(menu == "shortcuts")
+        {
+            GleeTouch.Shortcuts.open();
+        }
     },
     showMainMenu: function(){
         var els = document.getElementsByClassName('gleeSubOption');
@@ -112,7 +117,7 @@ var GleeTouch = {
  * Sharing page on different services
  */
  GleeTouch.Share = {
-     services:["twitter", "facebook"],
+     services:["Gmail","Twitter", "Facebook", "Reader", "Buzz"],
      open: function(){
          var len = this.services.length;
          for(var i=0; i<len; i++){
@@ -208,15 +213,24 @@ var GleeTouch = {
  * Page Commands
  **/
 GleeTouch.Page = {
-    services: ["read", "rss"],
+    services: [
+    {
+        text:"Make Page Readable",
+        method: "read"
+    }, 
+    {
+        text:"Open RSS in Google Reader",
+        method:"rss"
+    }],
     open: function(){
         var len = this.services.length;
         for(var i=0; i<len; i++){
             var link = document.createElement('a');
             link.className = 'gleeTouchOption gleeSubOption';
-            link.innerHTML = GleeTouch.Page.services[i];
+            link.innerHTML = GleeTouch.Page.services[i].text;
+            link.alt = i;
             link.addEventListener('click', function(e){
-                GleeTouch.Page[e.target.innerHTML.toLowerCase()]();
+                GleeTouch.Page[GleeTouch.Page.services[e.target.alt].method]();
             });
             GleeTouch.box.appendChild(link);
         }
@@ -226,6 +240,31 @@ GleeTouch.Page = {
     },
     rss: function(){
         var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)};
+    }
+};
+
+GleeTouch.Shortcuts = {
+    services: [
+    {
+        text:"Facebook",
+        url:"http://facebook.com"
+    }, 
+    {
+        text:"Twitter",
+        url:"http://twitter.com"
+    }],
+    open: function(){
+        var len = this.services.length;
+        for(var i=0; i<len; i++){
+            var link = document.createElement('a');
+            link.className = 'gleeTouchOption gleeSubOption';
+            link.innerHTML = GleeTouch.Shortcuts.services[i].text;
+            link.alt = i;
+            link.addEventListener('click', function(e){
+                location.href = GleeTouch.Shortcuts.services[e.target.alt].url;
+            });
+            GleeTouch.box.appendChild(link);
+        }
     }
 };
 
