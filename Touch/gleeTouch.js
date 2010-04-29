@@ -18,10 +18,10 @@ var GleeTouch = {
         this.open();
     },
     addGleeCSS: function(){
-        var boxCSS = '#gleeTouch{line-height:20px; left:35%; top:15%; margin:0; padding:5px; opacity:0.85; width:350px; position:fixed; height:250px; -webkit-border-radius:5px; display:none;z-index:100000; text-align:left !important;}';
-        var optionCSS = 'a.gleeTouchOption {padding:5px; display:block; margin: 2px 0px; -webkit-border-radius:2px; cursor:pointer; -webkit-box-shadow:#fff 0px 1px 1px;}';        
-        var fontCSS = '#gleeTouch{ font-family:Helvetica, Arial, serif !important; font-size:15px !important;text-shadow:#fff 0px 1px 0px;font-weight:normal !important;}';        
-        var themeCSS = '.GleeThemeWhite{ background-color:#f4f4f4 !important; -webkit-box-shadow: 0px 0px 10px #aaa; /*border: 1px solid #aaa;*/}.GleeThemeWhite a{ border:1px solid #ccc; color: #1b1b1b !important; }';
+        var boxCSS = '#gleeTouch{line-height:20px; left:35%; top:15%; margin:0; padding:5px; opacity:0.85; width:25%; position:fixed; height:35%; -webkit-border-radius:5px; display:none; z-index:100000; text-align:left !important;}';
+        var optionCSS = 'a.gleeTouchOption {padding:5px; display:block; margin: 2px 0px; -webkit-border-radius:2px; cursor:pointer; }';
+        var fontCSS = '#gleeTouch{ font-family:"Lucida Grande", Helvetica, Arial, sans-serif !important; font-size:15px !important; font-weight:normal !important;}';
+        var themeCSS = '.GleeThemeWhite{ background-color:#f4f4f4 !important; -webkit-box-shadow: 0px 0px 10px #aaa; /*border: 1px solid #aaa;*/}.GleeThemeWhite a, .GleeThemeWhite a:visited{ border:1px solid #ccc; color: #1b1b1b !important; text-shadow:#fff 0px 1px 0px; }.GleeThemeWhite a:active{ background-color:#696969 !important; color:#fbfbfb !important; text-shadow:none !important}';
         var cssNode = document.createElement('style');
         cssNode.setAttribute('type','text/css');
         var textNode = document.createTextNode(themeCSS + fontCSS + optionCSS + boxCSS);
@@ -44,7 +44,7 @@ var GleeTouch = {
         // this.box.fadeOut(100);
         this.box.style.display = 'none';
     },
-    create: function(){    
+    create: function(){
         this.box = document.createElement('div');
         this.box.id = 'gleeTouch';
         this.box.className = GleeTouch.theme;
@@ -56,18 +56,18 @@ var GleeTouch = {
     },
     createOption: function(name){
         var option = document.createElement('a');
-        option.className = 'gleeTouchOption gleeMainOption';
+        option.className = 'gleeTouchOption gleeTouchMainOption';
         option.innerHTML = name;
         this.box.appendChild(option);
     },
     addEventHandlers: function(){
         document.addEventListener('click', function(e){
-            if(e.target.id != "gleeTouch" && e.target.className != "gleeTouchOption gleeMainOption")
+            if(e.target.id != "gleeTouch" && e.target.className != "gleeTouchOption gleeTouchMainOption")
                {
                    GleeTouch.close();
                }
         });
-        var els = document.getElementsByClassName('gleeMainOption');
+        var els = document.getElementsByClassName('gleeTouchMainOption');
         var len = els.length;
         for(var i=0; i<len; i++)
         {
@@ -77,7 +77,7 @@ var GleeTouch = {
         }
     },
     showSubMenu: function(menu){
-        var els = document.getElementsByClassName('gleeMainOption');
+        var els = document.getElementsByClassName('gleeTouchMainOption');
         var len = els.length;
         for(var i=0; i<len; i++)
         {
@@ -97,14 +97,15 @@ var GleeTouch = {
         }
     },
     showMainMenu: function(){
-        var els = document.getElementsByClassName('gleeSubOption');
+        var els = document.getElementsByClassName('gleeTouchSubOption');
         var len = els.length;
         for(var i=0; i<len; i++)
         {
-            GleeTouch.box.removeChild(els[i]);
+            /* todo: This is a quickfix. Find a less costly way */
+            GleeTouch.box.removeChild(document.getElementsByClassName('gleeTouchSubOption')[0]);
         }
         els = [];
-        els = document.getElementsByClassName('gleeMainOption');
+        els = document.getElementsByClassName('gleeTouchMainOption');
         len = els.length;
         for(var i=0; i<len; i++)
         {
@@ -122,7 +123,7 @@ var GleeTouch = {
          var len = this.services.length;
          for(var i=0; i<len; i++){
              var link = document.createElement('a');
-             link.className = 'gleeTouchOption gleeSubOption';
+             link.className = 'gleeTouchOption gleeTouchSubOption';
              link.innerHTML = GleeTouch.Share.services[i];
              link.addEventListener('click', function(e){
                  GleeTouch.Share.execute(e.target.innerHTML.toLowerCase());
@@ -226,7 +227,7 @@ GleeTouch.Page = {
         var len = this.services.length;
         for(var i=0; i<len; i++){
             var link = document.createElement('a');
-            link.className = 'gleeTouchOption gleeSubOption';
+            link.className = 'gleeTouchOption gleeTouchSubOption';
             link.innerHTML = GleeTouch.Page.services[i].text;
             link.alt = i;
             link.addEventListener('click', function(e){
@@ -257,7 +258,7 @@ GleeTouch.Shortcuts = {
         var len = this.services.length;
         for(var i=0; i<len; i++){
             var link = document.createElement('a');
-            link.className = 'gleeTouchOption gleeSubOption';
+            link.className = 'gleeTouchOption gleeTouchSubOption';
             link.innerHTML = GleeTouch.Shortcuts.services[i].text;
             link.alt = i;
             link.addEventListener('click', function(e){
