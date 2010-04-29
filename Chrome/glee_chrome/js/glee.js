@@ -946,8 +946,6 @@ var Glee = {
 	},
 	getBackInitialState: function(){
 		Glee.Cache.jBody.stop(true);
-		if(this.userPosBeforeGlee != window.pageYOffset)
-			Glee.Cache.jBody.animate({scrollTop:Glee.userPosBeforeGlee},Glee.scrollingSpeed);
 		if(this.userFocusBeforeGlee != null)
 			this.userFocusBeforeGlee.focus();
 		else
