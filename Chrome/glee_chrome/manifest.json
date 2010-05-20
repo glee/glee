@@ -12,7 +12,8 @@
 		"matches":["http://*/*","https://*/*"],
 		"css":["css/glee.css","css/listmanager.css", "css/themes.css"],
 		"js":["js/jquery.js","js/glee.js","js/chrome.js","js/page-cmds.js","js/utils.js","js/linkreaper.js","js/listmanager.js"],
-		"run_at":"document_start"
+		"run_at":"document_start",
+		"all_frames":true
 	}],
 	"permissions":[
 		"tabs",
@@ -20,7 +21,7 @@
 		"bookmarks"
 	],
 	"browser_action":{
-		"default_icon":"images/icon_19.png",
+		"default_icon":"images/icon_enabled_19.png",
 		"default_title":"Turn gleeBox OFF"
 	}
 }

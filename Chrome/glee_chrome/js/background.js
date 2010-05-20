@@ -20,14 +20,16 @@ function refreshIcon(value)
 {
 	if(value == 0)
 	{
-		chrome.browserAction.setBadgeText({text:"OFF"});
+        // chrome.browserAction.setBadgeText({text:"OFF"});
 		chrome.browserAction.setTitle({title:"Turn gleeBox ON"});
+		chrome.browserAction.setIcon({path:"images/icon_disabled_19.png"});
 		chrome.browserAction.setBadgeBackgroundColor({color:[185,188,193,255]});
 	}
 	else
 	{
-		chrome.browserAction.setBadgeText({text:"ON"});
+        // chrome.browserAction.setBadgeText({text:"ON"});
 		chrome.browserAction.setTitle({title:"Turn gleeBox OFF"});
+		chrome.browserAction.setIcon({path:"images/icon_enabled_19.png"});
 		chrome.browserAction.setBadgeBackgroundColor({color:[103,163,82,255]});
 	}
 }
