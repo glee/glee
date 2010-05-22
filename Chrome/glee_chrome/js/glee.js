@@ -946,15 +946,10 @@ var Glee = {
 	},
 	getBackInitialState: function(){
 		Glee.Cache.jBody.stop(true);
-		if(this.userFocusBeforeGlee != null)
-			this.userFocusBeforeGlee.focus();
-		else
-		{
-			//wait till the thread is free
-			setTimeout(function(){
-				Glee.searchField.blur();
-			},0);
-		}
+		//wait till the thread is free
+		setTimeout(function(){
+			Glee.searchField.blur();
+		},0);
 	},
 	resetTimer: function(){
 		if(typeof(this.timer) != "undefined")
