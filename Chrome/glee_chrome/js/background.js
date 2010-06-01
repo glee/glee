@@ -15,42 +15,16 @@ function checkVersion(){
     });
 }
 
-//set the status value and update the browser action
-function refreshIcon(value)
-{
-	if(value == 0)
-	{
-        // chrome.browserAction.setBadgeText({text:"OFF"});
-		chrome.browserAction.setTitle({title:"Turn gleeBox ON"});
-		chrome.browserAction.setIcon({path:"images/icon_disabled_19.png"});
-		chrome.browserAction.setBadgeBackgroundColor({color:[185,188,193,255]});
-	}
-	else
-	{
-        // chrome.browserAction.setBadgeText({text:"ON"});
-		chrome.browserAction.setTitle({title:"Turn gleeBox OFF"});
-		chrome.browserAction.setIcon({path:"images/icon_enabled_19.png"});
-		chrome.browserAction.setBadgeBackgroundColor({color:[103,163,82,255]});
-	}
-}
-
 function init(){
 	//initialize the db
 	initdb(initGlobals);
 	function initGlobals(){
 		loadAllPrefs(function(prefs){
 			gleeboxPreferences = prefs;
-			initStatus();
 		});
 	}
 	checkVersion();
 }
-
-//initialize the status value on load of background.html
-function initStatus(){
-	refreshIcon(gleeboxPreferences.status);
-}
-
 
 //Toggle status value and store it in local storage
 function toggleStatus(){
@@ -59,7 +33,6 @@ function toggleStatus(){
 	else
 		gleeboxPreferences.status = 1;
 	savePreference("status", gleeboxPreferences.status);
-	refreshIcon(gleeboxPreferences.status);
 	
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
@@ -74,11 +47,6 @@ function toggleStatus(){
 		}
 	});
 }
-
-//React when a browser action's icon is clicked 
-chrome.browserAction.onClicked.addListener(function(tab) {
-	toggleStatus();
-});
 
 //Add listener to respond to requests from content script
 chrome.extension.onRequest.addListener(function(request,sender,sendResponse){

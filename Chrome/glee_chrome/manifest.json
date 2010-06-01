@@ -18,9 +18,5 @@
 		"tabs",
 		"http://api.bit.ly/",
 		"bookmarks"
-	],
-	"browser_action":{
-		"default_icon":"images/icon_enabled_19.png",
-		"default_title":"Turn gleeBox OFF"
-	}
+	]
 }
