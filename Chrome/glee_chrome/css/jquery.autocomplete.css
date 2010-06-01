@@ -1,6 +1,6 @@
 .ac_results {
 	padding: 0px;
-/*  border: 1px solid black;*/
+    border:none !important;
 	background-color: white;
 	overflow: hidden;
 	z-index: 99999;
@@ -18,7 +18,7 @@
 	margin: 0px;
 	padding: 2px 5px;
 	cursor: default;
-	display: none;
+	display: none !important;
 	/* 
 	if width will be 100% horizontal scrollbar will apear 
 	when scroll mode will be used
