@@ -275,6 +275,9 @@ jQuery(document).ready(function(){
 			else
 			{
 				var anythingOnClick = true;
+				// if is a yubnub command, add it to cache
+				if(value[0] == ":")
+				    Glee.addCommandToCache(value.split(" ")[0]);
 				if(Glee.selectedElement) //if the element exists
 				{
 					//check to see if an anchor element is associated with the selected element
@@ -1008,22 +1011,20 @@ var Glee = {
         else
         {
             if(len == 10)
-                this.Cache.commands[0] == value;
-            else
-                this.Cache.commands.push(value);
+                this.Cache.commands.pop();
+            this.Cache.commands.unshift(value);
         }
-        
-	    this.searchField.setOptions({
-            data: Glee.Cache.commands
-        });            
+        this.searchField.setOptions({
+                    data: Glee.Cache.commands
+                });
         this.Chrome.updateBackgroundCommandCache();
 	},
 	
 	updateCommandCache: function(commands){
 	    this.Cache.commands = commands;
 	    
-	    this.searchField.setOptions({
-            data: Glee.Cache.commands
-        });
+        this.searchField.setOptions({
+                    data: Glee.Cache.commands
+                });
 	}
 }
