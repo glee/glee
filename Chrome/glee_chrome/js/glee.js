@@ -230,6 +230,7 @@ jQuery(document).ready(function(){
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 				Glee.lastjQuery = value;
+				Glee.addCommandToCache(value);
 			}
 			else if(value[0] == "!" && value.length > 1)
 			{
@@ -241,6 +242,7 @@ jQuery(document).ready(function(){
 					Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 					return;
 				}
+                Glee.addCommandToCache(value);
 				//check if it is a command
 				//TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 				if(typeof(Glee.URL.name) != "undefined")
@@ -264,7 +266,7 @@ jQuery(document).ready(function(){
 					else 
 						eval(unescape(url.substring(11)));
 
-					Glee.setSubText("Executing bookmarklet '"+Glee.URL.title+"'...","msg");
+					Glee.setSubText("Executing bookmarklet '" + Glee.URL.title + "'...","msg");
 					setTimeout(function(){
 						Glee.closeBox();
 					},0);
@@ -554,7 +556,8 @@ var Glee = {
 	],
 	//jQuery cache objects
 	Cache: {
-		jBody: null
+		jBody: null,
+		commands: [] // recently executed commands
 	},
 	initBox: function(){
 		// Creating the div to be displayed
@@ -567,6 +570,12 @@ var Glee = {
 		this.sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
+		
+		// add autocomplete
+		this.searchField.autocomplete(Glee.Cache.commands, {
+		    autoFill: true
+		});
+		
 		Glee.userPosBeforeGlee = window.pageYOffset;
 		this.Chrome.getOptions();
 	},
@@ -615,6 +624,8 @@ var Glee = {
 			Glee.getHyperized();
 		}
 		
+		// init command cache
+        Glee.Chrome.initCommandCache();
 	},
 	getHyperized: function(){
 	    if(Glee.getEspSelector())
@@ -980,5 +991,39 @@ var Glee = {
 		};
 		Glee.setSubText("Displays a vertical list of currently open tabs.", "msg");
 		Glee.Chrome.getTabs(onGetTabs);
+	},
+	
+	// add command to recently executed commands cache
+	addCommandToCache: function(value){
+        var len = this.Cache.commands.length;
+        // is command already present? if yes, then move it to beginning of cache
+        var index = jQuery.inArray(value, Glee.Cache.commands);
+        if(index != -1)
+        {
+            // remove command
+            Glee.Cache.commands.splice(index, 1);
+            // add command to beginning
+            Glee.Cache.commands.unshift(value);
+        }
+        else
+        {
+            if(len == 10)
+                this.Cache.commands[0] == value;
+            else
+                this.Cache.commands.push(value);
+        }
+        
+	    this.searchField.setOptions({
+            data: Glee.Cache.commands
+        });            
+        this.Chrome.updateBackgroundCommandCache();
+	},
+	
+	updateCommandCache: function(commands){
+	    this.Cache.commands = commands;
+	    
+	    this.searchField.setOptions({
+            data: Glee.Cache.commands
+        });
 	}
 }
