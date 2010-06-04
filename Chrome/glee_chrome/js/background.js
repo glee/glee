@@ -29,6 +29,13 @@ function init(){
 		});
 	}
 	checkVersion();
+	initCommandCache();
+}
+
+function initCommandCache(){
+    cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
+    console.log("Commands in localStorage: " + localStorage['gleebox_commands_cache']);
+    console.log(cache.commands);
 }
 
 //Toggle status value and store it in local storage
@@ -144,6 +151,8 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	}
 	else if(request.value == "updateCommandCache"){
 	    cache.commands = request.commands;
+	    //update localStorage
+	    localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
 	    updateCommandCacheInAllTabs();
 	}
 	else if(request.value == "getOptions")

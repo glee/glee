@@ -158,6 +158,7 @@ jQuery(document).ready(function(){
 							{
 								Glee.initScraper(Glee.scrapers[i]);
 								foundScraper = true;
+                                // Glee.addCommandToCache(value);
 								break;
 							}
 						}
@@ -1024,7 +1025,7 @@ var Glee = {
 	    this.Cache.commands = commands;
 	    
         this.searchField.setOptions({
-                    data: Glee.Cache.commands
-                });
+            data: Glee.Cache.commands
+        });
 	}
 }
