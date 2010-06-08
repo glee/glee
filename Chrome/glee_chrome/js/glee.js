@@ -577,7 +577,8 @@ var Glee = {
 		
 		// add autocomplete
 		this.searchField.autocomplete(Glee.Cache.commands, {
-		    autoFill: true
+		    autoFill: true,
+		    selectFirst: false
 		});
 		
 		Glee.userPosBeforeGlee = window.pageYOffset;
