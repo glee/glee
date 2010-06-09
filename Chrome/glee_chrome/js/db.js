@@ -295,6 +295,7 @@ function loadAllPrefs(callback){
 		});
 	});
 }
+
 function loadPrefs(callback){
 	var A = opendb();
 	createPrefsTable(A);

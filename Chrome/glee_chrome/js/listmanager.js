@@ -1,13 +1,18 @@
 /* Glee's very own List Manager. Currently only used for the Tab manager */
 
 Glee.ListManager = {
-	items:null,
-	box:null,
-	searchField:null,
-	selected:null,
-	currentIndex:null,
-	//method to be called once an action is executed on any item
-	callback:null,
+	items: null,
+	
+	box: null,
+	
+	searchField: null,
+	
+	selected: null,
+	
+	currentIndex: null,
+	
+	// method to be called once an action is executed on any item
+	callback: null,
 	
 	openBox: function(data, callback){
 		this.callback = callback;
@@ -23,13 +28,13 @@ Glee.ListManager = {
 			setTimeout(function(){
 				Glee.ListManager.currentIndex = -1;
 				Glee.ListManager.selectSearchField();
-			},0);
+			}, 0);
 		});
 	},
 	
 	
 	closeBox: function(returnFocus, callback){
-		this.box.fadeOut(150 ,function(){
+		this.box.fadeOut(150, function(){
 			Glee.ListManager.box.html('');
 			Glee.ListManager.items = null;
 			Glee.ListManager.selected = null;
@@ -37,9 +42,7 @@ Glee.ListManager = {
 			if(returnFocus)
 				Glee.getBackInitialState();
 			if(callback)
-			{
 				callback();
-			}
 		});
 	},
 	
@@ -50,12 +53,12 @@ Glee.ListManager = {
 	},
 	
 	initKeyBindings: function(){
-		jQuery('#gleeListSearchField, .gleeListItem').bind('keydown',function(e){
-			if(e.keyCode == 27) //ESC
+		jQuery('#gleeListSearchField, .gleeListItem').bind('keydown', function(e){
+			if(e.keyCode == 27) // ESC
 			{
 				Glee.ListManager.closeBox(true);
 			}
-			else if(e.keyCode == 9) //TAB
+			else if(e.keyCode == 9) // TAB
 			{
 				e.preventDefault();
 				e.stopPropagation();
@@ -64,7 +67,7 @@ Glee.ListManager = {
 				else
 					Glee.ListManager.getNextItem();
 			}
-			else if(e.keyCode == 40 || e.keyCode == 38) //up/down arrow keys
+			else if(e.keyCode == 40 || e.keyCode == 38) // up/down arrow keys
 			{
 				e.preventDefault();
 				e.stopPropagation();
@@ -73,16 +76,16 @@ Glee.ListManager = {
 				else
 					Glee.ListManager.getPreviousItem();
 			}
-			else if(e.keyCode == 13) //enter
+			else if(e.keyCode == 13) // ENTER
 			{
 				e.preventDefault();
 				Glee.ListManager.openItem();
 			}
 		});
-		jQuery('#gleeListSearchField').bind('keyup',function(e){
+		jQuery('#gleeListSearchField').bind('keyup', function(e){
 			Glee.ListManager.refreshList();
 		});
-		jQuery('.gleeListItem').bind('keydown',function(e){
+		jQuery('.gleeListItem').bind('keydown', function(e){
 			if(e.keyCode == 8 || e.keyCode == 67) //delete on mac/backspace or c
 			{
 				e.preventDefault();
@@ -121,7 +124,7 @@ Glee.ListManager = {
 		var query = this.searchField.attr("value");
 		var listItems = jQuery('.gleeListItem');
 		var len = listItems.length;
-		for(var i=0;i<len;i++)
+		for(var i=0; i<len; i++)
 		{
 			if(listItems[i].innerText.toLowerCase().indexOf(query.toLowerCase()) == -1)
 				this.hideFromList(i);
@@ -134,15 +137,17 @@ Glee.ListManager = {
 	
 	getSelectedItemIndex: function(){
 		var idString = this.selected.id;
-		return idString.substring(8,idString.length);
+		return idString.substring(8, idString.length);
 	},
 	
 	hideFromList: function(index){
-		jQuery(jQuery('.gleeListItem')[index]).css("display","none");
+		jQuery(jQuery('.gleeListItem')[index])
+		.css("display", "none");
 	},
 	
 	showInList: function(index){
-		jQuery(jQuery('.gleeListItem')[index]).css("display","block");
+		jQuery(jQuery('.gleeListItem')[index])
+		.css("display", "block");
 	},
 	
 	selectSearchField: function(){
@@ -201,7 +206,13 @@ Glee.ListManager = {
 	removeItem: function(){
 		var itemIndex = this.getSelectedItemIndex();
 		var item = this.items[itemIndex];
-		jQuery(Glee.ListManager.selected).animate({height:"0", paddingTop:0, paddingBottom:0}, 200, function(){
+		jQuery(Glee.ListManager.selected)
+		.animate({
+		    height: "0", 
+		    paddingTop: 0, 
+		    paddingBottom: 0
+		}, 200,
+		function(){
 			jQuery(Glee.ListManager.selected).remove();
 			Glee.ListManager.currentIndex -= 1;
 			Glee.ListManager.getNextItem();

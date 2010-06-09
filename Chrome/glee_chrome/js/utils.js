@@ -62,7 +62,7 @@ Glee.Utils = {
 			//replace < with &lt; and > with &gt;
 			text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 			if(text.length > 75)
-				return text.substr(0,73)+"...";
+				return text.substr(0, 73)+"...";
 			else
 				return text;
 		}
@@ -82,7 +82,8 @@ Glee.Utils = {
 		else
 		{
 			var parents = el.parents();
-			for(var i=0;i<parents.length;i++)
+			var len = parents.length;
+			for(var i=0; i<len; i++)
 			{
 				if(jQuery(parents[i]).css("display") == "none")
 					return false;
@@ -94,16 +95,15 @@ Glee.Utils = {
 		var evt = document.createEvent("MouseEvents");
 		//on Mac, pass target as e.metaKey
 		if(navigator.platform.indexOf("Mac") != -1)
-			evt.initMouseEvent("click",true,true,window,0,0,0,0,0,false,false,false,target,0,null);
+			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, target, 0, null);
 		else //otherwise, pass target as e.ctrlKey	
-			evt.initMouseEvent("click",true,true,window,0,0,0,0,0,target,false,false,false,0,null);
+			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, target, false, false, false, 0, null);
 		return el[0].dispatchEvent(evt);
 	},
 	simulateScroll: function(val){
 		if(val == 0) {
-			Glee.Cache.jBody.stop(true);
+			Glee.cache.jBody.stop(true);
 			Glee.scrollState = 0;
-			Glee.userPosBeforeGlee = window.pageYOffset;
 		}
 		else if(Glee.scrollState == 0) {
 			Glee.scrollState = val;
@@ -113,14 +113,14 @@ Glee.Utils = {
 	infiniteScroll: function() {
 		if(Glee.scrollState < 0) {
 			loc = jQuery(document).height();
-			duration = 2*(loc - window.pageYOffset)/Glee.pageScrollSpeed;
+			duration = 2 * (loc - window.pageYOffset) / Glee.defaults.pageScrollSpeed;
 		}
 		else {
 			loc = 0;
-			duration = 2*(window.pageYOffset/Glee.pageScrollSpeed);
+			duration = 2 * (window.pageYOffset / Glee.defaults.pageScrollSpeed);
 		}
-		Glee.Cache.jBody.animate(
-			{scrollTop:loc},
+		Glee.cache.jBody.animate(
+			{ scrollTop: loc },
 			duration);
 	},
 	mergeSort: function(els){

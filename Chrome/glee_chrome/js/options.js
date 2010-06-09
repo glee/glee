@@ -81,7 +81,7 @@ function saveSettings(close_tab) {
 	{
 		var name = scraperNames[i].innerText;
 		var sel = scraperSels[i].innerText;
-		scrapers[scrapers.length] = { command:name, selector:sel, cssStyle:"GleeReaped", nullMessage: "Could not find any elements" };
+		scrapers[scrapers.length] = { command: name, selector: sel, cssStyle: "GleeReaped", nullMessage: "Could not find any elements" };
 	}
 	
 	//saving the ESP Status
@@ -99,7 +99,7 @@ function saveSettings(close_tab) {
 	{
 		var url = espUrls[i].innerText;
 		var sel = espSels[i].innerText;
-		espModifiers[espModifiers.length] = { url:url, selector:sel };
+		espModifiers[espModifiers.length] = { url: url, selector: sel };
 	}
 
 	//saving shortcut key
@@ -134,13 +134,15 @@ function propagateChanges(prefs)
 			//set the status in all the tabs open in the window
 			for(j=0;j<windows[i].tabs.length;j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"updateOptions", preferences:prefs},function(response){
-				});
+				chrome.tabs.sendRequest(windows[i].tabs[j].id,
+				    { value: "updateOptions", preferences: prefs },
+				    function(response){}
+				);
 			}
 		}
 	});
 	//update the global preferences cache
-	chrome.extension.sendRequest({value:"updatePrefCache", preferences:prefs},function(){});
+	chrome.extension.sendRequest({ value: "updatePrefCache", preferences: prefs }, function(){});
 }
 
 // Restores select box state to saved value from DB

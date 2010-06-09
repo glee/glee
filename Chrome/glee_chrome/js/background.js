@@ -1,11 +1,11 @@
 var response = {};
 
 function checkVersion(){
-    loadPreference('version',function(version){
+    loadPreference('version', function(version){
         if(version == null || version < 1.6)
         {
             //open the update page
-            chrome.tabs.create({url:"http://thegleebox.com/update.html", selected:true}, null);
+            chrome.tabs.create( { url:"http://thegleebox.com/update.html", selected: true}, null);
             //update version
             if(version == null)
                 createPreference('version', 1.6);
@@ -36,13 +36,17 @@ function toggleStatus(){
 	
 	//get all the windows and their tabs to propagate the change in status
 	chrome.windows.getAll({populate:true}, function(windows){
-		for( i=0; i<windows.length; i++)
+	    var len = windows.length;
+		for( i=0; i<len; i++)
 		{
 			//set the status in all the tabs open in the window
-			for(j=0;j<windows[i].tabs.length;j++)
+			var tabs_len = windows[i].tabs.length;
+			for(j=0; j<tabs_len; j++)
 			{
-				chrome.tabs.sendRequest(windows[i].tabs[j].id, {value:"initStatus",status:gleeboxPreferences.status},function(response){
-				});
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, 
+				    { value: "initStatus", status: gleeboxPreferences.status }, 
+				    function(response){}
+				);
 			}
 		}
 	});
@@ -52,20 +56,20 @@ function toggleStatus(){
 chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	if(request.value == "createTab")
 	{
-		chrome.tabs.create({url:request.url,selected:request.selected},null);
+		chrome.tabs.create({ url: request.url, selected: request.selected }, null);
 		sendResponse({});
 	}
 	else if(request.value == "openInThisTab")
 	{
 	    chrome.tabs.getSelected(null, function(tab){
-	        chrome.tabs.update(tab.id, {url:request.url}, function(){});
+	        chrome.tabs.update(tab.id, { url: request.url }, function(){});
 	    });
 	}
 	else if(request.value == "getTabs")
 	{
 		chrome.windows.getCurrent(function(currWindow){
 			chrome.tabs.getAllInWindow(currWindow.id, function(tabs){
-				sendResponse({tabs:tabs});
+				sendResponse({ tabs: tabs });
 			});
 		});
 	}
@@ -77,18 +81,18 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	}
 	else if(request.value == "moveToTab")
 	{
-		chrome.tabs.update(request.id, {selected:true},function(){
+		chrome.tabs.update(request.id, { selected: true }, function(){
 			sendResponse({});
 		});
 	}
 	else if(request.value == "sendRequest")
 	{
 		var req = new XMLHttpRequest();
-		req.open(request.method,request.url, true);
+		req.open(request.method, request.url, true);
 		req.onreadystatechange = function(){
 			if(req.readyState == 4)
 			{
-				sendResponse({data:req.responseText});
+				sendResponse({ data: req.responseText });
 			}
 		}
 		req.send();
@@ -97,7 +101,8 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 	{
 		var bookmarks = [];
 		chrome.bookmarks.search(request.text,function(results){
-			for(i=0;i<results.length;i++)
+		    var len = results.length;
+			for(i=0 ; i<len; i++)
 			{
 				if(results[i].url)
 				{
@@ -106,14 +111,15 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 						bookmarks[bookmarks.length] = results[i];
 				}
 			}
-			sendResponse({bookmarks:bookmarks});
+			sendResponse({ bookmarks: bookmarks });
 		});
 	}
 	else if(request.value == "getBookmarklet")
 	{
 		chrome.bookmarks.search(request.text,function(results){
 			var found = false;
-			for(i=0;i<results.length;i++)
+			var len = results.length;
+			for(i=0; i<len; i++)
 			{
 				if(results[i].url)
 				{
@@ -121,7 +127,7 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 					//Also match only titles
 					if(results[i].url.indexOf("javascript:") == 0 && results[i].title.toLowerCase().indexOf(request.text.toLowerCase()) != -1)
 					{
-						sendResponse({bookmarklet:results[i]});
+						sendResponse({ bookmarklet: results[i] });
 						found = true;
 						break;
 					}
@@ -129,12 +135,12 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 			}
 			//otherwise, return null if no bookmarklet is found
 			if(!found)
-				sendResponse({bookmarklet:null});
+				sendResponse({ bookmarklet: null });
 		});
 	}
 	else if(request.value == "getOptions")
 	{
-		sendResponse({preferences:gleeboxPreferences});
+		sendResponse({ preferences: gleeboxPreferences });
 	}
 	else if(request.value == "updateOption")
 	{
@@ -163,37 +169,37 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		var response = {};
 		switch(request.option)
 		{
-			case "scroll"	: savePreference("scroll_animation",value);
+			case "scroll"	: savePreference("scroll_animation", value);
 							  response.scroll_animation = value;
 							  gleeboxPreferences.scroll_animation = value;
 							  break;
 
-			case "bsearch"	: savePreference("bookmark_search",value);
+			case "bsearch"	: savePreference("bookmark_search", value);
 							  response.bookmark_search = value;
 							  gleeboxPreferences.bookmark_search = value;
 							  break;
 							
-			case "hyper"	: savePreference("hyper",value);
+			case "hyper"	: savePreference("hyper", value);
 							  response.hyper = value;
 							  gleeboxPreferences.hyper = value;
 							  break;
 
-			case "size"		: savePreference("size",value);
+			case "size"		: savePreference("size", value);
 							  response.size = value;
 							  gleeboxPreferences.size = value;
 							  break;
 			
 			case "pos"		:
-			case "position"	: savePreference("position",value);
+			case "position"	: savePreference("position", value);
 							  response.position = value;
 							  gleeboxPreferences.position = value;
 							  break;
 
-			case "theme"	: savePreference("theme",value);
+			case "theme"	: savePreference("theme", value);
 							  response.theme = value;
 							  gleeboxPreferences.theme = value;
 							  break;
-			case "esp"		: savePreference("esp_status",value);
+			case "esp"		: savePreference("esp_status", value);
 							  response.esp_status = value;
 							  gleeboxPreferences.esp_status = value;
 							  break;
@@ -213,8 +219,8 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 								}
 							  }
 							  if(!flag)
-								gleeboxPreferences.espModifiers[gleeboxPreferences.espModifiers.length] = {url:request.option_value.url, selector:request.option_value.selector};
-							  saveESP(gleeboxPreferences.espModifiers,function(){});
+								gleeboxPreferences.espModifiers[ gleeboxPreferences.espModifiers.length ] = { url: request.option_value.url, selector: request.option_value.selector };
+							  saveESP(gleeboxPreferences.espModifiers, function(){});
 							  response.espModifiers = gleeboxPreferences.espModifiers;
 							  break;
 
@@ -230,16 +236,17 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 								}
 							  }
 							  if(!flag)
-								gleeboxPreferences.scrapers[gleeboxPreferences.scrapers.length] = {command:request.option_value.command, 
-									selector:request.option_value.selector,
-									cssStyle: "GleeReaped",
-									nullMessage : "Could not find any matching elements on the page."
+								gleeboxPreferences.scrapers[ gleeboxPreferences.scrapers.length ] = { 
+								        command: request.option_value.command, 
+									    selector: request.option_value.selector,
+									    cssStyle: "GleeReaped",
+									    nullMessage : "Could not find any matching elements on the page."
 									};
-							  saveScrapers(gleeboxPreferences.scrapers,function(){});
+							  saveScrapers(gleeboxPreferences.scrapers, function(){});
 							  response.scrapers = gleeboxPreferences.scrapers;
 							  break;
 		}
-		sendResponse({preferences:response});
+		sendResponse({ preferences: response });
 	}
 	else if(request.value == "updatePrefCache")
 	{
