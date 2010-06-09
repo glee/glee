@@ -298,13 +298,13 @@ function initSettings(response)
 
 function makeItemsEditable(){
 	
-	//make domains editable
+	// make domains editable
 	var domainNames = document.getElementsByClassName("domain-name");
 	var len = domainNames.length;
 	for(var i=0; i<len; i++)
 		makeItemEditable(domainNames[i]);
 	
-	//make scrapers editable
+	// make scrapers editable
 	var scraperNames = document.getElementsByClassName("scraper-name");
 	var scraperSels = document.getElementsByClassName("scraper-sel");
 	len = scraperNames.length;
@@ -314,7 +314,7 @@ function makeItemsEditable(){
 		makeItemEditable(scraperSels[i]);
 	}
 	
-	//make visions editable
+	// make visions editable
 	var espUrls = document.getElementsByClassName("esp-url");
 	var espSels = document.getElementsByClassName("esp-sel");
 	len = espUrls.length;
@@ -324,7 +324,7 @@ function makeItemsEditable(){
 		makeItemEditable(espSels[i]);
 	}
 	
-	//add event listener to document to remove editable field (if it exists)
+	// add event listener to document to remove editable field (if it exists)
 	document.addEventListener(
 		"click",
 		function(e){
@@ -338,6 +338,8 @@ function makeItemsEditable(){
 function makeItemEditable(el){
 	
 	function clickHandler(e){
+	    if((e.type == 'keydown' && e.keyCode != 13) || e.target.id == "temporary-edit-field") return true;
+	    
 		e.stopPropagation();
 		var editableField = document.getElementById("temporary-edit-field");
 		if(e.target != editableField)
@@ -354,18 +356,23 @@ function makeItemEditable(el){
 			this.className += "##";
 			this.appendChild(textField);
 			textField.focus();
-			textField.addEventListener("keydown",function(e){
+
+			textField.addEventListener("keydown", function(e){
 				if(e.keyCode == 13 || e.keyCode == 27)
-				{
 					replaceEditableField(this);
-				}
-			},false);
+			}, false);
 			return false;
 		}
 	}	
 	
 	el.addEventListener(
 	"click",
+	clickHandler,
+	false
+	);
+	
+	el.addEventListener(
+	"keydown",
 	clickHandler,
 	false
 	);
@@ -377,6 +384,7 @@ function replaceEditableField(el){
 	parent.removeChild(el);
 	parent.className = parent.className.slice(0, parent.className.length - 2);
 	parent.innerHTML = val;
+	parent.focus();
 }
 
 function addItem(type, value1, value2){
@@ -397,7 +405,7 @@ function addItem(type, value1, value2){
 			{
 				listOfItems = document.getElementById("domains");
 				lastEl = document.getElementById("addDomainLI");
- 				content = "<span class='domain-name'>" + value1 + "</span>";
+ 				content = "<span class='domain-name' tabIndex=0 >" + value1 + "</span>";
 			}
 			else
 				return false;
@@ -419,7 +427,7 @@ function addItem(type, value1, value2){
 			{
  				listOfItems = document.getElementById("scraper-commands");
 				lastEl = document.getElementById("addScraper");
- 				content = "<strong>?</strong><span class='scraper-name'>"+ value1 +"</span> : <span class='scraper-sel'>"+ value2 +"</span>";
+ 				content = "<strong>?</strong><span class='scraper-name' tabIndex=0 >"+ value1 +"</span> : <span class='scraper-sel' tabIndex=0 >"+ value2 +"</span>";
 			}
 			else
 				return false;
@@ -439,7 +447,7 @@ function addItem(type, value1, value2){
 			{
  				listOfItems = document.getElementById("esp-modifiers");
 				lastEl = document.getElementById("addEspModifier");
- 				content = "<span class='esp-url'>" + value1 + "</span> : <span class='esp-sel'>" + value2 + "</span>";
+ 				content = "<span class='esp-url' tabIndex=0>" + value1 + "</span> : <span class='esp-sel' tabIndex=0 >" + value2 + "</span>";
 			}
 			else
 				return false;
