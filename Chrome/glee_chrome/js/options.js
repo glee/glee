@@ -95,7 +95,7 @@ function saveSettings(close_tab) {
 	var espUrls = document.getElementsByClassName("esp-url");
 	var espSels = document.getElementsByClassName("esp-sel");
 	var len = espUrls.length;
-	for(var i=0;i<len;i++)
+	for(var i=0; i<len; i++)
 	{
 		var url = espUrls[i].innerText;
 		var sel = espSels[i].innerText;

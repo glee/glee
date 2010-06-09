@@ -633,7 +633,7 @@ var Glee = {
 	    
 		// Creating DOM elements for gleeBox
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		this.subText = jQuery("<div id=\"gleeSubText\">"+Glee.defaults.nullStateMessage+"</div>");
+		this.subText = jQuery("<div id=\"gleeSubText\">" + Glee.defaults.nullStateMessage + "</div>");
 		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
 		this.searchBox = jQuery("<div id=\"gleeBox\" style='display:none'></div>");
 		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
@@ -649,7 +649,7 @@ var Glee = {
 		if(Glee.searchBox.css('display') == "none")
 		{
 			// Reset searchField content
-			Glee.searchField.attr('value','');
+			Glee.searchField.attr('value', '');
 			Glee.searchBox.fadeIn(150);
 			Glee.searchField[0].focus();
 			
@@ -678,7 +678,7 @@ var Glee = {
 			topSpace = 35;
 		else
 			topSpace = 78;
-		Glee.searchBox.css("top",topSpace+"%");
+		Glee.searchBox.css("top", topSpace + "%");
 		
 		// Setting gleeBox size
 		if(Glee.options.size == "small")
@@ -687,10 +687,10 @@ var Glee = {
 			fontsize = "50px"
 		else
 			fontsize = "100px"
-		Glee.searchField.css("font-size",fontsize);
+		Glee.searchField.css("font-size", fontsize);
 		
 		// Load HyperGlee if needed
-		if(Glee.status != 0 && Glee.options.hyperMode == true) {
+		if(Glee.options.status != 0 && Glee.options.hyperMode == true) {
 			Glee.getHyperized();
 		}
 		
@@ -708,8 +708,8 @@ var Glee = {
 	    this.resetTimer();
 		LinkReaper.unreapAllLinks();
 		this.getBackInitialState();
-		this.searchBox.fadeOut(150,function(){
-			Glee.searchField.attr('value','');
+		this.searchBox.fadeOut(150, function(){
+			Glee.searchField.attr('value', '');
 			Glee.setSubText(null);
 		});
 		this.lastQuery = null;
@@ -719,8 +719,8 @@ var Glee = {
 	
 	closeBoxWithoutBlur: function(){
 	    this.resetTimer();
-		this.searchBox.fadeOut(150,function(){
-			Glee.searchField.attr('value','');
+		this.searchBox.fadeOut(150, function(){
+			Glee.searchField.attr('value', '');
 			Glee.setSubText(null);
 		});
 		LinkReaper.unreapAllLinks();
@@ -735,7 +735,7 @@ var Glee = {
 		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
-		this.setSubText(Glee.selectedElement,"el");
+		this.setSubText(Glee.selectedElement, "el");
 		this.scrollToElement(Glee.selectedElement);
 		jQuery(LinkReaper.selectedLinks).each(function(){
 			jQuery(this).addClass(scraper.cssStyle);
@@ -771,7 +771,7 @@ var Glee = {
 			return sorted_els;
 	},
 	
-	setSubText: function(val,type){
+	setSubText: function(val, type){
 
 		this.URL = null;
 		
@@ -804,7 +804,7 @@ var Glee = {
 						if(value)
 							this.subText.html(Glee.Utils.filter(value));
 						else
-							this.subText.html("Input "+jQueryVal.attr("type"));
+							this.subText.html("Input " + jQueryVal.attr("type"));
 					}
 					// if it is a text area
 					else if(jQueryVal[0].tagName == "TEXTAREA") 
@@ -848,7 +848,7 @@ var Glee = {
 
 					this.subText.html(Glee.Utils.filter(text));
 					if(title !="" && title != text)
-						this.subText.html(Glee.Utils.filter(this.subText.html()+" -- "+title));
+						this.subText.html(Glee.Utils.filter(this.subText.html() + " -- " + title));
 					this.URL = jQueryVal.attr('href');
 					this.subURL.html(Glee.Utils.filter(this.URL));
 				}
@@ -864,7 +864,7 @@ var Glee = {
 				//if it is a URL
 				if(this.Utils.isURL(text))
 				{
-					this.subText.html(Glee.Utils.filter("Go to "+text));
+					this.subText.html(Glee.Utils.filter("Go to " + text));
 					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if(!text.match(regex))
 						text = "http://" + text;
@@ -949,12 +949,12 @@ var Glee = {
 	
     getEspSelector: function(){
         var url = document.location.href;
-        var len = Glee.espModifiers.length;
+        var len = Glee.options.espModifiers.length;
 		var sel = [];
 		for(var i=0; i<len; i++)
 		{
-			if(url.indexOf(Glee.espModifiers[i].url) != -1)
-				sel[sel.length] = Glee.espModifiers[i].selector;
+			if(url.indexOf(Glee.options.espModifiers[i].url) != -1)
+				sel[sel.length] = Glee.options.espModifiers[i].selector;
 		}
         if(sel.length != 0)
             return sel.join(',');
@@ -1029,7 +1029,7 @@ var Glee = {
 	updateUserPosition:function(){
 		var value = Glee.searchField.attr("value");
 		// Only update the user position if it is a scraping command or tabbing in ESP mode
-		if((value[0] == "?" && value.length > 1) || (value == "" && Glee.options.espStatus))
+		if( (value[0] == "?" && value.length > 1) || (value == "" && Glee.options.espStatus) )
 			Glee.userPosBeforeGlee = window.pageYOffset;
 	},
 	
