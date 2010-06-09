@@ -321,5 +321,21 @@ chrome.extension.onRequest.addListener(
 		}
 		else if(request.value == "updateOptions")
 			Glee.Chrome.applyOptions(request);
+		else if(request.value == "updateCommandCache")
+	        Glee.updateCommandCache(request.commands);
+
 		sendResponse({});
 });
+
+// get command cache from background.js
+Glee.Chrome.initCommandCache = function(){
+	chrome.extension.sendRequest( { value: "getCommandCache" }, function(response){
+        Glee.updateCommandCache(response.commands);
+	});
+}
+
+// update command cache in background.js
+Glee.Chrome.updateBackgroundCommandCache = function(){
+    chrome.extension.sendRequest( { value: "updateCommandCache", commands: Glee.cache.commands }, function(){
+	});
+}

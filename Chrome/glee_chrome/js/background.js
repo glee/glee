@@ -1,5 +1,10 @@
 var response = {};
 
+// recently executed commands cache. size limited to 10
+var cache = {
+    commands:[]
+};
+
 function checkVersion(){
     loadPreference('version', function(version){
         if(version == null || version < 1.6)
@@ -24,6 +29,13 @@ function init(){
 		});
 	}
 	checkVersion();
+	initCommandCache();
+}
+
+function initCommandCache(){
+    cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
+    console.log("Commands in localStorage: " + localStorage['gleebox_commands_cache']);
+    console.log(cache.commands);
 }
 
 //Toggle status value and store it in local storage
@@ -138,6 +150,17 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 				sendResponse({ bookmarklet: null });
 		});
 	}
+	else if(request.value == "getCommandCache"){
+	    sendResponse({
+	        commands: cache.commands
+	    });
+	}
+	else if(request.value == "updateCommandCache"){
+	    cache.commands = request.commands;
+	    //update localStorage
+	    localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
+	    updateCommandCacheInAllTabs();
+	}
 	else if(request.value == "getOptions")
 	{
 		sendResponse({ preferences: gleeboxPreferences });
@@ -249,7 +272,25 @@ chrome.extension.onRequest.addListener(function(request,sender,sendResponse){
 		sendResponse({ preferences: response });
 	}
 	else if(request.value == "updatePrefCache")
-	{
 		gleeboxPreferences = request.preferences;
-	}
+
 });
+
+function updateCommandCacheInAllTabs(){
+    //get all the windows and their tabs to propagate the command cache
+	chrome.windows.getAll({populate:true}, function(windows){
+		for( i = 0; i < windows.length; i++)
+		{
+			//set the status in all the tabs open in the window
+			for(j = 0;j < windows[i].tabs.length; j++)
+			{
+				chrome.tabs.sendRequest(windows[i].tabs[j].id, {
+				        value: "updateCommandCache",
+				        commands: cache.commands
+				    }, 
+				    function(response){}
+				);
+			}
+		}
+	});
+}

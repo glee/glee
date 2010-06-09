@@ -258,6 +258,7 @@ jQuery(document).ready(function(){
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 				Glee.lastjQuery = value;
+				Glee.addCommandToCache(value);
 			}
 			// Page command / Bookmarklet
 			else if(value[0] == "!" && value.length > 1)
@@ -271,7 +272,9 @@ jQuery(document).ready(function(){
 					Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 					return;
 				}
-
+                
+                Glee.addCommandToCache(value);
+				
 				// TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 				// If it a valid page command, execute it
 				if(typeof(Glee.URL.name) != "undefined")
@@ -307,9 +310,12 @@ jQuery(document).ready(function(){
 			else
 			{
 				var anythingOnClick = true;
-				
+				// if is a yubnub command, add it to cache
+				if(value[0] == ":")
+				    Glee.addCommandToCache(value.split(" ")[0]);
+                
 				// If an element is selected
-				if(Glee.selectedElement) 
+				if(Glee.selectedElement)
 				{
 					// Check to see if an anchor element is associated with the selected element
 					var a_el = null;
@@ -436,7 +442,10 @@ var Glee = {
 	    nullStateMessage:"Nothing selected",
 	    
     	// Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
-    	pageScrollSpeed: 4
+    	pageScrollSpeed: 4,
+    	
+    	// autocomplete cache size
+    	cacheSize: 20
     },
 
 	options: {
@@ -624,9 +633,10 @@ var Glee = {
 		}
 	],
 	
-	// Cache to store jQuery objects
+	// Cache for jQuery objects, commands and other objects
 	cache: {
-		jBody: null
+		jBody: null,
+		commands: [] // recently executed commands
 	},
 	
 	initBox: function(){
@@ -641,6 +651,13 @@ var Glee = {
 		this.sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(this.sub);
 		jQuery(document.body).append(this.searchBox);
+		
+		// add autocomplete
+		this.searchField.autocomplete(Glee.cache.commands, {
+		    autoFill: true,
+		    selectFirst: false
+		});
+		
 		Glee.userPosBeforeGlee = window.pageYOffset;
 		this.Chrome.getOptions();
 	},
@@ -694,6 +711,8 @@ var Glee = {
 			Glee.getHyperized();
 		}
 		
+		// init command cache
+        Glee.Chrome.initCommandCache();
 	},
 	
 	getHyperized: function(){
@@ -1086,5 +1105,37 @@ var Glee = {
 		};
 		Glee.setSubText("Displays a vertical list of currently open tabs.", "msg");
 		Glee.Chrome.getTabs(onGetTabs);
+	},
+	
+	// add command to recently executed commands cache
+	addCommandToCache: function(value){
+        var len = this.cache.commands.length;
+        // is command already present? if yes, then move it to beginning of cache
+        var index = jQuery.inArray(value, Glee.cache.commands);
+        if(index != -1)
+        {
+            // remove command
+            Glee.cache.commands.splice(index, 1);
+            // add command to beginning
+            Glee.cache.commands.unshift(value);
+        }
+        else
+        {
+            if(len == Glee.defaults.cacheSize)
+                this.cache.commands.pop();
+            this.cache.commands.unshift(value);
+        }
+        this.searchField.setOptions({
+            data: Glee.cache.commands
+        });
+        this.Chrome.updateBackgroundCommandCache();
+	},
+	
+	updateCommandCache: function(commands){
+	    this.cache.commands = commands;
+	    
+        this.searchField.setOptions({
+            data: Glee.cache.commands
+        });
 	}
 }
