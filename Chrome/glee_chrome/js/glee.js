@@ -434,6 +434,8 @@ var Glee = {
 	position: "middle",
 	//size of gleeBox (small,medium,large)
 	size:"medium",
+	// cache size for autocompletion
+	cacheSize: 20,
 	//URLs for which gleeBox should be disabled
 	domainsToBlock:[
 		"mail.google.com",
@@ -1012,7 +1014,7 @@ var Glee = {
         }
         else
         {
-            if(len == 10)
+            if(len == Glee.cacheSize)
                 this.Cache.commands.pop();
             this.Cache.commands.unshift(value);
         }
