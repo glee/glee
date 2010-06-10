@@ -1,20 +1,40 @@
 {
-	"name":"gleeBox",
-	"version":"1.6",
-	"description":"Keyboard glee for your web",
-	"icons":{
+	"name": "gleeBox",
+	"version": "1.6",
+	"description": "Keyboard glee for your web",
+	"background_page": "background.html",
+	"options_page": "options.html",
+	
+	"icons": {
 		"128": "images/icon_128.png"
 	},
-	"background_page":"background.html",
-	"options_page":"options.html",	
-	"content_scripts":[
+	
+	"content_scripts": [
 	{
-		"matches":["http://*/*","https://*/*"],
-		"css":["css/glee.css","css/listmanager.css", "css/themes.css", "css/jquery.autocomplete.css"],
-		"js":["js/jquery.js","js/glee.js","js/chrome.js","js/page-cmds.js","js/utils.js","js/linkreaper.js","js/listmanager.js", "js/jquery.autocomplete.js"],
+		"matches": [ "http://*/*", "https://*/*" ],
+		
+		"css": [
+			"css/glee.css",
+			"css/listmanager.css",
+			"css/themes.css",
+			"css/jquery.autocomplete.css"
+		],
+		
+		"js": [
+			"js/jquery.js",
+			"js/glee.js",
+			"js/chrome.js",
+			"js/page-cmds.js",
+			"js/utils.js",
+			"js/linkreaper.js",
+			"js/listmanager.js",
+			"js/jquery.autocomplete.js"
+		],
+		
 		"run_at":"document_start"
 	}],
-	"permissions":[
+	
+	"permissions": [
 		"tabs",
 		"http://api.bit.ly/",
 		"bookmarks"
