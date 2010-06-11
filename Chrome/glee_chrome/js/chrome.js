@@ -147,7 +147,7 @@ Glee.Chrome.applyOptions = function(response){
 
 	// ESP Modifiers
 	if(prefs.espModifiers != undefined)
-		Glee.options.espModifiers = prefs.espModifiers;
+		Glee.espModifiers = prefs.espModifiers;
 	
 	// Shortcut key
 	if(prefs.shortcut_key != undefined)

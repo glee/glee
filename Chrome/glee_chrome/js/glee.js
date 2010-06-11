@@ -968,12 +968,12 @@ var Glee = {
 	
     getEspSelector: function(){
         var url = document.location.href;
-        var len = Glee.options.espModifiers.length;
+        var len = Glee.espModifiers.length;
 		var sel = [];
 		for(var i=0; i<len; i++)
 		{
-			if(url.indexOf(Glee.options.espModifiers[i].url) != -1)
-				sel[sel.length] = Glee.options.espModifiers[i].selector;
+			if(url.indexOf(Glee.espModifiers[i].url) != -1)
+				sel[sel.length] = Glee.espModifiers[i].selector;
 		}
         if(sel.length != 0)
             return sel.join(',');
