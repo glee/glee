@@ -2,7 +2,7 @@
 
 Glee.Chrome = {};
 
-Glee.Chrome.isBookmark = function(text){
+Glee.Chrome.isBookmark = function(text) {
 	//send request to search the bookmark tree for the bookmark whose title matches text
 	chrome.extension.sendRequest( { value:"getBookmarks", text: text }, function(response){
 		if(response.bookmarks.length != 0) 
@@ -12,17 +12,17 @@ Glee.Chrome.isBookmark = function(text){
 			Glee.currentResultIndex = 0;
 			Glee.setSubText(0, "bookmark");
 		}
-		else //google it
+		else // search it
 		{
 			Glee.setSubText(text, "search");
 		}
 	});
 }
 
-Glee.Chrome.getBookmarklet = function(text){
-	//sending request to get the first matched bookmarklet
+Glee.Chrome.getBookmarklet = function(text) {
+	// sending request to get the first matched bookmarklet
 	chrome.extension.sendRequest({ value: "getBookmarklet", text: text}, function(response){
-		//if a bookmarklet is returned, run it
+
 		if(response.bookmarklet)
 			Glee.setSubText(response.bookmarklet, "bookmarklet");
 		else
@@ -30,14 +30,15 @@ Glee.Chrome.getBookmarklet = function(text){
 	});
 }
 
-Glee.Chrome.sendRequest = function(url,method,callback){
-	//send request to background.html to send an XMLHTTPRequest
+Glee.Chrome.sendRequest = function(url, method, callback){
+	// send request to background.html to send an XMLHTTPRequest
 	chrome.extension.sendRequest({ value: "sendRequest", url: url, method: method }, function(response){
 		callback(response.data);
 	});
 }
 
-Glee.Chrome.applyOptions = function(response){
+Glee.Chrome.applyOptions = function(response) {
+    
 	var prefs = response.preferences;
     // position
 	if(prefs.position != undefined)
@@ -153,11 +154,11 @@ Glee.Chrome.applyOptions = function(response){
 	if(prefs.shortcut_key != undefined)
 		Glee.options.shortcutKey = prefs.shortcut_key;
 
-	//Tab Manager shortcut key
+	// Tab Manager shortcut key
 	if(prefs.tab_shortcut_key != undefined)
 		Glee.options.tabShortcutKey = prefs.tab_shortcut_key;
 	
-	//check if it is a disabled domain
+	// check if it is a disabled domain
 	if(prefs.status != undefined)
 	{
 		if(Glee.Utils.checkDomain() == 1 && prefs.status == 1)
@@ -173,20 +174,19 @@ Glee.Chrome.applyOptions = function(response){
 	Glee.initOptions();
 }
 
-Glee.Chrome.openNewTab = function(url, selected){
+Glee.Chrome.openNewTab = function(url, selected) {
 	//sending request to background.html to create a new tab
 	chrome.extension.sendRequest({ value: "createTab", url: url, selected: selected }, function(response){
 	});	
 }
 
-Glee.Chrome.openPageInNewTab = function(url){
+Glee.Chrome.openPageInNewTab = function(url) {
 	Glee.searchField.attr('value', '');
 	Glee.setSubText(null);
 	Glee.Chrome.openNewTab(url, true);
 }
 
-Glee.Chrome.openPageIfNotExist = function(url){
-    /* Check if a tab already exists for the url */
+Glee.Chrome.openPageIfNotExist = function(url) {
     chrome.extension.sendRequest({ value: "getTabs" }, function(response){
        var len = response.tabs.length;
        for(var i=0; i<len; i++)
@@ -203,15 +203,15 @@ Glee.Chrome.openPageIfNotExist = function(url){
 	});
 }
 
-/* required for URLs beginning with 'chrome://' */
-Glee.Chrome.openPageInThisTab = function(url){
+// required for URLs beginning with 'chrome://'
+Glee.Chrome.openPageInThisTab = function(url) {
 	Glee.searchField.attr('value', '');
 	Glee.setSubText(null);
 	chrome.extension.sendRequest({ value: "openInThisTab", url: url }, function(response){
 	});
 }
 
-Glee.Chrome.setOptionValue = function(){
+Glee.Chrome.setOptionValue = function() {
 	var valid = true;
 	var validOptions = [
 		"scroll",
@@ -284,16 +284,16 @@ Glee.Chrome.setOptionValue = function(){
 		Glee.setSubText("Invalid !set syntax. Please refer manual using !help command","msg");
 		return;
 	}
-	chrome.extension.sendRequest({value:"updateOption",option:option,option_value:value},function(response){
+	
+	chrome.extension.sendRequest( { value: "updateOption", option: option, option_value: value }, function(response){
 		Glee.searchField.attr('value','');
 		Glee.setSubText(null);
-		Glee.Chrome.applyOptions(response);
         Glee.searchField.keyup();
 	});
 }
 
 Glee.Chrome.getOptions = function(){
-	//sending request to get the gleeBox options
+	// sending request to get the gleeBox options
 	chrome.extension.sendRequest({ value: "getOptions" }, Glee.Chrome.applyOptions);
 }
 
@@ -302,14 +302,14 @@ Glee.Chrome.getTabs = function(callback){
 }
 
 Glee.Chrome.removeTab = function(tab){
-	chrome.extension.sendRequest({ value: "removeTab", id: tab.id}, function(){});
+	chrome.extension.sendRequest({ value: "removeTab", id: tab.id }, function(){});
 }
 
 Glee.Chrome.moveToTab = function(tab){
-	chrome.extension.sendRequest({ value: "moveToTab", id: tab.id}, function(){});
+	chrome.extension.sendRequest({ value: "moveToTab", id: tab.id }, function(){});
 }
 
-//adding a listener to respond to requests from background.html to update the status/settings
+// adding a listener to respond to requests from background.html to update the status/settings
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse){
 		if(request.value == "initStatus")
@@ -328,14 +328,14 @@ chrome.extension.onRequest.addListener(
 });
 
 // get command cache from background.js
-Glee.Chrome.initCommandCache = function(){
+Glee.Chrome.initCommandCache = function() {
 	chrome.extension.sendRequest( { value: "getCommandCache" }, function(response){
         Glee.updateCommandCache(response.commands);
 	});
 }
 
 // update command cache in background.js
-Glee.Chrome.updateBackgroundCommandCache = function(){
+Glee.Chrome.updateBackgroundCommandCache = function() {
     chrome.extension.sendRequest( { value: "updateCommandCache", commands: Glee.cache.commands }, function(){
 	});
 }
