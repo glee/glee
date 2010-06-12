@@ -1,0 +1,255 @@
+/* Options Page CSS */
+
+body {
+	background-color: #fbfbfb;
+	font-size: 16px;
+	line-height: 28px;
+	font-family: Georgia, Utopia, Palatino, 'Palatino Linotype', serif;
+	color: #535353;
+	margin: 0;
+	padding: 0;
+}
+
+#wrap {
+	margin: 0 auto;
+	width: 840px;
+}
+
+#options {
+    margin: 0 auto;
+	width: 800px;
+	background-color: #fff;
+	border-radius: 5px;
+	-webkit-box-shadow: #d3d3d3 0px 0px 8px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+a,
+a:visited,
+a:active {
+	color: #467ecc;
+}
+
+a:hover {
+	color: #39719b;
+}
+
+h1 {
+	clear: both;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	font-size: 40px;
+	color: #555;
+	font-weight: normal;
+	text-align: center;
+}
+
+h2 {
+	clear: both;
+	color: #555;
+	font-size: 20px;
+	background-color: #edf2f2;
+	font-weight: normal;
+	letter-spacing: 1px;
+	margin: 20px 0px;
+	border-radius: 5px;
+	padding-left: 7px;
+	padding-top: 5px;
+	padding-bottom: 3px;
+}
+
+ul.options {
+	list-style-type:  none;
+	margin: 0;
+	margin-bottom: 10px;
+	margin-left: 20px;
+	margin-top: 5px;
+	padding: 0;
+	width: 100%;
+	display: block;
+	float: left;
+	clear: both;
+	width: 800px;
+}
+
+ul li {
+	margin-bottom: 30px;
+	display: block;
+	float: left;
+	clear: both;
+}
+
+ul li li {
+	border: none;
+	float: none;
+	margin: 0;
+	margin-bottom: 5px;
+}
+
+ul li ul {
+	margin: 0;
+	padding: 0;
+}
+
+.option-label {
+	float: left;
+	width: 330px;
+}
+
+.option-field {
+	float: left;
+	margin-left: 20px;
+}
+
+input,
+textarea {
+	border: 0;
+	background-color: #f1f1f1;
+	border: 1px solid #aaa;
+	border-radius: 2px;
+	padding: 2px 3px;
+	display: inline;
+	color: #333;
+	font-size: 13px;
+	line-height: 17px;
+	font-family: "Lucida Grande", "Trebuchet MS", sans-serif;
+	margin: 0;
+}
+
+.button:hover {
+	cursor: pointer;
+	background-color: #ddd;
+	color: #000;
+}
+
+.button:active {
+	background-color: #ccc;
+}
+
+.superButton {
+	font-size: 18px;
+	border-radius: 6px;
+	padding: 5px;
+}
+
+.superButton:hover {
+	cursor: pointer;
+	background-color: #ddd;
+	color: #000;
+}
+
+.superButton:active {
+	background-color: #ccc;
+}
+
+.inline_button {
+	padding-left: 20px;
+	float: right;
+}
+
+#addDomainLi {
+	margin-top: 10px;
+}
+
+.subtext {
+	font-size: 10px;
+	color: #555;
+	font-family: Verdana, Arial, sans-serif;
+	line-height: 14px;
+}
+
+#esp-modifiers li,
+#scraper-commands li {
+	width: 410px;
+	float: left;
+	word-wrap: break-word;
+}
+
+.scraper-name:hover,
+.scraper-sel:hover,
+.domain-name:hover,
+.esp-url:hover,
+.esp-sel:hover {
+	background-color: #f1f1f1;
+	border-radius: 2px;
+	padding: 1px 2px;
+	border: 1px solid #777;
+}
+
+.scraper-name {
+	font-weight: bold;
+}
+
+#footer {
+	margin-top: 50px;
+	border-top: 1px solid #ccc;
+	font-size: 14px;
+	line-height: 25px;
+	text-align: center;
+	color: #555;
+}
+
+/* Modal popup */
+
+#popup {
+    display: none;
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    color: gray;
+    font-size: 16px;
+    z-index: 10000;
+    padding: 5px;
+    width: 40%;
+    height: 48%;
+    background-color: #fff;
+    border-radius: 2px;
+    -webkit-box-shadow: #999 0px 0px 15px;
+}
+
+#popup textarea {
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 80%;
+    display: block;
+    background-color: #f1f1f1;
+}
+
+#backupImportButton{
+    float: right;
+    display: block;
+    margin-top: 10px;
+}
+
+/* Scrollbar styling */
+
+#popup textarea::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+#popup textarea::-webkit-scrollbar-button:start:decrement,
+#popup textarea::-webkit-scrollbar-button:end:increment {
+	display: none;
+}
+
+#popup textarea::-webkit-scrollbar-button:start:increment,
+#popup textarea::-webkit-scrollbar-button:end:decrement {
+    display: none;
+}
+
+#popup textarea::-webkit-scrollbar-track-piece {
+	border-radius: 7px;
+	background-color: #ddd;
+}
+
+#popup textarea::-webkit-scrollbar-thumb:vertical {
+    height: 100px;
+	border-radius: 7px;
+	background-color: #aaa;
+}
+#popup textarea::-webkit-scrollbar-corner:vertical, 
+#popup textarea::-webkit-scrollbar-resizer:vertical {
+    background-color: #ededed;
+}
