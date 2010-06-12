@@ -26,7 +26,7 @@ var gleebox_Backup = {
         var data = {
             status: this.translateForChrome(this.prefs.getValue('status', true)),
             search_engine: this.prefs.getValue('search_engine',''),
-            position: this.translateForChrome(this.prefs.getValue('position', 'middle')),
+            position: this.translateForChrome(this.prefs.getValue('position', 'bottom')),
             bookmark_search: this.translateForChrome(this.prefs.getValue('bookmark_search', false)),
             size: this.translateForChrome(this.prefs.getValue('size', 'medium')),
             scroll_animation: this.translateForChrome(this.prefs.getValue('scroll_animation', true)),

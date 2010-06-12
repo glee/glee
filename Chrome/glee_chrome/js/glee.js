@@ -462,7 +462,7 @@ var Glee = {
     	size: "medium",
     	
     	// Position of gleeBox (top, middle, bottom)
-    	position: "middle",
+    	position: "bottom",
     	
     	// Scrolling Animation speed
     	scrollingSpeed: 500,

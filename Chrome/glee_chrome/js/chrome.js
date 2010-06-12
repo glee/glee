@@ -44,10 +44,10 @@ Glee.Chrome.applyOptions = function(response){
 	{
 		if(prefs.position == 0)    // top
 			Glee.options.position = "top";
-		else if(prefs.position == 2)
-			Glee.options.position = "bottom";
+		else if(prefs.position == 1)
+			Glee.options.position = "middle";
 		else 
-			Glee.options.position = "middle"; 	// default
+			Glee.options.position = "bottom"; 	// default
 	}
 	
 	// size

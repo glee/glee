@@ -2,7 +2,7 @@
 
 var gleeboxPreferences = {
 	size:1,
-	position:1,
+	position:2,
 	status:1,
 	search_engine:"http://www.google.com/search?q=",
 	theme:"GleeThemeDefault",

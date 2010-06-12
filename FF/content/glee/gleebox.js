@@ -418,7 +418,7 @@ var Glee = {
 	//Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
 	pageScrollSpeed:4,
 	//position of gleeBox (top,middle,bottom)
-	position: "middle",
+	position: "bottom",
 	//size of gleeBox (small,medium,large)
 	size:"medium",
 	//URLs for which gleeBox should be disabled
