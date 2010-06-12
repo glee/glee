@@ -3,7 +3,7 @@
 /* help: Opens the gleeBox manual page in a new tab */
 Glee.help = function(newTab){
     if(newTab)
-	    Glee.Chrome.openPageIfNotExist("http://thegleebox.com/manual.html");
+	    Glee.Browser.openPageIfNotExist("http://thegleebox.com/manual.html");
 	else
         location.href = "http://thegleebox.com/manual.html";
 }
@@ -11,7 +11,7 @@ Glee.help = function(newTab){
 /* tipjar: Opens TipJar */
 Glee.tipjar = function(newTab){
     if(newTab)
-	    Glee.Chrome.openPageIfNotExist("http://tipjar.thegleebox.com/");
+	    Glee.Browser.openPageIfNotExist("http://tipjar.thegleebox.com/");
 	else
 	    location.href = "http://tipjar.thegleebox.com/";
 }
@@ -28,7 +28,7 @@ Glee.sendTweet = function(newTab){
 	var url = location.href;
 	if(url.length > 30)
 	{
-		Glee.Chrome.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+		Glee.Browser.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
 			var json = JSON.parse("["+data+"]");
 			var shortenedURL = json[0].results[location.href].shortUrl;
@@ -40,7 +40,7 @@ Glee.sendTweet = function(newTab){
 			else
 			    loc = "http://twitter.com/?status="+encodedURL;
 			if(newTab)
-        	    Glee.Chrome.openPageInNewTab(loc);
+        	    Glee.Browser.openPageInNewTab(loc);
         	else
         	    location.href = loc;
 		});
@@ -55,7 +55,7 @@ Glee.sendTweet = function(newTab){
 		else
             loc = "http://twitter.com/?status="+encodedURL;
     	if(newTab)
-    	    Glee.Chrome.openPageInNewTab(loc);
+    	    Glee.Browser.openPageInNewTab(loc);
     	else
     	    location.href = loc;
 	}
@@ -192,7 +192,7 @@ Glee.sharePage = function(newTab){
 	if(loc)
 	{
 	    if(newTab)
-	        Glee.Chrome.openPageInNewTab(loc);
+	        Glee.Browser.openPageInNewTab(loc);
 	    else
 	        location.href = loc;
 	}
@@ -206,7 +206,7 @@ Glee.makeReadable = function(){
 
 /* shorten: Shortens the URL using bit.ly and displays it in gleeBox */
 Glee.shortenURL = function(){
-	this.Chrome.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
+	this.Browser.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 	function(data){
 		var json = JSON.parse("["+data+"]");
 		var shortenedURL = json[0].results[location.href].shortUrl;
@@ -244,24 +244,24 @@ Glee.controlVideo = function(){
 /* ext: Open the Extensions page */
 Glee.viewExtensions = function(newTab){
     if(newTab)
-        Glee.Chrome.openPageIfNotExist("chrome://extensions/");
+        Glee.Browser.openPageIfNotExist("chrome://extensions/");
     else
-        Glee.Chrome.openPageInThisTab("chrome://extensions/");
+        Glee.Browser.openPageInThisTab("chrome://extensions/");
 }
 
 /* down: Open the Downloads page */
 Glee.viewDownloads = function(newTab){
     if(newTab)
-        Glee.Chrome.openPageIfNotExist("chrome://downloads/");
+        Glee.Browser.openPageIfNotExist("chrome://downloads/");
     else
-        Glee.Chrome.openPageInThisTab("chrome://downloads/");
+        Glee.Browser.openPageInThisTab("chrome://downloads/");
 }
 
 /* options: Open the Options page for gleeBox */
 Glee.displayOptionsPage = function(newTab){
     var url = chrome.extension.getURL("options.html");
     if(newTab)
-	    Glee.Chrome.openPageIfNotExist(url);
+	    Glee.Browser.openPageIfNotExist(url);
 	else
-	    Glee.Chrome.openPageInThisTab(url);
+	    Glee.Browser.openPageInThisTab(url);
 }
