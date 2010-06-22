@@ -38,7 +38,7 @@
 	</dict>
 	<dict>
 		<key>DefaultValue</key>
-		<string>g</string>
+		<real>71</real>
 		<key>Key</key>
 		<string>shortcutKey</string>
 		<key>Title</key>
@@ -123,6 +123,24 @@
 		<string>["mail.google.com", "wave.google.com", "mail.yahoo.com"]</string>
 		<key>Key</key>
 		<string>disabledUrls</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<true/>
+		<key>Key</key>
+		<string>espStatus</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>[{"url":"google.com/search","selector":"h3:not(ol.nobr&gt;li&gt;h3),a:contains(Next)"},{"url":"bing.com/search","selector":"div.sb_tlst"}]</string>
+		<key>Key</key>
+		<string>espModifiers</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>[]</string>
+		<key>Key</key>
+		<string>scrapers</string>
 	</dict>
 </array>
 </plist>

@@ -7,14 +7,6 @@
  *
  **/
 
-jQuery(document).ready( function() {
-    
-    // activating the no conflict mode of jQuery
-	jQuery.noConflict();
-	
-    Glee.init();
-});
-
 var Glee = {
     // used for Chrome specific code
     IS_CHROME: false,
@@ -1182,3 +1174,11 @@ Glee.Events = {
 		}, 0);
     }
 }
+
+jQuery(document).ready( function() {
+    // activating the no conflict mode of jQuery
+	jQuery.noConflict();
+	
+	if(Glee.IS_CHROME)
+        Glee.init();
+});

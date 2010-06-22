@@ -6,6 +6,7 @@
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/key-combo.js"></script>
 	<script type="text/javascript" src="js/options.js"></script>
+	<script type="text/javascript" src="js/safari-options.js"></script>
 </head>
 <body>
 <div id="wrap">
@@ -30,13 +31,13 @@
 <a href="#" onclick='javascript:document.getElementsByName("glee_search")[0].value = "http://search.yahoo.com/search?p=";return false;'>Yahoo</a>
 			</div>
 		</li>
-		<li>
+		<!-- <li>
 			<label class="option-label">Bookmark search<br/><span class="subtext">Searches bookmarks when no matching links are found</span></label>
 			<div class="option-field">
 				<input name="glee_bookmark_search" type="radio"> On
 				<input name="glee_bookmark_search" type="radio"> Off
 			</div>
-		</li>
+		</li> -->
 		<li>
 			<label class="option-label">Animated scrolling<br/><span class="subtext">Provides scrolling animation when traversing selected elements</span></label>
 			<div class="option-field">
@@ -44,27 +45,27 @@
 				<input name="glee_scrolling_animation" type="radio"> Off
 			</div>
 		</li>
-		<li>
+		<!-- <li>
 			<label class="option-label">Global shortcut for Glee Tab Manager<br/><span class="subtext">Launch tab manager without needing to go into gleeBox</span></label>
 			<div class="option-field">
 				<input name="glee_tab_shortcut_status" type="radio"> On
 				<input name="glee_tab_shortcut_status" type="radio"> Off
 			</div>
-		</li>
+		</li> -->
 		<li>
 			<label class="option-label">Shortcut to launch gleeBox<br/><span class="subtext">Enter a single character in the text field. Use Alt + Shortcut when text fields or other input elements are focussed.</span></label>
 			<div class="option-field">
 				<input name="glee_shortcut_key_field" size="5" type="text" /><span name="glee_shortcut_key" style="display:none"></span>&nbsp;&nbsp;
 					<a href="#" onclick='javascript:document.getElementsByName("glee_shortcut_key")[0].innerText = "71";document.getElementsByName("glee_shortcut_key_field")[0].value = "g";'>Revert to default</a>
 			</div>
-		</li>		
-		<li>
+		</li>
+		<!-- <li>
 			<label class="option-label">Shortcut to launch Glee Tab Manager<br/><span class="subtext">Enter a single character in the text field. Use Alt + Shortcut when text fields or other input elements are focussed.</span></label>
 			<div class="option-field">
 				<input name="glee_tab_shortcut_key_field" size="5" type="text" /><span name="glee_tab_shortcut_key" style="display:none"></span>&nbsp;&nbsp;
 					<a href="#" onclick='javascript:document.getElementsByName("glee_shortcut_key")[0].innerText = "190";document.getElementsByName("glee_tab_shortcut_key_field")[0].value = ".";'>Revert to default</a>
 			</div>
-		</li>
+		</li> -->
 	</ul>
 	<h2>Appearance</h2>
 	<ul class="options">

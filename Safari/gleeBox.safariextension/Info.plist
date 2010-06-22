@@ -25,22 +25,23 @@
 		<dict>
 			<key>End</key>
 			<array>
-				<string>js/events.js</string>
-				<string>js/safari.js</string>
-				<string>js/utils.js</string>
-				<string>js/linkreaper.js</string>
-				<string>js/glee.js</string>
-				<string>js/page-cmds.js</string>
+				<string>js/init.js</string>
 			</array>
 			<key>Start</key>
 			<array>
 				<string>js/jquery.js</string>
+				<string>js/glee.js</string>
+				<string>js/safari.js</string>
+				<string>js/events.js</string>
+				<string>js/page-cmds.js</string>
+				<string>js/linkreaper.js</string>
+				<string>js/utils.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
 		<array>
-			<string>css/themes.css</string>
 			<string>css/glee.css</string>
+			<string>css/themes.css</string>
 			<string>css/jquery.autocomplete.css</string>
 		</array>
 	</dict>
