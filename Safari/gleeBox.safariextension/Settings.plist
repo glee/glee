@@ -48,7 +48,7 @@
 	</dict>
 	<dict>
 		<key>DefaultValue</key>
-		<string>middle</string>
+		<string>bottom</string>
 		<key>Key</key>
 		<string>position</string>
 		<key>Title</key>

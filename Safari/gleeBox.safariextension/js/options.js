@@ -274,18 +274,6 @@ function initDefaultTexts() {
 	}
 }
 
-function exportSettings(){
-    var text = 'Copy the contents of this text field, and save them to a file for backup.';
-    showBackupPopup(text, false);
-    $("#settingsText").text(JSON.stringify(prefs));
-}
-
-function importSettings(){
-    var text = 'Paste exported settings here.';
-    showBackupPopup(text, true);
-    $("#settingsText").text('');
-}
-
 function showBackupPopup(infoText, showButton){
     
     var popup = $('#popup');
@@ -334,21 +322,8 @@ function initBackupPopup()
             hideBackupPopup();
     });
     
-    importBtn.click(function(e){
-        try{
-            var jsonString = $('#settingsText')[0].value;
-            var tempPref = JSON.parse(jsonString);
-            //set version to current
-            tempPref.version = prefs.version;
-            clearSettings();
-            initSettings(tempPref);
-            $('#backupInfo').text("Settings successfully imported!");
-            hideBackupPopup();
-        }
-        catch(e){
-            $('#backupInfo').text("The import format is incorrect!");
-            $('#settingsText')[0].focus();
-        }
+    importBtn.click(function(e) {
+        importAndApply();
     });
 }
 

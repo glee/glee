@@ -44,8 +44,14 @@ Glee.Browser = {
             Glee.espModifiers = JSON.parse(options.espModifiers);
         
         if(options.scrapers != undefined)
-            Glee.scrapers = JSON.parse(options.scrapers);
-
+        {
+    		Glee.scrapers.splice(4, Glee.scrapers.length);
+    		var scrapers = JSON.parse(options.scrapers);
+    		var len = scrapers.length;
+    		for(var i=0; i<len; i++)
+    		    Glee.scrapers[ 4 + i ] = scrapers[i];
+        }
+        
         if(options.theme != undefined)
         {
             if(Glee.ThemeOption)
