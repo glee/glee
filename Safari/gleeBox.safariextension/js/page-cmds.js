@@ -3,7 +3,7 @@
 /* help: Opens the gleeBox manual page in a new tab */
 Glee.help = function(newTab){
     if(newTab)
-	    Glee.Browser.openPageIfNotExist("http://thegleebox.com/manual.html");
+	    Glee.Browser.openNewTab("http://thegleebox.com/manual.html");
 	else
         location.href = "http://thegleebox.com/manual.html";
 }
@@ -11,7 +11,7 @@ Glee.help = function(newTab){
 /* tipjar: Opens TipJar */
 Glee.tipjar = function(newTab){
     if(newTab)
-	    Glee.Browser.openPageIfNotExist("http://tipjar.thegleebox.com/");
+	    Glee.Browser.openNewTab("http://tipjar.thegleebox.com/");
 	else
 	    location.href = "http://tipjar.thegleebox.com/";
 }
@@ -262,7 +262,7 @@ Glee.displayOptionsPage = function(newTab){
     if(newTab)
         Glee.Browser.openNewTab(url);
 	else
-        Glee.Browser.openPageInThisTab(url);
+        location.href = url;
 }
 
 Glee.setOptionValue = function() {

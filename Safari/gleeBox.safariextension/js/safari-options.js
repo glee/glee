@@ -4,7 +4,6 @@ $(document).ready(function() {
     safari.self.tab.dispatchMessage("getOptionsFromOptionsPage", null);
 });
 
-
 function respondToMessage(e) {
     if(e.name == "sendOptionsToOptionsPage")
         initSettings(translate(e.message));

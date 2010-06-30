@@ -18,48 +18,34 @@ Glee.Browser = {
     },
     
     applyOptions: function(options) {
-
-        if(options.size != undefined)
-            Glee.options.size = options.size;
         
-        if(options.position != undefined)
-            Glee.options.position = options.position;
-            
-        if(options.scrollingSpeed != undefined)
-            Glee.options.scrollingSpeed = options.scrollingSpeed;
-            
-        if(options.searchEngineUrl != undefined)
-            Glee.options.searchEngineUrl = options.searchEngineUrl;
-            
-        if(options.shortcutKey != undefined)
-            Glee.options.shortcutKey = options.shortcutKey;
-        
-        if(options.espStatus != undefined)
-            Glee.options.espStatus = options.espStatus;
-        
-        if(options.disabledUrls != undefined)
-            Glee.disabledUrls = JSON.parse(options.disabledUrls);
-        
-        if(options.espModifiers != undefined)
-            Glee.espModifiers = JSON.parse(options.espModifiers);
-        
-        if(options.scrapers != undefined)
+        for(opt in options)
         {
-    		Glee.scrapers.splice(4, Glee.scrapers.length);
-    		var scrapers = JSON.parse(options.scrapers);
-    		var len = scrapers.length;
-    		for(var i=0; i<len; i++)
-    		    Glee.scrapers[ 4 + i ] = scrapers[i];
-        }
-        
-        if(options.theme != undefined)
-        {
-            if(Glee.ThemeOption)
-    		{
-    		    Glee.searchBox.removeClass(Glee.ThemeOption);
-                Glee.searchField.removeClass(Glee.ThemeOption);
-    		}
-            Glee.ThemeOption = options.theme;
+            if(options[opt] == undefined)
+                continue;
+            switch(opt)
+            {
+                case "espModifiers" :   
+                case "disabledUrls" :   Glee[opt] = JSON.parse(options[opt]); break;
+                
+                case "scrapers"     :   Glee.scrapers.splice(4, Glee.scrapers.length);
+                                		var scrapers = JSON.parse(options.scrapers);
+                                		var len = scrapers.length;
+                                		for(var i=0; i<len; i++)
+                                		    Glee.scrapers[ 4 + i ] = scrapers[i];
+                                		break;
+                                		
+                case "theme"        :   if(Glee.ThemeOption)
+                                		{
+                                		    Glee.searchBox.removeClass(Glee.ThemeOption);
+                                            Glee.searchField.removeClass(Glee.ThemeOption);
+                                		}
+                                        Glee.ThemeOption = options.theme;
+                                        break;
+                
+                default             :   Glee.options[opt] = options[opt];
+            }
+            
         }
         
         Glee.initOptions();

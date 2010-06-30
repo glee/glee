@@ -31,7 +31,6 @@ function importAndApply() {
 
 // A day will come when they will have the same variable names / values
 
-
 function translateForExport(prefs) {
     var newPrefs = {};
     
