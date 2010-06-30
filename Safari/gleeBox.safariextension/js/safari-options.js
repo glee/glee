@@ -42,7 +42,7 @@ function initSettings(response)
     // position
 	if(prefs.position == "top")
 		document.getElementsByName("glee_pos")[0].checked = true;
-	else if(prefs.position == "medium")
+	else if(prefs.position == "middle")
 		document.getElementsByName("glee_pos")[1].checked = true;
 	else
 		document.getElementsByName("glee_pos")[2].checked = true;

@@ -18,11 +18,10 @@ Glee.Browser = {
     },
     
     applyOptions: function(options) {
-        console.log("Size: " + Glee.options.size);
+
         if(options.size != undefined)
             Glee.options.size = options.size;
         
-        console.log("Position: " + Glee.options.position);
         if(options.position != undefined)
             Glee.options.position = options.position;
             
@@ -31,6 +30,21 @@ Glee.Browser = {
             
         if(options.searchEngineUrl != undefined)
             Glee.options.searchEngineUrl = options.searchEngineUrl;
+            
+        if(options.shortcutKey != undefined)
+            Glee.options.shortcutKey = options.shortcutKey;
+        
+        if(options.espStatus != undefined)
+            Glee.options.espStatus = options.espStatus;
+        
+        if(options.disabledUrls != undefined)
+            Glee.disabledUrls = JSON.parse(options.disabledUrls);
+        
+        if(options.espModifiers != undefined)
+            Glee.espModifiers = JSON.parse(options.espModifiers);
+        
+        if(options.scrapers != undefined)
+            Glee.scrapers = JSON.parse(options.scrapers);
 
         if(options.theme != undefined)
         {
@@ -49,23 +63,26 @@ Glee.Browser = {
         if(e.name == "applyOptions")
             Glee.Browser.applyOptions(e.message);
         else if(e.name == "receiveCommandCache")
-            Glee.updateCommandCache(response.commands);
+            Glee.updateCommandCache(e.message);
+    },
+    
+    setOption: function(option, value) {
+        safari.self.tab.dispatchMessage("updateOption", { option: option, value: value });
+		Glee.searchField.attr('value','');
+		Glee.setSubText(null);
+        Glee.searchField.keyup();
     },
     
     // stub methods
     
     // get command cache from background.html
     initCommandCache: function() {
-        // safari.self.tab.dispatchMessage("getCommandCache", url);
-        // chrome.extension.sendRequest( { value: "getCommandCache" }, function(response){
-        //             Glee.updateCommandCache(response.commands);
-        // });
+        safari.self.tab.dispatchMessage( "getCommandCache" );
     },
 
     // update command cache in background.html
     updateBackgroundCommandCache: function() {
-        //         chrome.extension.sendRequest( { value: "updateCommandCache", commands: Glee.cache.commands }, function(){
-        // });
+        safari.self.tab.dispatchMessage( "updateCommandCache", Glee.cache.commands );
     },
     
     openTabManager: function(){
