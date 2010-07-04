@@ -10,13 +10,28 @@ var cache = {
         disabledUrls: null,
         espStatus: null,
         scrapers: null,
-        espModifiers: null
+        espModifiers: null,
+        version: null
     }
 };
 
 function init() {
     initOptions();
+    versionCheck();
     initCommandCache();
+}
+
+function versionCheck() {
+    if(cache.prefs.version != '1.6.1')
+    {
+        cache.prefs.version = '1.6.1';
+        saveOption('version', '1.6.1');
+
+        // open update.html
+        var activeWindow = safari.application.activeBrowserWindow;
+        var newTab = activeWindow.openTab();
+        newTab.url = "http://thegleebox.com/update.html";
+    }
 }
 
 function respondToMessage(e) {
@@ -33,6 +48,11 @@ function respondToMessage(e) {
     {
         cache.prefs = e.message;
         saveOptions();
+    }
+    
+    else if(e.name == "propagateOptions")
+    {
+        sendRequestToAllTabs( { value: "applyOptions", data: cache.prefs } );
     }
     
     else if(e.name == "openNewTab")
@@ -133,7 +153,7 @@ function updateOption(option, value) {
 	}
 	
 	cache.prefs[option] = value;
-    saveOption(option);
+    saveOption(option, value);
 	
 	// send request to update options in all tabs
     sendRequestToAllTabs({ value: 'applyOptions', data: cache.prefs });
@@ -141,11 +161,11 @@ function updateOption(option, value) {
 
 function saveOptions() {
     for(pref in cache.prefs)
-        saveOption(pref);
+        saveOption(pref, cache.prefs[pref]);
 }
 
-function saveOption(pref) {
-        safari.extension.settings.setItem(pref, cache.prefs[pref]);
+function saveOption(pref, value) {
+    safari.extension.settings.setItem(pref, value);
 }
 
 function initCommandCache() {
@@ -153,7 +173,7 @@ function initCommandCache() {
     console.log("Commands in localStorage: " + localStorage['gleebox_commands_cache']);
 }
 
-function sendRequestToAllTabs(req){
+function sendRequestToAllTabs(req) {
     var w_len = safari.application.browserWindows.length;
     for(var i=0; i < w_len; i++)
     {

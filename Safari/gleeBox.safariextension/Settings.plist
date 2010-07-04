@@ -142,5 +142,13 @@
 		<key>Key</key>
 		<string>scrapers</string>
 	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<real>0.0</real>
+		<key>Key</key>
+		<string>version</string>
+		<key>Secure</key>
+		<false/>
+	</dict>
 </array>
 </plist>

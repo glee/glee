@@ -332,19 +332,19 @@ function hideBackupPopup(){
 }
 
 function clearSettings(){
-    //clearing disabled urls
+    // clearing disabled urls
     var parent = document.getElementById("domains");
     var len = parent.children.length;
     for(var i=2; i<len; i++)
         parent.removeChild(document.getElementById("domain"+i));
     
-    //clearing scrapers
+    // clearing scrapers
     parent = document.getElementById("scraper-commands");
     len = parent.children.length;
     for(var i=5; i<len; i++)
         parent.removeChild(document.getElementById("scraper"+i));
     
-    //clearing visions
+    // clearing visions
     parent = document.getElementById("esp-modifiers");
     len = parent.children.length;
     for(var i=1; i<len; i++)

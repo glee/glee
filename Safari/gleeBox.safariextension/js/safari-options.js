@@ -25,6 +25,8 @@ function translate(settings) {
 function initSettings(response)
 {
     prefs = response;
+    prefs.version = "1.6.1";
+    
 	initDefaultTexts();
 
     // disabled domains
@@ -204,24 +206,12 @@ function saveSettings(close_tab) {
 			break;
 		}
 	}
-
-	// bookmark search
-    // if(document.getElementsByName("glee_bookmark_search")[0].checked)
-    //  prefs.bookmark_search = 1;
-    // else
-    //  prefs.bookmark_search = 0;
 	
     // scroll animation
 	if(document.getElementsByName("glee_scrolling_animation")[0].checked)
 		prefs.scrollingSpeed = 500;
 	else
 		prefs.scrollingSpeed = 0;
-	
-	// tab manager shortcut status
-	// if(document.getElementsByName("glee_tab_shortcut_status")[0].checked)
-	//         prefs.tab_shortcut_status = 1;
-	//     else
-	//         prefs.tab_shortcut_status = 0;
 
 	// scrapers
 	prefs.scrapers = [];
@@ -265,17 +255,14 @@ function saveSettings(close_tab) {
 	else
 		prefs.shortcutKey = 71;
 
-    // tab manager shortcut key
-    // var tabShortcutKey = document.getElementsByName("glee_tab_shortcut_key")[0].innerText;
-    // if(tabShortcutKey)
-    //  prefs.tab_shortcut_key = tabShortcutKey;
-    // else
-    //  prefs.tab_shortcut_key = 190;
-
-    savePreferences();
-    // propagateChanges();
+    saveOptions();
+    propagateOptions();
 }
 
-function savePreferences() {
+function saveOptions() {
     safari.self.tab.dispatchMessage("saveOptions", prefs);
+}
+
+function propagateOptions() {
+    safari.self.tab.dispatchMessage("propagateOptions");
 }
