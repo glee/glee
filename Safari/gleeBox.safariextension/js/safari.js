@@ -12,6 +12,16 @@ Glee.Browser = {
         document.location = url;
     },
     
+    openPageIfNotExist: function(url) {
+        safari.self.tab.dispatchMessage("openPageIfNotExist", url);
+        Glee.searchField.attr('value', '');
+        Glee.setSubText(null);
+    },
+    
+    sendRequest: function(url, method, callback) {
+        safari.self.tab.dispatchMessage("sendRequest", { url: url, method: method } );
+        Glee.Browser.onSendRequestCompletion = callback;
+    },
     
     getOptions: function() {
         safari.self.tab.dispatchMessage("getOptions", null);
@@ -56,6 +66,8 @@ Glee.Browser = {
             Glee.Browser.applyOptions(e.message);
         else if(e.name == "receiveCommandCache")
             Glee.updateCommandCache(e.message);
+        else if(e.name == "onSendRequestCompletion")
+            Glee.Browser.onSendRequestCompletion(e.message);
     },
     
     setOption: function(option, value) {
@@ -64,8 +76,6 @@ Glee.Browser = {
 		Glee.setSubText(null);
         Glee.searchField.keyup();
     },
-    
-    // stub methods
     
     // get command cache from background.html
     initCommandCache: function() {
@@ -77,8 +87,10 @@ Glee.Browser = {
         safari.self.tab.dispatchMessage( "updateCommandCache", Glee.cache.commands );
     },
     
+    // stub methods
+    
     openTabManager: function(){
-        //do nothing
+        // do nothing
     },
     
     getBookmarklet: function(){

@@ -37,6 +37,7 @@
 				<string>js/linkreaper.js</string>
 				<string>js/utils.js</string>
 				<string>js/jquery.autocomplete.js</string>
+				<string>js/safari-page-cmds.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

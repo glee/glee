@@ -62,6 +62,25 @@ function respondToMessage(e) {
         newTab.url = e.message;
     }
     
+    else if(e.name == "openPageIfNotExist")
+    {
+        var activeWindow = safari.application.activeBrowserWindow;
+        var tabs = activeWindow.tabs;
+        var len = tabs.length;
+        
+        for(var i=0; i < len; i++)
+        {
+            if( tabs[i].url == e.message)
+            {
+                tabs[i].activate();
+                return;
+            }
+        }
+        // otherwise, open new tab
+        var newTab = activeWindow.openTab();
+        newTab.url = e.message;
+    }
+
     else if(e.name == "updateOption")
         updateOption(e.message.option, e.message.value);
         
@@ -74,6 +93,19 @@ function respondToMessage(e) {
         console.log("adding command to cache: " + cache.commands);
         localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
         sendRequestToAllTabs({ value: 'updateCommandCache', data: cache.commands });
+    }
+    
+    else if(e.name == "sendRequest")
+    {
+        var req = new XMLHttpRequest();
+		req.open(e.message.method, e.message.url, true);
+		req.onreadystatechange = function(){
+			if(req.readyState == 4)
+			{
+                e.target.page.dispatchMessage("onSendRequestCompletion", req.responseText);
+			}
+		}
+		req.send();
     }
 }
 
