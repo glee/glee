@@ -36,6 +36,7 @@
 				<string>js/page-cmds.js</string>
 				<string>js/linkreaper.js</string>
 				<string>js/utils.js</string>
+				<string>js/jquery.autocomplete.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
