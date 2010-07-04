@@ -7,17 +7,7 @@
  *
  **/
 
-jQuery(document).ready( function() {
-    
-    // activating the no conflict mode of jQuery
-	jQuery.noConflict();
-	
-    Glee.init();
-});
-
 var Glee = {
-    // used for Chrome specific code
-    IS_CHROME: true,
     
     defaults: {
 	    nullStateMessage:"Nothing selected",
@@ -225,7 +215,7 @@ var Glee = {
 	    Glee.createBox();
 	    
 	    // Chrome hack: disable status while options are received
-	    if(Glee.IS_CHROME)
+	    if(IS_CHROME)
 	        Glee.options.status = 0;
 	    
 	    // get options from preference cache
@@ -288,7 +278,7 @@ var Glee = {
 		// Theme
 		Glee.searchBox.addClass(Glee.ThemeOption);
 		Glee.searchField.addClass(Glee.ThemeOption);
-		if(Glee.IS_CHROME && Glee.ListManager != undefined)
+		if(IS_CHROME && Glee.ListManager != undefined)
 		{
 		    if(Glee.ListManager.box)
     			Glee.ListManager.box.addClass(Glee.ThemeOption);
@@ -756,7 +746,7 @@ var Glee = {
 
     					if(e.keyCode == Glee.options.shortcutKey)
     					    Glee.open();
-    					else if(Glee.IS_CHROME)
+    					else if(IS_CHROME)
                             Glee.Browser.openTabManager();
     				}
     			}
@@ -787,7 +777,7 @@ var Glee = {
     		}
     		
     		// Open Tab Manager when shortcut key is pressed inside gleeBox
-    		else if(e.keyCode == Glee.options.tabShortcutKey && Glee.searchField.attr("value").length == 0 && Glee.IS_CHROME)
+    		else if(e.keyCode == Glee.options.tabShortcutKey && Glee.searchField.attr("value").length == 0 && IS_CHROME)
     		{
     		    if(e.metaKey || e.ctrlKey || e.shiftKey)
     		        break;
@@ -896,3 +886,12 @@ var Glee = {
     	});
 	}
 }
+
+jQuery(document).ready( function() {
+	jQuery.noConflict();
+
+    if(!IS_CHROME && window !== window.top)
+	    return;
+
+    Glee.init();
+});

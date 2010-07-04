@@ -1,3 +1,5 @@
+IS_CHROME = false;
+
 Glee.Browser = {
     
     openNewTab: function(url) {

@@ -1,5 +1,7 @@
 /* Chrome specific methods */
 
+IS_CHROME = true;
+
 Glee.Browser = {};
 
 Glee.Browser.isBookmark = function(text) {
