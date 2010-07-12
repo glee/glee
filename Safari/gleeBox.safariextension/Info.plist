@@ -7,13 +7,13 @@
 	<key>CFBundleDisplayName</key>
 	<string>gleeBox</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.ankit.sameer.ahuja.gleebox</string>
+	<string>com.ankitandsameerahuja.safari.gleebox</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.6.1 alpha</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.0</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -57,6 +57,8 @@
 			<string>All</string>
 		</dict>
 	</dict>
+	<key>Update Manifest URL</key>
+	<string>http://thegleebox.com/safari/update.plist</string>
 	<key>Website</key>
 	<string>http://thegleebox.com</string>
 </dict>
