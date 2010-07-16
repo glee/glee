@@ -30,7 +30,8 @@
 			"js/utils.js",
 			"js/linkreaper.js",
 			"js/listmanager.js",
-			"js/jquery.autocomplete.js"
+			"js/jquery.autocomplete.js",
+			"js/experimental-content.js"
 		],
 		
 		"run_at":"document_start"
@@ -39,6 +40,9 @@
 	"permissions": [
 		"tabs",
 		"http://api.bit.ly/",
-		"bookmarks"
-	]
+		"bookmarks",
+		"experimental"
+	],
+	
+	"omnibox_keyword": "glee"
 }

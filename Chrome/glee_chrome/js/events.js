@@ -119,7 +119,7 @@ Glee.Events = {
 		// If it a valid page command, execute it
 		if(typeof(Glee.URL.name) != "undefined")
 		{
-		    if(e.shiftKey)
+		    if(e && e.shiftKey)
 		        Glee.execCommand(Glee.URL, true);
 			else
 			    Glee.execCommand(Glee.URL, false);
