@@ -37,8 +37,9 @@ function versionCheck() {
 function respondToMessage(e) {
     
     // from content script
-    if(e.name == "getOptions")
+    if(e.name == "getOptions") {
         e.target.page.dispatchMessage("applyOptions", cache.prefs);
+    }
 
     // from options page
     else if(e.name == "getOptionsFromOptionsPage")

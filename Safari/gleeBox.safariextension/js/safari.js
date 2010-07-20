@@ -30,7 +30,6 @@ Glee.Browser = {
     },
     
     applyOptions: function(options) {
-        
         for(opt in options)
         {
             if(options[opt] == undefined)
@@ -38,7 +37,7 @@ Glee.Browser = {
             switch(opt)
             {
                 case "espModifiers" :   
-                case "disabledUrls" :   Glee[opt] = JSON.parse(options[opt]); break;
+                case "disabledUrls" :   Glee.domainsToBlock = JSON.parse(options.disabledUrls); break;
                 
                 case "scrapers"     :   Glee.scrapers.splice(4, Glee.scrapers.length);
                                 		var scrapers = JSON.parse(options.scrapers);
@@ -57,9 +56,11 @@ Glee.Browser = {
                 
                 default             :   Glee.options[opt] = options[opt];
             }
-            
         }
-        
+        if (Glee.Utils.checkDomain() != 1)
+            Glee.options.status = false;
+        else 
+            Glee.options.status = true;
         Glee.initOptions();
     },
     

@@ -727,7 +727,7 @@ var Glee = {
 	    
         jQuery(window).bind('keydown', function(e) {
     		var target = e.target || e.srcElement;
-    		if(Glee.options.status != 0)
+    		if(Glee.options.status && Glee.options.status != 0)
     		{
                 var node = target.nodeName.toLowerCase();
     			if( ( node != 'input' && node != 'textarea' && node != 'div' && node != 'object') || e.altKey )
