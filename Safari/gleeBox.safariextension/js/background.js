@@ -38,7 +38,7 @@ function respondToMessage(e) {
     
     // from content script
     if(e.name == "getOptions") {
-        e.target.page.dispatchMessage("applyOptions", cache.prefs);
+        e.target.page.dispatchMessage("updateOptions", cache.prefs);
     }
 
     // from options page
@@ -53,7 +53,7 @@ function respondToMessage(e) {
     
     else if(e.name == "propagateOptions")
     {
-        sendRequestToAllTabs( { value: "applyOptions", data: cache.prefs } );
+        sendRequestToAllTabs({value: "updateOptions", data: cache.prefs});
     }
     
     else if(e.name == "openNewTab")
@@ -189,7 +189,7 @@ function updateOption(option, value) {
     saveOption(option, value);
 	
 	// send request to update options in all tabs
-    sendRequestToAllTabs({ value: 'applyOptions', data: cache.prefs });
+    sendRequestToAllTabs({value: 'updateOptions', data: cache.prefs});
 }
 
 function saveOptions() {

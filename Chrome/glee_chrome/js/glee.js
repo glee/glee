@@ -10,7 +10,7 @@
 var Glee = {
     
     defaults: {
-	    nullStateMessage:"Nothing selected",
+	    nullStateMessage: "Nothing selected",
 	    
     	// Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
     	pageScrollSpeed: 4,
@@ -211,15 +211,15 @@ var Glee = {
 	},
 	
 	init: function() {
-	    // create the DOM elements
-	    Glee.createBox();
-	    
 	    // Chrome hack: disable status while options are received
 	    if(IS_CHROME)
 	        Glee.options.status = 0;
 	    
-	    // get options from preference cache
+	    // get options from cache in background.html
         Glee.Browser.getOptions();
+        
+        // create the DOM elements
+	    Glee.createBox();
 	    
 	    // add event listeners
 	    Glee.addListeners();
@@ -234,7 +234,6 @@ var Glee = {
 	},
 	
 	createBox: function() {
-	    
 		// Creating DOM elements for gleeBox
 		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
 		this.subText = jQuery("<div id=\"gleeSubText\">" + Glee.defaults.nullStateMessage + "</div>");
@@ -273,16 +272,17 @@ var Glee = {
 	},
 	
 	// called when options are returned by background.html
-	initOptions: function() {
-		
+	applyOptions: function() {
 		// Theme
 		Glee.searchBox.addClass(Glee.ThemeOption);
 		Glee.searchField.addClass(Glee.ThemeOption);
+		
 		if(IS_CHROME && Glee.ListManager != undefined)
 		{
 		    if(Glee.ListManager.box)
     			Glee.ListManager.box.addClass(Glee.ThemeOption);
 		}
+		
 		// Position
 		if(Glee.options.position == "top")
 			topSpace = 0;

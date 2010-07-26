@@ -37,7 +37,7 @@ function init() {
 
 function initCommandCache() {
     cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
-    console.log("Commands in localStorage: " + localStorage['gleebox_commands_cache']);
+    console.log("Commands in gleeBox cache: " + localStorage['gleebox_commands_cache']);
 }
 
 // Toggle status value and store it in local storage

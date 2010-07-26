@@ -29,7 +29,7 @@ Glee.Browser = {
         safari.self.tab.dispatchMessage("getOptions", null);
     },
     
-    applyOptions: function(options) {
+    updateOptions: function(options) {
         for(opt in options)
         {
             if(options[opt] == undefined)
@@ -61,12 +61,13 @@ Glee.Browser = {
             Glee.options.status = false;
         else 
             Glee.options.status = true;
-        Glee.initOptions();
+        
+        Glee.applyOptions();
     },
     
     respondToMessage: function(e) {
-        if(e.name == "applyOptions")
-            Glee.Browser.applyOptions(e.message);
+        if(e.name == "updateOptions")
+            Glee.Browser.updateOptions(e.message);
         else if(e.name == "receiveCommandCache")
             Glee.updateCommandCache(e.message);
         else if(e.name == "onSendRequestCompletion")

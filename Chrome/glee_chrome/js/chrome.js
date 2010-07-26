@@ -39,7 +39,7 @@ Glee.Browser.sendRequest = function(url, method, callback){
 	});
 }
 
-Glee.Browser.applyOptions = function(response) {
+Glee.Browser.updateOptions = function(response) {
     
 	var prefs = response.preferences;
     // position
@@ -172,8 +172,8 @@ Glee.Browser.applyOptions = function(response) {
 		Glee.options.status = 0;
 	else
 		Glee.options.status = 1;
-
-	Glee.initOptions();
+	
+	Glee.applyOptions();
 }
 
 Glee.Browser.openNewTab = function(url, selected) {
@@ -223,7 +223,7 @@ Glee.Browser.setOption = function(option, value) {
 
 Glee.Browser.getOptions = function(){
 	// sending request to get the gleeBox options
-	chrome.extension.sendRequest({ value: "getOptions" }, Glee.Browser.applyOptions);
+	chrome.extension.sendRequest({value: "getOptions"}, Glee.Browser.updateOptions);
 }
 
 Glee.Browser.openTabManager = function(){
@@ -256,16 +256,17 @@ Glee.Browser.moveToTab = function(tab){
 // adding a listener to respond to requests from background.html to update the status/settings
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse){
-		if(request.value == "initStatus")
+		if (request.value == "initStatus")
 		{
-			if(request.status && Glee.Utils.checkDomain())
+			if (request.status && Glee.Utils.checkDomain())
 				Glee.status = 1;
 			else
 				Glee.status = 0;
 		}
-		else if(request.value == "updateOptions")
-			Glee.Browser.applyOptions(request);
-		else if(request.value == "updateCommandCache")
+		else if (request.value == "updateOptions") {
+			Glee.Browser.updateOptions(request);
+		}
+		else if (request.value == "updateCommandCache")
 	        Glee.updateCommandCache(request.commands);
 
 		sendResponse({});
