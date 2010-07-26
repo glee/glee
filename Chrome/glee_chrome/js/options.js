@@ -577,7 +577,7 @@ function exportSettings(){
 }
 
 function importSettings(){
-    var text = 'Paste exported settings here.';
+    var text = 'Paste previously exported settings here:';
     showBackupPopup(text, 'import');
     $("#settingsText").text('');
 }
