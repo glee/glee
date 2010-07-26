@@ -13,7 +13,7 @@ function checkVersion() {
         if(version == null || version != "1.6.2")
         {
             //open the update page
-            chrome.tabs.create( { url:"http://thegleebox.com/update.html", selected: true}, null);
+            chrome.tabs.create( { url:"http://thegleebox.com/chrome-update.html", selected: true}, null);
             //update version
             if(version == null)
                 createPreference('version', "1.6.2");
