@@ -1,4 +1,4 @@
-/* Options Page CSS */
+/** Options Page CSS for gleeBox **/
 
 body {
 	background-color: #fbfbfb;
@@ -216,7 +216,7 @@ textarea {
     background-color: #f1f1f1;
 }
 
-#backupImportButton{
+#backupImportButton {
     float: right;
     display: block;
     margin-top: 10px;
@@ -249,6 +249,7 @@ textarea {
 	border-radius: 7px;
 	background-color: #aaa;
 }
+
 #popup textarea::-webkit-scrollbar-corner:vertical, 
 #popup textarea::-webkit-scrollbar-resizer:vertical {
     background-color: #ededed;

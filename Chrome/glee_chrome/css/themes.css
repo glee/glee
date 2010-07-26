@@ -1,14 +1,15 @@
-/* Themes */
-/* Setting the color and font is mandatory */
+/** gleeBox Themes **/
+
+/** Setting the color and font is mandatory **/
 
 .GleeThemeDefault { 
-	background-color:#333 !important;
-	color:#fff !important;
+	background-color: #333 !important;
+	color: #fff !important;
 	font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif !important;
 }
 
 .GleeThemeWhite { 
-	background-color:#fff !important;
+	background-color: #fff !important;
 	color:#000 !important;
 	border: 1px solid #939393 !important;
 	border-radius: 10px !important;

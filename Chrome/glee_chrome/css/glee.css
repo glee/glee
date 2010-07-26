@@ -1,3 +1,5 @@
+/** gleeBox **/
+
 .GleeReaped {
 	background-color: #fbee7e !important;
 	border: 1px dotted #818181 !important;
@@ -17,23 +19,23 @@
 }
 
 #gleeBox {
-	line-height: 20px !important;
-	height: auto !important;
-	z-index: 100000;
-	position: fixed;
-	left: 5%;
-	top: 35%;
-	display: none;
-	overflow: auto;
-	width: 90%;
 	background-color: #333;
-	opacity: 0.65;
-	color: #fff;
-	margin: 0;
-	font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif;
-	padding: 4px 6px !important;
-	text-align: left;
 	border-radius: 7px;
+	color: #fff;
+	display: none;
+	font-family: Calibri, "Lucida Grande", Lucida, Arial, sans-serif;
+	height: auto !important;
+	left: 5% !important;
+	line-height: 20px !important;
+	margin: 0;
+	opacity: 0.65;
+	overflow: auto !important;
+	padding: 4px 6px !important;
+	position: fixed !important;
+	text-align: left !important;
+	top: 35%;
+	width: 90% !important;
+	z-index: 100000 !important;
 }
 
 #gleeSearchField {
@@ -70,17 +72,17 @@
 }
 
 #gleeSubText {
-	float: left;
+	float: left !important;
 }
 
 #gleeSubURL {
-	display: inline;
-	float: right;
+	display: inline !important;
+	float: right !important;
 }
 
 #gleeSubActivity {
-	height: 10px;
-	display: inline;
-	float: left;
-	padding-left: 5px;
+	height: 10px !important;
+	display: inline !important;
+	float: left !important;
+	padding-left: 5px !important;
 }
