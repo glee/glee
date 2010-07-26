@@ -56,16 +56,16 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     
     switch(request.value) {
         case "createTab"        :   chrome.tabs.create({ url: request.url, selected: request.selected }, null);
-		                            sendResponse({});
-		                            break;
-		                  
+                                    sendResponse({});
+                                    break;
+
         case "openInThisTab"    :   chrome.tabs.getSelected(null, function(tab){
-                      	                chrome.tabs.update(tab.id, { url: request.url }, function(){});
-                      	            }); break;
+                                        chrome.tabs.update(tab.id, { url: request.url }, function(){});
+                                    }); break;
         
         case "getTabs"          :   chrome.windows.getCurrent(function(currWindow){
-                            			chrome.tabs.getAllInWindow(currWindow.id, function(tabs){
-                            				sendResponse({ tabs: tabs });
+                                        chrome.tabs.getAllInWindow(currWindow.id, function(tabs){
+                                            sendResponse({ tabs: tabs });
                             			});
                             		}); 
                             		break;
@@ -143,7 +143,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         case "updatePrefCache"  :   cache.prefs = request.preferences;
                                     sendResponse({});
                                     break;
-        
+                                    
+        case "copyToClipboard"  :   copyToClipboard(request.text); sendResponse({}); break;
     }
 });
 
@@ -259,4 +260,14 @@ function sendRequestToAllTabs(req){
 			}
 		}
 	});
+}
+
+// Copy to Clipboard
+function copyToClipboard(text) {
+    var copyTextarea = document.createElement('textarea');
+    document.body.appendChild(copyTextarea);
+    copyTextarea.value = text;
+    copyTextarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(copyTextarea);
 }

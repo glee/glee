@@ -571,103 +571,117 @@ function initDefaultTexts() {
 }
 
 function exportSettings(){
-    var text = 'Copy the contents of this text field, and save them to a file for backup.';
-    showBackupPopup(text, false);
+    var text = 'Copy the contents of this text field, and save them to a textfile:';
+    showBackupPopup(text, 'export');
     $("#settingsText").text(JSON.stringify(prefs));
 }
 
 function importSettings(){
     var text = 'Paste exported settings here.';
-    showBackupPopup(text, true);
+    showBackupPopup(text, 'import');
     $("#settingsText").text('');
 }
 
-function showBackupPopup(infoText, showButton){
-    
+function showBackupPopup(infoText, func) {
     var popup = $('#popup');
-    if(popup.length == 0)
+    if (popup.length == 0)
         initBackupPopup();
         
-    if(showButton)
-        $('#backupImportButton').css('display','block');
-    else
-        $('#backupImportButton').css('display','none');
+    if (func == 'import') {
+        $('#importButton').show();
+        $('#exportButton').hide();
+    }
+    else {
+        $('#importButton').hide();
+        $('#exportButton').show();
+    }
 
     $('#backupInfo').text(infoText);
     $('#popup').fadeIn(200);
-    setTimeout(function(){
+    
+    setTimeout(function() {
         $('#settingsText')[0].focus();
     }, 0);
 }
 
-function initBackupPopup()
-{
+function initBackupPopup() {
     var popup = $('<div/>',{
         id:"popup"
     });
+    
     $('<div id="backupInfo"></div>').appendTo(popup);
     $('<textarea id="settingsText"></textarea>').appendTo(popup);
-    var importBtn = $('<input type="button" class="button" value="Import Settings" id="backupImportButton" />');
-    importBtn.appendTo(popup);
+    
+    // import settings button
+    var importBtn = $('<input type="button" class="button" value="Import Settings" id="importButton" />')
+    .appendTo(popup);
+    
+    // copy to clipboard button (displayed in export)
+    $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
+    .appendTo(popup)
+    .click(function(e) {
+        chrome.extension.sendRequest({value: "copyToClipboard", text: $('#settingsText')[0].value}, function(){});
+    });
     
     $('body').append(popup);
     
-    //add events
-    $(document).keyup(function(e){
-        if(e.keyCode == 27)
+    // add events
+    $(document).keyup(function(e) {
+        if (e.keyCode == 27)
         {
             var backupPopup = $('#popup');
-            if(backupPopup.length != 0)
+            if (backupPopup.length != 0)
                 hideBackupPopup();
         }
     });
     
-    $(document).click(function(e){
-        if(e.target.id == "popup" || e.target.id == "settingsText" || e.target.id == "backupInfo" || e.target.type == "button")
+    $(document).click(function(e) {
+        if (e.target.id == "popup" || e.target.id == "settingsText" || e.target.id == "backupInfo" || e.target.type == "button")
             return true;
         var backupPopup = $('#popup');
-        if(backupPopup.length != 0)
+        if (backupPopup.length != 0)
             hideBackupPopup();
     });
     
-    importBtn.click(function(e){
-        try{
+    importBtn.click(function(e) {
+        try {
             var jsonString = $('#settingsText')[0].value;
             var tempPref = JSON.parse(jsonString);
-            //set version to current
+            // set version to current
             tempPref.version = prefs.version;
             clearSettings();
             initSettings(tempPref);
             $('#backupInfo').text("Settings successfully imported!");
             hideBackupPopup();
         }
-        catch(e){
+        
+        catch(e) {
             $('#backupInfo').text("The import format is incorrect!");
             $('#settingsText')[0].focus();
         }
     });
 }
 
-function hideBackupPopup(){
+function hideBackupPopup() {
     $('#popup').fadeOut(200);
 }
 
-function clearSettings(){
-    //clearing disabled urls
+function clearSettings() {
+    // clearing disabled urls
     var parent = document.getElementById("domains");
     var len = parent.children.length;
-    for(var i=2; i<len; i++)
+    for (var i = 2; i < len; i++)
         parent.removeChild(document.getElementById("domain"+i));
     
-    //clearing scrapers
+    // clearing scrapers
     parent = document.getElementById("scraper-commands");
     len = parent.children.length;
-    for(var i=5; i<len; i++)
+    for (var i = 5; i < len; i++)
         parent.removeChild(document.getElementById("scraper"+i));
     
-    //clearing visions
+    // clearing visions
     parent = document.getElementById("esp-modifiers");
     len = parent.children.length;
-    for(var i=1; i<len; i++)
+    for(var i = 1; i < len; i++)
         parent.removeChild(document.getElementById("esp"+i));
 }
