@@ -2,7 +2,7 @@
 
 /* help: Opens the gleeBox manual page in a new tab */
 Glee.help = function(newTab) {
-    if(newTab)
+    if (newTab)
 	    Glee.Browser.openPageIfNotExist("http://thegleebox.com/manual.html");
 	else
         location.href = "http://thegleebox.com/manual.html";
@@ -10,7 +10,7 @@ Glee.help = function(newTab) {
 
 /* tipjar: Opens TipJar */
 Glee.tipjar = function(newTab) {
-    if(newTab)
+    if (newTab)
 	    Glee.Browser.openPageIfNotExist("http://tipjar.thegleebox.com/");
 	else
 	    location.href = "http://tipjar.thegleebox.com/";
@@ -26,7 +26,7 @@ Glee.getRSSLink = function(newTab) {
 Glee.sendTweet = function(newTab) {
 	//if the url is longer than 30 characters, send request to bitly to get the shortened URL
 	var url = location.href;
-	if(url.length > 30)
+	if (url.length > 30)
 	{
 		Glee.Browser.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 		function(data){
@@ -35,11 +35,11 @@ Glee.sendTweet = function(newTab) {
 			var encodedURL = encodeURIComponent(shortenedURL);
 			var loc;
 			//redirect to twitter homepage
-			if(document.title.length <= 90)
+			if (document.title.length <= 90)
 			    loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 			else
 			    loc = "http://twitter.com/?status="+encodedURL;
-			if(newTab)
+			if (newTab)
         	    Glee.Browser.openPageInNewTab(loc);
         	else
         	    location.href = loc;
@@ -50,11 +50,11 @@ Glee.sendTweet = function(newTab) {
 		//redirect to twitter without shortening the URL
 		var encodedURL = encodeURIComponent(location.href);
 		var loc;
-		if(document.title.length <= 90)
+		if (document.title.length <= 90)
             loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
 		else
             loc = "http://twitter.com/?status="+encodedURL;
-    	if(newTab)
+    	if (newTab)
     	    Glee.Browser.openPageInNewTab(loc);
     	else
     	    location.href = loc;
@@ -68,7 +68,7 @@ Glee.inspectPage = function() {
 	LinkReaper.reapLinks(query);
 	Glee.selectedElement = LinkReaper.getFirst();
 	Glee.scrollToElement(Glee.selectedElement);
-	if(LinkReaper.selectedLinks.length > 1)
+	if (LinkReaper.selectedLinks.length > 1)
 	{
 		Glee.setSubText("Tab through and select the element you want to inspect and press Enter", "msg");
 		Glee.inspectMode = true;
@@ -88,19 +88,19 @@ Glee.inspectElement = function(el, level) {
 	var elId = el.attr("id");
 	var elClass = el.attr("class");
 
-	if(elClass.length != 0)
+	if (elClass.length != 0)
 	{
 		elClass = jQuery.trim(elClass.replace("GleeHL",""));
 		var len = 0;
-		if(elClass != "")
+		if (elClass != "")
 		{
 			var classes = elClass.split(" ");
 			len = classes.length;
 		}
-		if(len != 0)
+		if (len != 0)
 		{
 			var response = el[0].tagName.toLowerCase();
-			for(var i=0; i<len ;i ++)
+			for (var i = 0; i < len ; i++)
 			{
 				response += "."+classes[i];
 			}
@@ -108,7 +108,7 @@ Glee.inspectElement = function(el, level) {
 		}
 	}
 	// don't go beyond 2 levels up
-	if(level<2)
+	if (level < 2)
 		return Glee.inspectElement(el.parent(),level+1)+">"+el[0].tagName.toLowerCase();
 	else
 		return el[0].tagName.toLowerCase();
@@ -120,7 +120,7 @@ Glee.sharePage = function(newTab) {
 	var loc = null;
 	//Try to get description
 	var desc = jQuery('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
-	if((!desc) || (desc == ""))
+	if ((!desc) || (desc == ""))
 		{
 			mailDesc = "";
 			desc = "";
@@ -135,13 +135,13 @@ Glee.sharePage = function(newTab) {
 	enMailDesc = encodeURIComponent(mailDesc);
 	
 	// Short names of favorite services
-	if(site == "su")
+	if (site == "su")
 		site = "stumbleupon";
-	else if(site == "buzz")
+	else if (site == "buzz")
 		site = "googlebuzz";
-	else if(site == "fb")
+	else if (site == "fb")
 		site = "facebook";
-	else if(site == "reader")
+	else if (site == "reader")
 	    site = "googlereader";
 	
 	switch(site)
@@ -189,9 +189,9 @@ Glee.sharePage = function(newTab) {
 				+"&title="
 				+enTitle;
 	}
-	if(loc)
+	if (loc)
 	{
-	    if(newTab)
+	    if (newTab)
 	        Glee.Browser.openPageInNewTab(loc);
 	    else
 	        location.href = loc;
@@ -219,19 +219,19 @@ Glee.shortenURL = function() {
 Glee.controlVideo = function() {
 	var yPlayer = document.getElementById("movie_player"); //for YouTube
 	var func = Glee.searchField.attr('value').substring(2).replace(" ","");
-	if(yPlayer)
+	if (yPlayer)
 	{
 		setTimeout(function(){
 			Glee.scrollToElement(yPlayer);
 		}, 0);
 		var playerState = yPlayer.getPlayerState();
-		if(func == "") // default function is to toggle video state (play/pause)
+		if (func == "") // default function is to toggle video state (play/pause)
 		{
-			if ( playerState == 1 || playerState == 3)
+			if (playerState == 1 || playerState == 3)
 				yPlayer.pauseVideo();
-			else if( playerState == 2 )
+			else if (playerState == 2)
 				yPlayer.playVideo();
-			else if( playerState == 0 )
+			else if (playerState == 0)
 			{
 				yPlayer.seekTo(0,0);
 				yPlayer.playVideo();
@@ -259,38 +259,38 @@ Glee.setOptionValue = function() {
 	/* Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
 	var input = Glee.searchField.attr('value').substring(4);
 	var eqPos = input.indexOf("=");
-	if(eqPos == -1)
+	if (eqPos == -1)
 		valid = false;
 	else
 	{
 		var option = input.substring(0,eqPos).replace(/\s+|\s+/g, '');
 		var value = jQuery.trim(input.substring(eqPos+1));
 	}
-	if(option == "vision"){
+	if (option == "vision") {
 		//TODO: implement for all protocols
 		var url = location.href.replace("http://","");
 		//remove trailing / (if present)
-		if(url[url.length - 1] == "/")
+		if (url[url.length - 1] == "/")
 			url = url.substring(0,url.length - 1);
 		value = {url:url, selector:value};
 	}
-	if(option == "visions+")
+	if (option == "visions+")
 	{
 	    var separator = value.indexOf(":");
-	    if(jQuery.inArray(jQuery.trim(value.substring(0, separator)), ["http", "https"]) != -1)
+	    if (jQuery.inArray(jQuery.trim(value.substring(0, separator)), ["http", "https"]) != -1)
 	    {
 	        separator = separator + 1 + value.substring(separator+1, value.length).indexOf(":");
 	    }
 		var url = jQuery.trim(value.substring(0, separator));
 		var sel = value.substring(separator+1, value.length);
-		if(url == "$")
+		if (url == "$")
 		{
 			url = location.href.replace("http://","");
 			url = (url[url.length - 1] == "/") ? url.substring(0,url.length - 1) : url;
 		}
 		value = {url:url, selector:sel};
 	}
-	if(option == "scrapers+")
+	if (option == "scrapers+")
 	{
 		var separator = value.indexOf(":");
 		var cmd = jQuery.trim(value.substring(0, separator));
@@ -298,18 +298,18 @@ Glee.setOptionValue = function() {
 		value = {command:cmd, selector:sel};
 	}
 
-	if(option == "" || jQuery.inArray(option, validOptions) == -1)
+	if (option == "" || jQuery.inArray(option, validOptions) == -1)
 		valid = false;
-	else if( (option == "scroll" || option == "hyper" || option == "bsearch" || option == "esp") && jQuery.inArray(value,['on','off']) == -1)
+	else if ((option == "scroll" || option == "hyper" || option == "bsearch" || option == "esp") && jQuery.inArray(value,['on','off']) == -1)
 		valid = false;
-	else if( option == "size" && jQuery.inArray(value,['small','medium','med','large']) == -1)
+	else if (option == "size" && jQuery.inArray(value,['small','medium','med','large']) == -1)
 		valid = false;
-	else if( (option == "position" || option == "pos") && jQuery.inArray(value,['top','mid','middle','bottom']) == -1)
+	else if ((option == "position" || option == "pos") && jQuery.inArray(value,['top','mid','middle','bottom']) == -1)
 		valid = false;
-	else if( option == "theme" && jQuery.inArray(value,['default','white','console','greener','ruby','glee']) == -1)
+	else if (option == "theme" && jQuery.inArray(value,['default','white','console','greener','ruby','glee']) == -1)
 		valid = false;
 	// if failed validity test, return
-	if(!valid)
+	if (!valid)
 	{
 		Glee.setSubText("Invalid !set syntax. Please refer manual using !help command","msg");
 		return;

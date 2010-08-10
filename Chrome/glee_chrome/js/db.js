@@ -1,12 +1,12 @@
 var glee_db;
 
-function opendb(){
-	if(glee_db != null)
+function opendb() {
+	if (glee_db != null)
 		return glee_db;
-	if(window.openDatabase)
+	if (window.openDatabase)
 	{
 		glee_db = openDatabase("gleebox", "1.0", "gleeBox Local Database", 200000);
-		if(!glee_db)
+		if (!glee_db)
 		{
 			console.log("Failed to open gleeBox DB");
 			return false;
@@ -20,19 +20,19 @@ function opendb(){
 	return glee_db;
 }
 
-function initdb(callback){
+function initdb(callback) {
 	var A = opendb();
 	createPrefsTable(A);
 	createDisabledUrlsTable(A);
 	createScrapersTable(A);
 	createESPTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("SELECT * from preferences",
 			[],
 			function(C,D){
-				if(D.rows.length == 0)
+				if (D.rows.length == 0)
 				{
 					initPrefsTable(A);
 					initDisabledUrlsTable(A);
@@ -49,12 +49,12 @@ function initdb(callback){
 	}
 }
 
-function initPrefsTable(A){
-	if(A)
+function initPrefsTable(A) {
+	if (A)
 	{
 		A.transaction(function(B){
 			var prefs = getDefaultPreferences();
-			for(var i in prefs)
+			for (var i in prefs)
 			{
 				B.executeSql("INSERT INTO preferences (prefname, prefvalue) VALUES (?, ?)",[i,prefs[i]],
 				function(C,D){},
@@ -66,7 +66,7 @@ function initPrefsTable(A){
 
 function createPrefsTable(A)
 {
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("CREATE TABLE IF NOT EXISTS preferences(prefname varchar(255) PRIMARY KEY, prefvalue varchar(255), CONSTRAINT preftype UNIQUE (prefname))",
@@ -77,12 +77,12 @@ function createPrefsTable(A)
 	}
 }
 
-function initDisabledUrlsTable(A){
-	if(A)
+function initDisabledUrlsTable(A) {
+	if (A)
 	{
 		A.transaction(function(B){
 			var disabledUrls = getDefaultDisabledUrls();
-			for(var i in disabledUrls)
+			for (var i in disabledUrls)
 			{
 				B.executeSql("INSERT INTO disabledUrls (url) VALUES (?)",[disabledUrls[i]],
 				function(C,D){},
@@ -92,9 +92,8 @@ function initDisabledUrlsTable(A){
 	}
 }
 
-function createDisabledUrlsTable(A)
-{
-	if(A)
+function createDisabledUrlsTable(A) {
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("CREATE TABLE IF NOT EXISTS disabledUrls(url varchar(255) PRIMARY KEY, CONSTRAINT urltype UNIQUE (url))",
@@ -105,12 +104,12 @@ function createDisabledUrlsTable(A)
 	}
 }
 
-function initESPTable(A){
-	if(A)
+function initESPTable(A) {
+	if (A)
 	{
 		A.transaction(function(B){
 			var esp = getDefaultESP();
-			for(var i in esp)
+			for (var i in esp)
 			{
 				B.executeSql("INSERT INTO esp (url, selector) VALUES (?, ?)",[esp[i].url, esp[i].selector],
 				function(C,D){},
@@ -120,9 +119,8 @@ function initESPTable(A){
 	}
 }
 
-function createESPTable(A)
-{
-	if(A)
+function createESPTable(A) {
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("CREATE TABLE IF NOT EXISTS esp(url varchar(255) PRIMARY KEY, selector varchar(255), CONSTRAINT esptype UNIQUE (url))",
@@ -139,7 +137,7 @@ function initScrapersTable(A){
 
 function createScrapersTable(A)
 {
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
  			B.executeSql("CREATE TABLE IF NOT EXISTS scrapers(name varchar(255) PRIMARY KEY, selector varchar(255), CONSTRAINT scrapertype UNIQUE (name))",
@@ -150,25 +148,24 @@ function createScrapersTable(A)
 	}
 }
 
-function savePrefs(prefs,callback)
-{
+function savePrefs(prefs,callback) {
 	var A = opendb();
 	createPrefsTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(D){
-			if(prefs.length == 0)
+			if (prefs.length == 0)
 			{
 				callback();
 				return;
 			}
 			
 			var count = 0;
-			for(var i in prefs)
+			for (var i in prefs)
 			{
 				D.executeSql("REPLACE INTO preferences (prefname, prefvalue) VALUES (?, ?)",[i,prefs[i]],
 				function(E,F){
-					if(count == 6)
+					if (count == 6)
 						callback();
 					count ++;
 				},
@@ -179,52 +176,25 @@ function savePrefs(prefs,callback)
 	}
 }
 
-function saveScrapers(scrapers,callback){
+function saveScrapers(scrapers, callback) {
 	var A = opendb();
 	createScrapersTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(D){
 			//empty the table first
 			D.executeSql("DELETE FROM scrapers");
-			if(scrapers.length == 0)
+			if (scrapers.length == 0)
 			{
 				callback();
 				return;
 			}
 			var count = 0;
-			for(var i in scrapers)
+			for (var i in scrapers)
 			{
 				D.executeSql("INSERT INTO scrapers (name, selector) VALUES (?, ?)",[scrapers[i].command,scrapers[i].selector],
 				function(E,F){
-					if(count == scrapers.length-1)
-						callback();
-					count++;
-				},
-				function(E,F){console.log(F)});
-			}
-		});
-	}
-}
-function saveDisabledUrls(disabledUrls,callback){
-	var A = opendb();
-	createDisabledUrlsTable(A);
-	if(A)
-	{
-		A.transaction(function(D){
-			//empty the table first
-			D.executeSql("DELETE FROM disabledUrls");
-			if(disabledUrls.length == 0)
-			{
-				callback();
-				return;
-			}
-			var count = 0;
-			for(var i in disabledUrls)
-			{
-				D.executeSql("INSERT INTO disabledUrls (url) VALUES (?)",[disabledUrls[i]],
-				function(E,F){
-					if(count == disabledUrls.length-1)
+					if (count == scrapers.length-1)
 						callback();
 					count++;
 				},
@@ -234,25 +204,53 @@ function saveDisabledUrls(disabledUrls,callback){
 	}
 }
 
-function saveESP(esp,callback){
+function saveDisabledUrls(disabledUrls, callback) {
 	var A = opendb();
-	createESPTable(A);
-	if(A)
+	createDisabledUrlsTable(A);
+	if (A)
 	{
 		A.transaction(function(D){
 			//empty the table first
-			D.executeSql("DELETE FROM esp");
-			if(esp.length == 0)
+			D.executeSql("DELETE FROM disabledUrls");
+			if (disabledUrls.length == 0)
 			{
 				callback();
 				return;
 			}
 			var count = 0;
-			for(var i in esp)
+			for (var i in disabledUrls)
+			{
+				D.executeSql("INSERT INTO disabledUrls (url) VALUES (?)",[disabledUrls[i]],
+				function(E,F){
+					if (count == disabledUrls.length-1)
+						callback();
+					count++;
+				},
+				function(E,F){console.log(F)});
+			}
+		});
+	}
+}
+
+function saveESP(esp, callback) {
+	var A = opendb();
+	createESPTable(A);
+	if (A)
+	{
+		A.transaction(function(D){
+			//empty the table first
+			D.executeSql("DELETE FROM esp");
+			if (esp.length == 0)
+			{
+				callback();
+				return;
+			}
+			var count = 0;
+			for (var i in esp)
 			{
 				D.executeSql("INSERT INTO esp (url, selector) VALUES (?, ?)",[esp[i].url, esp[i].selector],
 				function(E,F){
-					if(count == esp.length-1)
+					if (count == esp.length-1)
 						callback();
 					count ++;
 				},
@@ -262,7 +260,7 @@ function saveESP(esp,callback){
 	}	
 }
 
-function saveAllPrefs(prefs,scrapers,disabledUrls,espModifiers,callback){
+function saveAllPrefs(prefs, scrapers, disabledUrls, espModifiers, callback) {
 	savePrefs(prefs,function(){
 		saveScrapers(scrapers,function(){
 			saveDisabledUrls(disabledUrls,function(){
@@ -274,7 +272,7 @@ function saveAllPrefs(prefs,scrapers,disabledUrls,espModifiers,callback){
 	});
 }
 
-function loadAllPrefs(callback){
+function loadAllPrefs(callback) {
 	//TODO: Find a better way to do this. Currently, successive callbacks are used to get the values from all the 4 tables
 	//before sending the response
 
@@ -296,10 +294,10 @@ function loadAllPrefs(callback){
 	});
 }
 
-function loadPrefs(callback){
+function loadPrefs(callback) {
 	var A = opendb();
 	createPrefsTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("SELECT * FROM preferences",
@@ -307,7 +305,7 @@ function loadPrefs(callback){
 			function(E,F){
 				var prefs = {};
 				var len = F.rows.length;
-				for(var i=0;i<len;i++)
+				for (var i = 0; i < len; i++)
 				{
 					prefs[F.rows.item(i)["prefname"]] = F.rows.item(i)["prefvalue"];
 				}
@@ -319,10 +317,10 @@ function loadPrefs(callback){
 	}
 }
 
-function loadDisabledUrls(callback){
+function loadDisabledUrls(callback) {
 	var A = opendb();
 	createDisabledUrlsTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("SELECT * FROM disabledUrls",
@@ -330,7 +328,7 @@ function loadDisabledUrls(callback){
 			function(E,F){
 				var disabledUrls = [];
 				var len = F.rows.length;
-				for(var i=0;i<len;i++)
+				for (var i = 0; i < len; i++)
 					disabledUrls[i] = F.rows.item(i)["url"];
 
 				callback(disabledUrls);
@@ -342,10 +340,10 @@ function loadDisabledUrls(callback){
 	}
 }
 
-function loadScrapers(callback){
+function loadScrapers(callback) {
 	var A = opendb();
 	createScrapersTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("SELECT * FROM scrapers",
@@ -353,7 +351,7 @@ function loadScrapers(callback){
 			function(E,F){
 				var scrapers = [];
 				var len = F.rows.length;
-				for(var i=0;i<len;i++)
+				for (var i = 0; i < len; i++)
 					scrapers[i] = {command:F.rows.item(i)["name"], selector:F.rows.item(i)["selector"], nullMessage: "Could not find any matching elements on the page", cssStyle: "GleeReaped"};
 				callback(scrapers);
 			},
@@ -362,17 +360,17 @@ function loadScrapers(callback){
 	}
 }
 
-function loadESP(callback){
+function loadESP(callback) {
 	var A = opendb();
 	createESPTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("SELECT * FROM esp",
 			[],
 			function(E,F){
 				var espModifiers = [];
-				for(var i=0;i<F.rows.length;i++)
+				for (var i = 0; i < F.rows.length; i++)
 					espModifiers[i] = {url:F.rows.item(i)["url"], selector:F.rows.item(i)["selector"]};
 				callback(espModifiers);
 			},
@@ -383,19 +381,19 @@ function loadESP(callback){
 	}
 }
 
-function loadPreference(prefname, callback){
+function loadPreference(prefname, callback) {
 	var A = opendb();
 	createPrefsTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("SELECT * FROM preferences where prefname=?",
 			[prefname],
 			function(C,D){
-				if(D.rows.length != 0)
+				if (D.rows.length != 0)
 				{
 					var value = D.rows.item(0)["prefvalue"];
-					if(value)
+					if (value)
 						callback(value);
 					else
 						callback(null);
@@ -411,10 +409,10 @@ function loadPreference(prefname, callback){
 	}
 }
 
-function savePreference(prefname,value){
+function savePreference(prefname, value) {
 	var A = opendb();
 	createPrefsTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("UPDATE preferences SET prefvalue = ? WHERE prefname=?",
@@ -429,10 +427,10 @@ function savePreference(prefname,value){
 	}
 }
 
-function createPreference(prefname,value){
+function createPreference(prefname, value) {
 	var A = opendb();
 	createPrefsTable(A);
-	if(A)
+	if (A)
 	{
 		A.transaction(function(B){
 			B.executeSql("INSERT INTO preferences VALUES (?, ?)",

@@ -1,13 +1,14 @@
 /* Utility methods in Glee */
 
 Glee.Utils = {
-	isURL: function(url){
+	isURL: function(url) {
 		var regex = new RegExp("(\\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw))");
 		return url.match(regex);
 	},
-	makeURLAbsolute: function(link,host){
+	
+	makeURLAbsolute: function(link, host) {
 		//check if its a bookmarklet meant to execute JS
-		if(link.indexOf("javascript:") == 0)
+		if (link.indexOf("javascript:") == 0)
 			return link;
 		//code from http://github.com/stoyan/etc/blob/master/toAbs/absolute.html
 		var lparts = link.split('/');
@@ -15,7 +16,7 @@ Glee.Utils = {
 			// already abs, return
 			return link;
 		}
-		if(link.indexOf("#") == 0) {
+		if (link.indexOf("#") == 0) {
 			// link is an anchor link
 			var hparts = host.split('#');
 			return hparts[0] + link;
@@ -31,7 +32,7 @@ Glee.Utils = {
 	        delete lparts[0];
 		}
 
-		for(i = 0; i < lparts.length; i++) {
+		for (i = 0; i < lparts.length; i++) {
 			if (lparts[i] === '..') {
 				// remove the previous dir level, if exists
 				if (typeof lparts[i - 1] !== 'undefined') { 
@@ -42,7 +43,7 @@ Glee.Utils = {
 				}
 				delete lparts[i];
 			}
-			if(lparts[i] === '.') {
+			if (lparts[i] === '.') {
 				delete lparts[i];
 			}
 		}
@@ -56,62 +57,69 @@ Glee.Utils = {
 		}
 		return hparts.join('/') + '/' + newlinkparts.join('/');
 	},
-	filter: function(text){
-		if(text && typeof(text) != "undefined")
+	
+	filter: function(text) {
+		if (text && typeof(text) != "undefined")
 		{
 			//replace < with &lt; and > with &gt;
 			text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-			if(text.length > 75)
+			if (text.length > 75)
 				return text.substr(0, 73)+"...";
 			else
 				return text;
 		}
 	},
-	checkDomain: function(){
-		for(var i=0; i<Glee.domainsToBlock.length; i++)
+	
+	checkDomain: function() {
+	    var len = Glee.domainsToBlock.length;
+		for (var i = 0; i < len; i++)
 		{
-			if(location.href.indexOf(Glee.domainsToBlock[i]) != -1)
+			if (location.href.indexOf(Glee.domainsToBlock[i]) != -1)
 				return 0;
 		}
 		return 1;
 	},
-	isVisible: function(el){
+	
+	isVisible: function(el) {
 		el = jQuery(el);
-		if(el.css('display') == "none" || el.css('visibility') == "hidden")
+		if (el.css('display') == "none" || el.css('visibility') == "hidden")
 			return false;
 		else
 		{
 			var parents = el.parents();
 			var len = parents.length;
-			for(var i=0; i<len; i++)
+			for (var i = 0; i < len; i++)
 			{
-				if(jQuery(parents[i]).css("display") == "none")
+				if (jQuery(parents[i]).css("display") == "none")
 					return false;
 			}
 		}
 		return true;
 	},
-	simulateClick: function(el,target){
+	
+	simulateClick: function(el, target) {
 		var evt = document.createEvent("MouseEvents");
 		//on Mac, pass target as e.metaKey
-		if(navigator.platform.indexOf("Mac") != -1)
+		if (navigator.platform.indexOf("Mac") != -1)
 			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, target, 0, null);
 		else //otherwise, pass target as e.ctrlKey	
 			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, target, false, false, false, 0, null);
 		return el[0].dispatchEvent(evt);
 	},
-	simulateScroll: function(val){
-		if(val == 0) {
+	
+	simulateScroll: function(val) {
+		if (val == 0) {
 			Glee.cache.jBody.stop(true);
 			Glee.scrollState = 0;
 		}
-		else if(Glee.scrollState == 0) {
+		else if (Glee.scrollState == 0) {
 			Glee.scrollState = val;
 			Glee.Utils.infiniteScroll();
 		}
 	},
+	
 	infiniteScroll: function() {
-		if(Glee.scrollState < 0) {
+		if (Glee.scrollState < 0) {
 			loc = jQuery(document).height();
 			duration = 2 * (loc - window.pageYOffset) / Glee.defaults.pageScrollSpeed;
 		}
@@ -122,11 +130,11 @@ Glee.Utils = {
 		Glee.cache.jBody.animate(
 			{ scrollTop: loc },
 			duration);
-	},
-	mergeSort: function(els){
-
+	}
+	,
+	mergeSort: function(els) {
 		var mid = Math.floor(els.length/2);
-		if(mid < 1)
+		if (mid < 1)
 			return els;
 		var left = [];
 		var right = [];
@@ -143,14 +151,14 @@ Glee.Utils = {
 		while( (left.length > 0) && (right.length > 0) )
 		{
 			//merging order based on top offset value
-			if(jQuery(right[0]).offset().top < jQuery(left[0]).offset().top)
+			if (jQuery(right[0]).offset().top < jQuery(left[0]).offset().top)
 				els.push(right.shift());
 			else 
 				els.push(left.shift());
 		}
-		while(left.length > 0)
+		while (left.length > 0)
 			els.push(left.shift());
-		while(right.length > 0)
+		while (right.length > 0)
 			els.push(right.shift());
 		return els;
 	}

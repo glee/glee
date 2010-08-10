@@ -10,7 +10,7 @@
 	overflow: auto;
 	position: fixed;
 	width: 50%;
-	z-index: 100000 !important;
+    z-index: 2147483647 !important;
 	opacity: 0.85;
 	height: 400px;
 	font-size: 15px !important;

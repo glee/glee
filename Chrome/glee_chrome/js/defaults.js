@@ -32,6 +32,5 @@ function getDefaultESP(){
 		url: "bing.com/search",
 		selector: "div.sb_tlst"
 	}];
-	
 	return esp;
 }

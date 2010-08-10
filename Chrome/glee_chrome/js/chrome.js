@@ -7,7 +7,7 @@ Glee.Browser = {};
 Glee.Browser.isBookmark = function(text) {
 	//send request to search the bookmark tree for the bookmark whose title matches text
 	chrome.extension.sendRequest( { value:"getBookmarks", text: text }, function(response){
-		if(response.bookmarks.length != 0) 
+		if (response.bookmarks.length != 0) 
 		{
 			Glee.bookmarks = response.bookmarks;
 			Glee.bookmarks[Glee.bookmarks.length] = text;
@@ -25,7 +25,7 @@ Glee.Browser.getBookmarklet = function(text) {
 	// sending request to get the first matched bookmarklet
 	chrome.extension.sendRequest({ value: "getBookmarklet", text: text}, function(response){
 
-		if(response.bookmarklet)
+		if (response.bookmarklet)
 			Glee.setSubText(response.bookmarklet, "bookmarklet");
 		else
 			Glee.setSubText("Command not found", "msg");
@@ -43,132 +43,132 @@ Glee.Browser.updateOptions = function(response) {
     
 	var prefs = response.preferences;
     // position
-	if(prefs.position != undefined)
+	if (prefs.position != undefined)
 	{
-		if(prefs.position == 0)    // top
+		if (prefs.position == 0)    // top
 			Glee.options.position = "top";
-		else if(prefs.position == 1)
+		else if (prefs.position == 1)
 			Glee.options.position = "middle";
 		else 
 			Glee.options.position = "bottom"; 	// default
 	}
 	
 	// size
-	if(prefs.size != undefined)
+	if (prefs.size != undefined)
 	{
-		if(prefs.size == 0)
+		if (prefs.size == 0)
 			Glee.options.size = "small";
-		else if(prefs.size == 2)
+		else if (prefs.size == 2)
 			Glee.options.size = "large";
 		else
 			Glee.options.size = "medium"; // default
 	}
 	
 	// bookmark search status
-	if(prefs.bookmark_search != undefined)
+	if (prefs.bookmark_search != undefined)
 	{
-		if(prefs.bookmark_search == 1)
+		if (prefs.bookmark_search == 1)
 			Glee.options.bookmarkSearchStatus = true;
 		else
 			Glee.options.bookmarkSearchStatus = false;
 	}
 
 	// scrolling animation status
-	if(prefs.scroll_animation != undefined)
+	if (prefs.scroll_animation != undefined)
 	{
-		if(prefs.scroll_animation == 0)
+		if (prefs.scroll_animation == 0)
 			Glee.options.scrollingSpeed = 0;
 		else
 			Glee.options.scrollingSpeed = 750;
 	}
 	
 	// tab shortcut status
-	if(prefs.tab_shortcut_status != undefined)
+	if (prefs.tab_shortcut_status != undefined)
 	{
-		if(prefs.tab_shortcut_status == 0)
+		if (prefs.tab_shortcut_status == 0)
 			Glee.options.tabShortcutStatus = false;
 		else
 			Glee.options.tabShortcutStatus = true;
 	}
 	
 	// disabled urls
-	if(prefs.disabledUrls != undefined)
+	if (prefs.disabledUrls != undefined)
 	{
 		Glee.domainsToBlock.splice(0, Glee.domainsToBlock.length);
 		var len = prefs.disabledUrls.length;
-		for(var i=0; i<len; i++)
+		for (var i = 0; i < len; i++)
 			Glee.domainsToBlock[i] = prefs.disabledUrls[i];
 	}
 	
 	// theme
-	if(prefs.theme != undefined)
+	if (prefs.theme != undefined)
 	{
 		//If a theme is already set, remove it
-		if(Glee.ThemeOption)
+		if (Glee.ThemeOption)
 		{
 			Glee.searchBox.removeClass(Glee.ThemeOption);
 			Glee.searchField.removeClass(Glee.ThemeOption);
-			if(Glee.ListManager.box)
+			if (Glee.ListManager.box)
 				Glee.ListManager.box.removeClass(Glee.ThemeOption);
 		}
 		Glee.ThemeOption = prefs.theme;
 	}
 	
 	//Search
-	if(prefs.search_engine != undefined)
+	if (prefs.search_engine != undefined)
 	{
 		Glee.options.searchEngineUrl = prefs.search_engine;
 	}
 	
 	// Hyper Mode
-	if(prefs.hyper != undefined)
+	if (prefs.hyper != undefined)
 	{
-		if(prefs.hyper == 1)
+		if (prefs.hyper == 1)
 			Glee.options.hyperMode = true;
 		else
 			Glee.options.hyperMode = false;
 	}
 
 	//getting the custom scraper commands
-	if(prefs.scrapers != undefined)
+	if (prefs.scrapers != undefined)
 	{
 		Glee.scrapers.splice(4, Glee.scrapers.length);
 		
 		var len = prefs.scrapers.length;
-		for( i=0; i<len; i++ )
+		for (i = 0; i < len; i++)
 			Glee.scrapers[ 4 + i ] = prefs.scrapers[i]; // because 4 scraper commands are built-in
 	}
 	
 	// ESP Status
-	if(prefs.esp_status != undefined)
+	if (prefs.esp_status != undefined)
 	{
-		if(prefs.esp_status == 1)
+		if (prefs.esp_status == 1)
 			Glee.options.espStatus = true;
 		else
 			Glee.options.espStatus = false;
 	}
 
 	// ESP Modifiers
-	if(prefs.espModifiers != undefined)
+	if (prefs.espModifiers != undefined)
 		Glee.espModifiers = prefs.espModifiers;
 	
 	// Shortcut key
-	if(prefs.shortcut_key != undefined)
+	if (prefs.shortcut_key != undefined)
 		Glee.options.shortcutKey = prefs.shortcut_key;
 
 	// Tab Manager shortcut key
-	if(prefs.tab_shortcut_key != undefined)
+	if (prefs.tab_shortcut_key != undefined)
 		Glee.options.tabShortcutKey = prefs.tab_shortcut_key;
 	
 	// check if it is a disabled domain
-	if(prefs.status != undefined)
+	if (prefs.status != undefined)
 	{
-		if(Glee.Utils.checkDomain() != 1 || prefs.status == 0)
+		if (Glee.Utils.checkDomain() != 1 || prefs.status == 0)
 			Glee.options.status = 0;
 		else
 			Glee.options.status = 1;
 	}
-	else if(Glee.Utils.checkDomain() != 1)
+	else if (Glee.Utils.checkDomain() != 1)
 		Glee.options.status = 0;
 	else
 		Glee.options.status = 1;
@@ -191,9 +191,9 @@ Glee.Browser.openPageInNewTab = function(url) {
 Glee.Browser.openPageIfNotExist = function(url) {
     chrome.extension.sendRequest({ value: "getTabs" }, function(response){
        var len = response.tabs.length;
-       for(var i=0; i<len; i++)
+       for (var i = 0; i < len; i++)
        {
-           if(response.tabs[i].url == url)
+           if (response.tabs[i].url == url)
            {
                Glee.searchField.attr('value', '');
                Glee.setSubText(null);
@@ -230,9 +230,9 @@ Glee.Browser.openTabManager = function(){
 	var onGetTabs = function(response){
 		Glee.closeBoxWithoutBlur();
 		Glee.ListManager.openBox(response.tabs, function(action, item){
-			if(action == "open")
+			if (action == "open")
 				Glee.Browser.moveToTab(item);
-			else if(action == "remove")
+			else if (action == "remove")
 				Glee.Browser.removeTab(item);
 		});
 	};
@@ -274,13 +274,13 @@ chrome.extension.onRequest.addListener(
 
 // get command cache from background.js
 Glee.Browser.initCommandCache = function() {
-	chrome.extension.sendRequest( { value: "getCommandCache" }, function(response){
+	chrome.extension.sendRequest({ value: "getCommandCache" }, function(response){
         Glee.updateCommandCache(response.commands);
 	});
 }
 
 // update command cache in background.js
 Glee.Browser.updateBackgroundCommandCache = function() {
-    chrome.extension.sendRequest( { value: "updateCommandCache", commands: Glee.cache.commands }, function(){
+    chrome.extension.sendRequest({ value: "updateCommandCache", commands: Glee.cache.commands }, function(){
 	});
 }

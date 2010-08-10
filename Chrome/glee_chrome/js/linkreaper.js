@@ -6,7 +6,7 @@ var LinkReaper = {
 	selectedLinks: [],
 	traversePosition: 0,
 	
-	reapAllLinks:function(){
+	reapAllLinks: function() {
 		this.selectedLinks = jQuery("a");
 		//get rid of the hidden links
 		this.selectedLinks = jQuery.grep(this.selectedLinks, Glee.Utils.isVisible);
@@ -24,14 +24,14 @@ var LinkReaper = {
 	},
 	
 	reapLinks: function(term) {
-		if((term != "") && (LinkReaper.searchTerm != term))
+		if ((term != "") && (LinkReaper.searchTerm != term))
 		{
 			// If this term is a specialization of the last term
-			if((term.indexOf(LinkReaper.searchTerm) == 0) &&
+			if ((term.indexOf(LinkReaper.searchTerm) == 0) &&
 			(LinkReaper.searchTerm != ""))
 			{
 				jQuery(LinkReaper.selectedLinks).each(function(){
-					if(!LinkReaper.reapALink(jQuery(this), term))
+					if (!LinkReaper.reapALink(jQuery(this), term))
 					{
 						LinkReaper.unreapLink(jQuery(this));
 					}
@@ -42,7 +42,7 @@ var LinkReaper = {
 			{
 				newList = [];
 				jQuery('a, a > img, input[type=button], input[type=submit], button').each(function(){
-					if(!LinkReaper.reapALink(jQuery(this), term))
+					if (!LinkReaper.reapALink(jQuery(this), term))
 						LinkReaper.unreapLink(jQuery(this));
 					else
 						newList.push(jQuery(this));
@@ -56,16 +56,16 @@ var LinkReaper = {
 	},
 	
 	reapALink: function(el, term) {
-		if(el[0].tagName == "A")
+		if (el[0].tagName == "A")
 			index = el.text().toLowerCase().indexOf(term.toLowerCase());
-		else if(el[0].tagName == "IMG")
+		else if (el[0].tagName == "IMG")
 			index = el.attr('alt').toLowerCase().indexOf(term.toLowerCase());
-		else if(el[0].tagName == "INPUT" && (el[0].type == "button" || el[0].type == "submit"))
+		else if (el[0].tagName == "INPUT" && (el[0].type == "button" || el[0].type == "submit"))
 			index = el.attr('value').toLowerCase().indexOf(term.toLowerCase());
-		else if(el[0].tagName == "BUTTON")
+		else if (el[0].tagName == "BUTTON")
 			index = el.text().toLowerCase().indexOf(term.toLowerCase());
 
-		if(index != -1 && Glee.Utils.isVisible(el)) {
+		if (index != -1 && Glee.Utils.isVisible(el)) {
 			el.addClass('GleeReaped');
 			Glee.setSubText(el,"el");
 			return true;
@@ -75,7 +75,7 @@ var LinkReaper = {
 		}
 	},
 	
-	reapWhatever: function(selector){
+	reapWhatever: function(selector) {
 		LinkReaper.selectedLinks = jQuery(selector);
 		LinkReaper.selectedLinks.each(function(){
 			jQuery(this).addClass('GleeReaped');
@@ -90,7 +90,7 @@ var LinkReaper = {
 		// TODO: What if there are multiple links with different names and same URL?
 		var isNotEqual = function(element){
 			element = jQuery(element);
-			if(element.attr('href') == el.attr('href') )
+			if (element.attr('href') == el.attr('href'))
 				return false;
 			else
 				return true;
@@ -110,10 +110,10 @@ var LinkReaper = {
 		this.traversePosition = 0;
 	},
 	
-	getNext: function(){
-		if(this.selectedLinks.length == 0)
+	getNext: function() {
+		if (this.selectedLinks.length == 0)
 			return null;
-		else if(this.traversePosition < this.selectedLinks.length - 1)
+		else if (this.traversePosition < this.selectedLinks.length - 1)
 		{
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[++this.traversePosition];
@@ -131,10 +131,10 @@ var LinkReaper = {
 		
 	},
 	
-	getPrev: function(){
-		if(this.selectedLinks.length == 0)
+	getPrev: function() {
+		if (this.selectedLinks.length == 0)
 			return null;
-		else if(this.traversePosition > 0)
+		else if (this.traversePosition > 0)
 		{
 			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
 			var hlItem = this.selectedLinks[--this.traversePosition];
@@ -152,20 +152,20 @@ var LinkReaper = {
 		
 	},
 	
-	getFirst: function(){
-		if(this.selectedLinks.length == 0)
+	getFirst: function() {
+		if (this.selectedLinks.length == 0)
 			return null;
 		this.highlight(jQuery(this.selectedLinks[0]));
 		this.traversePosition = 0;
 		return jQuery(this.selectedLinks[0]);
 	},
 	
-	highlight: function(el){
+	highlight: function(el) {
 		el.removeClass("GleeReaped");
 		el.addClass("GleeHL");
 	},
 	
-	unHighlight: function(el){
+	unHighlight: function(el) {
 		el.removeClass("GleeHL");
 		el.addClass("GleeReaped");
 	}

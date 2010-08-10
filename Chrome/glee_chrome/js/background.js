@@ -10,12 +10,12 @@ var cache = {
 
 function checkVersion() {
     loadPreference('version', function(version) {
-        if(version == null || version != "1.6.2")
+        if (version == null || version != "1.6.2")
         {
             //open the update page
             chrome.tabs.create( { url:"http://thegleebox.com/chrome-update.html", selected: true}, null);
             //update version
-            if(version == null)
+            if (version == null)
                 createPreference('version', "1.6.2");
             else
                 savePreference('version', "1.6.2");
@@ -42,7 +42,7 @@ function initCommandCache() {
 
 // Toggle status value and store it in local storage
 function toggleStatus() {
-	if(cache.prefs.status == 1)
+	if (cache.prefs.status == 1)
 		cache.prefs.status = 0;
 	else
 		cache.prefs.status = 1;
@@ -54,7 +54,7 @@ function toggleStatus() {
 // add listener to respond to requests from content script
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     
-    switch(request.value) {
+    switch (request.value) {
         case "createTab"        :   chrome.tabs.create({ url: request.url, selected: request.selected }, null);
                                     sendResponse({});
                                     break;
@@ -83,7 +83,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         case "sendRequest"      :   var req = new XMLHttpRequest();
                             		req.open(request.method, request.url, true);
                             		req.onreadystatechange = function(){
-                            			if(req.readyState == 4)
+                            			if (req.readyState == 4)
                             			{
                             				sendResponse({ data: req.responseText });
                             			}
@@ -94,12 +94,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         case "getBookmarks"     :   var bookmarks = [];
                             		chrome.bookmarks.search(request.text, function(results){
                             		    var len = results.length;
-                            			for(i=0 ; i<len; i++)
+                            			for (i = 0; i < len; i++)
                             			{
-                            				if(results[i].url)
+                            				if (results[i].url)
                             				{
                             					// exclude bookmarks whose URLs begin with 'javascript:' i.e. bookmarklets
-                            					if(results[i].url.indexOf("javascript:") != 0)
+                            					if (results[i].url.indexOf("javascript:") != 0)
                             						bookmarks.push(results[i]);
                             				}
                             			}
@@ -111,12 +111,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                                     chrome.bookmarks.search(query, function(results) {
                                  		var len = results.length;
 
-                                 		for(i=0; i<len; i++)
+                                 		for (i = 0; i < len; i++)
                                  		{
-                                 			if(results[i].url)
+                                 			if (results[i].url)
                                  			{
                                  				// check if it is a bookmarklet
-                                 				if( results[i].url.indexOf("javascript:") == 0 
+                                 				if (results[i].url.indexOf("javascript:") == 0 
                                  				&& results[i].title.toLowerCase().indexOf(query.toLowerCase()) != -1)
                                                     sendResponse({ bookmarklet: results[i] });
                                  			}
@@ -150,7 +150,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
 function updateOption(option, value) {
     // this transformation needs to be performed as values in db are stored this way
-    switch(value)
+    switch (value)
 	{
 		case "off"		:
 		case "small"	:
@@ -173,7 +173,7 @@ function updateOption(option, value) {
 		case 'glee'		: value = "GleeThemeGlee"; break;
 	}
 	
-	switch(option)
+	switch (option)
 	{
 		case "scroll"	: option = "scroll_animation";
 		                  cache.prefs[option] = value;
@@ -205,10 +205,10 @@ function updateOption(option, value) {
 		case "vision"	: 
 		
 		case "visions+"	: var len = cache.prefs.espModifiers.length;
-						  for(var i=0; i<len; i++)
+						  for (var i = 0; i < len; i++)
 						  {
 						    // if an esp vision already exists for url, modify it
-							if(cache.prefs.espModifiers[i].url == value.url)
+							if (cache.prefs.espModifiers[i].url == value.url)
 							{
 							    cache.prefs.espModifiers[i].selector = value.selector;
                                 return true;
@@ -225,9 +225,9 @@ function updateOption(option, value) {
 
 		case "scrapers+": var len = cache.prefs.scrapers.length;
 						  
-						  for(var i=0; i<len; i++)
+						  for (var i = 0; i < len; i++)
 						  {
-							if(cache.prefs.scrapers[i].command == value.command)
+							if (cache.prefs.scrapers[i].command == value.command)
 							{
 							    cache.prefs.scrapers[i].selector = value.selector;
                                 return true;
@@ -251,10 +251,10 @@ function updateOption(option, value) {
 function sendRequestToAllTabs(req){
     chrome.windows.getAll( { populate: true }, function(windows) {
 	    var w_len = windows.length;
-		for( i = 0; i < w_len; i++)
+		for (i = 0; i < w_len; i++)
 		{
             var t_len = windows[i].tabs.length;
-			for(j = 0; j < t_len; j++)
+			for (j = 0; j < t_len; j++)
 			{
 				chrome.tabs.sendRequest( windows[i].tabs[j].id, req, function(response){} );
 			}

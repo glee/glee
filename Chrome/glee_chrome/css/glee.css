@@ -35,7 +35,7 @@
 	text-align: left !important;
 	top: 35%;
 	width: 90% !important;
-	z-index: 100000 !important;
+    z-index: 2147483647 !important;
 }
 
 #gleeSearchField {
