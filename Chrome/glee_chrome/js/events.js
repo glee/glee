@@ -108,7 +108,7 @@ Glee.Events = {
 		if (Glee.inspectMode)
 		{
 			Glee.inspectMode = false;
-			result = Glee.inspectElement(Glee.selectedElement, 0);
+			result = SelectorGenerator.generate(Glee.selectedElement);
 			Glee.searchField.attr("value", result);
 			Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 			return true;

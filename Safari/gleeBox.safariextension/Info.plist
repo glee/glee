@@ -34,6 +34,7 @@
 				<string>js/utils.js</string>
 				<string>js/jquery.autocomplete.js</string>
 				<string>js/safari-page-cmds.js</string>
+				<string>js/selectorGenerator.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

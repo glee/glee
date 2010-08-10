@@ -75,43 +75,12 @@ Glee.inspectPage = function() {
 	}
 	else
 	{
-		result = Glee.inspectElement(Glee.selectedElement, 0);
+		result = SelectorGenerator.generate(Glee.selectedElement);
 		Glee.searchField.attr("value", result);
 		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 		return;
 	}
 	Glee.toggleActivity(0);
-}
-
-/* Used to form the jQuery selector for inspect command */
-Glee.inspectElement = function(el, level) {
-	var elId = el.attr("id");
-	var elClass = el.attr("class");
-
-	if (elClass.length != 0)
-	{
-		elClass = jQuery.trim(elClass.replace("GleeHL",""));
-		var len = 0;
-		if (elClass != "")
-		{
-			var classes = elClass.split(" ");
-			len = classes.length;
-		}
-		if (len != 0)
-		{
-			var response = el[0].tagName.toLowerCase();
-			for (var i = 0; i < len ; i++)
-			{
-				response += "."+classes[i];
-			}
-			return response;
-		}
-	}
-	// don't go beyond 2 levels up
-	if (level < 2)
-		return Glee.inspectElement(el.parent(),level+1)+">"+el[0].tagName.toLowerCase();
-	else
-		return el[0].tagName.toLowerCase();
 }
 
 /* share: Share current page via mail/gmail/twitter/facebook/stumbleupon/digg/delicious */

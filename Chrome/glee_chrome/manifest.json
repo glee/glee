@@ -30,6 +30,7 @@
 			"js/utils.js",
 			"js/linkreaper.js",
 			"js/listmanager.js",
+			"js/selectorGenerator.js",
 			"js/jquery.autocomplete.js"
 		],
 		
