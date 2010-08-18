@@ -1,17 +1,44 @@
 /** gleeBox **/
 
-.GleeReaped {
-	background-color: #fbee7e !important;
-	border: 1px dotted #818181 !important;
+/** Old highlighting css **/
+
+/*.GleeReaped {
+    background-color: #fbee7e !important;
+    border: 1px dotted #818181 !important;
 } 
 
 .GleeHL {
-	background-color: #d7fe65 !important;
-	-webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;
-	-moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;
-	padding: 3px !important;
-	color: #1c3249 !important;
-	border: 1px solid #818181 !important;
+    background-color: #d7fe65 !important;
+    -webkit-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;
+    -moz-box-shadow: rgb(177, 177, 177) 0px 0px 9px !important;
+    padding: 3px !important;
+    color: #1c3249 !important;
+    border: 1px solid #818181 !important;
+}
+
+.GleeHL a {
+    color: #1c3249 !important;
+}*/
+
+.GleeReaped {
+    background-color: #fbee7e !important;
+    outline: 1px dotted #818181 !important;
+}
+
+.GleeHL {
+    -webkit-box-shadow: hsla(71, 89%, 70%, 1) -2px -2px 0px,
+                        hsla(71, 89%, 70%, 1)  2px -2px 0px,
+                        hsla(71, 100%, 45%, 1) -2px  2px 0px,
+                        hsla(71, 100%, 45%, 1)  2px  2px 0px,
+                        hsla(71, 100%, 80%, 1)  0px 0px 0px 3px,
+                        rgba(42, 35, 0, 0.8)  1px  1px 3px 3px !important;
+    border-radius: 3px !important;
+    color: #1c3249 !important;
+    outline: none !important;
+    border: none !important;
+    background: -webkit-gradient(linear, left bottom, left top,
+                    color-stop(0, hsla(71, 100%, 47%, 1)),
+                    color-stop(1, hsla(71, 89%, 70%, 1))) !important;
 }
 
 .GleeHL a {
