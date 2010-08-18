@@ -55,7 +55,7 @@
 	left: 5% !important;
 	line-height: 20px !important;
 	margin: 0;
-	opacity: 0.65;
+	opacity: 1 !important;
 	overflow: auto !important;
 	padding: 4px 6px !important;
 	position: fixed !important;
