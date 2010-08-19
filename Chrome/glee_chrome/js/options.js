@@ -179,9 +179,10 @@ function makeItemEditable(el) {
 	function clickHandler(e) {
 	    if ((e.type == 'keydown' && e.keyCode != 13) || e.target.id == "temporary-edit-field") return true;
 	    e.stopPropagation();
-        // if (editableField) {
-        //     replaceEditableField(editableField);
-        // }
+	    var editableField = $("#temporary-edit-field")[0];
+        if (editableField) {
+            closeEditableField(editableField);
+        }
         var textField = document.createElement("input");
         textField.type = "text";
         textField.value = filter(this.innerHTML);
