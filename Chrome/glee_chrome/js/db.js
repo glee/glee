@@ -148,7 +148,7 @@ function createScrapersTable(A)
 	}
 }
 
-function savePrefs(prefs,callback) {
+function savePrefs(prefs, callback) {
 	var A = opendb();
 	createPrefsTable(A);
 	if (A)
