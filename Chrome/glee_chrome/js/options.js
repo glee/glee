@@ -1,8 +1,12 @@
 var prefs = {};
+var bg_window;
+var sync;
 
-function propagateChanges(prefs)
+// propagate change in preferences to all currently open tabs
+// updates preference cache in background.html
+// also, if sync is enabled, save data in bookmark as well
+function propagate()
 {
-    // update preferences in all currently open tabs
 	chrome.windows.getAll({populate:true}, function(windows){
 	    var w_len = windows.length;
 		for(var i = 0; i < w_len; i++)
@@ -17,8 +21,13 @@ function propagateChanges(prefs)
 			}
 		}
 	});
-	// update preferences in background.html
-	chrome.extension.sendRequest({value: "updatePrefCache", preferences: prefs}, function(){});
+	// update background.html cache
+	bg_window.cache.prefs = prefs;
+	
+	// if sync is enabled, also save data in bookmark
+	if (localStorage['gleebox_sync'] == 1) {
+        bg_window.saveSyncData(prefs);
+    }
 }
 
 // Restores select box state to saved value from DB
@@ -144,7 +153,9 @@ function initSettings(response)
 	}
 	KeyCombo.init(document.getElementsByName("tab_shortcut_key")[0], document.getElementsByName("tab_shortcut_key_span")[0]);
 	
+	setSyncUI();	
 	attachListeners();
+    bg_window = chrome.extension.getBackgroundPage();
 }
 
 function makeItemsEditable() {
@@ -249,27 +260,26 @@ function closeEditableField(e) {
                     saveESP(prefs.espModifiers, function(){});
                     break;
 	}
-    propagateChanges(prefs);
-    
+    propagate();
     document.removeEventListener("click", closeEditableField, false);
 }
 
 function addURL(value) {
     prefs.disabledUrls.push(value);
 	saveDisabledUrls(prefs.disabledUrls, function(){});
-	propagateChanges(prefs);
+	propagate();
 }
 
 function addScraper(value) {
     prefs.scrapers.push(value);
     saveScrapers(prefs.scrapers, function(){});
-	propagateChanges(prefs);
+	propagate();
 }
 
 function addESP(value) {
     prefs.espModifiers.push(value);
     saveESP(prefs.espModifiers, function(){});
-	propagateChanges(prefs);
+	propagate();
 }
 
 function addItem(type, value1, value2, shouldSave) {
@@ -383,11 +393,13 @@ function removeItem(e, type) {
             prefs.disabledUrls.splice(i, 1);
             saveDisabledUrls(prefs.disabledUrls, function(){});
 			break;
+			
 		case "scraper":
  			listOfItems = document.getElementById("scraper-commands");
             prefs.scrapers.splice(i, 1);
             saveScrapers(prefs.scrapers, function(){});
 			break;
+			
 		case "esp":
  			listOfItems = document.getElementById("esp-modifiers");
             prefs.espModifiers.splice(i, 1);
@@ -396,7 +408,7 @@ function removeItem(e, type) {
 	var el = document.getElementById(type + i);
 	listOfItems.removeChild(el);
     updateItemIndexes(type);
-	propagateChanges(prefs);
+	propagate();
 	return 0;
 }
 
@@ -421,7 +433,6 @@ function filter(text) {
 }
 
 /** Validation Methods **/
-
 function validateURL(url)
 {
     if (url == "Page URL" || url == "")
@@ -572,7 +583,7 @@ function initBackupPopup() {
             initSettings(tempPref);
             prefs = tempPref;
             saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function(){});
-            
+            saveSyncData();
             $('#backupInfo').text("Settings successfully imported!");
             hideBackupPopup();
         }
@@ -597,12 +608,11 @@ function clearSettings() {
 }
 
 function attachListeners() {
-    
     function saveOption(name, value) {
         value = translateOptionValue(name, value);
         savePreference(name, value);
         prefs[name] = value;
-		propagateChanges(prefs);
+		propagate();
     }
     
     // radio
@@ -642,4 +652,27 @@ function closeOptions(text){
 	chrome.tabs.getSelected(null, function(tab){
 		chrome.tabs.remove(tab.id, function(){});
 	});
+}
+
+/** Sync **/
+
+function toggleSyncing() {
+    if (localStorage['gleebox_sync'] == 1) {
+        localStorage['gleebox_sync'] = 0;
+        bg_window.disableSync();
+    }
+    else {
+        localStorage['gleebox_sync'] = 1;
+        bg_window.enableSync(true);
+    }
+    setSyncUI();
+}
+
+function setSyncUI() {
+    if (localStorage['gleebox_sync'] == 1) {
+        $('#sync-button').attr("value", "Disable Sync");
+    }
+    else {
+        $('#sync-button').attr("value", "Enable Sync");
+    }
 }

@@ -9,18 +9,17 @@ var cache = {
 };
 
 function checkVersion() {
-    loadPreference('version', function(version) {
-        if (version == null || version != "1.6.2")
-        {
-            //open the update page
-            chrome.tabs.create( { url:"http://thegleebox.com/chrome-update.html", selected: true}, null);
-            //update version
-            if (version == null)
-                createPreference('version', "1.6.2");
-            else
-                savePreference('version', "1.6.2");
-        }
-    });
+    if (cache.prefs.version = undefined || cache.prefs.version != "1.6.2")
+    {
+        // open the update page
+        chrome.tabs.create({url:"http://thegleebox.com/chrome-update.html", selected: true}, null);
+        // update version
+        if (version == null)
+            createPreference('version', "1.6.2");
+        else
+            savePreference('version', "1.6.2");
+        cache.prefs.version = "1.6.2";
+    }
 }
 
 function init() {
@@ -29,26 +28,18 @@ function init() {
 	function initGlobals(){
 		loadAllPrefs(function(prefs){
 			cache.prefs = prefs;
+            checkVersion();
+            if (localStorage['gleebox_sync'] == 1) {
+                enableSync();
+            }
 		});
 	}
-	checkVersion();
 	initCommandCache();
 }
 
 function initCommandCache() {
     cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
     console.log("Commands in gleeBox cache: " + localStorage['gleebox_commands_cache']);
-}
-
-// Toggle status value and store it in local storage
-function toggleStatus() {
-	if (cache.prefs.status == 1)
-		cache.prefs.status = 0;
-	else
-		cache.prefs.status = 1;
-	savePreference("status", cache.prefs.status);
-	
-	sendRequestToAllTabs( { value: 'initStatus', status: cache.prefs.status } );
 }
 
 // add listener to respond to requests from content script
@@ -246,10 +237,26 @@ function updateOption(option, value) {
 	
 	// send request to update options in all tabs
     sendRequestToAllTabs({ value: 'updateOptions', preferences: cache.prefs });
+    
+    // if sync is enabled, also update data in bookmark
+    if (localStorage['gleebox_sync'] == 1) {
+        saveSyncData(cache.prefs);
+    }
+}
+
+function updatePreferencesLocally(prefs) {
+    cache.prefs = prefs;
+    saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function(){});
+}
+
+function mergePreferencesLocally(prefs) {
+    /** TODO: Merge visions, scrapers, and disabled domains here **/
+    cache.prefs = prefs;
+    saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function(){});
 }
 
 function sendRequestToAllTabs(req){
-    chrome.windows.getAll( { populate: true }, function(windows) {
+    chrome.windows.getAll({populate: true}, function(windows) {
 	    var w_len = windows.length;
 		for (i = 0; i < w_len; i++)
 		{
