@@ -21,7 +21,7 @@ var Glee = {
 
 	options: {
 	    // gleeBox status (1 = enabled, 0 = disabled).
-    	status: 1, 
+    	status: 1,
 
         // Keydown code of shortcut key to launch gleeBox
     	shortcutKey: 71,
@@ -229,21 +229,21 @@ var Glee = {
 	},
 	
 	fillCache: function() {
-    	Glee.cache.jBody = jQuery('html, body');
+    	Glee.cache.jBody = $('html, body');
         Glee.Browser.initCommandCache();
 	},
 	
 	createBox: function() {
 		// Creating DOM elements for gleeBox
-		this.searchField = jQuery("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		this.subText = jQuery("<div id=\"gleeSubText\">" + Glee.defaults.nullStateMessage + "</div>");
-		this.subURL = jQuery("<div id=\"gleeSubURL\"></div>")
-		this.searchBox = jQuery("<div id=\"gleeBox\" style='display:none'></div>");
-		var subActivity	= jQuery("<div id=\"gleeSubActivity\"></div>")
-		this.sub = jQuery("<div id=\"gleeSub\"></div>");
+		this.searchField = $("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
+		this.subText = $("<div id=\"gleeSubText\">" + Glee.defaults.nullStateMessage + "</div>");
+		this.subURL = $("<div id=\"gleeSubURL\"></div>")
+		this.searchBox = $("<div id=\"gleeBox\" style='display:none'></div>");
+		var subActivity	= $("<div id=\"gleeSubActivity\"></div>")
+		this.sub = $("<div id=\"gleeSub\"></div>");
 		this.sub.append(this.subText).append(subActivity).append(this.subURL);
 		this.searchBox.append(this.searchField).append(this.sub);
-		jQuery(document.body).append(this.searchBox);
+		$(document.body).append(this.searchBox);
 		
 		// add autocomplete
 		this.searchField.autocomplete(Glee.cache.commands, {
@@ -330,9 +330,9 @@ var Glee = {
 	
 	closeBox: function() {
 	    this.resetTimer();
-		LinkReaper.unreapAllLinks();
 		this.getBackInitialState();
 		this.searchBox.fadeOut(150, function(){
+		    LinkReaper.unreapAllLinks();
 			Glee.searchField.attr('value', '');
 			Glee.setSubText(null);
 		});
@@ -344,10 +344,10 @@ var Glee = {
 	closeBoxWithoutBlur: function() {
 	    this.resetTimer();
 		this.searchBox.fadeOut(150, function(){
+		    LinkReaper.unreapAllLinks();
 			Glee.searchField.attr('value', '');
 			Glee.setSubText(null);
 		});
-		LinkReaper.unreapAllLinks();
 		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
@@ -355,14 +355,14 @@ var Glee = {
 	
 	initScraper: function(scraper) {
 		this.nullMessage = scraper.nullMessage;
-		LinkReaper.selectedLinks = jQuery(scraper.selector);
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
+		LinkReaper.selectedLinks = $(scraper.selector);
+		LinkReaper.selectedLinks = $.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		this.selectedElement = LinkReaper.getFirst();
 		this.setSubText(Glee.selectedElement, "el");
 		this.scrollToElement(Glee.selectedElement);
-		jQuery(LinkReaper.selectedLinks).each(function(){
-			jQuery(this).addClass(scraper.cssStyle);
+		$(LinkReaper.selectedLinks).each(function(){
+			$(this).addClass(scraper.cssStyle);
 		});
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
@@ -378,7 +378,7 @@ var Glee = {
 		var diff = null;
 		for (var i = 0; i < len; i++)
 		{
-			var new_diff = jQuery(sorted_els[i]).offset().top - window.pageYOffset;
+			var new_diff = $(sorted_els[i]).offset().top - window.pageYOffset;
 			if ((new_diff < diff || diff == null) && new_diff >= 0)
 			{
 				diff = new_diff;
@@ -388,7 +388,7 @@ var Glee = {
 		if (pos != 0)
 		{
 			var newly_sorted_els = sorted_els.splice(pos,len-pos);
-			jQuery.merge(newly_sorted_els, sorted_els);
+			$.merge(newly_sorted_els, sorted_els);
 			return newly_sorted_els;
 		}
 		else
@@ -403,44 +403,45 @@ var Glee = {
 		{
 			if (val && typeof val != "undefined")
 			{
-				jQueryVal = jQuery(val);
+				$val = $(val);
+				var tag = $val[0].tagName.toLowerCase();
 				
 				// if the selected element is not a link
-				if (jQueryVal[0].tagName != "A") 
+				if (tag != "a")
 				{
 					var a_el = null;
-					this.subText.html(Glee.Utils.filter(jQueryVal.text()));
-					if (jQueryVal[0].tagName == "IMG") //if it is an image
+					this.subText.html(Glee.Utils.filter($val.text()));
+					if (tag == "img")
 					{
-						a_el = jQuery(jQueryVal.parents('a'));
-						var value = jQueryVal.attr('alt');
+						a_el = $($val.parents('a'));
+						var value = $val.attr('alt');
 						if (value)
 							this.subText.html(Glee.Utils.filter(value));
-						else if (value = jQueryVal.parent('a').attr('title'))
+						else if (value = $val.parent('a').attr('title'))
 							this.subText.html(Glee.Utils.filter(value));
 						else
 							this.subText.html("Linked Image");
 					}
 					// if it is an input field
-					else if (jQueryVal[0].tagName == "INPUT") 
+					else if (tag == "input")
 					{
-						var value = jQueryVal.attr("value");
+						var value = $val.attr("value");
 						if (value)
 							this.subText.html(Glee.Utils.filter(value));
 						else
-							this.subText.html("Input " + jQueryVal.attr("type"));
+							this.subText.html("Input " + $val.attr("type"));
 					}
-					// if it is a text area
-					else if (jQueryVal[0].tagName == "TEXTAREA") 
+					// if it is a textarea
+					else if (tag == "textarea")
 					{
-						var value = jQueryVal.attr("name");
+						var value = $val.attr("name");
 						if (value)
 							this.subText.html(Glee.Utils.filter(value));
 						else
 							this.subText.html("Textarea");
 					}
 					else
-						a_el = jQuery(jQueryVal.find('a'));
+						a_el = $($val.find('a'));
 					
 					if (a_el)
 					{
@@ -454,11 +455,11 @@ var Glee = {
 						this.subURL.html("");
 				}
 				// if it is a link containing an image
-				else if (jQueryVal.find("img").length != 0)
+				else if ($val.find("img").length != 0)
 				{
-					this.URL = jQueryVal.attr("href");
+					this.URL = $val.attr("href");
 					this.subURL.html(Glee.Utils.filter(this.URL));
-					var title = jQueryVal.attr("title") || jQueryVal.find('img').attr('title');
+					var title = $val.attr("title") || $val.find('img').attr('title');
 					if (title != "")
 						this.subText.html(Glee.Utils.filter(title));
 					else
@@ -467,13 +468,13 @@ var Glee = {
 				// it is simply a link
 				else 
 				{
-					var title = jQueryVal.attr('title');
-					var text = jQueryVal.text();
+					var title = $val.attr('title');
+					var text = $val.text();
 
 					this.subText.html(Glee.Utils.filter(text));
 					if (title != "" && title != text)
 						this.subText.html(Glee.Utils.filter(this.subText.html() + " -- " + title));
-					this.URL = jQueryVal.attr('href');
+					this.URL = $val.attr('href');
 					this.subURL.html(Glee.Utils.filter(this.URL));
 				}
 			}
@@ -498,10 +499,10 @@ var Glee = {
 				else if (this.options.bookmarkSearchStatus) // is bookmark search enabled?
 				{
 					// emptying the bookmarks array
-					this.bookmarks.splice(0, Glee.bookmarks.length);
+					this.bookmarks = [];
 					this.Browser.isBookmark(text); // check if the text matches a bookmark
 				}
-				else //search
+				else // web search
 					this.setSubText(text, "search");
 			}
 		}
@@ -583,7 +584,7 @@ var Glee = {
         if (sel.length != 0)
             return sel.join(',');
         else // search for any default selector defined by meta tag in current page
-            return jQuery('meta[name="gleebox-default-selector"]').attr("content");
+            return $('meta[name="gleebox-default-selector"]').attr("content");
 	},
 	
 	fireEsp: function() {
@@ -603,7 +604,7 @@ var Glee = {
 	},
 	
 	scrollToElement: function(el) {
-		var target = jQuery(el);
+		var target = $(el);
 		var scroll = false;
 		if (target.length != 0)
 		{
@@ -654,12 +655,12 @@ var Glee = {
 		if (toggle == 1)
 		{
 			Glee.isSearching = true;
-			jQuery("#gleeSubActivity").html("searching");
+			$("#gleeSubActivity").html("searching");
 		}
 		else
 		{
 			Glee.isSearching = false;
-			jQuery("#gleeSubActivity").html("");
+			$("#gleeSubActivity").html("");
 		}
 	},
 	
@@ -695,7 +696,7 @@ var Glee = {
 	addCommandToCache: function(value) {
         var len = this.cache.commands.length;
         // is command already present? if yes, then move it to beginning of cache
-        var index = jQuery.inArray(value, Glee.cache.commands);
+        var index = $.inArray(value, Glee.cache.commands);
         if (index != -1)
         {
             // remove command
@@ -725,7 +726,7 @@ var Glee = {
 	
 	addListeners: function() {
 	    
-        jQuery(window).bind('keydown', function(e) {
+        $(window).bind('keydown', function(e) {
     		var target = e.target || e.srcElement;
     		if (Glee.options.status && Glee.options.status != 0)
     		{
@@ -887,7 +888,7 @@ var Glee = {
 	}
 }
 
-jQuery(document).ready(function() {
+$(document).ready(function() {
     if (!IS_CHROME && window !== window.top)
 	    return;
 

@@ -88,7 +88,7 @@ Glee.sharePage = function(newTab) {
 	var site = Glee.searchField.attr('value').substring(6).replace(" ","");
 	var loc = null;
 	//Try to get description
-	var desc = jQuery('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
+	var desc = $('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
 	if ((!desc) || (desc == ""))
 		{
 			mailDesc = "";
@@ -233,7 +233,7 @@ Glee.setOptionValue = function() {
 	else
 	{
 		var option = input.substring(0,eqPos).replace(/\s+|\s+/g, '');
-		var value = jQuery.trim(input.substring(eqPos+1));
+		var value = $.trim(input.substring(eqPos+1));
 	}
 	if (option == "vision") {
 		//TODO: implement for all protocols
@@ -246,11 +246,11 @@ Glee.setOptionValue = function() {
 	if (option == "visions+")
 	{
 	    var separator = value.indexOf(":");
-	    if (jQuery.inArray(jQuery.trim(value.substring(0, separator)), ["http", "https"]) != -1)
+	    if ($.inArray($.trim(value.substring(0, separator)), ["http", "https"]) != -1)
 	    {
 	        separator = separator + 1 + value.substring(separator+1, value.length).indexOf(":");
 	    }
-		var url = jQuery.trim(value.substring(0, separator));
+		var url = $.trim(value.substring(0, separator));
 		var sel = value.substring(separator+1, value.length);
 		if (url == "$")
 		{
@@ -262,20 +262,20 @@ Glee.setOptionValue = function() {
 	if (option == "scrapers+")
 	{
 		var separator = value.indexOf(":");
-		var cmd = jQuery.trim(value.substring(0, separator));
+		var cmd = $.trim(value.substring(0, separator));
 		var sel = value.substring(separator+1, value.length);
 		value = {command:cmd, selector:sel};
 	}
 
-	if (option == "" || jQuery.inArray(option, validOptions) == -1)
+	if (option == "" || $.inArray(option, validOptions) == -1)
 		valid = false;
-	else if ((option == "scroll" || option == "hyper" || option == "bsearch" || option == "esp") && jQuery.inArray(value,['on','off']) == -1)
+	else if ((option == "scroll" || option == "hyper" || option == "bsearch" || option == "esp") && $.inArray(value,['on','off']) == -1)
 		valid = false;
-	else if (option == "size" && jQuery.inArray(value,['small','medium','med','large']) == -1)
+	else if (option == "size" && $.inArray(value,['small','medium','med','large']) == -1)
 		valid = false;
-	else if ((option == "position" || option == "pos") && jQuery.inArray(value,['top','mid','middle','bottom']) == -1)
+	else if ((option == "position" || option == "pos") && $.inArray(value,['top','mid','middle','bottom']) == -1)
 		valid = false;
-	else if (option == "theme" && jQuery.inArray(value,['default','white','console','greener','ruby','glee']) == -1)
+	else if (option == "theme" && $.inArray(value,['default','white','console','greener','ruby','glee']) == -1)
 		valid = false;
 	// if failed validity test, return
 	if (!valid)

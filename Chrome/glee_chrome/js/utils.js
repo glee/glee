@@ -81,7 +81,7 @@ Glee.Utils = {
 	},
 	
 	isVisible: function(el) {
-		el = jQuery(el);
+		el = $(el);
 		if (el.css('display') == "none" || el.css('visibility') == "hidden")
 			return false;
 		else
@@ -90,7 +90,7 @@ Glee.Utils = {
 			var len = parents.length;
 			for (var i = 0; i < len; i++)
 			{
-				if (jQuery(parents[i]).css("display") == "none")
+				if ($(parents[i]).css("display") == "none")
 					return false;
 			}
 		}
@@ -120,7 +120,7 @@ Glee.Utils = {
 	
 	infiniteScroll: function() {
 		if (Glee.scrollState < 0) {
-			loc = jQuery(document).height();
+			loc = $(document).height();
 			duration = 2 * (loc - window.pageYOffset) / Glee.defaults.pageScrollSpeed;
 		}
 		else {
@@ -130,8 +130,8 @@ Glee.Utils = {
 		Glee.cache.jBody.animate(
 			{ scrollTop: loc },
 			duration);
-	}
-	,
+	},
+	
 	mergeSort: function(els) {
 		var mid = Math.floor(els.length/2);
 		if (mid < 1)
@@ -151,7 +151,7 @@ Glee.Utils = {
 		while( (left.length > 0) && (right.length > 0) )
 		{
 			//merging order based on top offset value
-			if (jQuery(right[0]).offset().top < jQuery(left[0]).offset().top)
+			if ($(right[0]).offset().top < $(left[0]).offset().top)
 				els.push(right.shift());
 			else 
 				els.push(left.shift());

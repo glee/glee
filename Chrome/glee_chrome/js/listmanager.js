@@ -47,13 +47,13 @@ Glee.ListManager = {
 	},
 	
 	createBox: function() {
-		this.box = jQuery("<div id='gleeListManager' ></div>");
+		this.box = $("<div id='gleeListManager' ></div>");
 		this.box.addClass(Glee.ThemeOption);
-		jQuery(document.body).append(Glee.ListManager.box);
+		$(document.body).append(Glee.ListManager.box);
 	},
 	
 	initKeyBindings: function() {
-		jQuery('#gleeListSearchField, .gleeListItem').bind('keydown', function(e){
+		$('#gleeListSearchField, .gleeListItem').bind('keydown', function(e){
 			if (e.keyCode == 27) // ESC
 			{
 				Glee.ListManager.closeBox(true);
@@ -82,10 +82,10 @@ Glee.ListManager = {
 				Glee.ListManager.openItem();
 			}
 		});
-		jQuery('#gleeListSearchField').bind('keyup', function(e){
+		$('#gleeListSearchField').bind('keyup', function(e){
 			Glee.ListManager.refreshList();
 		});
-		jQuery('.gleeListItem').bind('keydown', function(e){
+		$('.gleeListItem').bind('keydown', function(e){
 			if (e.keyCode == 8 || e.keyCode == 67) //delete on mac/backspace or c
 			{
 				e.preventDefault();
@@ -100,17 +100,17 @@ Glee.ListManager = {
 	},
 	
 	createSearchField: function() {
-		this.searchField = jQuery("<input id='gleeListSearchField' type='text' />");
+		this.searchField = $("<input id='gleeListSearchField' type='text' />");
 		this.box.append(this.searchField);
 	},
 	
 	createList: function() {
-		var listDIV = jQuery('<div id="gleeList"></div>');
+		var listDIV = $('<div id="gleeList"></div>');
 		var len = this.items.length;
 		var item;
 		for (var i = 0; i < len; i++)
 		{
-			item = jQuery('<a href="#" id="gleeList' + i + '" class="gleeListItem"></a>');
+			item = $('<a href="#" id="gleeList' + i + '" class="gleeListItem"></a>');
 			if (this.items[i].title)
 				item.html(this.items[i].title);
 			else
@@ -122,7 +122,7 @@ Glee.ListManager = {
 	
 	refreshList: function() {
 		var query = this.searchField.attr("value");
-		var listItems = jQuery('.gleeListItem');
+		var listItems = $('.gleeListItem');
 		var len = listItems.length;
 		for (var i = 0; i < len; i++)
 		{
@@ -132,7 +132,7 @@ Glee.ListManager = {
 				this.showInList(i);
 		}
 		this.currentIndex = -1;
-		this.selected = jQuery('.gleeListItem:visible')[0];
+		this.selected = $('.gleeListItem:visible')[0];
 	},
 	
 	getSelectedItemIndex: function() {
@@ -141,17 +141,17 @@ Glee.ListManager = {
 	},
 	
 	hideFromList: function(index) {
-		jQuery(jQuery('.gleeListItem')[index])
+		$($('.gleeListItem')[index])
 		.css("display", "none");
 	},
 	
 	showInList: function(index) {
-		jQuery(jQuery('.gleeListItem')[index])
+		$($('.gleeListItem')[index])
 		.css("display", "block");
 	},
 	
 	selectSearchField: function() {
-		this.selected = jQuery('.gleeListItem:visible')[0];
+		this.selected = $('.gleeListItem:visible')[0];
 		setTimeout(function(){
 				Glee.ListManager.searchField.focus();
 		},0);
@@ -159,21 +159,21 @@ Glee.ListManager = {
 	
 	select: function(index) {
 		if (index == -1) return;
- 		this.selected = jQuery('.gleeListItem:visible')[index];
+ 		this.selected = $('.gleeListItem:visible')[index];
 		setTimeout(function(){
 				Glee.ListManager.selected.focus();
 		},0);
-		jQuery(this.selected).addClass("gleeListItemHover");
+		$(this.selected).addClass("gleeListItemHover");
 	},
 	
 	deselect: function(index) {
 		if (index == -1) return;
-		jQuery(jQuery('.gleeListItem:visible')[index]).removeClass('gleeListItemHover');
+		$($('.gleeListItem:visible')[index]).removeClass('gleeListItemHover');
 	},
 	
 	getNextItem: function() {
 		this.deselect(this.currentIndex);
-		var listLen = jQuery('.gleeListItem:visible').length;
+		var listLen = $('.gleeListItem:visible').length;
 		if (this.currentIndex >= (listLen - 1))
 		{
 			this.currentIndex = -1;
@@ -188,7 +188,7 @@ Glee.ListManager = {
 	
 	getPreviousItem: function() {
 		this.deselect(this.currentIndex);
-		var listLen = jQuery('.gleeListItem:visible').length;
+		var listLen = $('.gleeListItem:visible').length;
 		if (this.currentIndex == 0)
 		{
 			this.currentIndex = -1;
@@ -206,14 +206,14 @@ Glee.ListManager = {
 	removeItem: function() {
 		var itemIndex = this.getSelectedItemIndex();
 		var item = this.items[itemIndex];
-		jQuery(Glee.ListManager.selected)
+		$(Glee.ListManager.selected)
 		.animate({
 		    height: "0",
 		    paddingTop: 0,
 		    paddingBottom: 0
 		}, 200,
 		function(){
-			jQuery(Glee.ListManager.selected).remove();
+			$(Glee.ListManager.selected).remove();
 			Glee.ListManager.currentIndex -= 1;
 			Glee.ListManager.getNextItem();
 		});

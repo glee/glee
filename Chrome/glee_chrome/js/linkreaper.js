@@ -7,19 +7,17 @@ var LinkReaper = {
 	traversePosition: 0,
 	
 	reapAllLinks: function() {
-		this.selectedLinks = jQuery("a");
+		this.selectedLinks = $("a");
 		//get rid of the hidden links
-		this.selectedLinks = jQuery.grep(this.selectedLinks, Glee.Utils.isVisible);
+		this.selectedLinks = $.grep(this.selectedLinks, Glee.Utils.isVisible);
 		//get rid of the linked images. we only want textual links
-		var hasImage = function(el){
-			return (jQuery(el).find('img').length == 0);
+		var hasImage = function(el) {
+			return ($(el).find('img').length == 0);
 		};
-		this.selectedLinks = jQuery(jQuery.grep(this.selectedLinks,hasImage));
-		this.selectedLinks.each(function(){
-			jQuery(this).addClass('GleeReaped');
-		});
+		this.selectedLinks = $($.grep(this.selectedLinks, hasImage));
+		this.selectedLinks.addClass('GleeReaped');
 		this.traversePosition = 0;
-		//can't figure out what value to set of searchTerm here
+		// can't figure out what value to set of searchTerm here
 		LinkReaper.searchTerm = "";
 	},
 	
@@ -30,22 +28,22 @@ var LinkReaper = {
 			if ((term.indexOf(LinkReaper.searchTerm) == 0) &&
 			(LinkReaper.searchTerm != ""))
 			{
-				jQuery(LinkReaper.selectedLinks).each(function(){
-					if (!LinkReaper.reapALink(jQuery(this), term))
-					{
-						LinkReaper.unreapLink(jQuery(this));
-					}
+				$(LinkReaper.selectedLinks).each(function(){
+				    var $this = $(this);
+					if (!LinkReaper.reapALink($this, term))
+						LinkReaper.unreapLink($this);
 				});
 			}
 			// Else search the whole page
 			else
 			{
 				newList = [];
-				jQuery('a, a > img, input[type=button], input[type=submit], button').each(function(){
-					if (!LinkReaper.reapALink(jQuery(this), term))
-						LinkReaper.unreapLink(jQuery(this));
+				$('a, a > img, input[type=button], input[type=submit], button').each(function(){
+				    var $this = $(this);
+					if (!LinkReaper.reapALink($this, term))
+						LinkReaper.unreapLink($this);
 					else
-						newList.push(jQuery(this));
+						newList.push($this);
 				});
 				LinkReaper.selectedLinks = newList;
 			}
@@ -56,13 +54,15 @@ var LinkReaper = {
 	},
 	
 	reapALink: function(el, term) {
-		if (el[0].tagName == "A")
+	    var tag = el[0].tagName.toLowerCase();
+
+		if (tag == "a")
 			index = el.text().toLowerCase().indexOf(term.toLowerCase());
-		else if (el[0].tagName == "IMG")
+		else if (tag == "img")
 			index = el.attr('alt').toLowerCase().indexOf(term.toLowerCase());
-		else if (el[0].tagName == "INPUT" && (el[0].type == "button" || el[0].type == "submit"))
+		else if (tag == "input" && (el[0].type == "button" || el[0].type == "submit"))
 			index = el.attr('value').toLowerCase().indexOf(term.toLowerCase());
-		else if (el[0].tagName == "BUTTON")
+		else if (tag == "button")
 			index = el.text().toLowerCase().indexOf(term.toLowerCase());
 
 		if (index != -1 && Glee.Utils.isVisible(el)) {
@@ -76,11 +76,9 @@ var LinkReaper = {
 	},
 	
 	reapWhatever: function(selector) {
-		LinkReaper.selectedLinks = jQuery(selector);
-		LinkReaper.selectedLinks.each(function(){
-			jQuery(this).addClass('GleeReaped');
-		});
-		LinkReaper.selectedLinks = jQuery.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
+		LinkReaper.selectedLinks = $(selector);
+		LinkReaper.selectedLinks.addClass('GleeReaped');
+		LinkReaper.selectedLinks = $.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
@@ -89,7 +87,7 @@ var LinkReaper = {
 	unreapLink: function(el) {
 		// TODO: What if there are multiple links with different names and same URL?
 		var isNotEqual = function(element){
-			element = jQuery(element);
+			element = $(element);
 			if (element.attr('href') == el.attr('href'))
 				return false;
 			else
@@ -100,12 +98,9 @@ var LinkReaper = {
 	},
 	
 	unreapAllLinks: function() {
-		jQuery(this.selectedLinks).each(function(){
-			jQuery(this).removeClass('GleeReaped').removeClass('GleeHL');
-		});
-		
-		// TODO: Isn't there a better way to empty an array?
-		this.selectedLinks.splice(0,LinkReaper.selectedLinks.length);
+		$(this.selectedLinks).removeClass('GleeReaped')
+		.removeClass('GleeHL');
+		this.selectedLinks = [];
 		this.searchTerm = "";
 		this.traversePosition = 0;
 	},
@@ -115,20 +110,20 @@ var LinkReaper = {
 			return null;
 		else if (this.traversePosition < this.selectedLinks.length - 1)
 		{
-			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
-			var hlItem = this.selectedLinks[++this.traversePosition];
-			this.highlight(jQuery(hlItem));
-			return jQuery(hlItem);
+			this.unHighlight($(this.selectedLinks[this.traversePosition]));
+			var hlItem = $(this.selectedLinks[++this.traversePosition]);
+			this.highlight(hlItem);
+			return hlItem;
 		}
 		else
 		{
 			//Un-highlight the last item. This might be a loopback.
-			this.unHighlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
+			this.unHighlight($(this.selectedLinks[this.selectedLinks.length - 1]));
 			this.traversePosition = 0;
-			this.highlight(jQuery(this.selectedLinks[0]));
-			return jQuery(this.selectedLinks[0]);
+			var link = $(this.selectedLinks[0]);
+			this.highlight(link);
+			return link;
 		}
-		
 	},
 	
 	getPrev: function() {
@@ -136,18 +131,19 @@ var LinkReaper = {
 			return null;
 		else if (this.traversePosition > 0)
 		{
-			this.unHighlight(jQuery(this.selectedLinks[this.traversePosition]));
-			var hlItem = this.selectedLinks[--this.traversePosition];
-			this.highlight(jQuery(hlItem));
-			return jQuery(hlItem);
+			this.unHighlight($(this.selectedLinks[this.traversePosition]));
+			var hlItem = $(this.selectedLinks[--this.traversePosition]);
+			this.highlight(hlItem);
+			return hlItem;
 		}
 		else
 		{
-			//Un-highlight the first item. This might be a reverse loopback.
-			this.unHighlight(jQuery(this.selectedLinks[0]));
+			// Un-highlight the first item. This might be a reverse loopback.
+			this.unHighlight($(this.selectedLinks[0]));
 			this.traversePosition = this.selectedLinks.length - 1;
-			this.highlight(jQuery(this.selectedLinks[this.selectedLinks.length - 1]));
-			return jQuery(this.selectedLinks[this.selectedLinks.length - 1]);
+			var link = $(this.selectedLinks[this.selectedLinks.length - 1]);
+			this.highlight(link);
+			return link;
 		}
 		
 	},
@@ -155,18 +151,19 @@ var LinkReaper = {
 	getFirst: function() {
 		if (this.selectedLinks.length == 0)
 			return null;
-		this.highlight(jQuery(this.selectedLinks[0]));
+		var link = $(this.selectedLinks[0]);
+		this.highlight(link);
 		this.traversePosition = 0;
-		return jQuery(this.selectedLinks[0]);
+		return link;
 	},
 	
 	highlight: function(el) {
-		el.removeClass("GleeReaped");
-		el.addClass("GleeHL");
+		el.removeClass("GleeReaped")
+		.addClass("GleeHL");
 	},
 	
 	unHighlight: function(el) {
-		el.removeClass("GleeHL");
-		el.addClass("GleeReaped");
+		el.removeClass("GleeHL")
+		.addClass("GleeReaped");
 	}
 }
