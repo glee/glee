@@ -86,7 +86,7 @@ var LinkReaper = {
 	
 	unreapLink: function(el) {
 		// TODO: What if there are multiple links with different names and same URL?
-		var isNotEqual = function(element){
+		var isNotEqual = function(element) {
 			element = $(element);
 			if (element.attr('href') == el.attr('href'))
 				return false;

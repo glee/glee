@@ -331,8 +331,10 @@ var Glee = {
 	closeBox: function() {
 	    this.resetTimer();
 		this.getBackInitialState();
-		this.searchBox.fadeOut(150, function(){
+		setTimeout(function() {
 		    LinkReaper.unreapAllLinks();
+		}, 0);
+		this.searchBox.fadeOut(150, function() {
 			Glee.searchField.attr('value', '');
 			Glee.setSubText(null);
 		});
@@ -343,8 +345,10 @@ var Glee = {
 	
 	closeBoxWithoutBlur: function() {
 	    this.resetTimer();
-		this.searchBox.fadeOut(150, function(){
+		setTimeout(function() {
 		    LinkReaper.unreapAllLinks();
+		}, 0);
+		this.searchBox.fadeOut(150, function() {
 			Glee.searchField.attr('value', '');
 			Glee.setSubText(null);
 		});
@@ -816,7 +820,7 @@ var Glee = {
                     // Command Mode
     				else {
     					// Flush any previously selected links
-    					LinkReaper.unreapAllLinks();
+                        LinkReaper.unreapAllLinks();
 
     					Glee.commandMode = true;
     					Glee.inspectMode = false;
