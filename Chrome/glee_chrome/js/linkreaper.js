@@ -37,7 +37,7 @@ var LinkReaper = {
 			// Else search the whole page
 			else
 			{
-				newList = [];
+				var newList = [];
 				$('a, a > img, input[type=button], input[type=submit], button').each(function(){
 				    var $this = $(this);
 					if (!LinkReaper.reapALink($this, term))
@@ -67,7 +67,7 @@ var LinkReaper = {
 
 		if (index != -1 && Glee.Utils.isVisible(el)) {
 			el.addClass('GleeReaped');
-			Glee.setSubText(el,"el");
+			Glee.setSubText(el, "el");
 			return true;
 		}
 		else {
@@ -98,8 +98,10 @@ var LinkReaper = {
 	},
 	
 	unreapAllLinks: function() {
-		$(this.selectedLinks).removeClass('GleeReaped')
-		.removeClass('GleeHL');
+		$(this.selectedLinks).each(function(){
+		    $(this).removeClass('GleeReaped')
+		    .removeClass('GleeHL');
+	    });
 		this.selectedLinks = [];
 		this.searchTerm = "";
 		this.traversePosition = 0;
