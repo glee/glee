@@ -207,8 +207,8 @@ function updateOption(option, value) {
 						  }
 						  cache.prefs.espModifiers.push(
 						  {
-							url: value.url,
-							selector: value.selector
+                              url: value.url,
+                              selector: value.selector
 						  });
 						  // save in db
 						  saveESP(cache.prefs.espModifiers, function(){});
@@ -224,11 +224,11 @@ function updateOption(option, value) {
                                 return true;
 							}
 						  }
-						  cache.prefs.scrapers.push( { 
-							command: value.command, 
-							selector: value.selector,
-							cssStyle: "GleeReaped",
-							nullMessage : "Could not find any matching elements on the page."
+						  cache.prefs.scrapers.push( {
+                              command: value.command, 
+                              selector: value.selector,
+                              cssStyle: "GleeReaped",
+                              nullMessage : "Could not find any matching elements on the page."
 						  });
 						  // save in db
 						  saveScrapers(cache.prefs.scrapers, function(){});

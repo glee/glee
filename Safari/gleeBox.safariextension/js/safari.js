@@ -30,23 +30,23 @@ Glee.Browser = {
     },
     
     updateOptions: function(options) {
-        for(opt in options)
+        for (opt in options)
         {
-            if(options[opt] == undefined)
+            if (options[opt] == undefined)
                 continue;
-            switch(opt)
+            switch (opt)
             {
-                case "espModifiers" :   
-                case "disabledUrls" :   Glee.domainsToBlock = JSON.parse(options.disabledUrls); break;
+                case "espModifiers" :   Glee.espModifiers = options.espModifiers; break;
+                case "disabledUrls" :   Glee.domainsToBlock = options.disabledUrls; break;
                 
                 case "scrapers"     :   Glee.scrapers.splice(4, Glee.scrapers.length);
-                                		var scrapers = JSON.parse(options.scrapers);
+                                		var scrapers = options.scrapers;
                                 		var len = scrapers.length;
-                                		for(var i=0; i<len; i++)
+                                		for (var i = 0; i < len; i++)
                                 		    Glee.scrapers[ 4 + i ] = scrapers[i];
                                 		break;
                                 		
-                case "theme"        :   if(Glee.ThemeOption)
+                case "theme"        :   if (Glee.ThemeOption)
                                 		{
                                 		    Glee.searchBox.removeClass(Glee.ThemeOption);
                                             Glee.searchField.removeClass(Glee.ThemeOption);
@@ -66,11 +66,11 @@ Glee.Browser = {
     },
     
     respondToMessage: function(e) {
-        if(e.name == "updateOptions")
+        if (e.name == "updateOptions")
             Glee.Browser.updateOptions(e.message);
-        else if(e.name == "receiveCommandCache")
+        else if (e.name == "receiveCommandCache")
             Glee.updateCommandCache(e.message);
-        else if(e.name == "onSendRequestCompletion")
+        else if (e.name == "onSendRequestCompletion")
             Glee.Browser.onSendRequestCompletion(e.message);
     },
     
@@ -78,17 +78,19 @@ Glee.Browser = {
         safari.self.tab.dispatchMessage("updateOption", { option: option, value: value });
 		Glee.searchField.attr('value','');
 		Glee.setSubText(null);
-        Glee.searchField.keyup();
+		setTimeout(function(){
+		    Glee.searchField.keyup();
+		}, 100);
     },
     
     // get command cache from background.html
     initCommandCache: function() {
-        safari.self.tab.dispatchMessage( "getCommandCache" );
+        safari.self.tab.dispatchMessage("getCommandCache");
     },
 
     // update command cache in background.html
     updateBackgroundCommandCache: function() {
-        safari.self.tab.dispatchMessage( "updateCommandCache", Glee.cache.commands );
+        safari.self.tab.dispatchMessage("updateCommandCache", Glee.cache.commands);
     },
     
     // stub methods

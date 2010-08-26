@@ -217,7 +217,9 @@ Glee.Browser.setOption = function(option, value) {
 	chrome.extension.sendRequest( { value: "updateOption", option: option, option_value: value }, function(response){
 		Glee.searchField.attr('value','');
 		Glee.setSubText(null);
-        Glee.searchField.keyup();
+		setTimeout(function() {
+		    Glee.searchField.keyup();
+		}, 0);
 	});
 }
 

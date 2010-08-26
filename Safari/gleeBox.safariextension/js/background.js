@@ -7,10 +7,10 @@ var cache = {
         shortcutKey: null,
         searchEngineUrl: null,
         scrollingSpeed: null,
-        disabledUrls: null,
+        disabledUrls: [],
         espStatus: null,
-        scrapers: null,
-        espModifiers: null,
+        scrapers: [],
+        espModifiers: [],
         version: null
     }
 };
@@ -22,7 +22,7 @@ function init() {
 }
 
 function versionCheck() {
-    if(cache.prefs.version != '1.6.1')
+    if (cache.prefs.version != '1.6.1')
     {
         cache.prefs.version = '1.6.1';
         saveOption('version', '1.6.1');
@@ -35,43 +35,42 @@ function versionCheck() {
 }
 
 function respondToMessage(e) {
-    
     // from content script
-    if(e.name == "getOptions") {
+    if (e.name == "getOptions") {
         e.target.page.dispatchMessage("updateOptions", cache.prefs);
     }
 
     // from options page
-    else if(e.name == "getOptionsFromOptionsPage")
+    else if (e.name == "getOptionsFromOptionsPage")
         e.target.page.dispatchMessage("sendOptionsToOptionsPage", cache.prefs);
     
-    else if(e.name == "saveOptions")
+    else if (e.name == "saveOptions")
     {
         cache.prefs = e.message;
         saveOptions();
     }
     
-    else if(e.name == "propagateOptions")
+    else if (e.name == "propagateOptions")
     {
         sendRequestToAllTabs({value: "updateOptions", data: cache.prefs});
     }
     
-    else if(e.name == "openNewTab")
+    else if (e.name == "openNewTab")
     {
         var activeWindow = safari.application.activeBrowserWindow;
         var newTab = activeWindow.openTab();
         newTab.url = e.message;
     }
     
-    else if(e.name == "openPageIfNotExist")
+    else if (e.name == "openPageIfNotExist")
     {
         var activeWindow = safari.application.activeBrowserWindow;
         var tabs = activeWindow.tabs;
         var len = tabs.length;
         
-        for(var i=0; i < len; i++)
+        for (var i = 0; i < len; i++)
         {
-            if( tabs[i].url == e.message)
+            if (tabs[i].url == e.message)
             {
                 tabs[i].activate();
                 return;
@@ -82,26 +81,25 @@ function respondToMessage(e) {
         newTab.url = e.message;
     }
 
-    else if(e.name == "updateOption")
+    else if (e.name == "updateOption")
         updateOption(e.message.option, e.message.value);
         
-    else if(e.name == "getCommandCache")
+    else if (e.name == "getCommandCache")
         e.target.page.dispatchMessage("receiveCommandCache", cache.commands);
         
-    else if(e.name == "updateCommandCache")
+    else if (e.name == "updateCommandCache")
     {
         cache.commands = e.message;
-        console.log("adding command to cache: " + cache.commands);
         localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
         sendRequestToAllTabs({ value: 'updateCommandCache', data: cache.commands });
     }
     
-    else if(e.name == "sendRequest")
+    else if (e.name == "sendRequest")
     {
         var req = new XMLHttpRequest();
 		req.open(e.message.method, e.message.url, true);
 		req.onreadystatechange = function(){
-			if(req.readyState == 4)
+			if (req.readyState == 4)
 			{
                 e.target.page.dispatchMessage("onSendRequestCompletion", req.responseText);
 			}
@@ -111,12 +109,16 @@ function respondToMessage(e) {
 }
 
 function initOptions() {
-    for( pref in cache.prefs )
-        cache.prefs[pref] = safari.extension.settings.getItem(pref);
+    for (pref in cache.prefs) {
+        if (pref == "espModifiers" || pref == "scrapers" || pref == "disabledUrls")
+            cache.prefs[pref] = JSON.parse(safari.extension.settings.getItem(pref));
+        else
+            cache.prefs[pref] = safari.extension.settings.getItem(pref);
+    }
 }
 
 function updateOption(option, value) {
-    switch(value)
+    switch (value)
 	{
 		case "off"		: value = false; break;
 		
@@ -132,7 +134,7 @@ function updateOption(option, value) {
 		case 'glee'		: value = "GleeThemeGlee"; break;
 	}
 	
-	switch(option)
+	switch (option)
 	{
 		case "scroll"	: option = "scrollingSpeed";
 		                  if(value)
@@ -151,38 +153,49 @@ function updateOption(option, value) {
 		case "vision"	: 
 		
 		case "visions+"	: var len = cache.prefs.espModifiers.length;
-						  for(var i=0; i<len; i++)
+		                  var found = false;
+						  for (var i = 0; i < len; i++)
 						  {
 						    // if an esp vision already exists for url, modify it
-							if(cache.prefs.espModifiers[i].url == value.url)
+							if (cache.prefs.espModifiers[i].url == value.url)
 							{
 							    cache.prefs.espModifiers[i].selector = value.selector;
-                                return true;
+							    found = true;
 							}
 						  }
-						  cache.prefs.espModifiers.push(
-						  {
-                              url: value.url,
-                              selector: value.selector
-						  });
+						  if (!found) {
+                              cache.prefs.espModifiers.push(
+      						  {
+                                    url: value.url,
+                                    selector: value.selector
+      						  });
+						  }
+						  saveOption("espModifiers", cache.prefs.espModifiers);
+                          sendRequestToAllTabs({value: 'updateOptions', data: cache.prefs});
+						  return true;
 
 		case "scrapers+": var len = cache.prefs.scrapers.length;
+						  var found = false;
 						  
-						  for(var i=0; i<len; i++)
+						  for (var i = 0; i < len; i++)
 						  {
-							if(cache.prefs.scrapers[i].command == value.command)
+							if (cache.prefs.scrapers[i].command == value.command)
 							{
 							    cache.prefs.scrapers[i].selector = value.selector;
-                                return true;
+                                found = true;
 							}
 						  }
-						  cache.prefs.scrapers.push( { 
-							command: value.command, 
-							selector: value.selector,
-							cssStyle: "GleeReaped",
-							nullMessage : "Could not find any matching elements on the page."
-						  });
-						  break;
+						  if (!found) {
+						      cache.prefs.scrapers.push({
+      						      command: value.command,
+      							  selector: value.selector,
+      							  cssStyle: "GleeReaped",
+      							  nullMessage : "Could not find any matching elements on the page."
+      						  });
+						  }
+						  saveOption("scrapers", cache.prefs.scrapers);
+                          sendRequestToAllTabs({value: 'updateOptions', data: cache.prefs});
+						  return true;
 	}
 	
 	cache.prefs[option] = value;
@@ -193,7 +206,7 @@ function updateOption(option, value) {
 }
 
 function saveOptions() {
-    for(pref in cache.prefs)
+    for (pref in cache.prefs)
         saveOption(pref, cache.prefs[pref]);
 }
 
@@ -208,10 +221,10 @@ function initCommandCache() {
 
 function sendRequestToAllTabs(req) {
     var w_len = safari.application.browserWindows.length;
-    for(var i=0; i < w_len; i++)
+    for (var i = 0; i < w_len; i++)
     {
         var t_len = safari.application.browserWindows[i].tabs.length;
-        for(var j=0; j < t_len; j++)
+        for (var j = 0; j < t_len; j++)
             safari.application.browserWindows[i].tabs[j].page.dispatchMessage( req.value,  req.data );
     }
 }

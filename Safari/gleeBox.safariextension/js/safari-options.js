@@ -5,21 +5,12 @@ $(document).ready(function() {
 });
 
 function respondToMessage(e) {
-    if(e.name == "sendOptionsToOptionsPage")
-        initSettings(translate(e.message));
+    if (e.name == "sendOptionsToOptionsPage")
+        initSettings(e.message);
 }
 
 // add event listener for messages from background.html
 safari.self.addEventListener("message", respondToMessage, false);
-
-function translate(settings) {
-    settings.disabledUrls = JSON.parse(settings.disabledUrls);
-    settings.espModifiers = JSON.parse(settings.espModifiers);
-    if(settings.scrapers)
-        settings.scrapers = JSON.parse(settings.scrapers);
-    console.log(settings);
-    return settings;
-}
 
 // Restores select box state to saved value from DB
 function initSettings(response)
@@ -106,7 +97,6 @@ function initSettings(response)
 	}
 
 	// esp status
-
 	if(!prefs.espStatus)
 		document.getElementsByName("glee_esp_status")[1].checked = true;
 	else
@@ -117,12 +107,12 @@ function initSettings(response)
 	var len = prefs.espModifiers.length;
 	if(len != 0)
 	{
-		for (var i=0; i<len; i++)
-			addItem('esp', prefs.espModifiers[i].url, prefs.espModifiers[i].selector );
+		for (var i = 0; i < len; i++)
+			addItem('esp', prefs.espModifiers[i].url, prefs.espModifiers[i].selector);
 	}
 	else
 	{
-		//adding a couple of default examples
+		// adding a couple of default examples
 		var newLI = document.createElement('li');
 		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\",0)'/>";
 		newLI.className = "esp";
@@ -161,7 +151,7 @@ function initSettings(response)
 
 }
 
-// Saves options 
+// Saves options
 function saveSettings(close_tab) {
 	prefs.disabledUrls = [];
 	

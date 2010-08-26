@@ -311,7 +311,7 @@ var Glee = {
 	    if (Glee.getEspSelector())
 	    {
 	        Glee.open();
-            Glee.lastQuery = "";
+            Glee.lastQuery = null;
 	    }
 	},
 	
@@ -793,12 +793,10 @@ var Glee = {
     	
     	Glee.searchField.bind('keyup', function(e) {
     		var value = Glee.searchField.attr('value');
-
     		// Check if content of gleeBox has changed
     		if (Glee.lastQuery != value)
     		{
     			e.preventDefault();
-
     			if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
     				Glee.isDOMSearchRequired = false;
     			else
