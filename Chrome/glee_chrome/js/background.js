@@ -246,9 +246,53 @@ function updatePreferencesLocally(prefs) {
 }
 
 function mergePreferencesLocally(prefs) {
-    /** TODO: Merge visions, scrapers, and disabled domains here **/
-    cache.prefs = prefs;
-    saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function(){});
+    // costly! but called only when syncing is first enabled
+    if (prefs != cache.prefs) {
+        // disabled urls
+        var len = prefs.disabledUrls.length;
+        var len2 = cache.prefs.disabledUrls.length;
+        var found;
+        for (var i = 0; i < len; i++) {
+            found = false;
+            for (var j = 0; j < len2; j++) {
+                if (cache.prefs.disabledUrls[j] == prefs.disabledUrls[i]) {
+                    found = true; break;
+                }
+            }
+            if (!found)
+                cache.prefs.disabledUrls.push(prefs.disabledUrls[i]);
+        }
+        
+        // scrapers
+        len = prefs.scrapers.length;
+        len2 = cache.prefs.scrapers.length;
+        for (var i = 0; i < len; i++) {
+            found = false;
+            for (var j = 0; j < len2; j++) {
+                if (cache.prefs.scrapers[j] == prefs.scrapers[i]) {
+                    found = true; break;
+                }
+            }
+            if (!found)
+                cache.prefs.scrapers.push(prefs.scrapers[i]);
+        }
+        
+        // esp visions
+        len = prefs.espModifiers.length;
+        len2 = cache.prefs.espModifiers.length;
+        for (var i = 0; i < len; i++) {
+            found = false;
+            for (var j = 0; j < len2; j++) {
+                if (cache.prefs.espModifiers[j] == prefs.espModifiers[i]) {
+                    found = true; break;
+                }
+            }
+            if (!found)
+                cache.prefs.espModifiers.push(prefs.espModifiers[i]);
+        }
+    }
+    saveAllPrefs(cache.prefs, cache.prefs.scrapers, cache.prefs.disabledUrls, cache.prefs.espModifiers, function(){});
+    return cache.prefs;
 }
 
 function sendRequestToAllTabs(req){
