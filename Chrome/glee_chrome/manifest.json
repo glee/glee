@@ -11,6 +11,16 @@
 	
 	"content_scripts": [
 	{
+		"matches":["http://*/*", "https://*/*"],
+		
+		"js": [
+			"js/injectcss.js"
+		],
+		
+		"run_at": "document_end",
+		"all_frames": true
+	},
+	{
 		"matches": [ "http://*/*", "https://*/*" ],
 		
 		"css": [
