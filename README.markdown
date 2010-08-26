@@ -22,7 +22,7 @@ Firefox: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.m
 
 Chrome: Load `Chrome/glee_chrome` as unpacked extension (in Developer mode).
 
-Safari: Add `Safari/gleeBox.safariextension` as a new extension in the Extension Builder.
+Safari: Add `Safari/gleeBox.safariextension` as a new extension in the Extension Builder. Many files are symlinked from `Chrome/glee_chrome`, so make sure you fetch the entire repository.
 
 Firefox: Drag `FF/gleebox.xpi` to Firefox to install.
 
