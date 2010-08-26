@@ -141,6 +141,7 @@ function translateOptionValue(name, value) {
 
 function saveAllOptions() {
     safari.self.tab.dispatchMessage("saveOptions", prefs);
+    propagate();
 }
 
 function propagate() {

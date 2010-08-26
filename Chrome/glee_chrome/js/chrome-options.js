@@ -162,7 +162,7 @@ function translateOptionValue(name, value) {
 
 function saveAllOptions() {
     saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function(){});
-    saveSyncData();
+    propagate();
 }
 
 // propagate change in preferences to all currently open tabs
