@@ -9,26 +9,22 @@ var cache = {
 };
 
 function checkVersion() {
-    if (cache.prefs.version = undefined || cache.prefs.version != "1.6.3")
+    if (localStorage['gleebox_version'] != "1.6.3")
     {
         // open the update page
-        chrome.tabs.create({url:"http://thegleebox.com/chrome-update.html", selected: true}, null);
+        chrome.tabs.create({url:"http://thegleebox.com/update.html", selected: true}, null);
         // update version
-        if (version == null)
-            createPreference('version', "1.6.3");
-        else
-            savePreference('version', "1.6.3");
-        cache.prefs.version = "1.6.3";
+        localStorage['gleebox_version'] = "1.6.3";
     }
 }
 
 function init() {
 	// initialize the db
 	initdb(initGlobals);
-	function initGlobals(){
-		loadAllPrefs(function(prefs){
+    checkVersion();
+	function initGlobals() {
+		loadAllPrefs(function(prefs) {
 			cache.prefs = prefs;
-            checkVersion();
             if (localStorage['gleebox_sync'] == 1) {
                 enableSync();
             }
