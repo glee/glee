@@ -5,8 +5,9 @@ $(document).ready(function() {
 });
 
 function respondToMessage(e) {
-    if (e.name == "sendOptionsToOptionsPage")
+    if (e.name == "sendOptionsToOptionsPage") {
         initSettings(e.message);
+    }
 }
 
 // add event listener for messages from background.html
@@ -17,242 +18,131 @@ function initSettings(response)
 {
     prefs = response;
     prefs.version = "1.6.1";
-    
 	initDefaultTexts();
 
-    // disabled domains
+    // disabled urls
 	var len = prefs.disabledUrls.length;
-	if(len != 0)
+	if (len != 0)
 	{
-		var domainList = document.getElementById("domains");
-		var lastChild = document.getElementById("addDomainLI");
-
-		for (var i=0; i<len; i++)
+		for (var i = 0; i < len; i++)
 			addItem('domain', prefs.disabledUrls[i]);
 	}
-
-    // position
-	if(prefs.position == "top")
-		document.getElementsByName("glee_pos")[0].checked = true;
-	else if(prefs.position == "middle")
-		document.getElementsByName("glee_pos")[1].checked = true;
-	else
-		document.getElementsByName("glee_pos")[2].checked = true;
-
-	if(prefs.size == "large")
-		document.getElementsByName("glee_size")[0].checked = true;
-	else if(prefs.size == "small")
-		document.getElementsByName("glee_size")[2].checked = true;
-	else
-		document.getElementsByName("glee_size")[1].checked = true;
-
-	// size
-	var search = prefs.searchEngineUrl;
-	document.getElementsByName("glee_search")[0].value = search;
-
-	// theme
-	var theme = prefs.theme;
-	tRadios = document.getElementsByName("glee_theme");
-	for (var i=0; i < tRadios.length; i++)
+	
+	// position
+    var tRadios = document.getElementsByName("position");
+	var r_len = tRadios.length;
+	for (var i = 0; i < r_len; i++)
 	{
-		if (theme == tRadios[i].value)
+		if (prefs.position == tRadios[i].value)
 		{
 			tRadios[i].checked = true;
 			break;
 		}
 	}
 
-	// bookmark search
-    // if(prefs.bookmark_search == 1)
-    //  document.getElementsByName("glee_bookmark_search")[0].checked = true;
-    // else
-    //  document.getElementsByName("glee_bookmark_search")[1].checked = true;
-
-	// scroll animation
-
-	if(prefs.scrollingSpeed == 0)
-		document.getElementsByName("glee_scrolling_animation")[1].checked = true;
-	else
-		document.getElementsByName("glee_scrolling_animation")[0].checked = true;
-		
-    // tab shortcut key status
-    // var tab_shortcut_status = prefs.tab_shortcut_status;
-    // if(tab_shortcut_status != undefined)
-    // {
-    //     if(tab_shortcut_status == 0)
-    //          document.getElementsByName("glee_tab_shortcut_status")[1].checked = true;
-    //      else
-    //          document.getElementsByName("glee_tab_shortcut_status")[0].checked = true;
-    // }
-    
-	// scraper commands
-	var len = prefs.scrapers.length;
-	if(len != 0)
+	// size
+    tRadios = document.getElementsByName("size");
+    r_len = tRadios.length;
+	for (var i = 0; i < r_len; i++)
 	{
-		var scraperList = document.getElementById("scraper-commands");
+		if (prefs.size == tRadios[i].value)
+		{
+			tRadios[i].checked = true;
+			break;
+		}
+	}
+	
+	// search engine
+	document.getElementsByName("searchEngineUrl")[0].value = prefs.searchEngineUrl;
 
-		// last element is a string only containing a ,
-		for (var i=0; i<len; i++)
-			addItem('scraper', prefs.scrapers[i].command, prefs.scrapers[i].selector);
+	// theme
+	tRadios = document.getElementsByName("theme");
+    r_len = tRadios.length;
+	for (var i = 0; i < r_len; i++)
+	{
+		if (prefs.theme == tRadios[i].value)
+		{
+			tRadios[i].checked = true;
+			break;
+		}
 	}
 
-	// esp status
-	if(!prefs.espStatus)
-		document.getElementsByName("glee_esp_status")[1].checked = true;
+	// scroll animation
+	if (prefs.scroll_animation == 0)
+		document.getElementsByName("scroll_animation")[1].checked = true;
 	else
-		document.getElementsByName("glee_esp_status")[0].checked = true; //default i.e. enabled
+		document.getElementsByName("scroll_animation")[0].checked = true;
+
+	// scraper commands
+	var len = prefs.scrapers.length;
+	if (len != 0)
+	{
+		// last element is a string only containing a ,
+		for (var i = 0; i < len; i++)
+			addItem('scraper', prefs.scrapers[i].command, prefs.scrapers[i].selector);
+	}	
+
+	// esp status
+	if (prefs.esp_status == 0)
+		document.getElementsByName("esp_status")[1].checked = true;
+	else
+		document.getElementsByName("esp_status")[0].checked = true;
 	
 	// esp visions
 	var espList = document.getElementById("esp-modifiers");
 	var len = prefs.espModifiers.length;
-	if(len != 0)
+	if (len != 0)
 	{
 		for (var i = 0; i < len; i++)
 			addItem('esp', prefs.espModifiers[i].url, prefs.espModifiers[i].selector);
 	}
 	else
 	{
-		// adding a couple of default examples
+		// add default examples
 		var newLI = document.createElement('li');
-		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\",0)'/>";
+		var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\")'/>";
 		newLI.className = "esp";
 		newLI.id = "esp0";
-		newLI.innerHTML = "<span class='esp-url'>google.com/search</span> : <span class='esp-sel'>h3:not(ol.nobr>li>h3)</span>"+inputBt;
-		espList.insertBefore(newLI,document.getElementById("addEspModifier"));
+		newLI.innerHTML = "<span class='esp-url'>google.com/search</span> : <span class='esp-sel'>h3:not(ol.nobr>li>h3)</span>" + inputBt;
+		espList.insertBefore(newLI, document.getElementById("addEspModifier"));
 
 		var newLI_2 = document.createElement('li');
-		var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\",1)'/>";
+		var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\")'/>";
 		newLI_2.className = "esp";
 		newLI_2.id = "esp1";
-		newLI_2.innerHTML = "<span class='esp-url'>bing.com/search</span> : <span class='esp-sel'>div.sb_tlst</span>"+inputBt_2;
-		espList.insertBefore(newLI_2,document.getElementById("addEspModifier"));
+		newLI_2.innerHTML = "<span class='esp-url'>bing.com/search</span> : <span class='esp-sel'>div.sb_tlst</span>" + inputBt_2;
+		espList.insertBefore(newLI_2, document.getElementById("addEspModifier"));
 	}
-	makeItemsEditable();
 	
-	// shortcut key
-    
-	if(prefs.shortcutKey)
-		document.getElementsByName("glee_shortcut_key")[0].innerText = prefs.shortcutKey;
+    // gleebox shortcut key
+	if (prefs.shortcutKey)
+		document.getElementsByName("shortcut_key_span")[0].innerText = prefs.shortcutKey;
 	else
-		document.getElementsByName("glee_shortcut_key")[0].innerText = 71; //default is g
+		document.getElementsByName("shortcut_key_span")[0].innerText = 71; // default is g
 
-	KeyCombo.init(document.getElementsByName("glee_shortcut_key_field")[0], document.getElementsByName("glee_shortcut_key")[0]);
+	KeyCombo.init(document.getElementsByName("shortcutKey")[0], document.getElementsByName("shortcut_key_span")[0]);
 	
-	//getting the tab manager shortcut key
-    // var tabShortcut = prefs.tab_shortcut_key;
-    // if(tabShortcut != undefined)
-    // {
-    //     if(tabShortcut)
-    //          document.getElementsByName("glee_tab_shortcut_key")[0].innerText = tabShortcut;
-    //      else
-    //          document.getElementsByName("glee_tab_shortcut_key")[0].innerText = 190; //default is .
-    // }
-    // KeyCombo.init(document.getElementsByName("glee_tab_shortcut_key_field")[0], document.getElementsByName("glee_tab_shortcut_key")[0]);
-
+	attachListeners();
 }
 
-// Saves options
-function saveSettings(close_tab) {
-	prefs.disabledUrls = [];
-	
-	// disabled urls
-	var domainNames = document.getElementsByClassName("domain-name");
-	var d_len = domainNames.length;
-	for(var i=0;i<d_len;i++)
-		prefs.disabledUrls[prefs.disabledUrls.length] = domainNames[i].innerHTML;
-		
-	prefs.disabledUrls = JSON.stringify(prefs.disabledUrls);
-
-    // search engine
-	if(document.getElementsByName("glee_search")[0].value
-		&& document.getElementsByName("glee_search")[0].value != "")
-			prefs.searchEngineUrl = document.getElementsByName("glee_search")[0].value;
-	else
-		prefs.searchEngineUrl = "http://www.google.com/search?q=";
-		
-    // position
-	if(document.getElementsByName("glee_pos")[0].checked)
-		prefs.position = "top";
-	else if(document.getElementsByName("glee_pos")[1].checked)
-		prefs.position = "middle";
-	else
-		prefs.position = "bottom";
-	
-	// size
-	if(document.getElementsByName("glee_size")[0].checked)
-		prefs.size = "small";
-	else if(document.getElementsByName("glee_size")[2].checked)
-		prefs.size = "large";
-	else
-		prefs.size = "medium";
-
-	// theme
-	tRadios = document.getElementsByName("glee_theme");
-	for (var i=0; i < tRadios.length; i++)
-	{
-		if (tRadios[i].checked)
-		{
- 			prefs.theme = tRadios[i].value;
-			break;
-		}
-	}
-	
-    // scroll animation
-	if(document.getElementsByName("glee_scrolling_animation")[0].checked)
-		prefs.scrollingSpeed = 500;
-	else
-		prefs.scrollingSpeed = 0;
-
-	// scrapers
-	prefs.scrapers = [];
-	var scraperNames = document.getElementsByClassName("scraper-name");
-	var scraperSels = document.getElementsByClassName("scraper-sel"); 
-	var len = scraperNames.length;
-	for(var i=0;i<len;i++)
-	{
-		var name = scraperNames[i].innerText;
-		var sel = scraperSels[i].innerText;
-		prefs.scrapers[prefs.scrapers.length] = { command: name, selector: sel, cssStyle: "GleeReaped", nullMessage: "Could not find any elements" };
-	}
-	
-	prefs.scrapers = JSON.stringify(prefs.scrapers);
-	
-	// esp status
-	if(document.getElementsByName("glee_esp_status")[1].checked)
-		prefs.espStatus = 0;
-	else
-		prefs.espStatus = 1;
-
-	// esp visions
-	prefs.espModifiers = [];
-
-	var espUrls = document.getElementsByClassName("esp-url");
-	var espSels = document.getElementsByClassName("esp-sel");
-	var len = espUrls.length;
-	for(var i=0; i<len; i++)
-	{
-		var url = espUrls[i].innerText;
-		var sel = espSels[i].innerText;
-		prefs.espModifiers[prefs.espModifiers.length] = { url: url, selector: sel };
-	}
-
-	prefs.espModifiers = JSON.stringify(prefs.espModifiers);
-	
-	// shortcut key
-	var shortcutKey = document.getElementsByName("glee_shortcut_key")[0].innerText;
-	if(shortcutKey)
-		prefs.shortcutKey = shortcutKey;
-	else
-		prefs.shortcutKey = 71;
-
-    saveOptions();
-    propagateOptions();
+function saveOption(name, value) {
+    value = translateOptionValue(name, value);
+    prefs[name] = value;
+    safari.self.tab.dispatchMessage("saveOption", {name: name, value: value});
+	propagate();
 }
 
-function saveOptions() {
+function translateOptionValue(name, value) {
+    switch (name) {
+        case "shortcutKey": return document.getElementsByName("shortcut_key_span")[0].innerText; break;
+    }
+    return value;
+}
+
+function saveAllOptions() {
     safari.self.tab.dispatchMessage("saveOptions", prefs);
 }
 
-function propagateOptions() {
+function propagate() {
     safari.self.tab.dispatchMessage("propagateOptions");
-}
+};

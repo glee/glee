@@ -748,7 +748,6 @@ var Glee = {
 
                         // set default subtext
                 		Glee.subText.html(Glee.defaults.nullStateMessage);
-
     					if (e.keyCode == Glee.options.shortcutKey)
     					    Glee.open();
     					else if (IS_CHROME)

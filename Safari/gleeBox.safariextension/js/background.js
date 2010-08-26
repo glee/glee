@@ -43,6 +43,12 @@ function respondToMessage(e) {
     // from options page
     else if (e.name == "getOptionsFromOptionsPage")
         e.target.page.dispatchMessage("sendOptionsToOptionsPage", cache.prefs);
+        
+    else if (e.name == "saveOption")
+    {
+	    cache.prefs[e.message.name] = e.message.value;
+        saveOption(e.message.name, e.message.value);
+    }
     
     else if (e.name == "saveOptions")
     {

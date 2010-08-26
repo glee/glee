@@ -3,13 +3,14 @@
 	<title>gleeBox Options</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="css/options.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/key-combo.js"></script>
 	<script type="text/javascript" src="js/options.js"></script>
+	<script type="text/javascript" src="js/chrome-options.js"></script>
 	<script type="text/javascript" src="js/db.js"></script>
 	<script type="text/javascript" src="js/defaults.js"></script>
-	<script type="text/javascript" src="js/jquery.js"></script>
 </head>
-<body onload="loadAllPrefs(initSettings);">
+<body>
 	<div id="wrap">
 		<h1>gleeBox Options</h1>
 		<div id="options">
@@ -25,7 +26,7 @@
 				<li>
 					<label class="option-label">Search Engine</label>
 					<div class="option-field">
-						<input name="search_engine" type="text" size=56><br/>
+						<input id="search_engine" name="search_engine" type="text" size=56><br/>
 						<a href="#" onclick='javascript:changeSearchEngine("google");return false;'>Google</a>&nbsp;&nbsp;
 						<a href="#" onclick='javascript:changeSearchEngine("bing");return false;'>Bing</a>&nbsp;&nbsp;
 						<a href="#" onclick='javascript:changeSearchEngine("yahoo");return false;'>Yahoo</a>

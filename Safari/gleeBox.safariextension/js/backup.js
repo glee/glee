@@ -1,31 +1,3 @@
-function exportSettings() {
-    var text = 'Copy the contents of this text field, and save them to a file for backup.';
-    showBackupPopup(text, false);
-    $("#settingsText").text(translateForExport(prefs));
-}
-
-function importSettings() {
-    var text = 'Paste exported settings here.';
-    showBackupPopup(text, true);
-    $("#settingsText").text('');
-}
-
-// called when import button is clicked
-function importAndApply() {
-    try{
-        var jsonString = $('#settingsText')[0].value;
-        var tempPref = translateForImport(JSON.parse(jsonString));
-        clearSettings();
-        initSettings(tempPref);
-        $('#backupInfo').text("Settings successfully imported!");
-        hideBackupPopup();
-    }
-    catch(e) {
-        $('#backupInfo').text("The import format is incorrect!");
-        $('#settingsText')[0].focus();
-    }
-}
-
 // Unfortunately, since Chrome version of gleeBox uses different variable names / values for certain preferences,
 // we have to translate those values here to maintain compatibility. 
 
