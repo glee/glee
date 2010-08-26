@@ -64,5 +64,5 @@
 	height: 10px !important;
 	display: inline !important;
 	float: left !important;
-	padding-left: 5px !important;
+	padding-left: 5px;
 }

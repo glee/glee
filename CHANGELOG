@@ -1,4 +1,12 @@
-[To be released]
+1.6.3 
+
+* Prettier and more robust highlighting (thanks to towolf)
+* Sync for Chrome
+* Removed Save button from Options page. Changes are saved instantly.
+* Bugfixes for Safari extension
+* More robust gleeBox appearance
+
+1.6.2 (26/07/2010)
 
 * Usability improvements
 * Removed Browser Action [Chrome]

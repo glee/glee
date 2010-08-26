@@ -9,16 +9,16 @@ var cache = {
 };
 
 function checkVersion() {
-    if (cache.prefs.version = undefined || cache.prefs.version != "1.6.2")
+    if (cache.prefs.version = undefined || cache.prefs.version != "1.6.3")
     {
         // open the update page
         chrome.tabs.create({url:"http://thegleebox.com/chrome-update.html", selected: true}, null);
         // update version
         if (version == null)
-            createPreference('version', "1.6.2");
+            createPreference('version', "1.6.3");
         else
-            savePreference('version', "1.6.2");
-        cache.prefs.version = "1.6.2";
+            savePreference('version', "1.6.3");
+        cache.prefs.version = "1.6.3";
     }
 }
 

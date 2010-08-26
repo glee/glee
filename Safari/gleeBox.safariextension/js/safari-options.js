@@ -17,7 +17,7 @@ safari.self.addEventListener("message", respondToMessage, false);
 function initSettings(response)
 {
     prefs = response;
-    prefs.version = "1.6.1";
+    prefs.version = "1.6.3";
 	initDefaultTexts();
 
     // disabled urls
