@@ -92,7 +92,7 @@ var Glee = {
 			name: "tweet",
 			method: "sendTweet",
 			description: "Tweet this page",
-			statusText: "Redirecting to twitter homepage..."
+			statusText: "Opening the Twitter sharing window..."
 		},
 		{
 			name: "shorten",

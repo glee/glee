@@ -22,43 +22,21 @@ Glee.getRSSLink = function(newTab) {
 	 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 }
 
-/* tweet: Opens the twitter page with the shortened URL of the current page in the text field used to post a tweet */
+/* tweet: Opens the twitter sharing window with the title and shortened URL of the current page in the text field */
 Glee.sendTweet = function(newTab) {
-	//if the url is longer than 30 characters, send request to bitly to get the shortened URL
-	var url = location.href;
-	if (url.length > 30)
-	{
-		Glee.Browser.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
-		function(data){
-			var json = JSON.parse("["+data+"]");
-			var shortenedURL = json[0].results[location.href].shortUrl;
-			var encodedURL = encodeURIComponent(shortenedURL);
-			var loc;
-			//redirect to twitter homepage
-			if (document.title.length <= 90)
-			    loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
-			else
-			    loc = "http://twitter.com/?status="+encodedURL;
-			if (newTab)
-        	    Glee.Browser.openPageInNewTab(loc);
-        	else
-        	    location.href = loc;
-		});
-	}
-	else
-	{
-		//redirect to twitter without shortening the URL
-		var encodedURL = encodeURIComponent(location.href);
-		var loc;
-		if (document.title.length <= 90)
-            loc = "http://twitter.com/?status="+document.title+" "+encodedURL;
-		else
-            loc = "http://twitter.com/?status="+encodedURL;
-    	if (newTab)
-    	    Glee.Browser.openPageInNewTab(loc);
-    	else
-    	    location.href = loc;
-	}
+    // twitter share bookmarklet
+    // http://dev.twitter.com/pages/share_bookmarklet
+    window.twttr=window.twttr||{};
+    var D=550,A=450,C=screen.height,B=screen.width,H=Math.round((B/2)-(D/2)),G=0,F=document,E;
+    var url = twitterBookmarklet();
+ if(C>A){G=Math.round((C/2)-(A/2))}
+ window.twttr.shareWin=window.open(url,'','left='+H+',top='+G+',width='+D+',height='+A+',personalbar=0,toolbar=0,scrollbars=1,resizable=1');
+ 
+ // slightly modified code from http://platform.twitter.com/bookmarklets/share.js?v=1
+ function twitterBookmarklet() {
+     function B(L){var M=[],K=0,J=L.length;for(;K<J;K++){M.push(L[K])}return M}function G(J){return encodeURIComponent(J).replace(/\+/g,"%2B")}function C(L){var K=[],J;for(J in L){if(L[J]!==null&&typeof L[J]!=="undefined"){K.push(G(J)+"="+G(L[J]))}}return K.sort().join("&")}function H(){var K=document.getElementsByTagName("a"),Q=document.getElementsByTagName("link"),J=/\bme\b/,M=/^https?\:\/\/(www\.)?twitter.com\/([a-zA-Z0-9_]+)$/,P=B(K).concat(B(Q)),O,S,L,N=0,R;for(;(R=P[N]);N++){S=R.getAttribute("rel");L=R.getAttribute("href");if(S&&L&&S.match(J)&&(O=L.match(M))){return O[2]}}}function F(K){var J;if(K.match(/^https?:\/\//)){return K}else{J=location.host;if(location.port.length>0){J+=":"+location.port}return[location.protocol,"//",J,K].join("")}}function I(){var J=document.getElementsByTagName("link");for(var K=0,L;(L=J[K]);K++){if(L.getAttribute("rel")=="canonical"){return F(L.getAttribute("href"))}}return null}var D=(function(){var K={text:decodeURIComponent(document.title),url:(I()||location.href),_:((new Date()).getTime())};var J=H();if(J){K.via=J}return C(K)}());var E=window.twttr.shareWin,A="http://twitter.com/share?"+D;
+     return A;
+ };
 }
 
 /* inspect: Displays the jQuery selector if only one matching element is returned or if more are returned,
