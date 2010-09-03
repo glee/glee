@@ -884,6 +884,15 @@ var Glee = {
     		{
     		    // stop scrolling
     			Glee.Utils.simulateScroll(0);
+    			// select the topmost element in view when scrolling using arrow keys ends
+    			// so that when you scroll to another part of the page and then TAB,
+    			// you're not pulled up to another position on the page
+    			if (Glee.selectedElement) {
+    			    LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
+                    LinkReaper.unHighlight(Glee.selectedElement);
+                    Glee.selectedElement = LinkReaper.getFirst();
+                    Glee.setSubText(Glee.selectedElement, "el");
+    			}
     		}
     	});
 	}
