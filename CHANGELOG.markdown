@@ -6,6 +6,7 @@
 * Bugfixes for Safari extension
 * More robust gleeBox appearance
 
+<br>
 **1.6.2** - *26 Jul 2010*
 
 * Usability improvements
@@ -14,6 +15,7 @@
 * Options page more accessible via keyboard [Chrome]
 * Changed the default position to bottom
 
+<br>
 **1.6** - *14 Apr 2010*
 
 * Backup: Export/Import your gleeBox settings (also between Firefox and Chrome)
@@ -23,6 +25,7 @@
 * Options page spruced up [Chrome only]
 * Other Bugfixes
 
+<br>
 **1.5** - *14 Mar 2010*
 
 * Glee Tab Manager: Manage currently open tabs [Chrome only]
@@ -39,6 +42,7 @@
 * Ability to add visions/scrapers via set command
 * Modified !tweet command so it also includes title of page being shared
 
+<br>
 **1.1** - *29 Jan 2010*
 
 * Input elements of type button/submit added to default link search
@@ -50,17 +54,21 @@
 * [Chrome] Fixed toggle of status using browser action
 * [Chrome] Custom scrapers work properly when browser is first run
 
-**1.0.3** *(Firefox)*
+<br>
+**1.0.3** *(Firefox)*  
 * Replaced occurrences of eval with alternatives
 
-1.0.2 *(Firefox)*
+<br>
+**1.0.2** *(Firefox)*  
 * Completely resolved the iframe issue where textfield/textarea inside an iframe wasn't accepting text input
 * Fixed set command
 
-**1.0.1** *(Firefox)*
+<br>
+**1.0.1** *(Firefox)*  
 * Partly solved iframe issue where gleeBox was inserting HTML inside iframes
 
-**1.0**
+<br>
+**1.0**  
 
 * Custom scraper commands
 * ESP mode
@@ -73,11 +81,13 @@
 * CSS Bugfixes
 * Performance improvements (reduced jQuery calls)
 
-**0.6.1** - *16 Dec 2009*
+<br>
+**0.6.1** - *16 Dec 2009*  
 
 * Minor bug fixes - CSS theme fix and subtext not getting set for ?img
 
-**0.6** - *15 Dec 2009*
+<br>
+**0.6** - *15 Dec 2009*  
 
 * Bookmarks integration in default search (Chrome)
 * Bookmarklets as commands (Chrome)
