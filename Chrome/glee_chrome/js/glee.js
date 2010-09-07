@@ -160,6 +160,11 @@ var Glee = {
 		    name: "down",
 		    method: "viewDownloads",
 		    description: "View the Downloads page"
+		},
+		{
+		    name: "snap",
+		    method: "takeScreenshot",
+		    description: "Take a screenshot of this page"
 		}
 	],
 	
@@ -330,7 +335,7 @@ var Glee = {
         this.detachScraperListener();
 	},
 	
-	closeBox: function() {
+	closeBox: function(callback) {
 	    this.resetTimer();
 		this.getBackInitialState();
 		setTimeout(function() {
@@ -339,6 +344,9 @@ var Glee = {
 		this.searchBox.fadeOut(150, function() {
 			Glee.searchField.attr('value', '');
 			Glee.setSubText(null);
+            if (callback) {
+                callback();
+            }
 		});
 		this.lastQuery = null;
 		this.selectedElement = null;

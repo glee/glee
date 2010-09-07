@@ -5,7 +5,8 @@ var cache = {
     // recently executed commands
     commands: [],
     // preferences
-    prefs: {}
+    prefs: {},
+    screenshotId: 0
 };
 
 function checkVersion() {
@@ -132,6 +133,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                                     break;
                                     
         case "copyToClipboard"  :   copyToClipboard(request.text); sendResponse({}); break;
+        
+        case "takeScreenshot"   :   takeScreenshot(); sendResponse({}); break;
     }
 });
 
@@ -317,4 +320,32 @@ function copyToClipboard(text) {
     copyTextarea.select();
     document.execCommand('copy');
     document.body.removeChild(copyTextarea);
+}
+
+// take a screenshot of the current page
+function takeScreenshot() {
+    // code from Samples (http://code.google.com/chrome/extensions/samples.html)
+    chrome.tabs.captureVisibleTab(null, {format: "png"}, function(img) {
+        var screenshotUrl = img;
+        var viewTabUrl = [chrome.extension.getURL('screenshot.html'), '?id=', cache.screenshotId++].join('');
+        // create a new page and display the image
+        chrome.tabs.create({url: viewTabUrl}, function(tab){
+            var targetId = tab.id;
+            
+            var addSnapshotImageToTab = function(tabId, changedProps) {
+              if (tabId != targetId || changedProps.status != "complete")
+                return;
+              chrome.tabs.onUpdated.removeListener(addSnapshotImageToTab);
+              var views = chrome.extension.getViews();
+              for (var i = 0; i < views.length; i++) {
+                  var view = views[i];
+                  if (view.location.href == viewTabUrl) {
+                      view.setScreenshotUrl(screenshotUrl);
+                      break;
+                  }
+              }
+            };
+            chrome.tabs.onUpdated.addListener(addSnapshotImageToTab);
+        });
+    });
 }
