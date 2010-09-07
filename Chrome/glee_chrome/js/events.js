@@ -40,7 +40,7 @@ Glee.Events = {
 		if (Glee.isDOMSearchRequired)
 		{
 		    // Set timer to search for links
-			Glee.timer = setTimeout(function(){
+			Glee.timer = setTimeout(function() {
 				LinkReaper.reapLinks(Glee.searchField.attr('value'));
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setSubText(Glee.selectedElement,"el");

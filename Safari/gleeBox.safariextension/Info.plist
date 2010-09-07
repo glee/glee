@@ -36,6 +36,7 @@
 				<string>js/safari-page-cmds.js</string>
 				<string>js/selectorGenerator.js</string>
 				<string>js/injectcss.js</string>
+				<string></string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

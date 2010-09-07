@@ -150,7 +150,7 @@ Glee.Utils = {
 
 		while( (left.length > 0) && (right.length > 0) )
 		{
-			//merging order based on top offset value
+			// merging order based on top offset value
 			if ($(right[0]).offset().top < $(left[0]).offset().top)
 				els.push(right.shift());
 			else 

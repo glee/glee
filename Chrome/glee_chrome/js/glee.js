@@ -207,6 +207,7 @@ var Glee = {
 	// Cache for jQuery objects, commands and other objects
 	cache: {
 		jBody: null,
+		scraper: null,
 		commands: [] // recently executed commands
 	},
 	
@@ -324,8 +325,9 @@ var Glee = {
         this.inspectMode = false;
         this.lastQuery = null;
         this.lastjQuery = null;
-		Glee.toggleActivity(0);
-        Glee.searchField.attr('value', '');
+        this.toggleActivity(0);
+        this.searchField.attr('value', '');
+        this.detachScraperListener();
 	},
 	
 	closeBox: function() {
@@ -341,6 +343,7 @@ var Glee = {
 		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
+        this.detachScraperListener();
 	},
 	
 	closeBoxWithoutBlur: function() {
@@ -355,21 +358,62 @@ var Glee = {
 		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
+        this.detachScraperListener();
 	},
 	
 	initScraper: function(scraper) {
 		this.nullMessage = scraper.nullMessage;
-		LinkReaper.selectedLinks = $(scraper.selector);
-		LinkReaper.selectedLinks = $.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
-		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
+		this.cache.scraper = scraper;
+        LinkReaper.selectedLinks = Glee.sortElementsByPosition($.grep($(scraper.selector), Glee.Utils.isVisible));
+        $(LinkReaper.selectedLinks).each(function() {
+            $(this).addClass(scraper.cssStyle);
+        });
 		this.selectedElement = LinkReaper.getFirst();
-		this.setSubText(Glee.selectedElement, "el");
+		this.setSubText(this.selectedElement, "el");
 		this.scrollToElement(Glee.selectedElement);
-		$(LinkReaper.selectedLinks).each(function(){
-			$(this).addClass(scraper.cssStyle);
-		});
-		LinkReaper.traversePosition = 0;
+        LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
+        this.attachScraperListener(scraper);
+	},
+	
+	// attach a livequery listener, so that when a new element belonging to the current scraper's selector gets inserted into the DOM, it gets added to the selected elements
+	attachScraperListener: function(scraper) {
+        $(scraper.selector).livequery(function() {
+            $this = $(this);
+            if(!Glee.Utils.isVisible(this))
+                return;
+            LinkReaper.selectedLinks.push(this);
+            LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
+            // LinkReaper.selectedLinks = Glee.addElementByPosition($this, LinkReaper.selectedLinks);
+            $this.addClass(scraper.cssStyle);
+        });
+	},
+	
+	detachScraperListener: function() {
+	    if (this.cache.scraper) {
+	        $(this.cache.scraper.selector).expire();
+	        this.cache.scraper = null;
+	    }
+	},
+	
+	addElementByPosition: function(el, list) {
+	    var len = list.length;
+	    if (len == 0) {
+            list.push(el);
+            return list;
+	    }
+	    var el_top = el.offset().top;
+	    var el_diff = el_top - window.pageYOffset;
+        // console.log("Element diff: " + el_diff);
+	    for (var i = 0; i < len; i++) {
+	        var diff = $(list[i]).offset().top - window.pageYOffset;
+            // console.log("Diff of " + list[i] + " : " + diff);
+	        if (el_diff < diff) {
+                list.splice(i, 0, el);
+                return list;
+	        }
+	    }
+        list.push(el); return list;
 	},
 	
 	sortElementsByPosition: function(elements) {
@@ -391,7 +435,7 @@ var Glee = {
 		}
 		if (pos != 0)
 		{
-			var newly_sorted_els = sorted_els.splice(pos,len-pos);
+			var newly_sorted_els = sorted_els.splice(pos, len - pos);
 			$.merge(newly_sorted_els, sorted_els);
 			return newly_sorted_els;
 		}
@@ -444,8 +488,17 @@ var Glee = {
 						else
 							this.subText.html("Textarea");
 					}
-					else
-						a_el = $($val.find('a'));
+					else {
+					    a_el = $($val.find('a'));
+					    var value = $val.text();
+                        if (value)
+                            this.subText.html(Glee.Utils.filter(value));
+                        else if (value = a_el.attr('title')) {
+                            this.subText.html(Glee.Utils.filter(value));
+                        }
+                        else
+                            this.subText.html("");
+					}
 					
 					if (a_el)
 					{
@@ -796,6 +849,7 @@ var Glee = {
     		if (Glee.lastQuery != value)
     		{
     			e.preventDefault();
+    			Glee.detachScraperListener();
     			if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
     				Glee.isDOMSearchRequired = false;
     			else
