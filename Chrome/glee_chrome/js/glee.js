@@ -332,7 +332,7 @@ var Glee = {
         this.lastjQuery = null;
         this.toggleActivity(0);
         this.searchField.attr('value', '');
-        this.detachScraperListener();
+        // this.detachScraperListener();
 	},
 	
 	closeBox: function(callback) {
@@ -351,7 +351,7 @@ var Glee = {
 		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
-        this.detachScraperListener();
+        // this.detachScraperListener();
 	},
 	
 	closeBoxWithoutBlur: function() {
@@ -366,7 +366,7 @@ var Glee = {
 		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
-        this.detachScraperListener();
+        // this.detachScraperListener();
 	},
 	
 	initScraper: function(scraper) {
@@ -381,7 +381,7 @@ var Glee = {
 		this.scrollToElement(Glee.selectedElement);
         LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
-        this.attachScraperListener(scraper);
+        // this.attachScraperListener(scraper);
 	},
 	
 	// attach a livequery listener, so that when a new element belonging to the current scraper's selector gets inserted into the DOM, it gets added to the selected elements
@@ -857,7 +857,7 @@ var Glee = {
     		if (Glee.lastQuery != value)
     		{
     			e.preventDefault();
-    			Glee.detachScraperListener();
+                // Glee.detachScraperListener();
     			if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
     				Glee.isDOMSearchRequired = false;
     			else

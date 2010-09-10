@@ -351,7 +351,7 @@ function importSettings() {
 
 // called when import button is clicked
 function importAndApply() {
-    try{
+    try {
         var jsonString = $('#settingsText')[0].value;
         var tempPref = translateForImport(JSON.parse(jsonString));
         tempPref.version = prefs.version;

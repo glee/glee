@@ -116,8 +116,9 @@ function respondToMessage(e) {
 
 function initOptions() {
     for (pref in cache.prefs) {
-        if (pref == "espModifiers" || pref == "scrapers" || pref == "disabledUrls")
+        if (pref == "espModifiers" || pref == "scrapers" || pref == "disabledUrls") {
             cache.prefs[pref] = JSON.parse(safari.extension.settings.getItem(pref));
+        }
         else
             cache.prefs[pref] = safari.extension.settings.getItem(pref);
     }
@@ -217,12 +218,14 @@ function saveOptions() {
 }
 
 function saveOption(pref, value) {
+    if (pref == "scrapers" || pref == "disabledUrls" || pref == "espModifiers") {
+        value = JSON.stringify(value);
+    }
     safari.extension.settings.setItem(pref, value);
 }
 
 function initCommandCache() {
     cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
-    console.log("Commands in localStorage: " + localStorage['gleebox_commands_cache']);
 }
 
 function sendRequestToAllTabs(req) {

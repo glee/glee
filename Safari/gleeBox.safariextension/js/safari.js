@@ -26,6 +26,12 @@ Glee.Browser = {
     },
     
     getOptions: function() {
+        // fix for other extensions' pages, where e.target.page is undefined when sending back response from background.html
+        // as a workaround, disabling gleeBox on such pages
+        if (location.href.indexOf("safari-extension://") != -1) {
+            Glee.options.status = 0;
+            return false;
+        }
         safari.self.tab.dispatchMessage("getOptions", null);
     },
     
