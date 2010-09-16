@@ -243,41 +243,44 @@ Glee.Events = {
 			if (Glee.selectedElement)
 			{
 				var el = Glee.selectedElement[0];
-				if (el.tagName == "INPUT" && (el.type == "button" || el.type == "submit" || el.type == "image"))
+				var tag = el.tagName.toLowerCase();
+				if ((tag == "input" && (el.type == "button" || el.type == "submit" || el.type == "image")) ||
+				tag == "button")
 				{
-					setTimeout(function(){
-						Glee.Utils.simulateClick(Glee.selectedElement,false);
-					},0);
-				}
-				else if (el.tagName == "BUTTON")
-				{
-					setTimeout(function(){
-						Glee.Utils.simulateClick(Glee.selectedElement,false);
+					setTimeout(function() {
+						Glee.Utils.simulateClick(Glee.selectedElement, false);
 						Glee.searchField.blur();
-					},0);
+					}, 0);
 				}
-				else if (el.tagName == "INPUT" || el.tagName == "TEXTAREA")
+				else if (tag == "input" && (el.type == "radio" || el.type == "checkbox"))
 				{
-					setTimeout(function(){
+                     if (!Glee.selectedElement.is(':checked'))
+		                Glee.selectedElement[0].checked = true;
+                    else if (el.type == "checkbox")
+		                Glee.selectedElement[0].checked = false;
+					Glee.searchField.blur();
+				}
+				else if (tag == "input" || tag == "textarea")
+				{
+					setTimeout(function() {
 						Glee.selectedElement[0].focus();
-					},0);
+						Glee.Utils.selectAllText(Glee.selectedElement[0]);
+					}, 0);
 				}
-				else
-				{
-					setTimeout(function(){
-						Glee.searchField.blur();
-					},0);
+				else {
+				    setTimeout(function() {
+						Glee.selectedElement[0].focus();
+					}, 0);
 				}
 			}
 			else
 			{
-				setTimeout(function(){
+				setTimeout(function() {
 					Glee.searchField.blur();
-				}, 0)
+				}, 0);
 			}
 		}
-		
-		setTimeout(function(){
+		setTimeout(function() {
 			Glee.closeBoxWithoutBlur();
 		}, 0);
     }

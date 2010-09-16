@@ -452,7 +452,6 @@ var Glee = {
 	},
 	
 	setSubText: function(val, type) {
-
 		this.URL = null;
 		
 		if (type == "el") // here val is the element or null if no element is found for a search

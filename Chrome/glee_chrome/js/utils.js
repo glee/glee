@@ -161,5 +161,13 @@ Glee.Utils = {
 		while (right.length > 0)
 			els.push(right.shift());
 		return els;
-	}
+	},
+	
+	selectAllText: function(el) {
+        if (!el || !el.value || el.value == "")
+            return false;
+        var len = el.value.length;
+        el.setSelectionRange(0, len);
+        return true;
+    }
 }
