@@ -162,6 +162,16 @@ var Glee = {
 		    description: "View the Downloads page"
 		},
 		{
+		    name: "plugins",
+		    method: "viewPlugins",
+		    description: "View the Plugins page"
+		},
+		{
+		    name: "labs",
+		    method: "viewLabs",
+		    description: "View the labs page"
+		},
+		{
 		    name: "snap",
 		    method: "takeScreenshot",
 		    description: "Take a screenshot of this page"

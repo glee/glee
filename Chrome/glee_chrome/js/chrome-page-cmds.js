@@ -16,6 +16,22 @@ Glee.viewDownloads = function(newTab) {
         Glee.Browser.openPageInThisTab("chrome://downloads/");
 }
 
+/* plugins: Open the Plugins page */
+Glee.viewPlugins = function(newTab) {
+    if (newTab)
+        Glee.Browser.openPageIfNotExist("chrome://plugins");
+    else
+        Glee.Browser.openPageInThisTab("chrome://plugins");
+}
+
+/* labs: Open the Labs page */
+Glee.viewLabs = function(newTab) {
+    if (newTab)
+        Glee.Browser.openPageIfNotExist("chrome://labs/");
+    else
+        Glee.Browser.openPageInThisTab("chrome://labs/");
+}
+
 /* options: Open the Options page for gleeBox */
 Glee.displayOptionsPage = function(newTab) {
     var url = chrome.extension.getURL("options.html");
