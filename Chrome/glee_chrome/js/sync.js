@@ -7,22 +7,43 @@
  * Dual licensed under GPL and MIT licenses.
  **/
 
+/***** Edit these options for your extension *****/
+
+/***** IMPORTANT: Replace all instances of 'cache.prefs' in this code with your DATA SOURCE. *****/
+// DATA SOURCE is a JSON object in background.html which stores your data.
+
+// Extension name. used to create titles for bookmark / containing folder
+var syncName = "gleebox";
+
+// method to be called when sync occurs. Updated JSON data returned from the bookmark is passed to this method
+var onSync = updatePreferencesLocally;
+
+// method to be called when data is to be merged. It's called when sync is enabled. Should return updated JSON data.
+// If set to null, onSync is called.
+var onMerge = mergePreferencesLocally;
+
+// API: Call the following methods to manage sync.
+
+// initSync(): Call this when background.html finishes loading to initialize sync. If sync status is set to 1, it enables sync. If sync is not optional and is always enabled, call enableSync() instead.
+// saveSyncData(): Updates the data stored in bookmark. Call this whenever you need to update data. It automatically triggers sync on other machines.
+// enableSync(): Enables sync. By default, sync is disabled.
+// disableSync(): Disables sync
+
+// Status of sync is stored in localStorage[syncName_sync]. Like here it is: localStorage['gleebox_sync'].
+// 1: Sync is enabled
+// 0: Sync is disabled
+// By default, sync is disabled.
+
+/***** End of editable options *****/
+
 // bookmark's id in which data is stored
 var syncId;
 var syncFolderId;
+var syncBookmarkName = syncName + "_data";
+var syncURL = "http://" + syncName + "/?data=";
 
 // to prevent sync() from getting called when saveSyncData() changes bookmark url
 var saveSyncDataWasCalled = false;
-
-// extension name. used to create titles for bookmark / containing folder
-var syncName = "gleebox";
-var syncBookmarkName = syncName + "_data";
-var syncURL = "http://" + syncName + "/?data=";
-var onSync = updatePreferencesLocally;
-var onMerge = mergePreferencesLocally;
-
-// data source is cache.prefs here
-// localStorage['gleebox_sync'] is used to check if sync is enabled / disabled
 
 // loads data from bookmark (if it exists). If no data is returned, saves local data in the bookmark
 function sync() {
@@ -54,8 +75,16 @@ function syncWithMerge() {
     });
 }
 
+function initSync() {
+    if (localStorage[syncName + '_sync'] == 1) {
+        attachSyncListeners();
+        sync();
+    }
+}
+
 // called when syncing is turned on in options page and if sync is enabled, when background.html loads
 function enableSync(merge) {
+    localStorage[syncName + '_sync'] = 1;
     attachSyncListeners();
     if (merge)
         syncWithMerge();
@@ -65,6 +94,7 @@ function enableSync(merge) {
 
 // called when syncing is turned off in options page
 function disableSync() {
+    localStorage[syncName + '_sync'] = 0;
     detachSyncListeners();
 }
 
@@ -192,13 +222,13 @@ function detachSyncListeners() {
 }
 
 function onBookmarkUpdate(id, properties) {
-    if (localStorage['gleebox_sync'] == 1 && id == syncId && !saveSyncDataWasCalled) {
+    if (localStorage[syncName + '_sync'] == 1 && id == syncId && !saveSyncDataWasCalled) {
         sync();
     }
 }
 
 function onBookmarkCreate(id, bookmark) {
-    if (localStorage['gleebox_sync'] == 1 && bookmark.parentId == syncFolderId && !saveSyncDataWasCalled) {
+    if (localStorage[syncName + '_sync'] == 1 && bookmark.parentId == syncFolderId && !saveSyncDataWasCalled) {
         sync();
     }
 }

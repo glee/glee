@@ -26,9 +26,7 @@ function init() {
 	function initGlobals() {
 		loadAllPrefs(function(prefs) {
 			cache.prefs = prefs;
-            if (localStorage['gleebox_sync'] == 1) {
-                enableSync();
-            }
+            initSync();
 		});
 	}
 	initCommandCache();

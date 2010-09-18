@@ -197,11 +197,9 @@ function propagate()
 
 function toggleSyncing() {
     if (localStorage['gleebox_sync'] == 1) {
-        localStorage['gleebox_sync'] = 0;
         bg_window.disableSync();
     }
     else {
-        localStorage['gleebox_sync'] = 1;
         bg_window.enableSync(true);
     }
     setSyncUI();
