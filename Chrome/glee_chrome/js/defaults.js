@@ -6,6 +6,8 @@ function getDefaultPreferences(){
 		position: 2,
 		status: 1,
 		search_engine: "http://www.google.com/search?q=",
+		command_engine: "yubnub",
+		quix_url: "http://quixapp.com/quix.txt",
 		theme: "GleeThemeDefault",
 		bookmark_search: 0,
 		scroll_animation: 1,

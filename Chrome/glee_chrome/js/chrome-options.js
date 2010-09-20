@@ -36,8 +36,21 @@ function initSettings(response)
 		document.getElementsByName("size")[1].checked = true;
 
 	// search engine
-	document.getElementsByName("search_engine")[0].value = prefs.search_engine;
-
+	if (prefs.search_engine != undefined)
+	    document.getElementsByName("search_engine")[0].value = prefs.search_engine;
+	
+    // command engine
+    if (prefs.command_engine == "quix") {
+        document.getElementsByName("command_engine")[1].checked = true;
+        $("#quix_url").show();
+    }
+    else
+        document.getElementsByName("command_engine")[0].checked = true; // default is yubnub
+    
+    // quix url
+	if (prefs.quix_url != undefined)
+	    document.getElementsByName("quix_url")[0].value = prefs.quix_url;
+	
 	// theme
 	tRadios = document.getElementsByName("theme");
 	var r_len = tRadios.length;

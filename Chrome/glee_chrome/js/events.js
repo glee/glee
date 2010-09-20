@@ -1,5 +1,4 @@
 Glee.Events = {
-    
     // called when tab key is pressed inside gleebox
     onTabKeyDown: function(e) {
         if (Glee.selectedElement)
@@ -72,12 +71,12 @@ Glee.Events = {
 		return false;
     },
     
-    // when a yubnub command is entered
-    queryYubnub: function(value) {
+    // when a yubnub/quix command is entered
+    queryCommandEngine: function(value) {
         c = value.substring(1);
         c = c.replace("$", location.href);
-        Glee.subText.html(Glee.Utils.filter("Run yubnub command (press enter to execute): " + c));
-        Glee.URL = "http://yubnub.org/parser/parse?command=" + encodeURIComponent(c);
+        Glee.subText.html(Glee.Utils.filter("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c));
+        Glee.URL = Glee.getCommandEngineSyntax(encodeURIComponent(c));
         Glee.subURL.html(Glee.Utils.filter(Glee.URL));
     },
     
@@ -147,6 +146,47 @@ Glee.Events = {
 		}
     },
     
+    executeCommandEngine: function(newTab) {
+        var u = Glee.URL;
+        if (Glee.options.commandEngine == "yubnub") {
+            if (newTab) {
+     		    Glee.reset();
+                Glee.Browser.openNewTab(u);
+            }
+            else {
+                window.location = u;
+                Glee.closeBoxWithoutBlur();
+            }
+        }
+	    else {
+     		var d = '' + document.location;
+     		if (newTab) {
+     		    Glee.reset();
+     		    Glee.Browser.openNewTab(u + "&mode=direct");
+     		}
+     		else if (d.substr(0, 4) != 'http') {
+                window.location = u + '&mode=direct';
+                Glee.closeBoxWithoutBlur();
+     		}
+            else {
+                var heads = document.getElementsByTagName('head');
+                if (heads.length == 0) {
+    				window.location = u + '&mode=direct';
+                    Glee.closeBoxWithoutBlur();
+    			}
+    			else {
+    				var sc = document.createElement('script');
+    				sc.src = u;
+    				sc.id = 'quix';
+    				sc.type = 'text/javascript';
+                    Glee.closeBox(function() {
+        				void(heads[0].appendChild(sc));
+                    });
+    			}
+    		}
+	    }
+	},
+    
     // jquery selector is executed
     executeJQuerySelector: function(value) {
         if (Glee.selectedElement)
@@ -159,14 +199,17 @@ Glee.Events = {
 		Glee.lastjQuery = value;
     },
     
-    // general query execution 
+    // general query execution
     execute: function(e, value) {
         var anythingOnClick = true;
 
-		// if is a yubnub command, add it to cache
-		if (value[0] == ":")
-		    Glee.addCommandToCache( value.split(" ")[0] );
-
+		// if is a yubnub/quix command, add it to cache and execute
+		if (value[0] == ":") {
+		    Glee.Events.executeCommandEngine(e.shiftKey);
+		    Glee.addCommandToCache(value.split(" ")[0]);
+		    return true;
+		}
+		
 		// If an element is selected
 		if (Glee.selectedElement)
 		{

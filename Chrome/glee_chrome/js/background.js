@@ -10,13 +10,25 @@ var cache = {
 };
 
 function checkVersion() {
-    if (localStorage['gleebox_version'] != "1.6.3")
+    if (localStorage['gleebox_version'] != "1.7")
     {
+        // create the new preferences in the db
+        updateDB();
         // open the update page
         chrome.tabs.create({url:"http://thegleebox.com/update.html", selected: true}, null);
         // update version
-        localStorage['gleebox_version'] = "1.6.3";
+        localStorage['gleebox_version'] = "1.7";
     }
+}
+
+function updateDB() {
+    loadPreference('command_engine', function(value) {
+        if (!value) {
+            // create the new preferences in 1.7
+            createPreference('command_engine', 'yubnub');
+            createPreference('quix_url', 'http://quixapp.com/quix.txt');
+        }
+    });
 }
 
 function init() {

@@ -414,13 +414,13 @@ function savePreference(prefname, value) {
 	createPrefsTable(A);
 	if (A)
 	{
-		A.transaction(function(B){
+		A.transaction(function(B) {
 			B.executeSql("UPDATE preferences SET prefvalue = ? WHERE prefname=?",
-			[value,prefname],
-			function(C,D){
+			[value, prefname],
+			function(C,D) {
                 
 			},
-			function(C,D){
+			function(C,D) {
 				console.log(D);
 			});
 		});
@@ -432,13 +432,13 @@ function createPreference(prefname, value) {
 	createPrefsTable(A);
 	if (A)
 	{
-		A.transaction(function(B){
+		A.transaction(function(B) {
 			B.executeSql("INSERT INTO preferences VALUES (?, ?)",
-			[prefname,value],
-			function(C,D){
+			[prefname, value],
+			function(C,D) {
                 
 			},
-			function(C,D){
+			function(C,D) {
 				console.log(D);
 			});
 		});

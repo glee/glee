@@ -50,7 +50,11 @@ var Glee = {
     	bookmarkSearchStatus: false,
     	
     	// Search Engine URL
-    	searchEngineUrl: "http://www.google.com/search?q="
+    	searchEngineUrl: "http://www.google.com/search?q=",
+    	
+    	commandEngine: "yubnub",
+    	
+    	quixUrl: "http://quixapp.com/quix.txt"
 	},
 	
 	// State of scrolling. 0=None, 1=Up, -1=Down.
@@ -765,6 +769,19 @@ var Glee = {
 		else
 			Glee[method](openInNewTab);
 	},
+	
+	getCommandEngineSyntax: function(c) {
+	    if (Glee.options.commandEngine == "yubnub") {
+	        return "http://yubnub.org/parser/parse?command=" + c;
+	    }
+	    else {
+             return 'http://quixapp.com/go/?c=' + encodeURIComponent(c)
+              			+'&t='+(document.title?encodeURIComponent(document.title):'')
+              			+'&s='+Glee.options.quixUrl
+              			+'&v=080'
+              			+'&u='+(document.location?encodeURIComponent(document.location):'');
+        }
+	},
 		
 	// add command to recently executed commands cache
 	addCommandToCache: function(value) {
@@ -903,7 +920,7 @@ var Glee = {
                             Glee.Events.queryScraper(value);
 
     					else if (value[0] == ':')
-                            Glee.Events.queryYubnub(value);
+                            Glee.Events.queryCommandEngine(value);
                         
                     	else if (value[0] == "!" && value.length > 1)
     					    Glee.Events.queryPageCmd(value);

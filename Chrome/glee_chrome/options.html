@@ -33,23 +33,30 @@
 					</div>
 				</li>
 				<li>
+					<label class="option-label">Command Engine<br/><span class="subtext">Choose the engine you want to use for : commands</span></label>
+					<div class="option-field">
+						<input name="command_engine" type="radio" value="yubnub" onclick="$('#quix_url').hide();"> Yubnub&nbsp;
+						<input name="command_engine" type="radio" value="quix" onclick="$('#quix_url').show();"> Quix&nbsp;&nbsp;<input style="display:none" id="quix_url" name="quix_url" type="text" size=36>
+					</div>
+				</li>
+				<li>
 					<label class="option-label">Bookmark search<br/><span class="subtext">Searches bookmarks when no matching links are found</span></label>
 					<div class="option-field">
-						<input name="bookmark_search" type="radio" value="1"> On
+						<input name="bookmark_search" type="radio" value="1"> On&nbsp;
 						<input name="bookmark_search" type="radio" value="0"> Off
 					</div>
 				</li>
 				<li>
 					<label class="option-label">Animated scrolling<br/><span class="subtext">Provides scrolling animation when traversing selected elements</span></label>
 					<div class="option-field">
-						<input name="scroll_animation" type="radio" value="1"> On
+						<input name="scroll_animation" type="radio" value="1"> On&nbsp;
 						<input name="scroll_animation" type="radio" value="0"> Off
 					</div>
 				</li>
 				<li>
 					<label class="option-label">Global shortcut for Glee Tab Manager<br/><span class="subtext">Launch tab manager without needing to go into gleeBox</span></label>
 					<div class="option-field">
-						<input name="tab_shortcut_status" type="radio" value="1"> On
+						<input name="tab_shortcut_status" type="radio" value="1"> On&nbsp;
 						<input name="tab_shortcut_status" type="radio" value="0"> Off
 					</div>
 				</li>
@@ -73,16 +80,16 @@
 				<li>
 					<label class="option-label">Position</label>
 					<div class="option-field">
-						<input name="position" type="radio" value="0"> Top 
-						<input name="position" type="radio" value="1"> Middle
+						<input name="position" type="radio" value="0"> Top&nbsp; 
+						<input name="position" type="radio" value="1"> Middle&nbsp;
 						<input name="position" type="radio" value="2"> Bottom
 					</div>
 				</li>
 				<li>
 					<label class="option-label">Size</label>
 					<div class="option-field">
-						<input name="size" type="radio" value="0"> Small
-						<input name="size" type="radio" value="1"> Medium
+						<input name="size" type="radio" value="0"> Small&nbsp;
+						<input name="size" type="radio" value="1"> Medium&nbsp;
 						<input name="size" type="radio" value="2"> Large
 					</div>
 				</li>

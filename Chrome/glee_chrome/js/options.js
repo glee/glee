@@ -445,7 +445,6 @@ function clearSettings() {
 }
 
 function attachListeners() {
-    
     // radio
     // for some reason, change event does not fire when using keyboard
     $('.option-field input[type=radio]').bind('change keyup', function(e) {

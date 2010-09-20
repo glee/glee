@@ -40,7 +40,6 @@ Glee.Browser.sendRequest = function(url, method, callback){
 }
 
 Glee.Browser.updateOptions = function(response) {
-    
 	var prefs = response.preferences;
     // position
 	if (prefs.position != undefined)
@@ -103,7 +102,7 @@ Glee.Browser.updateOptions = function(response) {
 	// theme
 	if (prefs.theme != undefined)
 	{
-		//If a theme is already set, remove it
+		// If a theme is already set, remove it
 		if (Glee.ThemeOption)
 		{
 			Glee.searchBox.removeClass(Glee.ThemeOption);
@@ -114,10 +113,19 @@ Glee.Browser.updateOptions = function(response) {
 		Glee.ThemeOption = prefs.theme;
 	}
 	
-	//Search
+	// Search
 	if (prefs.search_engine != undefined)
 	{
 		Glee.options.searchEngineUrl = prefs.search_engine;
+	}
+	
+	if (prefs.command_engine != undefined) {
+	    Glee.options.commandEngine = prefs.command_engine;
+	}
+	
+	// Quix url
+	if (prefs.quix_url != undefined) {
+	    Glee.options.quixUrl = prefs.quix_url;
 	}
 	
 	// Hyper Mode
@@ -129,17 +137,16 @@ Glee.Browser.updateOptions = function(response) {
 			Glee.options.hyperMode = false;
 	}
 
-	//getting the custom scraper commands
+	// scrapers
 	if (prefs.scrapers != undefined)
 	{
 		Glee.scrapers.splice(4, Glee.scrapers.length);
-		
 		var len = prefs.scrapers.length;
-		for (i = 0; i < len; i++)
+		for (var i = 0; i < len; i++)
 			Glee.scrapers[ 4 + i ] = prefs.scrapers[i]; // because 4 scraper commands are built-in
 	}
 	
-	// ESP Status
+	// ESP status
 	if (prefs.esp_status != undefined)
 	{
 		if (prefs.esp_status == 1)
@@ -160,7 +167,7 @@ Glee.Browser.updateOptions = function(response) {
 	if (prefs.tab_shortcut_key != undefined)
 		Glee.options.tabShortcutKey = prefs.tab_shortcut_key;
 	
-	// check if it is a disabled domain
+	// check for disabled urls
 	if (prefs.status != undefined)
 	{
 		if (Glee.Utils.checkDomain() != 1 || prefs.status == 0)
