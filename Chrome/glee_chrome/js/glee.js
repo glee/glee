@@ -775,11 +775,7 @@ var Glee = {
 	        return "http://yubnub.org/parser/parse?command=" + c;
 	    }
 	    else {
-             return 'http://quixapp.com/go/?c=' + encodeURIComponent(c)
-              			+'&t='+(document.title?encodeURIComponent(document.title):'')
-              			+'&s='+Glee.options.quixUrl
-              			+'&v=080'
-              			+'&u='+(document.location?encodeURIComponent(document.location):'');
+             return 'http://quixapp.com/go/?c=' + encodeURIComponent(c);
         }
 	},
 		

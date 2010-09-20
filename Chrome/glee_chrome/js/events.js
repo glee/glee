@@ -76,7 +76,7 @@ Glee.Events = {
         c = value.substring(1);
         c = c.replace("$", location.href);
         Glee.subText.html(Glee.Utils.filter("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c));
-        Glee.URL = Glee.getCommandEngineSyntax(encodeURIComponent(c));
+        Glee.URL = Glee.getCommandEngineSyntax(c);
         Glee.subURL.html(Glee.Utils.filter(Glee.URL));
     },
     
@@ -160,8 +160,13 @@ Glee.Events = {
         }
 	    else {
      		var d = '' + document.location;
+     		u = u+'&t='+(document.title?encodeURIComponent(document.title):'')
+  			+'&s='+Glee.options.quixUrl
+  			+'&v=080'
+  			+'&u='+(document.location?encodeURIComponent(document.location):'');
+  			
      		if (newTab) {
-     		    Glee.reset();
+                Glee.reset();
      		    Glee.Browser.openNewTab(u + "&mode=direct");
      		}
      		else if (d.substr(0, 4) != 'http') {
@@ -179,9 +184,10 @@ Glee.Events = {
     				sc.src = u;
     				sc.id = 'quix';
     				sc.type = 'text/javascript';
-                    Glee.closeBox(function() {
-        				void(heads[0].appendChild(sc));
-                    });
+                    void(heads[0].appendChild(sc));
+                    setTimeout(function() {
+                        Glee.closeBox();
+                    }, 0);
     			}
     		}
 	    }
