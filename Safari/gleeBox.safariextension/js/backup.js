@@ -31,6 +31,12 @@ function translateForExport(prefs) {
     // search engine url
     newPrefs.search_engine = prefs.searchEngineUrl;
     
+    // command engine
+    newPrefs.command_engine = prefs.commandEngine;
+    
+    // quix url
+    newPrefs.quix_url = prefs.quixUrl;
+    
     // esp status
     newPrefs.esp_status = prefs.espStatus;
     
@@ -70,6 +76,12 @@ function translateForImport(importPrefs) {
 
     // search engine url
     newPrefs.searchEngineUrl = importPrefs.search_engine;
+    
+    // command engine
+    newPrefs.commandEngine = importPrefs.command_engine;
+    
+    // quix URL
+    newPrefs.quixUrl = importPrefs.quix_url;
 
     // esp status
     newPrefs.espStatus = importPrefs.esp_status;

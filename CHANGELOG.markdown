@@ -1,3 +1,15 @@
+**1.7** (To be released)
+* Added support for Quix
+* !tweet now uses the official twitter share bookmarklet
+* Usability improvements: 
+	* ?? selects the existing text in a textfield/textarea
+	* Scrolling using arrow keys selects the topmost visible element (when esp vision/scraper is active)
+	* Radios/checkboxes can be checked/unchecked using gleebox
+	* Listens to DOM changes, so that any new elements are added to the current selection
+* Added !snap and !plugins commands (Chrome only)
+* Safari bugfixes
+
+<br>
 **1.6.3**
 
 * Prettier and more robust highlighting (thanks to towolf)

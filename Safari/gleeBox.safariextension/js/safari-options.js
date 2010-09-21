@@ -54,6 +54,20 @@ function initSettings(response)
 	
 	// search engine
 	document.getElementsByName("searchEngineUrl")[0].value = prefs.searchEngineUrl;
+	
+    // command engine
+    if (prefs.commandEngine == "quix") {
+        document.getElementsByName("commandEngine")[1].checked = true;
+        $("#quix_url").show();
+    }
+    else
+        document.getElementsByName("commandEngine")[0].checked = true; // default is yubnub
+    
+    // quix url
+	if (prefs.quixUrl)
+	    document.getElementsByName("quixUrl")[0].value = prefs.quixUrl;
+	else 
+	    document.getElementsByName("quixUrl")[0].value = "http://quixapp.com/quix.txt";
 
 	// theme
 	tRadios = document.getElementsByName("theme");
@@ -68,10 +82,10 @@ function initSettings(response)
 	}
 
 	// scroll animation
-	if (prefs.scroll_animation == 0)
-		document.getElementsByName("scroll_animation")[1].checked = true;
+	if (prefs.scrollingSpeed == 0)
+		document.getElementsByName("scrollingSpeed")[1].checked = true;
 	else
-		document.getElementsByName("scroll_animation")[0].checked = true;
+		document.getElementsByName("scrollingSpeed")[0].checked = true;
 
 	// scraper commands
 	var len = prefs.scrapers.length;
@@ -83,10 +97,10 @@ function initSettings(response)
 	}	
 
 	// esp status
-	if (prefs.esp_status == 0)
-		document.getElementsByName("esp_status")[1].checked = true;
+	if (prefs.espStatus == 0)
+		document.getElementsByName("espStatus")[1].checked = true;
 	else
-		document.getElementsByName("esp_status")[0].checked = true;
+		document.getElementsByName("espStatus")[0].checked = true;
 	
 	// esp visions
 	var espList = document.getElementById("esp-modifiers");

@@ -1,6 +1,6 @@
 /* Utility methods in Glee */
 
-Glee.Utils = {
+Utils = {
 	isURL: function(url) {
 		var regex = new RegExp("(\\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw))");
 		return url.match(regex);
@@ -169,5 +169,55 @@ Glee.Utils = {
         var len = el.value.length;
         el.setSelectionRange(0, len);
         return true;
+    },
+    
+    makeEditable: function(el, callback, options) {
+        el.bind('click keyup', {callback: callback}, function(e) {
+            if (e.type == 'keyup' && e.keyCode != 13)
+                return true;
+
+            var el = $(this);
+            el.hide();
+            
+            var elWidth;
+            if (options && options.fixedWidth)
+                elWidth = options.fixedWidth;
+            else 
+                elWidth = el.width();
+            var value = el.text();
+            // create a textfield
+            var input = $('<input>', {
+                type: 'text',
+                value: value,
+                id: 'gleebox-editing-field'
+            })
+            .width(elWidth);
+            
+            el.before(input);
+            input.focus();
+
+            // if selectText is set to true, select all text in input field
+            if (options && options.selectText)
+                input.get(0).setSelectionRange(0, value.length);
+
+            var onClose = function(e) {
+                if (e.type == "keyup" && e.keyCode != 13 && e.keyCode != 27)
+                    return true;
+                if (e.type == "mousedown" && e.target.id == e.data.input.attr('id'))
+                    return true;
+                var value = e.data.input.attr('value');
+                e.data.input.remove();
+                if (value == "")
+                    value = e.data.el.html();
+                e.data.el.html(value);
+                e.data.el.show();
+                e.data.callback(value);
+                $(document).unbind("mousedown", onClose);
+                $(document).unbind("keyup", onClose);
+            }
+            
+            input.bind('keyup', {input: input, el: el, callback: callback}, onClose);
+            $(document).bind('mousedown',{input: input, el: el, callback: callback}, onClose);
+        });
     }
 }

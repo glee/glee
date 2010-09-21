@@ -75,9 +75,9 @@ Glee.Events = {
     queryCommandEngine: function(value) {
         c = value.substring(1);
         c = c.replace("$", location.href);
-        Glee.subText.html(Glee.Utils.filter("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c));
+        Glee.subText.html(Utils.filter("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c));
         Glee.URL = Glee.getCommandEngineSyntax(c);
-        Glee.subURL.html(Glee.Utils.filter(Glee.URL));
+        Glee.subURL.html(Utils.filter(Glee.URL));
     },
     
     // when a page command is entered
@@ -243,7 +243,7 @@ Glee.Events = {
 					a_el.attr("target", "_self");
 
 					// Simulating a click on the link
-					anythingOnClick = Glee.Utils.simulateClick(a_el, target);
+					anythingOnClick = Utils.simulateClick(a_el, target);
 
 					// If opening link on the same page, close gleeBox
 					if (!target)
@@ -269,7 +269,7 @@ Glee.Events = {
 		if (Glee.URL)
 		{
 			// If the URL is relative, make it absolute
-			Glee.URL = Glee.Utils.makeURLAbsolute(Glee.URL, location.href);
+			Glee.URL = Utils.makeURLAbsolute(Glee.URL, location.href);
 
 			// Open in new tab
 			if (e.shiftKey)
@@ -297,7 +297,7 @@ Glee.Events = {
 				tag == "button")
 				{
 					setTimeout(function() {
-						Glee.Utils.simulateClick(Glee.selectedElement, false);
+						Utils.simulateClick(Glee.selectedElement, false);
 						Glee.searchField.blur();
 					}, 0);
 				}
@@ -313,7 +313,7 @@ Glee.Events = {
 				{
 					setTimeout(function() {
 						Glee.selectedElement[0].focus();
-						Glee.Utils.selectAllText(Glee.selectedElement[0]);
+						Utils.selectAllText(Glee.selectedElement[0]);
 					}, 0);
 				}
 				else {

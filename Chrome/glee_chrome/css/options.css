@@ -161,9 +161,20 @@ textarea {
 
 #esp-modifiers li,
 #scraper-commands li {
-	width: 410px;
 	float: left;
+    font-size: 14px;
+	margin: 5px 0px;
 	word-wrap: break-word;
+}
+
+#esp-modifiers input,
+#scraper-commands input {
+    float: left;
+}
+
+#esp-modifiers .button,
+#scraper-commands .button {
+    margin-left: 10px;
 }
 
 .scraper-name:hover,
@@ -172,13 +183,41 @@ textarea {
 .esp-url:hover,
 .esp-sel:hover {
 	background-color: #f1f1f1;
+	outline: 1px solid #777;
 	border-radius: 2px;
-	padding: 1px 2px;
-	border: 1px solid #777;
 }
 
-.scraper-name {
-	font-weight: bold;
+.separator {
+    float: left;
+    margin: 0px 5px;
+}
+
+.scraper-prefix {
+    font-weight: bold;
+    float: left;
+}
+
+.esp-url, .scraper-name, .default-scraper-name {
+    font-weight: bold;
+	float: left;
+    display: inline-block;
+    width: 100px;
+}
+
+.esp-url {
+    width: 300px;
+}
+
+.esp-sel, .scraper-sel {
+    width: 550px;
+    display: inline-block;
+    font-size: 12px;
+    font-family: Monaco, Consolas;
+    float: right;
+}
+
+.esp-sel {
+    width: 360px;
 }
 
 #footer {
@@ -191,7 +230,6 @@ textarea {
 }
 
 /* Modal popup */
-
 #popup {
     display: none;
     position: fixed;

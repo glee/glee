@@ -386,7 +386,7 @@ var Glee = {
 	initScraper: function(scraper) {
 		this.nullMessage = scraper.nullMessage;
 		this.cache.scraper = scraper;
-        LinkReaper.selectedLinks = Glee.sortElementsByPosition($.grep($(scraper.selector), Glee.Utils.isVisible));
+        LinkReaper.selectedLinks = Glee.sortElementsByPosition($.grep($(scraper.selector), Utils.isVisible));
         $(LinkReaper.selectedLinks).each(function() {
             $(this).addClass(scraper.cssStyle);
         });
@@ -402,7 +402,7 @@ var Glee = {
 	attachScraperListener: function(scraper) {
         $(scraper.selector).livequery(function() {
             $this = $(this);
-            if(!Glee.Utils.isVisible(this))
+            if(!Utils.isVisible(this))
                 return;
             LinkReaper.selectedLinks.push(this);
             LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
@@ -440,7 +440,7 @@ var Glee = {
 	
 	sortElementsByPosition: function(elements) {
 		// Sort elements
-		var sorted_els = Glee.Utils.mergeSort(elements);
+		var sorted_els = Utils.mergeSort(elements);
 		
 		// Begin the array from the element closest to the current position
 		var len = sorted_els.length;
@@ -479,15 +479,15 @@ var Glee = {
 				if (tag != "a")
 				{
 					var a_el = null;
-					this.subText.html(Glee.Utils.filter($val.text()));
+					this.subText.html(Utils.filter($val.text()));
 					if (tag == "img")
 					{
 						a_el = $($val.parents('a'));
 						var value = $val.attr('alt');
 						if (value)
-							this.subText.html(Glee.Utils.filter(value));
+							this.subText.html(Utils.filter(value));
 						else if (value = $val.parent('a').attr('title'))
-							this.subText.html(Glee.Utils.filter(value));
+							this.subText.html(Utils.filter(value));
 						else
 							this.subText.html("Linked Image");
 					}
@@ -496,7 +496,7 @@ var Glee = {
 					{
 						var value = $val.attr("value");
 						if (value)
-							this.subText.html(Glee.Utils.filter(value));
+							this.subText.html(Utils.filter(value));
 						else
 							this.subText.html("Input " + $val.attr("type"));
 					}
@@ -505,7 +505,7 @@ var Glee = {
 					{
 						var value = $val.attr("name");
 						if (value)
-							this.subText.html(Glee.Utils.filter(value));
+							this.subText.html(Utils.filter(value));
 						else
 							this.subText.html("Textarea");
 					}
@@ -513,9 +513,9 @@ var Glee = {
 					    a_el = $($val.find('a'));
 					    var value = $val.text();
                         if (value)
-                            this.subText.html(Glee.Utils.filter(value));
+                            this.subText.html(Utils.filter(value));
                         else if (value = a_el.attr('title')) {
-                            this.subText.html(Glee.Utils.filter(value));
+                            this.subText.html(Utils.filter(value));
                         }
                         else
                             this.subText.html("");
@@ -526,7 +526,7 @@ var Glee = {
 						if (a_el.length != 0)
 						{
 							this.URL = a_el.attr("href");
-							this.subURL.html(Glee.Utils.filter(this.URL));
+							this.subURL.html(Utils.filter(this.URL));
 						}
 					}
 					else
@@ -536,10 +536,10 @@ var Glee = {
 				else if ($val.find("img").length != 0)
 				{
 					this.URL = $val.attr("href");
-					this.subURL.html(Glee.Utils.filter(this.URL));
+					this.subURL.html(Utils.filter(this.URL));
 					var title = $val.attr("title") || $val.find('img').attr('title');
 					if (title != "")
-						this.subText.html(Glee.Utils.filter(title));
+						this.subText.html(Utils.filter(title));
 					else
 						this.subText.html("Linked Image");
 				}
@@ -549,30 +549,30 @@ var Glee = {
 					var title = $val.attr('title');
 					var text = $val.text();
 
-					this.subText.html(Glee.Utils.filter(text));
+					this.subText.html(Utils.filter(text));
 					if (title != "" && title != text)
-						this.subText.html(Glee.Utils.filter(this.subText.html() + " -- " + title));
+						this.subText.html(Utils.filter(this.subText.html() + " -- " + title));
 					this.URL = $val.attr('href');
-					this.subURL.html(Glee.Utils.filter(this.URL));
+					this.subURL.html(Utils.filter(this.URL));
 				}
 			}
 			else if (Glee.commandMode == true)
 			{
 				this.subText.html(Glee.nullMessage);
 			}
-			else //go to URL, search for bookmarks or search the web
+			else // go to URL, search for bookmarks or search the web
 			{
 				var text = this.searchField.attr("value");
 				this.selectedElement = null;
-				//if it is a URL
-				if (this.Utils.isURL(text))
+				// if it is a URL
+				if (Utils.isURL(text))
 				{
-					this.subText.html(Glee.Utils.filter("Go to " + text));
+					this.subText.html(Utils.filter("Go to " + text));
 					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if (!text.match(regex))
 						text = "http://" + text;
 					this.URL = text;
-					this.subURL.html(Glee.Utils.filter(text));
+					this.subURL.html(Utils.filter(text));
 				}
 				else if (this.options.bookmarkSearchStatus) // is bookmark search enabled?
 				{
@@ -586,9 +586,9 @@ var Glee = {
 		}
 		else if (type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
 		{
-			this.subText.html(Glee.Utils.filter("Open bookmark (" + ( val + 1 ) + " of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
+			this.subText.html(Utils.filter("Open bookmark (" + ( val + 1 ) + " of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
 			this.URL = this.bookmarks[val].url;
-			this.subURL.html(Glee.Utils.filter(this.URL));
+			this.subURL.html(Utils.filter(this.URL));
 		}
 		else if (type == "bookmarklet") // here val is the bookmarklet returned
 		{
@@ -598,9 +598,9 @@ var Glee = {
 		}
 		else if (type == "search") // here val is the text query
 		{
-			this.subText.html(Glee.Utils.filter("Search for " + val));
+			this.subText.html(Utils.filter("Search for " + val));
 			this.URL = Glee.options.searchEngineUrl + val;
-			this.subURL.html(Glee.Utils.filter(this.URL));
+			this.subURL.html(Utils.filter(this.URL));
 		}
 		else if (type == "msg") // here val is the message to be displayed
 		{
@@ -860,7 +860,7 @@ var Glee = {
     		// Up/Down Arrow keys: Page scrolling
     		else if (e.keyCode == 40 || e.keyCode == 38)
     		{
-    			Glee.Utils.simulateScroll((e.keyCode == 38 ? 1 : -1));
+    			Utils.simulateScroll((e.keyCode == 38 ? 1 : -1));
     		}
     		
     		// Open Tab Manager when shortcut key is pressed inside gleeBox
@@ -967,7 +967,7 @@ var Glee = {
     		else if (e.keyCode == 40 || e.keyCode == 38)
     		{
     		    // stop scrolling
-    			Glee.Utils.simulateScroll(0);
+    			Utils.simulateScroll(0);
     			// select the topmost element in view when scrolling using arrow keys ends
     			// so that when you scroll to another part of the page and then TAB,
     			// you're not pulled up to another position on the page

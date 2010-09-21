@@ -6,6 +6,8 @@ var cache = {
         theme: null,
         shortcutKey: null,
         searchEngineUrl: null,
+        commandEngine: "yubnub",
+        quixUrl: "http://quixapp.com/quix.txt",
         scrollingSpeed: null,
         disabledUrls: [],
         espStatus: null,

@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="js/chrome-options.js"></script>
 	<script type="text/javascript" src="js/db.js"></script>
 	<script type="text/javascript" src="js/defaults.js"></script>
+	<script type="text/javascript" src="js/utils.js"></script>
 </head>
 <body>
 	<div id="wrap">
@@ -33,7 +34,7 @@
 					</div>
 				</li>
 				<li>
-					<label class="option-label">Command Engine<br/><span class="subtext">Choose the engine you want to use for : commands</span></label>
+					<label class="option-label">Command Engine<br/><span class="subtext">Choose between <a href="http://yubnub.org/">Yubnub</a> or <a href="http://quixapp.com/">Quix</a> for : commands</span></label>
 					<div class="option-field">
 						<input name="command_engine" type="radio" value="yubnub" onclick="$('#quix_url').hide();"> Yubnub&nbsp;
 						<input name="command_engine" type="radio" value="quix" onclick="$('#quix_url').show();"> Quix&nbsp;&nbsp;<input style="display:none" id="quix_url" name="quix_url" type="text" size=36>
@@ -111,13 +112,13 @@
 					Some of these options require an understanding of <a href="http://docs.jquery.com/Selectors">jQuery selectors</a>. Find and share advanced gleeBox tips at <a href="http://tipjar.thegleebox.com">TipJar</a>.
 				</li>
 				<li>
-					<label class="option-label">Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label>
-					<ul id="scraper-commands" class="option-field">
-						<li><strong>??</strong> : Input Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-						<li><strong>?img</strong> : Linked Images<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-						<li><strong>?h</strong> : H1, H2 and H3 Elements<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-						<li><strong>?a</strong> : Links<span style="float:right;font-size:14px;color:gray">In-built</span></li>
-						<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" value="Name" style="float:left;margin-right:5px;width:10em" /><span style="float:left;line-height:20px"> : </span><input id="scraper-selector" type="text" value="jQuery Selector" style="float:left;margin-left:5px;width:16.76em" /><input style="float:right;" type="submit" value="Add" class="button"/></form></li>
+					<label>Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label><br><br>
+					<ul id="scraper-commands">
+						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
+						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" value="Name" style="float:left;margin-right:5px;width:100px" /><span style="float:left;line-height:20px"> : </span><input id="scraper-selector" type="text" value="jQuery Selector" style="float:left;margin-left:5px;width:550px" /><input style="float:right;" type="submit" value="Add" class="button"/></form></li>
 					</ul>
 				</li>
 				<li>
@@ -128,9 +129,9 @@
 					</div>
 				</li>
 				<li>
-					<label class="option-label">ESP Visions<br/><span class="subtext">Specify part of a page's URL and the default jQuery selector to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is set to On.</span></label>
-					<ul id="esp-modifiers" class="option-field">
-						<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" value="Page URL" style="width:14em;float:left;margin-right:5px;" /><span style="float:left;line-height:20px"> : </span><input id="add-esp-selector" type="text" value="jQuery Selector" style="width:13.38em;float:left;margin-left:5px"/><input type="submit" value="Add" style="float:right;" class="button"/></form></li>
+					<label>ESP Visions<br/><span class="subtext">Specify part of a page's URL and the default jQuery selector to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is set to On.</span></label><br><br>
+					<ul id="esp-modifiers">
+						<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" value="Page URL" style="width:300px;float:left;margin-right:5px;" /><span style="float:left;line-height:20px"> : </span><input id="add-esp-selector" type="text" value="jQuery Selector" style="width:360px;float:left;margin-left:5px"/><input type="submit" value="Add" style="float:right;" class="button"/></form></li>
 					</ul>
 				</li>
 			</ul>

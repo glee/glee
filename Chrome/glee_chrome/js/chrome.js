@@ -170,12 +170,12 @@ Glee.Browser.updateOptions = function(response) {
 	// check for disabled urls
 	if (prefs.status != undefined)
 	{
-		if (Glee.Utils.checkDomain() != 1 || prefs.status == 0)
+		if (Utils.checkDomain() != 1 || prefs.status == 0)
 			Glee.options.status = 0;
 		else
 			Glee.options.status = 1;
 	}
-	else if (Glee.Utils.checkDomain() != 1)
+	else if (Utils.checkDomain() != 1)
 		Glee.options.status = 0;
 	else
 		Glee.options.status = 1;
@@ -267,7 +267,7 @@ chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse){
 		if (request.value == "initStatus")
 		{
-			if (request.status && Glee.Utils.checkDomain())
+			if (request.status && Utils.checkDomain())
 				Glee.status = 1;
 			else
 				Glee.status = 0;

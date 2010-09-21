@@ -1,20 +1,71 @@
 var prefs = {};
 
+function makeItemEditable(el, type) {
+    if (type == "domain") {
+        Utils.makeEditable(el, function(newValue) {
+	        var id = el.parent().attr('id').slice(6);
+            prefs.disabledUrls[id] = newValue;
+            saveOption("disabledUrls", prefs.disabledUrls);
+		});
+    }
+    
+    else if (type == "scraper-name") {
+        Utils.makeEditable(el, function(newValue) {
+            var id = el.parent().attr('id').slice(7);
+            prefs.scrapers[id].command = newValue;
+            saveOption("scrapers", prefs.scrapers);
+        });
+    }
+    
+    else if (type == "scraper-sel") {
+        Utils.makeEditable(el, function(newValue) {
+            var id = el.parent().attr('id').slice(7);
+            prefs.scrapers[id].selector = newValue;
+            saveOption("scrapers", prefs.scrapers);
+        });
+    }
+    
+    else if (type == "esp-url") {
+        Utils.makeEditable(el, function(newValue) {
+            var id = el.parent().attr('id').slice(3);
+		    prefs.espModifiers[id].url = newValue;
+            saveOption("espModifiers", prefs.espModifiers);
+        });
+    }
+    
+    else if (type == "esp-sel") {
+        Utils.makeEditable(el, function(newValue) {
+            var id = el.parent().attr('id').slice(3);
+            prefs.espModifiers[id].selector = newValue;
+            saveOption("espModifiers", prefs.espModifiers);
+        });
+    }
+}
+
 function makeItemsEditable() {
 	// make domains editable
 	var domainNames = document.getElementsByClassName("domain-name");
 	var len = domainNames.length;
-	for (var i = 0; i < len; i++)
-		makeItemEditable(domainNames[i]);
-	
+	for (var i = 0; i < len; i++) {
+	    Utils.makeEditable(domainNames[i], function(newValue) {
+            prefs.disabledUrls[i] = val;
+            saveOption("disabledUrls", prefs.disabledUrls);
+		});
+	}
 	// make scrapers editable
 	var scraperNames = document.getElementsByClassName("scraper-name");
 	var scraperSels = document.getElementsByClassName("scraper-sel");
 	len = scraperNames.length;
 	for (var i = 0; i < len; i++)
 	{
-		makeItemEditable(scraperNames[i]);
-		makeItemEditable(scraperSels[i]);
+		Utils.makeEditable(scraperNames[i], function(newValue) {
+            prefs.scrapers[i].command = newValue;
+            saveOption("scrapers", prefs.scrapers);
+		});
+		Utils.makeEditable(scraperSels[i], function(newValue) {
+            prefs.scrapers[i].selector = newValue;
+            saveOption("scrapers", prefs.scrapers);
+		});
 	}
 	
 	// make visions editable
@@ -23,86 +74,15 @@ function makeItemsEditable() {
 	len = espUrls.length;
 	for (var i = 0; i < len; i++)
 	{
-		makeItemEditable(espUrls[i]);
-		makeItemEditable(espSels[i]);
+		Utils.makeEditable(espUrls[i], function(newValue) {
+		    prefs.espModifiers[i].url = newValue;
+            saveOption("espModifiers", prefs.espModifiers);
+		});
+		Utils.makeEditable(espSels[i], function(newValue) {
+            prefs.espModifiers[i].selector = newValue;
+            saveOption("espModifiers", prefs.espModifiers);
+		});
 	}
-}
-
-function makeItemEditable(el) {
-	function clickHandler(e) {
-	    if ((e.type == 'keydown' && e.keyCode != 13) || e.target.id == "temporary-edit-field") return true;
-	    e.stopPropagation();
-	    var editableField = $("#temporary-edit-field")[0];
-        if (editableField) {
-            closeEditableField(editableField);
-        }
-        var textField = document.createElement("input");
-        textField.type = "text";
-        textField.value = filter(this.innerHTML);
-        textField.id = "temporary-edit-field";
-        this.innerHTML = "";
-        // invalidate the class name to avoid CSS
-        this.className += "##";
-        this.appendChild(textField);
-        textField.focus();
-        
-        textField.addEventListener("keydown", function(e){
-         if (e.keyCode == 13 || e.keyCode == 27)
-             closeEditableField(this);
-        }, false);
-        
-		// add event listener to document to remove editable field (if it exists)
-        document.addEventListener("click", closeEditableField, false);
-        
-		return false;
-	}
-	
-	el.addEventListener(
-	"click",
-	clickHandler,
-    false
-	);
-	
-	el.addEventListener(
-	"keydown",
-	clickHandler,
-    false
-	);
-}
-
-function closeEditableField(e) {
-    var field = $("#temporary-edit-field")[0];
-    if (e.target == field)
-        return true;
-	var val = field.value;
-	var parent = field.parentNode;
-	parent.removeChild(field);
-	parent.className = parent.className.slice(0, parent.className.length - 2);
-	parent.innerHTML = val;
-	parent.focus();
-	// save changes
-	var container = parent.parentNode;
-	switch (container.className) {
-	    case "domain":  var id = container.id.slice(6);
-	                    prefs.disabledUrls[id] = val;
-	                    saveOption("disabledUrls", prefs.disabledUrls);
-	                    break;
-	    
-        case "scraper": var id = container.id.slice(7);
-                        var $container = $(container);
-                        prefs.scrapers[id].command = $container.find('.scraper-name').html();
-                        prefs.scrapers[id].selector = $container.find('.scraper-sel').html();
-                        saveOption("scrapers", prefs.scrapers);
-                        break;
-        
-        case "esp": var id = container.id.slice(3);
-                    var $container = $(container);
-                    prefs.espModifiers[id].url = $container.find('.esp-url').html();
-                    prefs.espModifiers[id].selector = $container.find('.esp-sel').html();
-                    saveOption("espModifiers", prefs.espModifiers);
-                    break;
-	}
-    document.removeEventListener("click", closeEditableField, false);
 }
 
 function addURL(value) {
@@ -124,8 +104,24 @@ function addItem(type, value1, value2, shouldSave) {
 	var listOfItems;
 	var lastEl;
 	var content;
+	var	no = $('li.' + type).length;
+	var container = $('<li>', {
+	   id: type + no,
+	   className: type
+	});
+	var inputBt = $("<input>", {
+	    className: 'button',
+	    style: 'float: right;',
+	    type: 'button',
+	    value: 'Remove'
+	})
+	.click(function(e) {
+	    removeItem(e, type);
+	});
+
+    container.append(inputBt);
+    
 	switch (type) {
-	    
 		case "domain":
 			var domainName = document.getElementById("add_domain");
 			if (!value1)
@@ -138,7 +134,13 @@ function addItem(type, value1, value2, shouldSave) {
 			{
 				listOfItems = document.getElementById("domains");
 				lastEl = document.getElementById("addDomainLI");
- 				content = "<span class='domain-name' tabIndex=0 >" + value1 + "</span>";
+ 				content = $('<span>', {
+ 				    className: "domain-name",
+ 				    tabIndex: 0,
+ 				    html: value1
+ 				});
+                makeItemEditable(content, "domain");
+                container.append(content);
  				if (shouldSave) {
                     addURL(value1);
  				}
@@ -162,7 +164,30 @@ function addItem(type, value1, value2, shouldSave) {
 			{
  				listOfItems = document.getElementById("scraper-commands");
 				lastEl = document.getElementById("addScraper");
- 				content = "<strong>?</strong><span class='scraper-name' tabIndex=0 >"+ value1 +"</span> : <span class='scraper-sel' tabIndex=0 >"+ value2 +"</span>";
+                var contentName = $('<span>', {
+                    className: "scraper-name",
+                    tabIndex: 0,
+                    html: value1
+                });
+                makeItemEditable(contentName, "scraper-name");
+                
+                var contentSelector = $('<span>', {
+                    className: "scraper-sel",
+                    tabIndex: 0,
+                    html: value2
+                });
+                makeItemEditable(contentSelector, "scraper-sel");
+                
+                var prefix = $("<span class='scraper-prefix'>?</span>");
+                var separator = $("<span>", {
+                    className: 'separator',
+                    html: ':'
+                });
+                container.append(prefix)
+                .append(contentName)
+                .append(separator)
+                .append(contentSelector);
+                
  				if (shouldSave) {
  				    addScraper({ command: value1, selector: value2, cssStyle: "GleeReaped", nullMessage: "Could not find any elements" });
  				}
@@ -185,7 +210,29 @@ function addItem(type, value1, value2, shouldSave) {
 			{
  				listOfItems = document.getElementById("esp-modifiers");
 				lastEl = document.getElementById("addEspModifier");
- 				content = "<span class='esp-url' tabIndex=0>" + value1 + "</span> : <span class='esp-sel' tabIndex=0 >" + value2 + "</span>";
+				var separator = $("<span>", {
+                    className: "separator",
+                    html: ':'
+                });
+                
+                var contentName = $('<span>', {
+                    className: "esp-url",
+                    tabIndex: 0,
+                    html: value1
+                });
+                makeItemEditable(contentName, "esp-url");
+                
+                var contentSelector = $('<span>', {
+                    className: "esp-sel",
+                    tabIndex: 0,
+                    html: value2
+                });
+                makeItemEditable(contentSelector, "esp-sel");
+                
+ 				container.append(contentName)
+ 				.append(separator)
+ 				.append(contentSelector);
+ 				
  				if (shouldSave) {
  				    addESP({url: value1, selector: value2});
  				}
@@ -193,32 +240,7 @@ function addItem(type, value1, value2, shouldSave) {
 			else
 				return false;
 	}
-	var	no = $('li.' + type).length;
-	var newEl = $('<li>', {
-	   id: type + no,
-	   className: type,
-	   html: content
-	});
-	var inputBt = $("<input>", {
-	    className: 'button',
-	    style: 'float: right',
-	    type: 'button',
-	    value: 'Remove'
-	})
-	.click(function(e) {
-	    removeItem(e, type);
-	});
-
-    newEl.append(inputBt)
-	listOfItems.insertBefore(newEl[0], lastEl);
-
-	var children = newEl[0].children;
-	var len = children.length;
-	for (var i = 0; i < len; i++)
-	{
-		if (children[i].tagName == "SPAN")
-			makeItemEditable(children[i]);
-	}
+	listOfItems.insertBefore(container[0], lastEl);
 }
 
 
