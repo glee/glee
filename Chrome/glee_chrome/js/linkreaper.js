@@ -9,7 +9,7 @@ var LinkReaper = {
 	reapAllLinks: function() {
 		this.selectedLinks = $("a");
 		//get rid of the hidden links
-		this.selectedLinks = $.grep(this.selectedLinks, Glee.Utils.isVisible);
+		this.selectedLinks = $.grep(this.selectedLinks, Utils.isVisible);
 		//get rid of the linked images. we only want textual links
 		var hasImage = function(el) {
 			return ($(el).find('img').length == 0);
@@ -65,7 +65,7 @@ var LinkReaper = {
 		else if (tag == "button")
 			index = el.text().toLowerCase().indexOf(term.toLowerCase());
 
-		if (index != -1 && Glee.Utils.isVisible(el)) {
+		if (index != -1 && Utils.isVisible(el)) {
 			el.addClass('GleeReaped');
 			Glee.setSubText(el, "el");
 			return true;
@@ -78,7 +78,7 @@ var LinkReaper = {
 	reapWhatever: function(selector) {
 		LinkReaper.selectedLinks = $(selector);
 		LinkReaper.selectedLinks.addClass('GleeReaped');
-		LinkReaper.selectedLinks = $.grep(LinkReaper.selectedLinks, Glee.Utils.isVisible);
+		LinkReaper.selectedLinks = $.grep(LinkReaper.selectedLinks, Utils.isVisible);
 		LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
 		LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";

@@ -114,7 +114,7 @@ Utils = {
 		}
 		else if (Glee.scrollState == 0) {
 			Glee.scrollState = val;
-			Glee.Utils.infiniteScroll();
+            Utils.infiniteScroll();
 		}
 	},
 	

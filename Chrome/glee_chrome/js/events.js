@@ -151,7 +151,7 @@ Glee.Events = {
         if (Glee.options.commandEngine == "yubnub") {
             if (newTab) {
      		    Glee.reset();
-                Glee.Browser.openNewTab(u);
+                Glee.Browser.openNewTab(u, false);
             }
             else {
                 window.location = u;
@@ -167,7 +167,7 @@ Glee.Events = {
   			
      		if (newTab) {
                 Glee.reset();
-     		    Glee.Browser.openNewTab(u + "&mode=direct");
+     		    Glee.Browser.openNewTab(u + "&mode=direct", false);
      		}
      		else if (d.substr(0, 4) != 'http') {
                 window.location = u + '&mode=direct';
@@ -274,7 +274,7 @@ Glee.Events = {
 			// Open in new tab
 			if (e.shiftKey)
 			{
-				Glee.Browser.openNewTab(Glee.URL,false);
+				Glee.Browser.openNewTab(Glee.URL, false);
 				// If it is not a scraper command, clear gleebox
 				if (Glee.searchField.attr('value').indexOf("?") == -1)
 					Glee.searchField.attr('value', '');
