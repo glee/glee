@@ -243,7 +243,6 @@ function addItem(type, value1, value2, shouldSave) {
 	listOfItems.insertBefore(container[0], lastEl);
 }
 
-
 function removeItem(e, type) {
 	var listOfItems;
 	var i = e.target.parentNode.id.substr(type.length);
@@ -369,6 +368,16 @@ function importSettings() {
     var text = 'Paste previously exported settings here:';
     showBackupPopup(text, 'import');
     $("#settingsText").text('');
+}
+
+function devPackCallback(data) {
+	var text = "This is a collection of our favorite settings, selectors and visions. Apply at your own risk.";
+	showBackupPopup(text, 'import');
+	$("#settingsText").text(data);
+}
+
+function importDevPack() {	
+	$.get('http://thegleebox.com/app/devpack.txt', devPackCallback);
 }
 
 // called when import button is clicked

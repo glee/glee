@@ -51,6 +51,7 @@
 	"permissions": [
 		"tabs",
 		"http://api.bit.ly/",
+		"http://thegleebox.com/*",
 		"bookmarks"
 	]
 }
