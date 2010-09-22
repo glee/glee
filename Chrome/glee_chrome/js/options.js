@@ -484,6 +484,7 @@ function attachListeners() {
 function changeSearchEngine(engine) {
     var value = "http://www.google.com/search?q=";
     switch (engine) {
+		case "gssl": value = "https://encrypted.google.com/search?q="; break;
         case "bing": value = "http://www.bing.com/search?q="; break;
         case "yahoo": value = "http://search.yahoo.com/search?p="; break;
     }

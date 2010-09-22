@@ -29,6 +29,7 @@
 					<div class="option-field">
 						<input id="search_engine" name="search_engine" type="text" size=56><br/>
 						<a href="#" onclick='javascript:changeSearchEngine("google");return false;'>Google</a>&nbsp;&nbsp;
+						<a href="#" onclick='javascript:changeSearchEngine("gssl");return false;'>Google SSL</a>&nbsp;&nbsp;
 						<a href="#" onclick='javascript:changeSearchEngine("bing");return false;'>Bing</a>&nbsp;&nbsp;
 						<a href="#" onclick='javascript:changeSearchEngine("yahoo");return false;'>Yahoo</a>
 					</div>
@@ -138,12 +139,14 @@
 			<h2>Backup</h2>
 			<ul class="options">
 				<li style="font-size:14px;color:gray;line-height:20px;margin-bottom:10px">
-					Export your current gleeBox settings to a file or import previously backed up settings from a gleeBox installation.
+					Export your current gleeBox settings to a file or import previously backed up settings from a gleeBox installation.<br>
+					<strong>Importing will override all of your current settings</strong>
 				</li>
 				<div style="clear:both">
 					<input type="button" class="button" value="&nbsp;&nbsp;Export&nbsp;&nbsp;" onclick= "exportSettings();"/>&nbsp;&nbsp;
 					<input type="button" class="button" value="&nbsp;&nbsp;Import&nbsp;&nbsp;" onclick= "importSettings()"/>
 				</div>
+				<br>
 			</ul>
 			<h2>Sync <span style="color: #aaa; font-size: 14px; font-style: italic;">(experimental)</span></h2>
 			<ul class="options">
