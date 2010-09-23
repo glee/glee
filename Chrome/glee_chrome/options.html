@@ -114,11 +114,12 @@
 				</li>
 				<li>
 					<label>Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label><br><br>
+					<b>?</b><input type="text" id="scraper-search-field" value="Search..." class="before-focus" />
 					<ul id="scraper-commands">
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
 						<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" value="Name" style="float:left;margin-right:5px;width:100px" /><span style="float:left;line-height:20px"> : </span><input id="scraper-selector" type="text" value="jQuery Selector" style="float:left;margin-left:5px;width:550px" /><input style="float:right;" type="submit" value="Add" class="button"/></form></li>
 					</ul>
 				</li>
@@ -131,6 +132,7 @@
 				</li>
 				<li>
 					<label>ESP Visions<br/><span class="subtext">Specify part of a page's URL and the default jQuery selector to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is set to On.</span></label><br><br>
+					<input type="text" id="esp-search-field" value="Search..." class="before-focus" />
 					<ul id="esp-modifiers">
 						<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" value="Page URL" style="width:300px;float:left;margin-right:5px;" /><span style="float:left;line-height:20px"> : </span><input id="add-esp-selector" type="text" value="jQuery Selector" style="width:360px;float:left;margin-left:5px"/><input type="submit" value="Add" style="float:right;" class="button"/></form></li>
 					</ul>

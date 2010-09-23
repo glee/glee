@@ -12,6 +12,7 @@ function initSettings(response)
 {
     prefs = response;
 	initDefaultTexts();
+	initFiltering();
 
     // disabled urls
 	var len = prefs.disabledUrls.length;

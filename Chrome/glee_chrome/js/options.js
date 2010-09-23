@@ -328,6 +328,9 @@ function clearDefaultText(e) {
     if (target.value == target.defaultText) {
         target.value = '';
     }
+    else if (e.type == "click") {
+        Utils.selectAllText(target);
+    }
 }
 
 function replaceDefaultText(e) {
@@ -346,8 +349,8 @@ function initDefaultTexts() {
         
         if (theInput.type == 'text') {
             /* Add event handlers */
-            theInput.addEventListener('focus', clearDefaultText, false);
-            theInput.addEventListener('blur', replaceDefaultText, false);
+            $(theInput).bind('focus click', clearDefaultText)
+            .bind('blur', replaceDefaultText);
             /* Save the current value */
             if (theInput.value != '') {
                 theInput.defaultText = theInput.value;
@@ -376,7 +379,7 @@ function devPackCallback(data) {
 	$("#settingsText").text(data);
 }
 
-function importDevPack() {	
+function importDevPack() {
 	$.get('http://thegleebox.com/app/devpack.txt', devPackCallback);
 }
 
@@ -417,7 +420,9 @@ function showBackupPopup(infoText, func) {
     $('#popup').fadeIn(200);
     
     setTimeout(function() {
-        $('#settingsText')[0].focus();
+        var field = $('#settingsText')[0];
+        Utils.selectAllText(field);
+        field.focus();
     }, 0);
 }
 
@@ -500,4 +505,46 @@ function changeSearchEngine(engine) {
     var ui = $('#search_engine');
     ui.attr('value', value)
     .keyup();
+}
+
+/** filtering **/
+
+function initFiltering() {
+    // scraper
+    $("#scraper-search-field")
+    .keyup(function(e) {
+        filterScraper(e.target.value);
+    });
+    
+    // esp
+    $("#esp-search-field")
+    .keyup(function(e) {
+        filterESP(e.target.value);
+    });
+}
+
+function filterESP(value) {
+    var espDivs = $(".esp");
+    var urls = $(".esp-url");
+    var len = espDivs.length;
+    for (var i = 0; i < len; i++) {
+        var $div = $(espDivs[i]);
+        if (urls[i].innerHTML.indexOf(value) == -1)
+            $div.hide();
+        else
+            $div.show();
+    }
+}
+
+function filterScraper(value) {
+    var scraperDivs = $(".scraper, .default-scraper");
+    var names = $(".scraper-name, .default-scraper-name");
+    var len = scraperDivs.length;
+    for (var i = 0; i < len; i++) {
+        var $div = $(scraperDivs[i]);
+        if (names[i].innerHTML.indexOf(value) == -1)
+            $div.hide();
+        else
+            $div.show();
+    }
 }

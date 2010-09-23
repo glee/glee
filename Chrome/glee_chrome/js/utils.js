@@ -184,6 +184,8 @@ Utils = {
                 elWidth = options.fixedWidth;
             else 
                 elWidth = el.width();
+            var fontSize = el.css('font-size');
+            var fontFamily = el.css('font-family');
             var value = el.text();
             // create a textfield
             var input = $('<input>', {
@@ -191,7 +193,11 @@ Utils = {
                 value: value,
                 id: 'gleebox-editing-field'
             })
-            .width(elWidth);
+            .width(elWidth)
+            .css({
+                'font-family': fontFamily,
+                'font-size': fontSize
+            });
             
             el.before(input);
             input.focus();

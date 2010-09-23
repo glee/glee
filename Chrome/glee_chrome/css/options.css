@@ -204,7 +204,11 @@ textarea {
     width: 100px;
 }
 
-.esp-url {
+#scraper-search-field {
+    width: 100px;
+}
+
+.esp-url, #esp-search-field {
     width: 300px;
 }
 
@@ -240,7 +244,7 @@ textarea {
     z-index: 10000;
     padding: 5px;
     width: 40%;
-    height: 48%;
+    height: 50%;
     background-color: #fff;
     border-radius: 2px;
     line-height: 20px;

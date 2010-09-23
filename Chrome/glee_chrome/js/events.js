@@ -180,14 +180,14 @@ Glee.Events = {
                     Glee.closeBoxWithoutBlur();
     			}
     			else {
-    				var sc = document.createElement('script');
-    				sc.src = u;
-    				sc.id = 'quix';
-    				sc.type = 'text/javascript';
-                    void(heads[0].appendChild(sc));
-                    setTimeout(function() {
-                        Glee.closeBox();
-                    }, 0);
+    			    // a little slower than yubnub, but well
+    			    // atleast the quix server is faster than yubnub
+                    var sc = document.createElement('script');
+                    sc.src = u;
+                    sc.id = 'quix';
+                    sc.type = 'text/javascript';
+                    heads[0].appendChild(sc);
+                    Glee.closeBox();
     			}
     		}
 	    }

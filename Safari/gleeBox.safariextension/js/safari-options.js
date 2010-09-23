@@ -19,7 +19,8 @@ function initSettings(response)
     prefs = response;
     prefs.version = "1.6.3";
 	initDefaultTexts();
-
+    initFiltering();
+    
     // disabled urls
 	var len = prefs.disabledUrls.length;
 	if (len != 0)
