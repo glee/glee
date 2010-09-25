@@ -281,6 +281,10 @@ var Glee = {
 			Glee.searchField.attr('value', '');
 			Glee.searchBox.fadeIn(150);
 			Glee.searchField[0].focus();
+			
+	        // If ESP vision exists, execute it
+            if (Glee.options.espStatus)
+                Glee.fireEsp();
 		}
 		else
 		{
@@ -813,11 +817,15 @@ var Glee = {
     	});
     	
     	Glee.searchField.bind('keydown', function(e) {
-            // Escape: Hides gleeBox
+            // Escape: Hides gleeBox if empty. Otherwise, clears gleeBox
     		if (e.keyCode == 27)
     		{
     			e.preventDefault();
-    			Glee.closeBox();
+                // if (Glee.searchField.attr('value') == "") {
+			    Glee.closeBox();
+                // }
+                // else
+                //     Glee.reset();
     		}
     		
     		// TAB: Scroll between elements/bookmarks

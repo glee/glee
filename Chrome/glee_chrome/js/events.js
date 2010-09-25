@@ -253,9 +253,9 @@ Glee.Events = {
 						Glee.closeBoxWithoutBlur();
 					}
 
-					// If link is to be opened in a new tab & it isn't a scraper command, clear gleebox
-					else if (Glee.searchField.attr('value').indexOf("?") == -1)
-						Glee.searchField.attr('value', '');
+                    // If link is to be opened in a new tab & it isn't a scraper command, clear gleebox
+                    else if (Glee.searchField.attr('value').indexOf("?") == -1)
+                        Glee.searchField.attr('value', '');
                     
 					return false;
 				}
@@ -274,9 +274,9 @@ Glee.Events = {
 			if (e.shiftKey)
 			{
 				Glee.Browser.openNewTab(Glee.URL, false);
-				// If it is not a scraper command, clear gleebox
-				if (Glee.searchField.attr('value').indexOf("?") == -1)
-					Glee.searchField.attr('value', '');
+                // If it is not a scraper command, clear gleebox
+                if (Glee.searchField.attr('value').indexOf("?") == -1)
+                    Glee.searchField.attr('value', '');
 				return false;
 			}
 			else
