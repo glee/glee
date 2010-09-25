@@ -238,3 +238,7 @@ function translateForExport(prefs) {
 function translateForImport(importPrefs) {
     return importPrefs;
 }
+
+function copyToClipboard(text) {
+    chrome.extension.sendRequest({value: "copyToClipboard", text: text}, function(){});
+}

@@ -51,7 +51,6 @@ function initCommandCache() {
 
 // add listener to respond to requests from content script
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    
     switch (request.value) {
         case "createTab"        :   chrome.tabs.create({ url: request.url, selected: request.selected }, null);
                                     sendResponse({});

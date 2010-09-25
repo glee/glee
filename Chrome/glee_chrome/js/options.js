@@ -374,7 +374,7 @@ function importSettings() {
 }
 
 function devPackCallback(data) {
-	var text = "This is a collection of our favorite settings, selectors and visions. Apply at your own risk.";
+	var text = "A collection of our favorite settings, scrapers and visions. Apply at your own risk. Follow <a href='http://twitter.com/thegleebox'>@thegleebox</a> to know when we update it.";
 	showBackupPopup(text, 'import');
 	$("#settingsText").text(data);
 }
@@ -388,7 +388,8 @@ function importAndApply() {
     try {
         var jsonString = $('#settingsText')[0].value;
         var tempPref = translateForImport(JSON.parse(jsonString));
-        tempPref.version = prefs.version;
+        // merge
+        tempPref = mergeSettings(tempPref, prefs);
         clearSettings();
         initSettings(tempPref);
         prefs = tempPref;
@@ -400,6 +401,43 @@ function importAndApply() {
         $('#backupInfo').text("The import format is incorrect!");
         $('#settingsText')[0].focus();
     }
+}
+
+function mergeSettings(a, b) {
+    // for conflicting scrapers/visions, a takes priority
+    // merging scrapers
+    var a_len = a.scrapers.length;
+    var b_len = b.scrapers.length;
+    for (var i = 0; i < b_len; i++) {
+        var found = false;
+        for (var j = 0; j < a_len; j++) {
+            if (b.scrapers[i].command == a.scrapers[j].command) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            a.scrapers.push(b.scrapers[i]);
+        }
+    }
+    
+    // merging ESP visions
+    var a_len = a.espModifiers.length;
+    var b_len = b.espModifiers.length;
+    for (var i = 0; i < b_len; i++) {
+        var found = false;
+        for (var j = 0; j < a_len; j++) {
+            if (b.espModifiers[i].url == a.espModifiers[j].url) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            a.espModifiers.push(b.espModifiers[i]);
+        }
+    }
+    
+    return a;
 }
 
 function showBackupPopup(infoText, func) {
@@ -416,7 +454,7 @@ function showBackupPopup(infoText, func) {
         $('#exportButton').show();
     }
 
-    $('#backupInfo').text(infoText);
+    $('#backupInfo').html(infoText);
     $('#popup').fadeIn(200);
     
     setTimeout(function() {
@@ -438,12 +476,12 @@ function initBackupPopup() {
     var importBtn = $('<input type="button" class="button" value="Import Settings" id="importButton" />')
     .appendTo(popup);
     
-    // // copy to clipboard button (displayed in export)
-    // $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
-    // .appendTo(popup)
-    // .click(function(e) {
-    //     chrome.extension.sendRequest({value: "copyToClipboard", text: $('#settingsText')[0].value}, function(){});
-    // });
+    // copy to clipboard button (displayed in export)
+    $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
+    .appendTo(popup)
+    .click(function(e) {
+        copyToClipboard($('#settingsText')[0].value);
+    });
     
     $('body').append(popup);
     

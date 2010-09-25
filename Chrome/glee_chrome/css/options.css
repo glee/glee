@@ -242,7 +242,8 @@ textarea {
     color: gray;
     font-size: 16px;
     z-index: 10000;
-    padding: 5px;
+    padding: 10px;
+    border-radius: 5px;
     width: 40%;
     height: 50%;
     background-color: #fff;
