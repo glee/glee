@@ -30,7 +30,6 @@ Glee.Events = {
     
     // called when a non-command query is entered by user
     queryNonCommand: function() {
-        LinkReaper.unreapAllLinks();
 		Glee.commandMode = false;
 
 		// if a previous query's timer exists, reset it
@@ -45,7 +44,7 @@ Glee.Events = {
 				Glee.setSubText(Glee.selectedElement,"el");
 				Glee.scrollToElement(Glee.selectedElement);
 				Glee.toggleActivity(0);
-			}, 300);
+			}, Glee.defaults.linkSearchTimer);
 		}
 		else
 		{

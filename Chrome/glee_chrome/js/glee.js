@@ -16,7 +16,9 @@ var Glee = {
     	pageScrollSpeed: 4,
     	
     	// autocomplete cache size
-    	cacheSize: 20
+    	cacheSize: 20,
+    	
+    	linkSearchTimer: 250
     },
 
 	options: {
@@ -783,7 +785,6 @@ var Glee = {
 	},
 	
 	addListeners: function() {
-	    
         $(window).bind('keydown', function(e) {
     		var target = e.target || e.srcElement;
     		if (Glee.options.status && Glee.options.status != 0)
@@ -857,7 +858,6 @@ var Glee = {
 
     			if (value != "")
     			{
-
     				Glee.toggleActivity(1);
 
     				// Check if the query is not a command
