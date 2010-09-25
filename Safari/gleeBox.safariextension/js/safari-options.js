@@ -161,4 +161,4 @@ function saveAllOptions() {
 
 function propagate() {
     safari.self.tab.dispatchMessage("propagateOptions");
-};
+}

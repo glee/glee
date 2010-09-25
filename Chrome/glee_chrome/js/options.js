@@ -477,11 +477,11 @@ function initBackupPopup() {
     .appendTo(popup);
     
     // copy to clipboard button (displayed in export)
-    $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
-    .appendTo(popup)
-    .click(function(e) {
-        copyToClipboard($('#settingsText')[0].value);
-    });
+    // $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
+    // .appendTo(popup)
+    // .click(function(e) {
+    //     copyToClipboard($('#settingsText')[0].value);
+    // });
     
     $('body').append(popup);
     

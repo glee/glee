@@ -225,12 +225,13 @@ textarea {
 }
 
 #footer {
-	margin-top: 50px;
+	margin-top: 10px;
 	border-top: 1px solid #ccc;
 	font-size: 14px;
 	line-height: 25px;
 	text-align: center;
 	color: #555;
+	clear: both;
 }
 
 /* Modal popup */

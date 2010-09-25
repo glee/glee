@@ -92,10 +92,10 @@
 					<label>Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label><br><br>
 					<b>?</b><input type="text" id="scraper-search-field" value="Search..." class="before-focus" />
 					<ul id="scraper-commands">
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-						<li><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
 						<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" value="Name" style="float:left;margin-right:5px;width:100px" /><span style="float:left;line-height:20px"> : </span><input id="scraper-selector" type="text" value="jQuery Selector" style="float:left;margin-left:5px;width:550px" /><input style="float:right;" type="submit" value="Add" class="button"/></form></li>
 					</ul>
 				</li>
@@ -117,11 +117,13 @@
 			<h2>Backup</h2>
 			<ul class="options">
 				<li style="font-size:14px;color:gray;line-height:20px;margin-bottom:10px">
-					Export your current gleeBox settings to a file or import previously backed up settings from a gleeBox installation.
+					Export your current gleeBox settings to a file or import previously backed up settings from a gleeBox installation.<br><br>
+					<strong>Importing will overwrite your current settings. Your existing scrapers & visions will be preserved (only ones with conflicting name/url will be overwritten)</strong>
 				</li>
 				<div style="clear:both">
 					<input type="button" class="button" value="&nbsp;&nbsp;Export&nbsp;&nbsp;" onclick= "exportSettings();"/>&nbsp;&nbsp;
-					<input type="button" class="button" value="&nbsp;&nbsp;Import&nbsp;&nbsp;" onclick= "importSettings()"/>
+					<input type="button" class="button" value="&nbsp;&nbsp;Import&nbsp;&nbsp;" onclick= "importSettings()"/>&nbsp;&nbsp;
+					<input type="button" class="button" value="&nbsp;&nbsp;Import Developer Pack&nbsp;&nbsp;" onclick= "importDevPack();"/><br><br>
 				</div>
 			</ul>
 					<br><br>
