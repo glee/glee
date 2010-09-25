@@ -279,10 +279,6 @@ var Glee = {
 			Glee.searchField.attr('value', '');
 			Glee.searchBox.fadeIn(150);
 			Glee.searchField[0].focus();
-			
-			// If ESP vision exists, execute it
-			if (Glee.options.espStatus)
-				Glee.fireEsp();
 		}
 		else
 		{
@@ -398,16 +394,17 @@ var Glee = {
         // this.attachScraperListener(scraper);
 	},
 	
-	// attach a livequery listener, so that when a new element belonging to the current scraper's selector gets inserted into the DOM, it gets added to the selected elements
+	// attach a livequery listener, so that when a new element belonging to the current scraper/vision's selector gets inserted into the DOM, it gets added to the selected elements
 	attachScraperListener: function(scraper) {
         $(scraper.selector).livequery(function() {
+            console.log("livequery called");
             $this = $(this);
             if(!Utils.isVisible(this))
                 return;
             LinkReaper.selectedLinks.push(this);
             LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
-            // LinkReaper.selectedLinks = Glee.addElementByPosition($this, LinkReaper.selectedLinks);
             $this.addClass(scraper.cssStyle);
+            LinkReaper.traversePosition = 0;
         });
 	},
 	
@@ -418,51 +415,25 @@ var Glee = {
 	    }
 	},
 	
-	addElementByPosition: function(el, list) {
-	    var len = list.length;
-	    if (len == 0) {
-            list.push(el);
-            return list;
-	    }
-	    var el_top = el.offset().top;
-	    var el_diff = el_top - window.pageYOffset;
-        // console.log("Element diff: " + el_diff);
+	sortElementsByPosition: function(els) {
+	    var len = els.length;
 	    for (var i = 0; i < len; i++) {
-	        var diff = $(list[i]).offset().top - window.pageYOffset;
-            // console.log("Diff of " + list[i] + " : " + diff);
-	        if (el_diff < diff) {
-                list.splice(i, 0, el);
-                return list;
-	        }
+            var small_diff = $(els[i]).offset().top - window.pageYOffset;
+            var pos = i;
+            for (var j = i + 1; j < len; j++) {
+                var j_diff = $(els[j]).offset().top - window.pageYOffset;
+                if ((j_diff > 0 && (j_diff < small_diff || small_diff < 0)) ||
+                (small_diff < 0 && j_diff < small_diff))
+                {
+                    small_diff = j_diff;
+                    pos = j;
+                }
+            }
+            temp = els[pos];
+            els[pos] = els[i];
+            els[i] = temp;
 	    }
-        list.push(el); return list;
-	},
-	
-	sortElementsByPosition: function(elements) {
-		// Sort elements
-		var sorted_els = Utils.mergeSort(elements);
-		
-		// Begin the array from the element closest to the current position
-		var len = sorted_els.length;
-		var pos = 0;
-		var diff = null;
-		for (var i = 0; i < len; i++)
-		{
-			var new_diff = $(sorted_els[i]).offset().top - window.pageYOffset;
-			if ((new_diff < diff || diff == null) && new_diff >= 0)
-			{
-				diff = new_diff;
-				pos = i;
-			}
-		}
-		if (pos != 0)
-		{
-			var newly_sorted_els = sorted_els.splice(pos, len - pos);
-			$.merge(newly_sorted_els, sorted_els);
-			return newly_sorted_els;
-		}
-		else
-			return sorted_els;
+	    return els;
 	},
 	
 	setSubText: function(val, type) {
@@ -841,7 +812,6 @@ var Glee = {
     	});
     	
     	Glee.searchField.bind('keydown', function(e) {
-
             // Escape: Hides gleeBox
     		if (e.keyCode == 27)
     		{
@@ -854,7 +824,7 @@ var Glee = {
     		{
     			e.stopPropagation();
     			e.preventDefault();
-    			Glee.Events.onTabKeyDown(e);
+			    Glee.Events.onTabKeyDown(e);
     		}
     		
     		// Up/Down Arrow keys: Page scrolling
@@ -972,7 +942,7 @@ var Glee = {
     			// so that when you scroll to another part of the page and then TAB,
     			// you're not pulled up to another position on the page
     			if (Glee.selectedElement) {
-    			    LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
+                    LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
                     LinkReaper.unHighlight(Glee.selectedElement);
                     Glee.selectedElement = LinkReaper.getFirst();
                     Glee.setSubText(Glee.selectedElement, "el");

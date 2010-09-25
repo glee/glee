@@ -41,8 +41,7 @@
 			"js/linkreaper.js",
 			"js/listmanager.js",
 			"js/selectorGenerator.js",
-			"js/jquery.autocomplete.js",
-			"js/jquery.livequery.js"
+			"js/jquery.autocomplete.js"
 		],
 		
 		"run_at":"document_start"

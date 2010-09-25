@@ -132,37 +132,6 @@ Utils = {
 			duration);
 	},
 	
-	mergeSort: function(els) {
-		var mid = Math.floor(els.length/2);
-		if (mid < 1)
-			return els;
-		var left = [];
-		var right = [];
-
-		while(els.length > mid)
-			left.push(els.shift());
-
-		while(els.length > 0)
-			right.push(els.shift());
-
-		left = this.mergeSort(left);
-		right = this.mergeSort(right);
-
-		while( (left.length > 0) && (right.length > 0) )
-		{
-			// merging order based on top offset value
-			if ($(right[0]).offset().top < $(left[0]).offset().top)
-				els.push(right.shift());
-			else 
-				els.push(left.shift());
-		}
-		while (left.length > 0)
-			els.push(left.shift());
-		while (right.length > 0)
-			els.push(right.shift());
-		return els;
-	},
-	
 	selectAllText: function(el) {
         if (!el || !el.value || el.value == "")
             return false;
