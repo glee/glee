@@ -6,6 +6,7 @@
 	* ?? selects the existing text in a textfield/textarea
 	* Scrolling using arrow keys selects the topmost visible element (when esp vision/scraper is active)
 	* Radios/checkboxes can be checked/unchecked using gleebox
+	* Performance improvements including faster link search
 * Changed layout for scrapers and visions in Options page. Also, ability to filter through them.
 * Added !snap and !plugins commands (Chrome only)
 * Safari bugfixes

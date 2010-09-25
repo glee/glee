@@ -817,7 +817,7 @@ var Glee = {
     	});
     	
     	Glee.searchField.bind('keydown', function(e) {
-            // Escape: Hides gleeBox if empty. Otherwise, clears gleeBox
+            // Escape: Hides gleeBox.
     		if (e.keyCode == 27)
     		{
     			e.preventDefault();
