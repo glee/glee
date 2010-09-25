@@ -6,6 +6,8 @@ function makeItemEditable(el, type) {
 	        var id = el.parent().attr('id').slice(6);
             prefs.disabledUrls[id] = newValue;
             saveOption("disabledUrls", prefs.disabledUrls);
+		}, {
+		    fixedWidth: 300
 		});
     }
     
