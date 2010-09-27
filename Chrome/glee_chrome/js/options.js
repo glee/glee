@@ -371,7 +371,7 @@ function exportSettings() {
 }
 
 function importSettings() {
-    var text = 'Paste previously exported settings here:';
+    var text = 'Paste previously exported settings here. This will overwrite all your current settings.';
     showBackupPopup(text, 'import');
     $("#settingsText").text('');
 }
