@@ -1,4 +1,5 @@
 var prefs = {};
+var textfieldTimer = null;
 
 function makeItemEditable(el, type) {
     if (type == "domain") {
@@ -376,8 +377,8 @@ function importSettings() {
 }
 
 function devPackCallback(data) {
-	var text = "A collection of our favorite settings, scrapers and visions. Apply at your own risk. Follow <a href='http://twitter.com/thegleebox'>@thegleebox</a> to know when we update it.";
-	showBackupPopup(text, 'import');
+	var text = "A collection of our favorite scrapers and visions. Your other settings will be preserved. Follow <a href='http://twitter.com/thegleebox'>@thegleebox</a> to know when we update it.";
+	showBackupPopup(text, 'importDevPack');
 	$("#settingsText").text(data);
 }
 
@@ -391,12 +392,32 @@ function importAndApply() {
         var jsonString = $('#settingsText')[0].value;
         var tempPref = translateForImport(JSON.parse(jsonString));
         // merge
-        tempPref = mergeSettings(tempPref, prefs);
+        // tempPref = mergeSettings(tempPref, prefs);
         clearSettings();
         initSettings(tempPref);
         prefs = tempPref;
         saveAllOptions();
         $('#backupInfo').text("Settings successfully imported!");
+        hideBackupPopup();
+    }
+    catch(e) {
+        $('#backupInfo').text("The import format is incorrect!");
+        $('#settingsText')[0].focus();
+    }
+}
+
+function applyDevPack() {
+    try {
+        var jsonString = $('#settingsText')[0].value;
+        var tempPref = translateForImport(JSON.parse(jsonString));
+        // merge
+        tempPref = mergeSettings(tempPref, prefs);
+        prefs.scrapers = tempPref.scrapers;
+        prefs.espModifiers = tempPref.espModifiers;
+        clearSettings();
+        initSettings(prefs);
+        saveAllOptions();
+        $('#backupInfo').text("Developer Pack successfully imported!");
         hideBackupPopup();
     }
     catch(e) {
@@ -449,11 +470,15 @@ function showBackupPopup(infoText, func) {
         
     if (func == 'import') {
         $('#importButton').show();
-        $('#exportButton').hide();
+        $('#importDevPackButton').hide();
     }
-    else {
+    else if (func == 'export'){
         $('#importButton').hide();
-        $('#exportButton').show();
+        $('#importDevPackButton').hide();
+    }
+    else if (func == 'importDevPack') {
+        $('#importDevPackButton').show();
+        $('#importButton').hide();
     }
 
     $('#backupInfo').html(infoText);
@@ -476,7 +501,13 @@ function initBackupPopup() {
     
     // import settings button
     var importBtn = $('<input type="button" class="button" value="Import Settings" id="importButton" />')
-    .appendTo(popup);
+    .appendTo(popup)
+    .click(importAndApply);
+    
+    // import dev pack button
+    var importDevPackBtn = $('<input type="button" class="button" value="Import Scrapers & Visions" id="importDevPackButton" />')
+    .appendTo(popup)
+    .click(applyDevPack);
     
     // copy to clipboard button (displayed in export)
     // $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
@@ -504,8 +535,6 @@ function initBackupPopup() {
         if (backupPopup.length != 0)
             hideBackupPopup();
     });
-    
-    importBtn.click(importAndApply);
 }
 
 function hideBackupPopup() {
@@ -529,9 +558,16 @@ function attachListeners() {
         saveOption(e.target.name, e.target.value);
     });
     
+    
     // textfields
-    $('.option-field input[type=text]:not(#add_domain, #scraper-name, #scraper-selector, #add-esp-url, #add-esp-selector)').keyup(function(e) {
-        saveOption(e.target.name, e.target.value);
+    $('.option-field input[type=text]:not(#add_domain, #scraper-name, #scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e) {
+        if (textfieldTimer) {
+            clearTimeout(textfieldTimer);
+            textfieldTimer = null;
+        }
+        textfieldTimer = setTimeout(function() {
+            saveOption(e.target.name, e.target.value);
+        }, 400);
     });
 }
 

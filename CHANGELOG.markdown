@@ -1,6 +1,7 @@
 [To be released]
 
 * Added support for Quix
+* Added Developer Pack
 * !tweet now uses the official twitter share bookmarklet
 * Usability improvements:
 	* ?? selects the existing text in a textfield/textarea
