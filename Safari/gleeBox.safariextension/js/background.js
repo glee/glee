@@ -24,10 +24,10 @@ function init() {
 }
 
 function versionCheck() {
-    if (cache.prefs.version != '1.6.3')
+    if (cache.prefs.version != '1.8')
     {
-        cache.prefs.version = '1.6.3';
-        saveOption('version', '1.6.3');
+        cache.prefs.version = '1.8';
+        saveOption('version', '1.8');
 
         // open update.html
         var activeWindow = safari.application.activeBrowserWindow;
