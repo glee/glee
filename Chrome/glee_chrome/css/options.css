@@ -216,7 +216,7 @@ textarea {
     width: 550px;
     display: inline-block;
     font-size: 12px;
-    font-family: Monaco, Consolas;
+    font-family: Monaco, "Lucida Console", monospace;
     float: right;
 }
 
