@@ -117,7 +117,7 @@ Glee.Events = {
 		// If it a valid page command, execute it
 		if (typeof(Glee.URL.name) != "undefined")
 		{
-			Glee.Browser.registerCommandHit("Page Command", Glee.searchField.attr('value'));
+			Glee.Browser.registerCommandHit("Page Command", Glee.searchField.attr('value').split(" ")[0]);
 		    if (e.shiftKey)
 		        Glee.execCommand(Glee.URL, true);
 			else
@@ -127,7 +127,7 @@ Glee.Events = {
 		// execute bookmarklet
 		else
 		{
-			Glee.Browser.registerCommandHit("Bookmarklet", Glee.searchField.attr('value'));
+			Glee.Browser.registerCommandHit("Bookmarklet", Glee.searchField.attr('value').split(" ")[0]);
 			url = Glee.URL.url;
 			var len = url.length;
 
@@ -223,6 +223,8 @@ Glee.Events = {
 		// If an element is selected
 		if (Glee.selectedElement)
 		{
+			if (Glee.isEspActive)
+				Glee.Browser.registerCommandHit("ESP Vision", document.domain);
 			// Check to see if an anchor element is associated with the selected element
 			var a_el = null;
 			if (Glee.selectedElement[0].tagName == "A")

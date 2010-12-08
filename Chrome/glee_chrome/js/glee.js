@@ -76,6 +76,9 @@ var Glee = {
 	
     inspectMode: false,
 
+	// if currently, ESP is active. Used for analytics
+	isEspActive: false,
+
 	// Currently selected element
 	selectedElement: null,
 	
@@ -348,6 +351,7 @@ var Glee = {
         this.setSubText(null);
         this.selectedElement = null;
         this.commandMode = false;
+		this.isEspActive = false;
         this.inspectMode = false;
         this.lastQuery = null;
         this.lastjQuery = null;
@@ -372,6 +376,7 @@ var Glee = {
 		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
+		this.isEspActive = false;
         // this.detachScraperListener();
 	},
 	
@@ -387,6 +392,7 @@ var Glee = {
 		this.lastQuery = null;
 		this.selectedElement = null;
 		this.inspectMode = false;
+		this.isEspActive = false;
         // this.detachScraperListener();
 	},
 	
@@ -651,7 +657,6 @@ var Glee = {
         var selStr = Glee.getEspSelector();
 		if (selStr)
 		{
-			// Glee.Browser.registerCommandHit("ESP Vision", document.domain);
 			// Temporary scraper object
 			var tempScraper = {
 				nullMessage : "Could not find any elements on the page",
@@ -659,6 +664,7 @@ var Glee = {
 				cssStyle : "GleeReaped"
 			};
 			Glee.commandMode = true;
+			Glee.isEspActive = true;
 			Glee.initScraper(tempScraper);
 		}
 		return ;
@@ -872,6 +878,7 @@ var Glee = {
 
     			if (value != "")
     			{
+					Glee.isEspActive = false;
     				Glee.toggleActivity(1);
 
     				// Check if the query is not a command
@@ -922,7 +929,7 @@ var Glee = {
     				Glee.reset();
 
     				// If an ESP vision exists, execute it
-    				if (Glee.options.espStatus)
+    				if (Glee.options.espStatus && !Glee.isEspActive)
     					Glee.fireEsp();
     			}
     			Glee.lastQuery = value;
