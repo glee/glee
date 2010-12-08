@@ -10,22 +10,21 @@ var cache = {
 };
 
 function checkVersion() {
-    if (localStorage['gleebox_version'] != "1.8")
+    if (localStorage['gleebox_version'] != "1.8.1")
     {
         // create the new preferences as part of update
         updateDB();
         // open the update page
         chrome.tabs.create({url:"http://thegleebox.com/update.html", selected: true}, null);
         // update version
-        localStorage['gleebox_version'] = "1.8";
+        localStorage['gleebox_version'] = "1.8.1";
     }
 }
 
 function updateDB() {
-    loadPreference('command_engine', function(value) {
+    loadPreference('analytics', function(value) {
         if (!value) {
-            createPreference('command_engine', 'yubnub');
-            createPreference('quix_url', 'http://quixapp.com/quix.txt');
+			createPreference('analytics', 1);
         }
     });
 }
@@ -38,6 +37,7 @@ function init() {
 		loadAllPrefs(function(prefs) {
 			cache.prefs = prefs;
             initSync();
+			initAnalytics();
 		});
 	}
 	initCommandCache();
@@ -45,7 +45,7 @@ function init() {
 
 function initCommandCache() {
     cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
-    console.log("Commands in gleeBox cache: " + localStorage['gleebox_commands_cache']);
+    // console.log("Commands in gleeBox cache: " + localStorage['gleebox_commands_cache']);
 }
 
 // add listener to respond to requests from content script
@@ -143,6 +143,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         case "copyToClipboard"  :   copyToClipboard(request.text); sendResponse({}); break;
         
         case "takeScreenshot"   :   takeScreenshot(); sendResponse({}); break;
+
+		case "registerCommandHit"	: 	registerCommandHit(request.category, request.command); sendResponse({}); break;
     }
 });
 

@@ -293,3 +293,8 @@ Glee.Browser.updateBackgroundCommandCache = function() {
     chrome.extension.sendRequest({ value: "updateCommandCache", commands: Glee.cache.commands }, function(){
 	});
 }
+
+Glee.Browser.registerCommandHit = function(category, command) { 
+	chrome.extension.sendRequest({value: "registerCommandHit", category: category, command: command}, function() {
+	});
+}

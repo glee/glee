@@ -63,6 +63,7 @@ Glee.Events = {
 			if (Glee.scrapers[i].command == cmd)
 			{
 				Glee.initScraper(Glee.scrapers[i]);
+				Glee.Browser.registerCommandHit("Scraper", value);
                 return true;
 			}
 		}
@@ -89,7 +90,7 @@ Glee.Events = {
 		{
 			if (trimVal == Glee.commands[i].name)
 			{
-				Glee.setSubText(Glee.commands[i].description,"msg");
+				Glee.setSubText(Glee.commands[i].description, "msg");
 				Glee.URL = Glee.commands[i];
 				break;
 			}
@@ -112,10 +113,11 @@ Glee.Events = {
 			return true;
 		}
 
-		// TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
+		// TODO: Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 		// If it a valid page command, execute it
 		if (typeof(Glee.URL.name) != "undefined")
 		{
+			Glee.Browser.registerCommandHit("Page Command", Glee.searchField.attr('value'));
 		    if (e.shiftKey)
 		        Glee.execCommand(Glee.URL, true);
 			else
@@ -125,6 +127,7 @@ Glee.Events = {
 		// execute bookmarklet
 		else
 		{
+			Glee.Browser.registerCommandHit("Bookmarklet", Glee.searchField.attr('value'));
 			url = Glee.URL.url;
 			var len = url.length;
 
@@ -148,6 +151,7 @@ Glee.Events = {
     executeCommandEngine: function(newTab) {
         var u = Glee.URL;
         if (Glee.options.commandEngine == "yubnub") {
+			Glee.Browser.registerCommandHit("Yubnub", Glee.searchField.attr('value').split(" ")[0]);
             if (newTab) {
      		    Glee.reset();
                 Glee.Browser.openNewTab(u, false);
@@ -158,6 +162,7 @@ Glee.Events = {
             }
         }
 	    else {
+			Glee.Browser.registerCommandHit("Quix", Glee.searchField.attr('value').split(" ")[0]);
      		var d = '' + document.location;
      		u = u+'&t='+(document.title?encodeURIComponent(document.title):'')
   			+'&s='+Glee.options.quixUrl
@@ -196,7 +201,7 @@ Glee.Events = {
     executeJQuerySelector: function(value) {
         if (Glee.selectedElement)
 			Glee.selectedElement.removeClass('GleeHL');
-		
+		Glee.Browser.registerCommandHit("jQuery Selector", Glee.searchField.attr('value'));
 		LinkReaper.reapWhatever( value.substring(1) );
 		Glee.selectedElement = LinkReaper.getFirst();
 		Glee.setSubText(Glee.selectedElement, "el");

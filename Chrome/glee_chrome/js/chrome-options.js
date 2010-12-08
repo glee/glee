@@ -85,6 +85,12 @@ function initSettings(response)
     		document.getElementsByName("tab_shortcut_status")[0].checked = true;
 	}
 	
+	// analytics
+	if (prefs.analytics != undefined && prefs.analytics == 0)
+    	document.getElementsByName("analytics")[1].checked = true;
+	else
+    	document.getElementsByName("analytics")[0].checked = true;
+	
 	// scraper commands
 	var len = prefs.scrapers.length;
 	if (len != 0)

@@ -646,6 +646,7 @@ var Glee = {
         var selStr = Glee.getEspSelector();
 		if (selStr)
 		{
+			// Glee.Browser.registerCommandHit("ESP Vision", document.domain);
 			// Temporary scraper object
 			var tempScraper = {
 				nullMessage : "Could not find any elements on the page",
