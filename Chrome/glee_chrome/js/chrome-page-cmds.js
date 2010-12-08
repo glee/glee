@@ -24,12 +24,20 @@ Glee.viewPlugins = function(newTab) {
         Glee.Browser.openPageInThisTab("chrome://plugins");
 }
 
-/* labs: Open the Labs page */
-Glee.viewLabs = function(newTab) {
+/* flags: Open the Flags page */
+Glee.viewFlags = function(newTab) {
     if (newTab)
-        Glee.Browser.openPageIfNotExist("chrome://labs/");
+        Glee.Browser.openPageIfNotExist("chrome://flags/");
     else
-        Glee.Browser.openPageInThisTab("chrome://labs/");
+        Glee.Browser.openPageInThisTab("chrome://flags/");
+}
+
+/* webstore: Open the Flags page */
+Glee.viewWebstore = function(newTab) {
+    if (newTab)
+        Glee.Browser.openPageIfNotExist("https://chrome.google.com/webstore");
+    else
+        Glee.Browser.openPageInThisTab("https://chrome.google.com/webstore");
 }
 
 /* options: Open the Options page for gleeBox */
@@ -48,4 +56,3 @@ Glee.takeScreenshot = function() {
         chrome.extension.sendRequest({value: "takeScreenshot"}, function(){ });
     });
 }
-
