@@ -173,9 +173,14 @@ var Glee = {
 		    description: "View the Plugins page"
 		},
 		{
-		    name: "labs",
-		    method: "viewLabs",
-		    description: "View the labs page"
+		    name: "flags",
+		    method: "viewFlags",
+		    description: "View the flags page"
+		},
+		{
+			name: "webstore",
+			method: "viewWebstore",
+			description: "Open the Chrome Web Store"
 		},
 		{
 		    name: "snap",
