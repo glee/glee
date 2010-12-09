@@ -1,6 +1,6 @@
 // These are methods called by db.js when initializing tables to get default options
 
-function getDefaultPreferences(){
+function getDefaultPreferences() {
 	var prefs = {
 		size: 1,
 		position: 2,
@@ -21,11 +21,11 @@ function getDefaultPreferences(){
 	return prefs;
 }
 
-function getDefaultDisabledUrls(){
+function getDefaultDisabledUrls() {
 	return ["mail.google.com", "wave.google.com", "mail.yahoo.com"];
 }
 
-function getDefaultESP(){
+function getDefaultESP() {
 	var esp = [
 	{
 		url: "google.com/search",

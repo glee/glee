@@ -102,6 +102,10 @@ ul li ul {
 	margin-left: 20px;
 }
 
+.option-field input[type=checkbox] {
+	margin-top: 10px;
+}
+
 input,
 textarea {
 	border: 0;

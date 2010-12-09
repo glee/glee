@@ -32,7 +32,7 @@ Glee.viewFlags = function(newTab) {
         Glee.Browser.openPageInThisTab("chrome://flags/");
 }
 
-/* webstore: Open the Flags page */
+/* webstore: Open the Chrome Webstore */
 Glee.viewWebstore = function(newTab) {
     if (newTab)
         Glee.Browser.openPageIfNotExist("https://chrome.google.com/webstore");

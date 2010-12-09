@@ -558,6 +558,10 @@ function attachListeners() {
         saveOption(e.target.name, e.target.value);
     });
     
+	// checkbox
+	$('.option-field input[type=checkbox]').bind('change', function(e) {
+		saveOption(e.target.name, (e.target.value) ? 1 : 0);
+	});
     
     // textfields
     $('.option-field input[type=text]:not(#add_domain, #scraper-name, #scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e) {

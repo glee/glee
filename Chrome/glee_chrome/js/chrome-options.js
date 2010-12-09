@@ -3,6 +3,30 @@
 var bg_window;
 var sync;
 
+// preference strings
+var prefStrings = [
+	"position",
+	"size",
+	"search_engine",
+	"command_engine",
+	"quix_url",
+	"theme",
+	"bookmark_search",
+	"scroll_animation",
+	"tab_shortcut_status",
+	"esp_status"
+];
+
+// default values for preferences
+var prefDefaults = {
+	position: 2,
+	size: 1,
+	bookmark_search: 0,
+	scroll_animation: 1,
+	tab_shortcut_status: 1,
+	esp_status: 1
+}
+
 $(document).ready(function() {
     loadAllPrefs(initSettings);
 });
@@ -13,6 +37,41 @@ function initSettings(response)
     prefs = response;
 	initDefaultTexts();
 	initFiltering();
+	
+	// set all the preferences in UI
+	var prefsLen = prefStrings.length;
+	for (var i = 0; i < prefsLen; i++) {
+		var prefName = prefStrings[i];
+		var $el = $("[name=" + prefName + "]");
+		var el = $el.get(0);
+		
+		if (el.type == "radio") {
+			var r_len = $el.length;
+			for (var j = 0; j < r_len; j++) {
+				var radio = $el.get(j);
+				var prefIntValue = parseInt(prefs[prefName]);
+				if (prefs[prefName] == radio.value || prefIntValue == radio.value) {
+					radio.checked = true;
+					break;
+				}
+			}
+		}
+		
+		else if (el.type == "checkbox") {
+			if (prefs[prefName] == 1 || (prefs[prefName] == undefined && prefDefaults[prefName] == 1))
+				el.checked = true;
+				
+		}
+		
+		else if (el.type == "text") {
+			if (prefs[prefName] != undefined)
+				el.value = prefs[prefName];
+		}
+	}
+	
+	// display the Quix URL field, if Quix is selected as the command engine
+    if (prefs.command_engine == "quix")
+        $("#quix_url").show();
 
     // disabled urls
 	var len = prefs.disabledUrls.length;
@@ -22,69 +81,6 @@ function initSettings(response)
 			addItem('domain', prefs.disabledUrls[i]);
 	}
 	
-	// position
-	var pos = parseInt(prefs.position);
-	if (pos != undefined)
-		document.getElementsByName("position")[pos].checked = true;
-	else
-		document.getElementsByName("position")[1].checked = true;
-
-	// size
-	var size = parseInt(prefs.size);
-	if (size != undefined)
-		document.getElementsByName("size")[size].checked = true;
-	else
-		document.getElementsByName("size")[1].checked = true;
-
-	// search engine
-	if (prefs.search_engine != undefined)
-	    document.getElementsByName("search_engine")[0].value = prefs.search_engine;
-	
-    // command engine
-    if (prefs.command_engine == "quix") {
-        document.getElementsByName("command_engine")[1].checked = true;
-        $("#quix_url").show();
-    }
-    else
-        document.getElementsByName("command_engine")[0].checked = true; // default is yubnub
-    
-    // quix url
-	if (prefs.quix_url != undefined)
-	    document.getElementsByName("quix_url")[0].value = prefs.quix_url;
-	
-	// theme
-	tRadios = document.getElementsByName("theme");
-	var r_len = tRadios.length;
-	for (var i = 0; i < r_len; i++)
-	{
-		if (prefs.theme == tRadios[i].value)
-		{
-			tRadios[i].checked = true;
-			break;
-		}
-	}
-
-    // bookmark search status
-	if (prefs.bookmark_search == 1)
-		document.getElementsByName("bookmark_search")[0].checked = true;
-	else
-		document.getElementsByName("bookmark_search")[1].checked = true;
-
-	// scroll animation
-	if (prefs.scroll_animation == 0)
-		document.getElementsByName("scroll_animation")[1].checked = true;
-	else
-		document.getElementsByName("scroll_animation")[0].checked = true;
-		
-	// tab manager shortcut status
-	if (prefs.tab_shortcut_status != undefined)
-	{
-	    if (prefs.tab_shortcut_status == 0)
-    		document.getElementsByName("tab_shortcut_status")[1].checked = true;
-    	else
-    		document.getElementsByName("tab_shortcut_status")[0].checked = true;
-	}
-	
 	// scraper commands
 	var len = prefs.scrapers.length;
 	if (len != 0)
@@ -92,13 +88,7 @@ function initSettings(response)
 		// last element is a string only containing a ,
 		for (var i = 0; i < len; i++)
 			addItem('scraper', prefs.scrapers[i].command, prefs.scrapers[i].selector);
-	}	
-
-	// esp status
-	if (prefs.esp_status == 0)
-		document.getElementsByName("esp_status")[1].checked = true;
-	else
-		document.getElementsByName("esp_status")[0].checked = true;
+	}
 	
 	// esp visions
 	var espList = document.getElementById("esp-modifiers");
