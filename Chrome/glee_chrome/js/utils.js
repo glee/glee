@@ -119,7 +119,7 @@ var Utils = {
 			
 			for (var i = 0; i < len; i++)
 			{
-				if ($(parents[i]).css("display") === "none")
+				if ($($parents[i]).css("display") === "none")
 					return false;
 			}
 		}
