@@ -33,6 +33,7 @@
 		"js": [
 			"js/jquery.js",
 			"js/glee.js",
+			"js/elementState.js",
 			"js/events.js",
 			"js/chrome.js",
 			"js/page-cmds.js",

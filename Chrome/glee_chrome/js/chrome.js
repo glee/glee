@@ -12,11 +12,11 @@ Glee.Browser.isBookmark = function(text) {
 			Glee.bookmarks = response.bookmarks;
 			Glee.bookmarks[Glee.bookmarks.length] = text;
 			Glee.currentResultIndex = 0;
-			Glee.setSubText(0, "bookmark");
+			Glee.setState(0, "bookmark");
 		}
 		else // search it
 		{
-			Glee.setSubText(text, "search");
+			Glee.setState(text, "search");
 		}
 	});
 }
@@ -26,9 +26,9 @@ Glee.Browser.getBookmarklet = function(text) {
 	chrome.extension.sendRequest({ value: "getBookmarklet", text: text}, function(response){
 
 		if (response.bookmarklet)
-			Glee.setSubText(response.bookmarklet, "bookmarklet");
+			Glee.setState(response.bookmarklet, "bookmarklet");
 		else
-			Glee.setSubText("Command not found", "msg");
+			Glee.setState("Command not found", "msg");
 	});
 }
 
@@ -105,8 +105,8 @@ Glee.Browser.updateOptions = function(response) {
 		// If a theme is already set, remove it
 		if (Glee.ThemeOption)
 		{
-			Glee.searchBox.removeClass(Glee.ThemeOption);
-			Glee.searchField.removeClass(Glee.ThemeOption);
+			Glee.$searchBox.removeClass(Glee.ThemeOption);
+			Glee.$searchField.removeClass(Glee.ThemeOption);
 			if (Glee.ListManager.box)
 				Glee.ListManager.box.removeClass(Glee.ThemeOption);
 		}
@@ -190,8 +190,7 @@ Glee.Browser.openNewTab = function(url, selected) {
 }
 
 Glee.Browser.openPageInNewTab = function(url) {
-	Glee.searchField.attr('value', '');
-	Glee.setSubText(null);
+	Glee.empty();
 	Glee.Browser.openNewTab(url, true);
 }
 
@@ -202,10 +201,9 @@ Glee.Browser.openPageIfNotExist = function(url) {
        {
            if (response.tabs[i].url == url)
            {
-               Glee.searchField.attr('value', '');
-               Glee.setSubText(null);
-               Glee.Browser.moveToTab(response.tabs[i]);
-               return;
+				Glee.empty();
+				Glee.Browser.moveToTab(response.tabs[i]);
+				return;
            }
        }
        Glee.Browser.openPageInNewTab(url);
@@ -214,18 +212,16 @@ Glee.Browser.openPageIfNotExist = function(url) {
 
 // required for URLs beginning with 'chrome://'
 Glee.Browser.openPageInThisTab = function(url) {
-	Glee.searchField.attr('value', '');
-	Glee.setSubText(null);
+	Glee.empty();
 	chrome.extension.sendRequest({ value: "openInThisTab", url: url }, function(response){
 	});
 }
 
 Glee.Browser.setOption = function(option, value) {
 	chrome.extension.sendRequest( { value: "updateOption", option: option, option_value: value }, function(response){
-		Glee.searchField.attr('value','');
-		Glee.setSubText(null);
+		Glee.empty();
 		setTimeout(function() {
-		    Glee.searchField.keyup();
+		    Glee.$searchField.keyup();
 		}, 0);
 	});
 }
@@ -237,7 +233,7 @@ Glee.Browser.getOptions = function(){
 
 Glee.Browser.openTabManager = function(){
 	var onGetTabs = function(response){
-		Glee.closeBoxWithoutBlur();
+		Glee.closeWithoutBlur();
 		Glee.ListManager.openBox(response.tabs, function(action, item){
 			if (action == "open")
 				Glee.Browser.moveToTab(item);
@@ -245,7 +241,7 @@ Glee.Browser.openTabManager = function(){
 				Glee.Browser.removeTab(item);
 		});
 	};
-	Glee.setSubText("Displays a vertical list of currently open tabs.", "msg");
+	Glee.setState("Displays a vertical list of currently open tabs.", "msg");
 	Glee.Browser.getTabs(onGetTabs);
 },
 

@@ -1,6 +1,6 @@
-/* All page commands go here */
+// Glee Page (!) Commands
 
-/* help: Opens the gleeBox manual page in a new tab */
+// help: Opens the gleeBox manual page in a new tab
 Glee.help = function(newTab) {
     if (newTab)
 	    Glee.Browser.openPageIfNotExist("http://thegleebox.com/manual.html");
@@ -8,7 +8,7 @@ Glee.help = function(newTab) {
         location.href = "http://thegleebox.com/manual.html";
 }
 
-/* tipjar: Opens TipJar */
+// tipjar: Opens the gleeBox TipJar site
 Glee.tipjar = function(newTab) {
     if (newTab)
 	    Glee.Browser.openPageIfNotExist("http://tipjar.thegleebox.com/");
@@ -16,15 +16,14 @@ Glee.tipjar = function(newTab) {
 	    location.href = "http://tipjar.thegleebox.com/";
 }
 
-/* rss: Opens the rss feed of page in google reader */
+// rss: Opens the rss feed of page in google reader
 Glee.getRSSLink = function(newTab) {
 	//code via bookmark for google reader
 	 var b=document.body;var GR________bookmarklet_domain='http://www.google.com';if(b&&!document.xmlVersion){void(z=document.createElement('script'));void(z.src='http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else{location='http://www.google.com/reader/view/feed/'+encodeURIComponent(location.href)}
 }
 
-/* tweet: Opens the twitter sharing window with the title and shortened URL of the current page in the text field */
-Glee.sendTweet = function(newTab) {
-    // twitter share bookmarklet
+// tweet: Opens the twitter sharing window with the title and shortened URL of the current page in the text field 
+Glee.sendTweet = function() {
     // http://dev.twitter.com/pages/share_bookmarklet
     window.twttr=window.twttr||{};
     var D=550,A=450,C=screen.height,B=screen.width,H=Math.round((B/2)-(D/2)),G=0,F=document,E;
@@ -39,10 +38,9 @@ Glee.sendTweet = function(newTab) {
  };
 }
 
-/* inspect: Displays the jQuery selector if only one matching element is returned or if more are returned,
-			allows the user tab through and press enter to inspect a single element */
+// inspect: Displays the jQuery selector if only one matching element is returned. 
 Glee.inspectPage = function() {
-	var query = Glee.searchField.attr("value").substring(9);
+	var query = Glee.value().substring(9);
 	LinkReaper.reapLinks(query);
 	Glee.selectedElement = LinkReaper.getFirst();
 	Glee.scrollToElement(Glee.selectedElement);
@@ -54,18 +52,18 @@ Glee.inspectPage = function() {
 	else
 	{
 		result = SelectorGenerator.generate(Glee.selectedElement);
-		Glee.searchField.attr("value", result);
+		Glee.value(result);
 		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 		return;
 	}
 	Glee.toggleActivity(0);
 }
 
-/* share: Share current page via mail/gmail/twitter/facebook/stumbleupon/digg/delicious */
+// share: Share current page in mail/twitter/facebook. Makes use of the AddThis service
 Glee.sharePage = function(newTab) {
-	var site = Glee.searchField.attr('value').substring(6).replace(" ","");
+	var site = Glee.value().substring(6).replace(" ", "");
 	var loc = null;
-	//Try to get description
+	// get description
 	var desc = $('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr("content");
 	if ((!desc) || (desc == ""))
 		{
@@ -82,13 +80,13 @@ Glee.sharePage = function(newTab) {
 	enMailDesc = encodeURIComponent(mailDesc);
 	
 	// Short names of favorite services
-	if (site == "su")
+	if (site === "su")
 		site = "stumbleupon";
-	else if (site == "buzz")
+	else if (site === "buzz")
 		site = "googlebuzz";
-	else if (site == "fb")
+	else if (site === "fb")
 		site = "facebook";
-	else if (site == "reader")
+	else if (site === "reader")
 	    site = "googlereader";
 	
 	switch(site)
@@ -145,27 +143,27 @@ Glee.sharePage = function(newTab) {
 	}
 }
 
-/* read: Make the current page readable using Readability */
+// read: Make the current page readable using Readability 
 Glee.makeReadable = function() {
 	//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
     location.href = "javascript:(function(){readStyle='style-athelas';readSize='size-medium';readMargin='margin-medium';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='all';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
 }
 
-/* shorten: Shortens the URL using bit.ly and displays it in gleeBox */
+// shorten: Shortens the current page's URL using bit.ly and displays the shortened URL in gleeBox 
 Glee.shortenURL = function() {
 	this.Browser.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+encodeURIComponent(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
 	function(data){
 		var json = JSON.parse("["+data+"]");
 		var shortenedURL = json[0].results[location.href].shortUrl;
-		Glee.searchField.attr("value",shortenedURL);
+		Glee.value(shortenedURL);
 		Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
 	});
 }
 
-/* v: Play/Pause YouTube videos */
+// v: Play/Pause YouTube videos 
 Glee.controlVideo = function() {
 	var yPlayer = document.getElementById("movie_player"); //for YouTube
-	var func = Glee.searchField.attr('value').substring(2).replace(" ","");
+	var func = Glee.value().substring(2).replace(" ","");
 	if (yPlayer)
 	{
 		setTimeout(function(){
@@ -185,9 +183,11 @@ Glee.controlVideo = function() {
 			}
 		}
 	}
-	Glee.closeBox();
+	Glee.close();
 }
 
+// set: Set the value of a gleeBox option from inside gleeBox
+// Syntax: !set option-name=option-value
 Glee.setOptionValue = function() {
 	var valid = true;
 	var validOptions = [
@@ -203,8 +203,8 @@ Glee.setOptionValue = function() {
 		"scrapers+"
 	];
 	
-	/* Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value> */
-	var input = Glee.searchField.attr('value').substring(4);
+	// Checking if syntax is valid. Valid syntax is !set <valid-option>=<valid-value>
+	var input = Glee.value().substring(4);
 	var eqPos = input.indexOf("=");
 	if (eqPos == -1)
 		valid = false;

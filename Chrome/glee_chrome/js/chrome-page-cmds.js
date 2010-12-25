@@ -1,6 +1,6 @@
-// Chrome specific page commands
+// Chrome specific Page commands
 
-/* ext: Open the Extensions page */
+// ext: Open the Extensions page
 Glee.viewExtensions = function(newTab) {
     if (newTab)
         Glee.Browser.openPageIfNotExist("chrome://extensions/");
@@ -8,7 +8,7 @@ Glee.viewExtensions = function(newTab) {
         Glee.Browser.openPageInThisTab("chrome://extensions/");
 }
 
-/* down: Open the Downloads page */
+// down: Open the Downloads page
 Glee.viewDownloads = function(newTab) {
     if (newTab)
         Glee.Browser.openPageIfNotExist("chrome://downloads/");
@@ -16,7 +16,7 @@ Glee.viewDownloads = function(newTab) {
         Glee.Browser.openPageInThisTab("chrome://downloads/");
 }
 
-/* plugins: Open the Plugins page */
+// plugins: Open the Plugins page
 Glee.viewPlugins = function(newTab) {
     if (newTab)
         Glee.Browser.openPageIfNotExist("chrome://plugins");
@@ -24,7 +24,7 @@ Glee.viewPlugins = function(newTab) {
         Glee.Browser.openPageInThisTab("chrome://plugins");
 }
 
-/* flags: Open the Flags page */
+// flags: Open the Flags page
 Glee.viewFlags = function(newTab) {
     if (newTab)
         Glee.Browser.openPageIfNotExist("chrome://flags/");
@@ -32,7 +32,7 @@ Glee.viewFlags = function(newTab) {
         Glee.Browser.openPageInThisTab("chrome://flags/");
 }
 
-/* webstore: Open the Chrome Webstore */
+// webstore: Open the Chrome Webstore
 Glee.viewWebstore = function(newTab) {
     if (newTab)
         Glee.Browser.openPageIfNotExist("https://chrome.google.com/webstore");
@@ -40,7 +40,7 @@ Glee.viewWebstore = function(newTab) {
         Glee.Browser.openPageInThisTab("https://chrome.google.com/webstore");
 }
 
-/* options: Open the Options page for gleeBox */
+// options: Open the Options page for gleeBox
 Glee.displayOptionsPage = function(newTab) {
     var url = chrome.extension.getURL("options.html");
     if (newTab)
@@ -49,10 +49,9 @@ Glee.displayOptionsPage = function(newTab) {
 	    Glee.Browser.openPageInThisTab(url);
 }
 
-/* snap: Take a screenshot of the current page */
+// snap: Take a screenshot of the current page
 Glee.takeScreenshot = function() {
-    // close gleeBox
-    Glee.closeBox(function() {
+    Glee.close(function() {
         chrome.extension.sendRequest({value: "takeScreenshot"}, function(){ });
     });
 }

@@ -15,7 +15,7 @@ Glee.Events = {
 			if (Glee.commandMode && Glee.inspectMode)
 				return;
 			
-			Glee.setSubText(Glee.selectedElement, "el");
+			Glee.setState(Glee.selectedElement, "el");
 		}
 		
 		// else if no element is selected, scroll through bookmarks
@@ -39,16 +39,16 @@ Glee.Events = {
 		{
 		    // Set timer to search for links
 			Glee.timer = setTimeout(function() {
-				LinkReaper.reapLinks(Glee.searchField.attr('value'));
+				LinkReaper.reapLinks(Glee.value());
 				Glee.selectedElement = LinkReaper.getFirst();
-				Glee.setSubText(Glee.selectedElement,"el");
+				Glee.setState(Glee.selectedElement, "el");
 				Glee.scrollToElement(Glee.selectedElement);
 				Glee.toggleActivity(0);
 			}, Glee.defaults.linkSearchTimer);
 		}
 		else
 		{
-			Glee.setSubText(null, "el");
+			Glee.setState(null, "el");
 			Glee.toggleActivity(0);
 		}
     },
@@ -66,7 +66,7 @@ Glee.Events = {
                 return true;
 			}
 		}
-		Glee.setSubText(null);
+		Glee.setState(null);
 		return false;
     },
     
@@ -74,9 +74,8 @@ Glee.Events = {
     queryCommandEngine: function(value) {
         c = value.substring(1);
         c = c.replace("$", location.href);
-        Glee.subText.html(Utils.filter("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c));
-        Glee.URL = Glee.getCommandEngineSyntax(c);
-        Glee.subURL.html(Utils.filter(Glee.URL));
+        Glee.description("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c, true);
+		Glee.setURL(Glee.getCommandEngineSyntax(c));
     },
     
     // when a page command is entered
@@ -89,16 +88,14 @@ Glee.Events = {
 		{
 			if (trimVal == Glee.commands[i].name)
 			{
-				Glee.setSubText(Glee.commands[i].description,"msg");
+				Glee.setState(Glee.commands[i].description, "msg");
 				Glee.URL = Glee.commands[i];
 				break;
 			}
 		}
         // If it is not a valid page command, try to find closest matching bookmarklet
 		if (!Glee.URL)
-		{
 			Glee.Browser.getBookmarklet(trimVal);
-		}
     },
     
     // when a page command is executed
@@ -107,12 +104,12 @@ Glee.Events = {
 		{
 			Glee.inspectMode = false;
 			result = SelectorGenerator.generate(Glee.selectedElement);
-			Glee.searchField.attr("value", result);
-			Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
+			Glee.value(result);
+			Glee.setState("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 			return true;
 		}
 
-		// TODO:Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
+		// TODO: Glee.URL is misleading here when it actually contains the command or bookmarklet. Fix this
 		// If it a valid page command, execute it
 		if (typeof(Glee.URL.name) != "undefined")
 		{
@@ -137,10 +134,10 @@ Glee.Events = {
 			else 
 				eval(unescape(url.substring(11)));
 
-			Glee.setSubText("Executing bookmarklet '" + Glee.URL.title + "'...","msg");
+			Glee.setState("Executing bookmarklet '" + Glee.URL.title + "'...", "msg");
 
 			setTimeout(function() {
-				Glee.closeBox();
+				Glee.close();
 			}, 0);
 		}
     },
@@ -154,7 +151,7 @@ Glee.Events = {
             }
             else {
                 window.location = u;
-                Glee.closeBoxWithoutBlur();
+                Glee.closeWithoutBlur();
             }
         }
 	    else {
@@ -170,13 +167,13 @@ Glee.Events = {
      		}
      		else if (d.substr(0, 4) != 'http') {
                 window.location = u + '&mode=direct';
-                Glee.closeBoxWithoutBlur();
+                Glee.closeWithoutBlur();
      		}
             else {
                 var heads = document.getElementsByTagName('head');
                 if (heads.length == 0) {
     				window.location = u + '&mode=direct';
-                    Glee.closeBoxWithoutBlur();
+                    Glee.closeWithoutBlur();
     			}
     			else {
     			    // a little slower than yubnub, but well
@@ -186,7 +183,7 @@ Glee.Events = {
                     sc.id = 'quix';
                     sc.type = 'text/javascript';
                     heads[0].appendChild(sc);
-                    Glee.closeBox();
+                    Glee.close();
     			}
     		}
 	    }
@@ -199,7 +196,7 @@ Glee.Events = {
 		
 		LinkReaper.reapWhatever( value.substring(1) );
 		Glee.selectedElement = LinkReaper.getFirst();
-		Glee.setSubText(Glee.selectedElement, "el");
+		Glee.setState(Glee.selectedElement, "el");
 		Glee.scrollToElement(Glee.selectedElement);
 		Glee.lastjQuery = value;
     },
@@ -248,21 +245,21 @@ Glee.Events = {
 					if (!target)
 					{
 						setTimeout(function(){
-							Glee.searchField.blur();
+							Glee.blur();
 						}, 0);
-						Glee.closeBoxWithoutBlur();
+						Glee.closeWithoutBlur();
 					}
 
                     // If link is to be opened in a new tab & it isn't a scraper command, clear gleebox
-                    else if (Glee.searchField.attr('value').indexOf("?") == -1)
-                        Glee.searchField.attr('value', '');
+                    else if (!Glee.isScraper())
+						Glee.empty();
                     
 					return false;
 				}
 			}
 		}
 
-		if (Glee.URL == "#" || Glee.URL == "")
+		if (Glee.URL === "#" || Glee.URL === "")
 			Glee.URL = null;
 
 		if (Glee.URL)
@@ -275,14 +272,14 @@ Glee.Events = {
 			{
 				Glee.Browser.openNewTab(Glee.URL, false);
                 // If it is not a scraper command, clear gleebox
-                if (Glee.searchField.attr('value').indexOf("?") == -1)
-                    Glee.searchField.attr('value', '');
+                if (!Glee.isScraper())
+					Glee.empty();
 				return false;
 			}
 			else
 			{
 				url = Glee.URL;
-				Glee.closeBoxWithoutBlur();
+				Glee.closeWithoutBlur();
 				window.location = url;
 			}
 		}
@@ -297,16 +294,16 @@ Glee.Events = {
 				{
 					setTimeout(function() {
 						Utils.simulateClick(Glee.selectedElement, false);
-						Glee.searchField.blur();
+						Glee.blur();
 					}, 0);
 				}
 				else if (tag == "input" && (el.type == "radio" || el.type == "checkbox"))
 				{
-                     if (!Glee.selectedElement.is(':checked'))
-		                Glee.selectedElement[0].checked = true;
+					if (!Glee.selectedElement.is(':checked'))
+						Glee.selectedElement[0].checked = true;
                     else if (el.type == "checkbox")
 		                Glee.selectedElement[0].checked = false;
-					Glee.searchField.blur();
+					Glee.blur();
 				}
 				else if (tag == "input" || tag == "textarea")
 				{
@@ -324,12 +321,12 @@ Glee.Events = {
 			else
 			{
 				setTimeout(function() {
-					Glee.searchField.blur();
+					Glee.blur();
 				}, 0);
 			}
 		}
 		setTimeout(function() {
-			Glee.closeBoxWithoutBlur();
+			Glee.closeWithoutBlur();
 		}, 0);
     }
 }

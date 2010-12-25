@@ -262,47 +262,40 @@ var Glee = {
 	
 	createBox: function() {
 		// Creating DOM elements for gleeBox
-		this.searchField = $("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
-		this.subText = $("<div id=\"gleeSubText\">" + Glee.defaults.nullStateMessage + "</div>");
-		this.subURL = $("<div id=\"gleeSubURL\"></div>")
-		this.searchBox = $("<div id=\"gleeBox\" style='display:none'></div>");
+		this.$searchField = $("<input type=\"text\" id=\"gleeSearchField\" value=\"\" />");
+		this.$subText = $("<div id=\"gleeSubText\">" + Glee.defaults.nullStateMessage + "</div>");
+		this.$subURL = $("<div id=\"gleeSubURL\"></div>")
+		this.$searchBox = $("<div id=\"gleeBox\" style='display:none'></div>");
 		var subActivity	= $("<div id=\"gleeSubActivity\"></div>")
 		this.sub = $("<div id=\"gleeSub\"></div>");
-		this.sub.append(this.subText).append(subActivity).append(this.subURL);
-		this.searchBox.append(this.searchField).append(this.sub);
-		$(document.body).append(this.searchBox);
+		this.sub.append(this.$subText).append(subActivity).append(this.$subURL);
+		this.$searchBox.append(this.$searchField).append(this.sub);
+		$(document.body).append(this.$searchBox);
 		
 		// add autocomplete
-		this.searchField.autocomplete(Glee.cache.commands, {
+		this.$searchField.autocomplete(Glee.cache.commands, {
 		    autoFill: true,
 		    selectFirst: false
 		});
 	},
 	
 	open: function() {
-		if (Glee.searchBox.css('display') == "none")
+		if (!Glee.isVisible())
 		{
-			// Reset searchField content
-			Glee.searchField.attr('value', '');
-			Glee.searchBox.fadeIn(150);
-			Glee.searchField[0].focus();
-			
-	        // If ESP vision exists, execute it
-            if (Glee.options.espStatus)
-                Glee.fireEsp();
+			// reset gleeBox 
+			Glee.empty();
+			Glee.$searchBox.fadeIn(150);			
+			Glee.focus();
+            Glee.fireEsp();
 		}
 		else
-		{
-			// If gleeBox is already visible, return focus
-			Glee.searchField[0].focus();
-		}
+			Glee.focus();
 	},
 	
 	// called when options are returned by background.html
 	applyOptions: function() {
 		// Theme
-		Glee.searchBox.addClass(Glee.ThemeOption);
-		Glee.searchField.addClass(Glee.ThemeOption);
+		Glee.addClass(Glee.ThemeOption);
 		
 		if (IS_CHROME && Glee.ListManager != undefined)
 		{
@@ -317,7 +310,7 @@ var Glee = {
 			topSpace = 35;
 		else
 			topSpace = 78;
-		Glee.searchBox.css("top", topSpace + "%");
+		Glee.$searchBox.css("top", topSpace + "%");
 		
 		// Size
 		if (Glee.options.size == "small")
@@ -326,7 +319,7 @@ var Glee = {
 			fontsize = "50px"
 		else
 			fontsize = "100px"
-		Glee.searchField.css("font-size", fontsize);
+		Glee.$searchField.css("font-size", fontsize);
 		
 		// Hyper mode
 		if (Glee.options.status != 0 && Glee.options.hyperMode == true) {
@@ -342,29 +335,97 @@ var Glee = {
 	    }
 	},
 	
+	value: function(value) {
+		if (value === undefined)
+			return this.$searchField.attr('value');
+		else
+			this.$searchField.attr('value', value);
+		return true;
+	},
+	
+	setURL: function(value) {
+		console.log("setURL: " + value);
+		this.URL = value;
+		this.$subURL.html(Utils.filter(value));
+	},
+	
+	description: function(value, shouldFilter) {
+		if (value === undefined)
+			return this.$subText.html();
+		else {
+			if (shouldFilter)
+				value = Utils.filter(value);
+			this.$subText.html(value);
+		}
+		return true;
+	},
+	
+	focus: function() {
+		this.$searchField.get(0).focus();
+	},
+	
+	blur: function() {
+		this.$searchField.get(0).blur();
+	},
+	
+	empty: function() {
+		this.value('');
+		this.setState(null);
+	},
+	
+	addClass: function(class) {
+		this.$searchBox.addClass(class);
+		this.$searchField.addClass(class);
+	},
+	
+	removeClass: function(class) {
+		this.$searchBox.removeClass(class);
+		this.$searchField.removeClass(class);		
+	},
+	
+	isVisible: function() {
+		if (this.$searchBox.css('display') === "none")
+			return false;
+		else
+			return true;
+	},
+	
+	isScraper: function() {
+		if (this.value().indexOf("?") === 0)
+			return true;
+		else
+			return false;
+	},
+	
+	isEmpty: function() {
+		if (this.value() === "")
+			return true;
+		else
+			return false;
+	},
+	
 	reset: function() {
         this.resetTimer();
 		LinkReaper.unreapAllLinks();
-        this.setSubText(null);
         this.selectedElement = null;
         this.commandMode = false;
         this.inspectMode = false;
         this.lastQuery = null;
         this.lastjQuery = null;
         this.toggleActivity(0);
-        this.searchField.attr('value', '');
+		this.empty();
         // this.detachScraperListener();
 	},
 	
-	closeBox: function(callback) {
+	close: function(callback) {
 	    this.resetTimer();
 		this.getBackInitialState();
 		setTimeout(function() {
 		    LinkReaper.unreapAllLinks();
 		}, 0);
-		this.searchBox.fadeOut(150, function() {
-			Glee.searchField.attr('value', '');
-			Glee.setSubText(null);
+		this.$searchBox.fadeOut(150, function() {
+			Glee.empty();
+			Glee.setState(null);
             if (callback) {
                 callback();
             }
@@ -375,14 +436,13 @@ var Glee = {
         // this.detachScraperListener();
 	},
 	
-	closeBoxWithoutBlur: function() {
+	closeWithoutBlur: function() {
 	    this.resetTimer();
 		setTimeout(function() {
 		    LinkReaper.unreapAllLinks();
 		}, 0);
-		this.searchBox.fadeOut(150, function() {
-			Glee.searchField.attr('value', '');
-			Glee.setSubText(null);
+		this.$searchBox.fadeOut(150, function() {
+			Glee.empty();
 		});
 		this.lastQuery = null;
 		this.selectedElement = null;
@@ -398,7 +458,7 @@ var Glee = {
             $(this).addClass(scraper.cssStyle);
         });
 		this.selectedElement = LinkReaper.getFirst();
-		this.setSubText(this.selectedElement, "el");
+		this.setState(this.selectedElement, "el");
 		this.scrollToElement(Glee.selectedElement);
         LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
@@ -447,114 +507,28 @@ var Glee = {
 	    return els;
 	},
 	
-	setSubText: function(val, type) {
-		this.URL = null;
+	setState: function(value, type) {
+		this.setURL(null);
 		
-		if (type == "el") // here val is the element or null if no element is found for a search
+		// in case of element
+		if (type === "el")
 		{
-			if (val && typeof val != "undefined")
-			{
-				$val = $(val);
-				var tag = $val[0].tagName.toLowerCase();
-				
-				// if the selected element is not a link
-				if (tag != "a")
-				{
-					var a_el = null;
-					this.subText.html(Utils.filter($val.text()));
-					if (tag == "img")
-					{
-						a_el = $($val.parents('a'));
-						var value = $val.attr('alt');
-						if (value)
-							this.subText.html(Utils.filter(value));
-						else if (value = $val.parent('a').attr('title'))
-							this.subText.html(Utils.filter(value));
-						else
-							this.subText.html("Linked Image");
-					}
-					// if it is an input field
-					else if (tag == "input")
-					{
-						var value = $val.attr("value");
-						if (value)
-							this.subText.html(Utils.filter(value));
-						else
-							this.subText.html("Input " + $val.attr("type"));
-					}
-					// if it is a textarea
-					else if (tag == "textarea")
-					{
-						var value = $val.attr("name");
-						if (value)
-							this.subText.html(Utils.filter(value));
-						else
-							this.subText.html("Textarea");
-					}
-					else {
-					    a_el = $($val.find('a'));
-					    var value = $val.text();
-                        if (value)
-                            this.subText.html(Utils.filter(value));
-                        else if (value = a_el.attr('title')) {
-                            this.subText.html(Utils.filter(value));
-                        }
-                        else
-                            this.subText.html("");
-					}
-					
-					if (a_el)
-					{
-						if (a_el.length != 0)
-						{
-							this.URL = a_el.attr("href");
-							this.subURL.html(Utils.filter(this.URL));
-						}
-					}
-					else
-						this.subURL.html("");
-				}
-				// if it is a link containing an image
-				else if ($val.find("img").length != 0)
-				{
-					this.URL = $val.attr("href");
-					this.subURL.html(Utils.filter(this.URL));
-					var title = $val.attr("title") || $val.find('img').attr('title');
-					if (title != "")
-						this.subText.html(Utils.filter(title));
-					else
-						this.subText.html("Linked Image");
-				}
-				// it is simply a link
-				else 
-				{
-					var title = $val.attr('title');
-					var text = $val.text();
-
-					this.subText.html(Utils.filter(text));
-					if (title != "" && title != text)
-						this.subText.html(Utils.filter(this.subText.html() + " -- " + title));
-					this.URL = $val.attr('href');
-					this.subURL.html(Utils.filter(this.URL));
-				}
+			// value is the element here
+			if (value && value != undefined) {
+				var state = new ElementState(value);
 			}
-			else if (Glee.commandMode == true)
+			else // go to URL, search for bookmarks or search the web ( in that order )
 			{
-				this.subText.html(Glee.nullMessage);
-			}
-			else // go to URL, search for bookmarks or search the web
-			{
-				var text = this.searchField.attr("value");
+				var text = this.value();
 				this.selectedElement = null;
 				// if it is a URL
 				if (Utils.isURL(text))
 				{
-					this.subText.html(Utils.filter("Go to " + text));
+					this.description("Go to " + text, true);
 					var regex = new RegExp("((https?|ftp|file):((//)|(\\\\))+)");
 					if (!text.match(regex))
 						text = "http://" + text;
-					this.URL = text;
-					this.subURL.html(Utils.filter(text));
+					this.setURL(text);
 				}
 				else if (this.options.bookmarkSearchStatus) // is bookmark search enabled?
 				{
@@ -563,36 +537,33 @@ var Glee = {
 					this.Browser.isBookmark(text); // check if the text matches a bookmark
 				}
 				else // web search
-					this.setSubText(text, "search");
+					this.setState(text, "search");
 			}
-		}
-		else if (type == "bookmark") // here val is the bookmark no. in Glee.bookmarks
+		}			
+		else if (type === "bookmark") // value is the bookmark no. in Glee.bookmarks
 		{
-			this.subText.html(Utils.filter("Open bookmark (" + ( val + 1 ) + " of "+(this.bookmarks.length - 1)+"): "+this.bookmarks[val].title));
-			this.URL = this.bookmarks[val].url;
-			this.subURL.html(Utils.filter(this.URL));
+			this.description("Open bookmark (" + ( value + 1 ) + " of "+(this.bookmarks.length - 1) + "): " + this.bookmarks[value].title, true);
+			this.setURL(this.bookmarks[value].url);
 		}
-		else if (type == "bookmarklet") // here val is the bookmarklet returned
+		else if (type === "bookmarklet") // value is the bookmarklet returned
 		{
-			this.subText.html("Closest matching bookmarklet: " + val.title + " (press enter to execute)");
-			this.URL = val;
-			this.subURL.html('');
+			this.description("Closest matching bookmarklet: " + value.title + " (press enter to execute)", true);
+			this.setURL(val);
 		}
-		else if (type == "search") // here val is the text query
+		else if (type === "search") // value is the text query
 		{
-			this.subText.html(Utils.filter("Search for " + val));
-			this.URL = Glee.options.searchEngineUrl + val;
-			this.subURL.html(Utils.filter(this.URL));
+			this.description("Search for " + value, true);
+			this.setURL(Glee.options.searchEngineUrl + value);
 		}
-		else if (type == "msg") // here val is the message to be displayed
+		else if (type === "msg") // value is the message to be displayed
 		{
-			this.subText.html(val);
-			this.subURL.html('');
+			this.description(value);
+			this.setURL("");
 		}
 		else
 		{
-			this.subText.html(Glee.defaults.nullStateMessage);
-			this.subURL.html('');
+			this.description(Glee.defaults.nullStateMessage);
+			this.setURL("");
 		}
 	},
 	
@@ -606,9 +577,9 @@ var Glee = {
 
 			// if it is the last bookmark, allow user to execute a search
 			if (this.currentResultIndex == this.bookmarks.length - 1)
-				this.setSubText(this.bookmarks[this.currentResultIndex], "search");
+				this.setState(this.bookmarks[this.currentResultIndex], "search");
 			else
-				this.setSubText(this.currentResultIndex, "bookmark");
+				this.setState(this.currentResultIndex, "bookmark");
 		}
 		else
 			return null;
@@ -624,9 +595,9 @@ var Glee = {
 
 			// if it is the last bookmark, allow user to execute a search
 			if (this.currentResultIndex == this.bookmarks.length - 1)
-				this.setSubText(this.bookmarks[this.currentResultIndex], "search");
+				this.setState(this.bookmarks[this.currentResultIndex], "search");
 			else
-				this.setSubText(this.currentResultIndex, "bookmark");
+				this.setState(this.currentResultIndex, "bookmark");
 		}
 		else
 			return null;
@@ -648,6 +619,8 @@ var Glee = {
 	},
 	
 	fireEsp: function() {
+		if (!Glee.options.espStatus)
+			return false;
         var selStr = Glee.getEspSelector();
 		if (selStr)
 		{
@@ -660,7 +633,7 @@ var Glee = {
 			Glee.commandMode = true;
 			Glee.initScraper(tempScraper);
 		}
-		return ;
+		return true;
 	},
 	
 	scrollToElement: function(el) {
@@ -727,9 +700,9 @@ var Glee = {
 	getBackInitialState: function() {
 		Glee.cache.jBody.stop(true);
 		// Wait till the thread is free
-		setTimeout(function(){
-			Glee.searchField.blur();
-		},0);
+		setTimeout(function() {
+			Glee.blur();
+		}, 0);
 	},
 	
 	resetTimer: function() {
@@ -740,8 +713,8 @@ var Glee = {
 	execCommand: function(command, openInNewTab) {
 		// call the method
 		var method = command.method;
-        // Set subtext
-		this.setSubText(command.statusText, "msg");
+		// set text
+		this.setState(command.statusText, "msg");
 		
 		if (method.indexOf("Browser.") == 0)
 		{
@@ -779,7 +752,7 @@ var Glee = {
                 this.cache.commands.pop();
             this.cache.commands.unshift(value);
         }
-        this.searchField.setOptions({
+        this.$searchField.setOptions({
             data: Glee.cache.commands
         });
         this.Browser.updateBackgroundCommandCache();
@@ -788,7 +761,7 @@ var Glee = {
 	updateCommandCache: function(commands) {
 	    this.cache.commands = commands;
 	    
-        this.searchField.setOptions({
+        this.$searchField.setOptions({
             data: Glee.cache.commands
         });
 	},
@@ -811,7 +784,7 @@ var Glee = {
     					e.preventDefault();
 
                         // set default subtext
-                		Glee.subText.html(Glee.defaults.nullStateMessage);
+						Glee.description(Glee.defaults.nullStateMessage);
     					if (e.keyCode == Glee.options.shortcutKey)
     					    Glee.open();
     					else if (IS_CHROME)
@@ -821,13 +794,13 @@ var Glee = {
     		}
     	});
     	
-    	Glee.searchField.bind('keydown', function(e) {
+    	Glee.$searchField.bind('keydown', function(e) {
             // Escape: Hides gleeBox.
     		if (e.keyCode == 27)
     		{
     			e.preventDefault();
                 // if (Glee.searchField.attr('value') == "") {
-			    Glee.closeBox();
+			    Glee.close();
                 // }
                 // else
                 //     Glee.reset();
@@ -848,7 +821,7 @@ var Glee = {
     		}
     		
     		// Open Tab Manager when shortcut key is pressed inside gleeBox
-    		else if (e.keyCode == Glee.options.tabShortcutKey && Glee.searchField.attr("value").length == 0 && IS_CHROME)
+    		else if (e.keyCode == Glee.options.tabShortcutKey && Glee.value().length == 0 && IS_CHROME)
     		{
     		    if (e.metaKey || e.ctrlKey || e.shiftKey)
     		        break;
@@ -857,8 +830,8 @@ var Glee = {
     		}
     	});
     	
-    	Glee.searchField.bind('keyup', function(e) {
-    		var value = Glee.searchField.attr('value');
+    	Glee.$searchField.bind('keyup', function(e) {
+    		var value = Glee.value();
     		// Check if content of gleeBox has changed
     		if (Glee.lastQuery != value)
     		{
@@ -895,23 +868,23 @@ var Glee = {
     					Glee.resetTimer();
     					Glee.toggleActivity(0);
 
-    					if (value[0] == '?' && value.length > 1)
+    					if (value[0] === '?' && value.length > 1)
                             Glee.Events.queryScraper(value);
 
-    					else if (value[0] == ':')
+    					else if (value[0] === ':')
                             Glee.Events.queryCommandEngine(value);
                         
-                    	else if (value[0] == "!" && value.length > 1)
+                    	else if (value[0] === "!" && value.length > 1)
     					    Glee.Events.queryPageCmd(value);
 
-    					else if (value[0] == '*')
+    					else if (value[0] === '*')
     					{
     						Glee.nullMessage = "Nothing found for your selector.";
-    						Glee.setSubText("Enter jQuery selector and press enter, at your own risk.", "msg");
+    						Glee.setState("Enter jQuery selector and press enter, at your own risk.", "msg");
     					}
 
     					else
-    						Glee.setSubText("Command not found", "msg");
+    						Glee.setState("Command not found", "msg");
     				}
     			}
     			// gleeBox is empty
@@ -919,10 +892,7 @@ var Glee = {
     			{
     			    // reset everything
     				Glee.reset();
-
-    				// If an ESP vision exists, execute it
-    				if (Glee.options.espStatus)
-    					Glee.fireEsp();
+   					Glee.fireEsp();
     			}
     			Glee.lastQuery = value;
     			Glee.lastjQuery = null;
@@ -933,12 +903,12 @@ var Glee = {
     		{
     			e.preventDefault();
 
-    			if (value[0] == "*" && value != Glee.lastjQuery) {
+    			if (value[0] === "*" && value != Glee.lastjQuery) {
     			    Glee.addCommandToCache(value);
     			    Glee.Events.executeJQuerySelector(value);
     			}
                     
-    			else if (value[0] == "!" && value.length > 1) {
+    			else if (value[0] === "!" && value.length > 1) {
     			    Glee.addCommandToCache(value);
     			    Glee.Events.executePageCmd(e, value);
     			}
@@ -958,7 +928,7 @@ var Glee = {
                     LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
                     LinkReaper.unHighlight(Glee.selectedElement);
                     Glee.selectedElement = LinkReaper.getFirst();
-                    Glee.setSubText(Glee.selectedElement, "el");
+                    Glee.setState(Glee.selectedElement, "el");
     			}
     		}
     	});
