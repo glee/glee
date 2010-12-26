@@ -467,7 +467,6 @@ var Glee = {
                 callback();
             }
 		});
-		this.isActive = false;
 	},
 	
 	closeWithoutBlur: function(callback) {
@@ -476,7 +475,6 @@ var Glee = {
 			if (callback)
 				callback();
 		});
-		this.isActive = false;
 	},
 	
 	initScraper: function(scraper) {

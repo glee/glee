@@ -37,7 +37,6 @@ Glee.Events = {
 	onKeyUp: function(e) {
 		
 		var value = Glee.value();
-		console.log("onKeyUP");
 		
 		// check if content of gleeBox has changed
 		if (Glee.lastQuery != value)
