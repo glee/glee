@@ -99,13 +99,15 @@ var LinkReaper = {
 	},
 	
 	unreapAllLinks: function() {
-		$(this.selectedLinks).each(function(){
-		    $(this).removeClass('GleeReaped')
-		    .removeClass('GleeHL');
-	    });
-		this.selectedLinks = [];
-		this.searchTerm = "";
-		this.traversePosition = 0;
+		// setTimeout(function() {
+			$(LinkReaper.selectedLinks).each(function() {
+			    $(this).removeClass('GleeReaped')
+			    .removeClass('GleeHL');
+		    });
+			LinkReaper.selectedLinks = [];
+			LinkReaper.searchTerm = "";
+			LinkReaper.traversePosition = 0;
+		// }, 0);
 	},
 	
 	getNext: function() {

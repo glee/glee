@@ -10,7 +10,7 @@
 var Glee = {
     
     defaults: {
-	    nullStateMessage: "Nothing selected",
+	    nullStateMessage: "",
 	    
     	// Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
     	pageScrollSpeed: 4,
@@ -250,8 +250,9 @@ var Glee = {
         // create the DOM elements
 	    Glee.createBox();
 	    
-		// attach the win listener
+		// attach the event listeners
 	    Glee.attachWindowListener();
+		Glee.attachListeners();
 
         // fill cache
         Glee.fillCache();
@@ -268,13 +269,21 @@ var Glee = {
 		this.$subText = $("<div id=\"gleeSubText\">" + Glee.defaults.nullStateMessage + "</div>");
 		this.$subURL = $("<div id=\"gleeSubURL\"></div>")
 		this.$searchBox = $("<div id=\"gleeBox\" style='display:none'></div>");
-		var subActivity	= $("<div id=\"gleeSubActivity\"></div>")
-		this.sub = $("<div id=\"gleeSub\"></div>");
-		this.sub.append(this.$subText).append(subActivity).append(this.$subURL);
-		this.$searchBox.append(this.$searchField).append(this.sub);
+		this.$searchActivity = $("<div id=\"gleeSearchActivity\"></div>")
+		this.$sub = $("<div id=\"gleeSub\"></div>");
+		
+		this.$sub
+		.append(this.$subText)
+		.append(this.$searchActivity)
+		.append(this.$subURL);
+		
+		this.$searchBox
+		.append(this.$searchField)
+		.append(this.$sub);
+		
 		$(document.body).append(this.$searchBox);
 		
-		// add autocomplete
+		// initialize autocomplete
 		this.$searchField.autocomplete(Glee.cache.commands, {
 		    autoFill: true,
 		    selectFirst: false
@@ -287,7 +296,6 @@ var Glee = {
 			Glee.$searchBox.fadeIn(150);
            	Glee.fireEsp();
 		}
-		Glee.attachListeners();
 		Glee.focus();
 	},
 	
@@ -342,9 +350,12 @@ var Glee = {
 		return true;
 	},
 	
-	setURL: function(value) {
+	setURL: function(value, fieldValue) {
 		this.URL = value;
-		this.$subURL.html(Utils.filter(value));
+		if (fieldValue != undefined)
+			this.$subURL.html(Utils.filter(fieldValue));
+		else
+			this.$subURL.html(Utils.filter(value));
 	},
 	
 	description: function(value, shouldFilter) {
@@ -368,7 +379,7 @@ var Glee = {
 	
 	empty: function() {
 		this.value('');
-		this.setURL('');
+		this.setState(null);
 	},
 	
 	addClass: function(class) {
@@ -388,8 +399,39 @@ var Glee = {
 			return true;
 	},
 	
+	isCommand: function() {
+		if (this.isScraper() ||
+			this.isPageCmd() ||
+			this.isColonCmd() ||
+			this.isJQueryCmd() )
+			return true;
+		else
+			return false;
+	},
+	
 	isScraper: function() {
 		if (this.value().indexOf("?") === 0)
+			return true;
+		else
+			return false;
+	},
+	
+	isPageCmd: function() {
+		if (this.value().indexOf("!") === 0)
+			return true;
+		else
+			return false;
+	},
+	
+	isColonCmd: function() {
+		if (this.value().indexOf(":") === 0)
+			return true;
+		else
+			return false;
+	},
+	
+	isJQueryCmd: function() {
+		if (this.value().indexOf("*") === 0)
 			return true;
 		else
 			return false;
@@ -404,7 +446,6 @@ var Glee = {
 	
 	reset: function() {
         this.resetTimer();
-		LinkReaper.unreapAllLinks();
         this.selectedElement = null;
         this.commandMode = false;
         this.inspectMode = false;
@@ -412,27 +453,30 @@ var Glee = {
         this.lastjQuery = null;
         this.setSearchActivity(false);
 		this.empty();
+		setTimeout(function() {
+			LinkReaper.unreapAllLinks();
+		}, 0);
         // this.detachScraperListener();
 	},
 	
 	close: function(callback) {
 		this.getBackInitialState();
+		this.reset();
 		this.$searchBox.fadeOut(150, function() {
-			Glee.reset();
             if (callback) {
                 callback();
             }
 		});
-		Glee.detachListeners();
+		this.isActive = false;
 	},
 	
 	closeWithoutBlur: function(callback) {
+		this.reset();
 		this.$searchBox.fadeOut(150, function() {
-			Glee.reset();
 			if (callback)
 				callback();
 		});
-		Glee.detachListeners();
+		this.isActive = false;
 	},
 	
 	initScraper: function(scraper) {
@@ -443,8 +487,9 @@ var Glee = {
             $(this).addClass(scraper.cssStyle);
         });
 		this.selectedElement = LinkReaper.getFirst();
+		this.nullMessage = "Nothing matched";
 		this.setState(this.selectedElement, "el");
-		this.scrollToElement(Glee.selectedElement);
+		this.scrollToElement(this.selectedElement);
         LinkReaper.traversePosition = 0;
 		LinkReaper.searchTerm = "";
         // this.attachScraperListener(scraper);
@@ -499,12 +544,21 @@ var Glee = {
 			// value is the element here
 			if (value && value != undefined) {
 				var state = new ElementState(value);
+				return true;
 			}
-			else // go to URL, search for bookmarks or search the web ( in that order )
+			
+			// if in command mode, display the set null message
+			else if (this.commandMode) {
+				this.setState(this.nullMessage, "msg");
+				return true;
+			}
+			
+			else
 			{
 				var text = this.value();
 				this.selectedElement = null;
-				// if it is a URL
+
+				// if it is a URL, open it
 				if (Utils.isURL(text))
 				{
 					this.description("Go to " + text, true);
@@ -512,38 +566,56 @@ var Glee = {
 					if (!text.match(regex))
 						text = "http://" + text;
 					this.setURL(text);
+					return true;
 				}
-				else if (this.options.bookmarkSearchStatus) // is bookmark search enabled?
+				
+				// bookmark search, if enabled
+				else if (this.options.bookmarkSearchStatus)
 				{
 					// emptying the bookmarks array
 					this.bookmarks = [];
 					this.Browser.isBookmark(text); // check if the text matches a bookmark
 					this.setURL("");
+					return true;
 				}
-				else // web search
+				
+				// web search				
+				else {
 					this.setState(text, "search");
+					return true;
+				}
 			}
-		}			
+		}
+		
+		// set state for bookmark
 		else if (type === "bookmark") // value is the bookmark no. in Glee.bookmarks
 		{
 			this.description("Open bookmark (" + ( value + 1 ) + " of "+(this.bookmarks.length - 1) + "): " + this.bookmarks[value].title, true);
 			this.setURL(this.bookmarks[value].url);
 		}
+		
+		// set state for bookmarklet
 		else if (type === "bookmarklet") // value is the bookmarklet returned
 		{
 			this.description("Closest matching bookmarklet: " + value.title + " (press enter to execute)", true);
-			this.setURL(val);
+			this.setURL(value, '');
 		}
+		
+		// search web
 		else if (type === "search") // value is the text query
 		{
 			this.description("Search for " + value, true);
 			this.setURL(Glee.options.searchEngineUrl + value);
 		}
+		
+		// display a message
 		else if (type === "msg") // value is the message to be displayed
 		{
 			this.description(value);
 			this.setURL("");
 		}
+		
+		// return to default state.
 		else
 		{
 			this.description(Glee.defaults.nullStateMessage);
@@ -672,12 +744,12 @@ var Glee = {
 		if (status)
 		{
 			Glee.isSearching = true;
-			$("#gleeSubActivity").html("searching");
+			Glee.$searchActivity.html("searching");
 		}
 		else
 		{
 			Glee.isSearching = false;
-			$("#gleeSubActivity").html("");
+			Glee.$searchActivity.html("");
 		}
 	},
 	
@@ -752,7 +824,7 @@ var Glee = {
 	
 	attachListeners: function() {
 		Glee.$searchField.bind('keydown', Glee.Events.onKeyDown);
-    	Glee.$searchField.bind('keyup', Glee.Events.onKeyUp);
+		Glee.$searchField.bind('keyup', Glee.Events.onKeyUp);
 	},
 	
 	detachListeners: function() {
@@ -778,8 +850,6 @@ var Glee = {
     						return true;
     					e.preventDefault();
 
-                        // set default subtext
-						Glee.description(Glee.defaults.nullStateMessage);
     					if (e.keyCode == Glee.options.shortcutKey)
     					    Glee.open();
     					else if (IS_CHROME)

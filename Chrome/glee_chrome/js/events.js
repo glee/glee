@@ -35,34 +35,32 @@ Glee.Events = {
 	
 	// called when keyup event occurs inside gleeBox
 	onKeyUp: function(e) {
+		
 		var value = Glee.value();
+		console.log("onKeyUP");
 		
 		// check if content of gleeBox has changed
 		if (Glee.lastQuery != value)
 		{
 			e.preventDefault();
             // Glee.detachScraperListener();
-
-			// determine if a DOM search is required
-			if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
-				Glee.isDOMSearchRequired = false;
-			else
-				Glee.isDOMSearchRequired = true;
 			
 			// if not empty
 			if (value != "")
 			{
+				// determine if a DOM search is required
+				if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
+					Glee.isDOMSearchRequired = false;
+				else
+					Glee.isDOMSearchRequired = true;
+				
 				Glee.setSearchActivity(true);
 				Glee.isEspRunning = false;
 
 				// Check if the query is not a command
-				if (value[0] != "?"
-					&& value[0] != "!"
-					&& value[0] != ":"
-					&& value[0] != '*')
-				{
+				if (!Glee.isCommand())
 					Glee.Events.queryNonCommand();
-				}
+				
                 // Command Mode
 				else {
 					// Flush any previously selected links
@@ -77,20 +75,17 @@ Glee.Events = {
 					Glee.resetTimer();
 					Glee.setSearchActivity(false);
 
-					if (value[0] === '?' && value.length > 1)
+					if (Glee.isScraper())
                         Glee.Events.queryScraper(value);
 
-					else if (value[0] === ':')
+					else if (Glee.isColonCmd())
                         Glee.Events.queryCommandEngine(value);
                     
-                	else if (value[0] === "!" && value.length > 1)
+                	else if (Glee.isPageCmd())
 					    Glee.Events.queryPageCmd(value);
 
-					else if (value[0] === '*')
-					{
-						Glee.nullMessage = "Nothing found for your selector.";
+					else if (Glee.isJQueryCmd())
 						Glee.setState("Enter jQuery selector and press enter, at your own risk.", "msg");
-					}
 
 					else
 						Glee.setState("Command not found", "msg");
@@ -111,15 +106,12 @@ Glee.Events = {
 		{
 			e.preventDefault();
 
-			if (value[0] === "*" && value != Glee.lastjQuery) {
-			    Glee.addCommandToCache(value);
+			if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
 			    Glee.Events.executeJQuerySelector(value);
 			}
                 
-			else if (value[0] === "!" && value.length > 1) {
-			    Glee.addCommandToCache(value);
+			else if (Glee.isPageCmd())
 			    Glee.Events.executePageCmd(e, value);
-			}
 			else
 			    Glee.Events.execute(e, value);
 		}
@@ -197,6 +189,10 @@ Glee.Events = {
     
     // when a scraper command is entered
     queryScraper: function(value) {
+		if (value.length === 1) {
+			Glee.setState("Enter Scraper Command", "msg");
+			return false;
+		}
         var cmd = value.substr(1);
 		var len = Glee.scrapers.length;
 		
@@ -208,12 +204,16 @@ Glee.Events = {
                 return true;
 			}
 		}
-		Glee.empty();
+		Glee.setState("Command not found", "msg");
 		return false;
     },
     
     // when a yubnub/quix command is entered
     queryCommandEngine: function(value) {
+		if (value.length === 1) {
+			Glee.setState("Enter " + Glee.options.commandEngine + " command", "msg");
+			return false;
+		}
         c = value.substring(1);
         c = c.replace("$", location.href);
         Glee.description("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c, true);
@@ -222,6 +222,10 @@ Glee.Events = {
     
     // when a page command is entered
     queryPageCmd: function(value) {
+		if (value.length === 1) {
+			Glee.setState("Enter Page Command", "msg");
+			return false;
+		}
     	var trimVal = value.split(" ")[0].substr(1);
 		Glee.URL = null;
 		var len = Glee.commands.length;
@@ -241,7 +245,12 @@ Glee.Events = {
     },
     
     // when a page command is executed
-    executePageCmd: function(e) {
+    executePageCmd: function(e, value) {
+		if (value.length === 1)
+			return false;
+			
+	    Glee.addCommandToCache(value);
+
 		if (Glee.inspectMode)
 		{
 			Glee.inspectMode = false;
@@ -332,11 +341,14 @@ Glee.Events = {
 	},
     
     // jquery selector is executed
-    executeJQuerySelector: function(value) {
+    executeJQuerySelector: function(value) {	
+	    Glee.addCommandToCache(value);
+
         if (Glee.selectedElement)
 			Glee.selectedElement.removeClass('GleeHL');
 		
 		LinkReaper.reapWhatever( value.substring(1) );
+		Glee.nullMessage = "Nothing matched your selector";
 		Glee.selectedElement = LinkReaper.getFirst();
 		Glee.setState(Glee.selectedElement, "el");
 		Glee.scrollToElement(Glee.selectedElement);

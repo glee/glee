@@ -36,13 +36,15 @@
 	font-family: inherit !important;
 	font-weight: normal !important;
 	height: auto !important;
+	min-height: 20px !important;
+	display: block !important;
 	margin: 0 !important;
 	padding: 0 !important;
 	color: inherit !important;
 	line-height: normal !important;
 }
 
-#gleeSubText, #gleeSubURL, #gleeSubActivity {
+#gleeSubText, #gleeSubURL, #gleeSearchActivity {
 	width: auto !important;
 	font-size: inherit !important;
 	color: inherit !important;
@@ -53,6 +55,7 @@
 
 #gleeSubText {
 	float: left !important;
+	margin-right: 5px !important;
 }
 
 #gleeSubURL {
@@ -60,9 +63,8 @@
 	float: right !important;
 }
 
-#gleeSubActivity {
+#gleeSearchActivity {
 	height: 10px !important;
 	display: inline !important;
 	float: left !important;
-	padding-left: 5px;
 }
