@@ -70,6 +70,8 @@ var Glee = {
 	
 	isSearching: false,
 	
+	isEspRunning: false,
+	
 	isDOMSearchRequired: true,
 	
 	commandMode: false,
@@ -248,8 +250,8 @@ var Glee = {
         // create the DOM elements
 	    Glee.createBox();
 	    
-	    // add event listeners
-	    Glee.addListeners();
+		// attach the win listener
+	    Glee.attachWindowListener();
 
         // fill cache
         Glee.fillCache();
@@ -282,14 +284,11 @@ var Glee = {
 	open: function() {
 		if (!Glee.isVisible())
 		{
-			// reset gleeBox 
-			Glee.empty();
-			Glee.$searchBox.fadeIn(150);			
-			Glee.focus();
-            Glee.fireEsp();
+			Glee.$searchBox.fadeIn(150);
+           	Glee.fireEsp();
 		}
-		else
-			Glee.focus();
+		Glee.attachListeners();
+		Glee.focus();
 	},
 	
 	// called when options are returned by background.html
@@ -344,7 +343,6 @@ var Glee = {
 	},
 	
 	setURL: function(value) {
-		console.log("setURL: " + value);
 		this.URL = value;
 		this.$subURL.html(Utils.filter(value));
 	},
@@ -370,7 +368,7 @@ var Glee = {
 	
 	empty: function() {
 		this.value('');
-		this.setState(null);
+		this.setURL('');
 	},
 	
 	addClass: function(class) {
@@ -412,42 +410,29 @@ var Glee = {
         this.inspectMode = false;
         this.lastQuery = null;
         this.lastjQuery = null;
-        this.toggleActivity(0);
+        this.setSearchActivity(false);
 		this.empty();
         // this.detachScraperListener();
 	},
 	
 	close: function(callback) {
-	    this.resetTimer();
 		this.getBackInitialState();
-		setTimeout(function() {
-		    LinkReaper.unreapAllLinks();
-		}, 0);
 		this.$searchBox.fadeOut(150, function() {
-			Glee.empty();
-			Glee.setState(null);
+			Glee.reset();
             if (callback) {
                 callback();
             }
 		});
-		this.lastQuery = null;
-		this.selectedElement = null;
-		this.inspectMode = false;
-        // this.detachScraperListener();
+		Glee.detachListeners();
 	},
 	
-	closeWithoutBlur: function() {
-	    this.resetTimer();
-		setTimeout(function() {
-		    LinkReaper.unreapAllLinks();
-		}, 0);
+	closeWithoutBlur: function(callback) {
 		this.$searchBox.fadeOut(150, function() {
-			Glee.empty();
+			Glee.reset();
+			if (callback)
+				callback();
 		});
-		this.lastQuery = null;
-		this.selectedElement = null;
-		this.inspectMode = false;
-        // this.detachScraperListener();
+		Glee.detachListeners();
 	},
 	
 	initScraper: function(scraper) {
@@ -508,8 +493,6 @@ var Glee = {
 	},
 	
 	setState: function(value, type) {
-		this.setURL(null);
-		
 		// in case of element
 		if (type === "el")
 		{
@@ -535,6 +518,7 @@ var Glee = {
 					// emptying the bookmarks array
 					this.bookmarks = [];
 					this.Browser.isBookmark(text); // check if the text matches a bookmark
+					this.setURL("");
 				}
 				else // web search
 					this.setState(text, "search");
@@ -621,6 +605,7 @@ var Glee = {
 	fireEsp: function() {
 		if (!Glee.options.espStatus)
 			return false;
+		Glee.isEspRunning = true;
         var selStr = Glee.getEspSelector();
 		if (selStr)
 		{
@@ -648,8 +633,7 @@ var Glee = {
 			{
 				scroll = true;
 			}
-			//TODO: Set scroll to true if the element is overlapping with gleeBox
-
+			// TODO: Set scroll to true if the element is overlapping with gleeBox
 			if (scroll)
 			{
 				// We keep the scroll such that the element stays a little away from
@@ -681,11 +665,11 @@ var Glee = {
 	getBufferDuration: function(distance) {
 		if (distance < 0)
 			distance *= -1;
-		return (Glee.options.scrollingSpeed == 0 ? 0 : distance*0.4);
+		return (Glee.options.scrollingSpeed == 0 ? 0 : distance * 0.4);
 	},
 	
-	toggleActivity: function(toggle) {
-		if (toggle == 1)
+	setSearchActivity: function(status) {
+		if (status)
 		{
 			Glee.isSearching = true;
 			$("#gleeSubActivity").html("searching");
@@ -706,7 +690,7 @@ var Glee = {
 	},
 	
 	resetTimer: function() {
-		if (typeof(this.timer) != "undefined")
+		if (this.timer != undefined)
 			clearTimeout(this.timer);
 	},
 	
@@ -726,7 +710,7 @@ var Glee = {
 	},
 	
 	getCommandEngineSyntax: function(c) {
-	    if (Glee.options.commandEngine == "yubnub") {
+	    if (Glee.options.commandEngine === "yubnub") {
 	        return "http://yubnub.org/parser/parse?command=" + c;
 	    }
 	    else {
@@ -766,15 +750,26 @@ var Glee = {
         });
 	},
 	
-	addListeners: function() {
-        $(window).bind('keydown', function(e) {
+	attachListeners: function() {
+		Glee.$searchField.bind('keydown', Glee.Events.onKeyDown);
+    	Glee.$searchField.bind('keyup', Glee.Events.onKeyUp);
+	},
+	
+	detachListeners: function() {
+		Glee.$searchField.unbind('keydown', Glee.Events.onKeyDown);
+    	Glee.$searchField.unbind('keyup', Glee.Events.onKeyUp);
+	},
+	
+	attachWindowListener: function() {
+		// attach the window Listener
+		$(window).bind('keydown', function(e) {
     		var target = e.target || e.srcElement;
     		if (Glee.options.status && Glee.options.status != 0)
     		{
                 var node = target.nodeName.toLowerCase();
     			if ((node != 'input' && node != 'textarea' && node != 'div' && node != 'object') || e.altKey)
     			{
-    			    if (target.id == "gleeSearchField")
+    			    if (target.id === "gleeSearchField")
     			        return true;
 
     				if (e.keyCode == Glee.options.shortcutKey || (e.keyCode == Glee.options.tabShortcutKey && Glee.options.tabShortcutStatus))
@@ -790,145 +785,6 @@ var Glee = {
     					else if (IS_CHROME)
                             Glee.Browser.openTabManager();
     				}
-    			}
-    		}
-    	});
-    	
-    	Glee.$searchField.bind('keydown', function(e) {
-            // Escape: Hides gleeBox.
-    		if (e.keyCode == 27)
-    		{
-    			e.preventDefault();
-                // if (Glee.searchField.attr('value') == "") {
-			    Glee.close();
-                // }
-                // else
-                //     Glee.reset();
-    		}
-    		
-    		// TAB: Scroll between elements/bookmarks
-    		else if (e.keyCode == 9)
-    		{
-    			e.stopPropagation();
-    			e.preventDefault();
-			    Glee.Events.onTabKeyDown(e);
-    		}
-    		
-    		// Up/Down Arrow keys: Page scrolling
-    		else if (e.keyCode == 40 || e.keyCode == 38)
-    		{
-    			Utils.simulateScroll((e.keyCode == 38 ? 1 : -1));
-    		}
-    		
-    		// Open Tab Manager when shortcut key is pressed inside gleeBox
-    		else if (e.keyCode == Glee.options.tabShortcutKey && Glee.value().length == 0 && IS_CHROME)
-    		{
-    		    if (e.metaKey || e.ctrlKey || e.shiftKey)
-    		        break;
-    			Glee.Browser.openTabManager();
-    			return;
-    		}
-    	});
-    	
-    	Glee.$searchField.bind('keyup', function(e) {
-    		var value = Glee.value();
-    		// Check if content of gleeBox has changed
-    		if (Glee.lastQuery != value)
-    		{
-    			e.preventDefault();
-                // Glee.detachScraperListener();
-    			if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
-    				Glee.isDOMSearchRequired = false;
-    			else
-    				Glee.isDOMSearchRequired = true;
-
-    			if (value != "")
-    			{
-    				Glee.toggleActivity(1);
-
-    				// Check if the query is not a command
-    				if (value[0] != "?"
-    					&& value[0] != "!"
-    					&& value[0] != ":"
-    					&& value[0] != '*')
-    				{
-    					Glee.Events.queryNonCommand();
-    				}
-                    // Command Mode
-    				else {
-    					// Flush any previously selected links
-                        LinkReaper.unreapAllLinks();
-
-    					Glee.commandMode = true;
-    					Glee.inspectMode = false;
-    					Glee.selectedElement = null;
-
-    					if (Glee.options.bookmarkSearchStatus)
-    						Glee.bookmarks = [];
-    					Glee.resetTimer();
-    					Glee.toggleActivity(0);
-
-    					if (value[0] === '?' && value.length > 1)
-                            Glee.Events.queryScraper(value);
-
-    					else if (value[0] === ':')
-                            Glee.Events.queryCommandEngine(value);
-                        
-                    	else if (value[0] === "!" && value.length > 1)
-    					    Glee.Events.queryPageCmd(value);
-
-    					else if (value[0] === '*')
-    					{
-    						Glee.nullMessage = "Nothing found for your selector.";
-    						Glee.setState("Enter jQuery selector and press enter, at your own risk.", "msg");
-    					}
-
-    					else
-    						Glee.setState("Command not found", "msg");
-    				}
-    			}
-    			// gleeBox is empty
-    			else
-    			{
-    			    // reset everything
-    				Glee.reset();
-   					Glee.fireEsp();
-    			}
-    			Glee.lastQuery = value;
-    			Glee.lastjQuery = null;
-    		}
-
-            // ENTER: execute query
-    		else if (e.keyCode == 13)
-    		{
-    			e.preventDefault();
-
-    			if (value[0] === "*" && value != Glee.lastjQuery) {
-    			    Glee.addCommandToCache(value);
-    			    Glee.Events.executeJQuerySelector(value);
-    			}
-                    
-    			else if (value[0] === "!" && value.length > 1) {
-    			    Glee.addCommandToCache(value);
-    			    Glee.Events.executePageCmd(e, value);
-    			}
-    			else
-    			    Glee.Events.execute(e, value);
-    		}
-    		
-    		// Up/Down arrows
-    		else if (e.keyCode == 40 || e.keyCode == 38)
-    		{
-    		    // stop scrolling
-    			Utils.simulateScroll(0);
-    			// select the topmost element in view when scrolling using arrow keys ends
-    			// so that when you scroll to another part of the page and then TAB,
-    			// you're not pulled up to another position on the page
-    			if (Glee.selectedElement) {
-                    LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
-                    LinkReaper.unHighlight(Glee.selectedElement);
-                    Glee.selectedElement = LinkReaper.getFirst();
-                    Glee.setState(Glee.selectedElement, "el");
     			}
     		}
     	});

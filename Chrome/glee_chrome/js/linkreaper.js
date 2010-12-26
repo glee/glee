@@ -68,7 +68,7 @@ var LinkReaper = {
 
 		if (index != -1 && Utils.isVisible(el)) {
 			el.addClass('GleeReaped');
-			Glee.state(el, "el");
+			Glee.setState(el, "el");
 			return true;
 		}
 		else {

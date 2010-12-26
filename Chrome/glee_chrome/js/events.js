@@ -1,4 +1,146 @@
 Glee.Events = {
+
+	// called when keydown event occurs inside gleeBox
+	onKeyDown: function(e) {
+		// esc: hide gleeBox
+		if (e.keyCode === 27)
+		{
+			e.preventDefault();
+		    Glee.close();
+		}
+		
+		// tab: Scroll between elements / bookmarks
+		else if (e.keyCode === 9)
+		{
+			e.stopPropagation();
+			e.preventDefault();
+		    Glee.Events.onTabKeyDown(e);
+		}
+		
+		// Up / Down Arrow keys: Begin scrolling
+		else if (e.keyCode === 40 || e.keyCode === 38)
+		{
+			Utils.simulateScroll((e.keyCode === 38 ? 1 : -1));
+		}
+		
+		// Open Tab Manager when shortcut key is pressed inside gleeBox
+		else if (e.keyCode === Glee.options.tabShortcutKey && Glee.value().length === 0 && IS_CHROME)
+		{
+		    if (e.metaKey || e.ctrlKey || e.shiftKey)
+		        break;
+			Glee.Browser.openTabManager();
+			return;
+		}
+	},
+	
+	// called when keyup event occurs inside gleeBox
+	onKeyUp: function(e) {
+		var value = Glee.value();
+		
+		// check if content of gleeBox has changed
+		if (Glee.lastQuery != value)
+		{
+			e.preventDefault();
+            // Glee.detachScraperListener();
+
+			// determine if a DOM search is required
+			if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
+				Glee.isDOMSearchRequired = false;
+			else
+				Glee.isDOMSearchRequired = true;
+			
+			// if not empty
+			if (value != "")
+			{
+				Glee.setSearchActivity(true);
+				Glee.isEspRunning = false;
+
+				// Check if the query is not a command
+				if (value[0] != "?"
+					&& value[0] != "!"
+					&& value[0] != ":"
+					&& value[0] != '*')
+				{
+					Glee.Events.queryNonCommand();
+				}
+                // Command Mode
+				else {
+					// Flush any previously selected links
+                    LinkReaper.unreapAllLinks();
+
+					Glee.commandMode = true;
+					Glee.inspectMode = false;
+					Glee.selectedElement = null;
+
+					if (Glee.options.bookmarkSearchStatus)
+						Glee.bookmarks = [];
+					Glee.resetTimer();
+					Glee.setSearchActivity(false);
+
+					if (value[0] === '?' && value.length > 1)
+                        Glee.Events.queryScraper(value);
+
+					else if (value[0] === ':')
+                        Glee.Events.queryCommandEngine(value);
+                    
+                	else if (value[0] === "!" && value.length > 1)
+					    Glee.Events.queryPageCmd(value);
+
+					else if (value[0] === '*')
+					{
+						Glee.nullMessage = "Nothing found for your selector.";
+						Glee.setState("Enter jQuery selector and press enter, at your own risk.", "msg");
+					}
+
+					else
+						Glee.setState("Command not found", "msg");
+				}
+			}
+			// gleeBox is empty.
+			else if (!Glee.isEspRunning)
+			{
+				Glee.reset();
+				Glee.fireEsp();
+			}
+			Glee.lastQuery = value;
+			Glee.lastjQuery = null;
+		}
+
+        // enter: execute query
+		else if (e.keyCode === 13)
+		{
+			e.preventDefault();
+
+			if (value[0] === "*" && value != Glee.lastjQuery) {
+			    Glee.addCommandToCache(value);
+			    Glee.Events.executeJQuerySelector(value);
+			}
+                
+			else if (value[0] === "!" && value.length > 1) {
+			    Glee.addCommandToCache(value);
+			    Glee.Events.executePageCmd(e, value);
+			}
+			else
+			    Glee.Events.execute(e, value);
+		}
+		
+		// Up / Down arrow keys: Stop scrolling
+		else if (e.keyCode === 40 || e.keyCode === 38)
+		{
+		    // stop scrolling
+			Utils.simulateScroll(0);
+			// select the topmost element in view when scrolling using arrow keys ends
+			// so that when you scroll to another part of the page and then TAB,
+			// you're not pulled up to another position on the page
+			if (Glee.selectedElement) {
+                LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
+                LinkReaper.unHighlight(Glee.selectedElement);
+                Glee.selectedElement = LinkReaper.getFirst();
+                Glee.setState(Glee.selectedElement, "el");
+			}
+		}
+	},
+	
     // called when tab key is pressed inside gleebox
     onTabKeyDown: function(e) {
         if (Glee.selectedElement)
@@ -43,13 +185,13 @@ Glee.Events = {
 				Glee.selectedElement = LinkReaper.getFirst();
 				Glee.setState(Glee.selectedElement, "el");
 				Glee.scrollToElement(Glee.selectedElement);
-				Glee.toggleActivity(0);
+				Glee.setSearchActivity(false);
 			}, Glee.defaults.linkSearchTimer);
 		}
 		else
 		{
 			Glee.setState(null, "el");
-			Glee.toggleActivity(0);
+			Glee.setSearchActivity(false);
 		}
     },
     
@@ -66,7 +208,7 @@ Glee.Events = {
                 return true;
 			}
 		}
-		Glee.setState(null);
+		Glee.empty();
 		return false;
     },
     

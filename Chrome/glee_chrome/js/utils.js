@@ -78,7 +78,7 @@ var Utils = {
 	 * 	@return {String} The filtered text
 	 */
 	filter: function(text) {
-		if (text && typeof(text) != "undefined")
+		if (text && text != undefined)
 		{
 			// replace < with &lt; and > with &gt;
 			text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -87,6 +87,7 @@ var Utils = {
 			else
 				return text;
 		}
+		return text;
 	},
 	
 	/**

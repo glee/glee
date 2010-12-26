@@ -56,7 +56,7 @@ Glee.inspectPage = function() {
 		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
 		return;
 	}
-	Glee.toggleActivity(0);
+	Glee.toggleSearchActivity();
 }
 
 // share: Share current page in mail/twitter/facebook. Makes use of the AddThis service
