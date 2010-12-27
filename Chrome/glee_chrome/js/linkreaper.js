@@ -37,7 +37,7 @@ var LinkReaper = {
 			// Else search the whole page
 			else
 			{
-			    LinkReaper.unreapAllLinks();
+				LinkReaper.unreapAllLinks();
 				var newList = [];
 				$('a, a > img, input[type=button], input[type=submit], button').each(function() {
 				    var $this = $(this);

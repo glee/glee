@@ -112,7 +112,7 @@ var Glee = {
 			name: "read",
 			method: "makeReadable",
 			description: "Make your page readable using Readability",
-			statusText: "Please wait while Glee+Readability work up the magic..."
+			statusText: "Please wait while gleeBox + Readability work up the magic..."
 		},
 		{
 			name: "rss",
@@ -453,15 +453,15 @@ var Glee = {
         this.lastjQuery = null;
         this.setSearchActivity(false);
 		this.empty();
-		setTimeout(function() {
-			LinkReaper.unreapAllLinks();
-		}, 0);
         // this.detachScraperListener();
 	},
 	
 	close: function(callback) {
 		this.getBackInitialState();
 		this.reset();
+		setTimeout(function() {
+			LinkReaper.unreapAllLinks();
+		}, 0);
 		this.$searchBox.fadeOut(150, function() {
             if (callback) {
                 callback();
@@ -471,6 +471,9 @@ var Glee = {
 	
 	closeWithoutBlur: function(callback) {
 		this.reset();
+		setTimeout(function() {
+			LinkReaper.unreapAllLinks();
+		}, 0);		
 		this.$searchBox.fadeOut(150, function() {
 			if (callback)
 				callback();
@@ -485,7 +488,6 @@ var Glee = {
             $(this).addClass(scraper.cssStyle);
         });
 		this.selectedElement = LinkReaper.getFirst();
-		this.nullMessage = "Nothing matched";
 		this.setState(this.selectedElement, "el");
 		this.scrollToElement(this.selectedElement);
         LinkReaper.traversePosition = 0;
@@ -496,7 +498,6 @@ var Glee = {
 	// attach a livequery listener, so that when a new element belonging to the current scraper/vision's selector gets inserted into the DOM, it gets added to the selected elements
 	attachScraperListener: function(scraper) {
         $(scraper.selector).livequery(function() {
-            console.log("livequery called");
             $this = $(this);
             if(!Utils.isVisible(this))
                 return;
@@ -681,7 +682,7 @@ var Glee = {
 		{
 			// Temporary scraper object
 			var tempScraper = {
-				nullMessage : "Could not find any elements on the page",
+				nullMessage : "",
 				selector : selStr,
 				cssStyle : "GleeReaped"
 			};

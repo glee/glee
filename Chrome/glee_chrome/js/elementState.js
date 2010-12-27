@@ -51,11 +51,20 @@ ElementState.prototype.initNonLink = function() {
 }
 
 ElementState.prototype.initImage = function() {
-	var value = this.$el.attr('alt') 
-				|| this.$el.parent('a').attr('title')
-				|| "Image";
-	Glee.description(value);
-	Glee.setURL("");
+	var $a_parent = this.$el.parent('a');
+	var value = $a_parent.attr('title')
+				|| this.$el.attr('alt');
+	if (value)
+		Glee.description(value);
+	else if ($a_parent.length != 0)
+		Glee.description("Linked Image");
+	else
+		Glee.description("Image");
+	
+	if ($a_parent.length != 0)
+		Glee.setURL($a_parent.attr('href'));
+	else
+		Glee.setURL("");
 }
 
 ElementState.prototype.initInput = function() {

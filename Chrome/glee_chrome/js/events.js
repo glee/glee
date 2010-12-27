@@ -52,9 +52,10 @@ Glee.Events = {
 					Glee.isDOMSearchRequired = false;
 				else
 					Glee.isDOMSearchRequired = true;
+					
+				Glee.isEspRunning = false;
 				
 				Glee.setSearchActivity(true);
-				Glee.isEspRunning = false;
 
 				// Check if the query is not a command
 				if (!Glee.isCommand())
@@ -94,7 +95,10 @@ Glee.Events = {
 			else if (!Glee.isEspRunning)
 			{
 				Glee.reset();
-				Glee.fireEsp();
+				setTimeout(function() {
+					LinkReaper.unreapAllLinks();
+					Glee.fireEsp();
+				}, 0);
 			}
 			Glee.lastQuery = value;
 			Glee.lastjQuery = null;
