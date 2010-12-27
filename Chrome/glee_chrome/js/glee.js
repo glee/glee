@@ -62,6 +62,9 @@ var Glee = {
 	// State of scrolling. 0=None, 1=Up, -1=Down.
 	scrollState: 0,
 	
+	// if any text is selected when gleeBox is activated, it acts as the default query for cmd engine
+	defaultQuery: null,
+	
 	// last query executed in gleeBox
 	lastQuery: null,
 	
@@ -296,6 +299,7 @@ var Glee = {
 			Glee.$searchBox.fadeIn(150);
            	Glee.fireEsp();
 		}
+		Glee.getDefaultQuery();
 		Glee.focus();
 	},
 	
@@ -332,6 +336,13 @@ var Glee = {
 		if (Glee.options.status != 0 && Glee.options.hyperMode == true) {
 			Glee.getHyperized();
 		}
+	},
+	
+	getDefaultQuery: function() {
+		// check for highlighted text
+		var text = window.getSelection().toString();
+		if (text)
+			Glee.defaultQuery = text;
 	},
 	
 	getHyperized: function() {
@@ -451,6 +462,7 @@ var Glee = {
         this.inspectMode = false;
         this.lastQuery = null;
         this.lastjQuery = null;
+		this.defaultQuery = null;
         this.setSearchActivity(false);
 		this.empty();
         // this.detachScraperListener();

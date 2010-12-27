@@ -41,7 +41,8 @@ Glee.Events = {
 		// check if content of gleeBox has changed
 		if (Glee.lastQuery != value)
 		{
-			e.preventDefault();
+			if (e)
+				e.preventDefault();
             // Glee.detachScraperListener();
 			
 			// if not empty
@@ -219,6 +220,12 @@ Glee.Events = {
 		}
         c = value.substring(1);
         c = c.replace("$", location.href);
+
+		// if no arguments, use default query
+		var parts = c.split(" ");
+		if (parts.length === 1 && Glee.defaultQuery)
+			c += " " + Glee.defaultQuery;
+		
         Glee.description("Run " + Glee.options.commandEngine + " command (press enter to execute): " + c, true);
 		Glee.setURL(Glee.getCommandEngineSyntax(c));
     },
@@ -258,8 +265,10 @@ Glee.Events = {
 		{
 			Glee.inspectMode = false;
 			result = SelectorGenerator.generate(Glee.selectedElement);
-			Glee.value(result);
-			Glee.setState("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
+			var value = "*" + result; 
+			Glee.value(value);
+			Glee.lastQuery = value;
+			Glee.Events.executeJQuerySelector(result);
 			return true;
 		}
 

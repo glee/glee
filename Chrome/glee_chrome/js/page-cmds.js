@@ -46,17 +46,19 @@ Glee.inspectPage = function() {
 	Glee.scrollToElement(Glee.selectedElement);
 	if (LinkReaper.selectedLinks.length > 1)
 	{
-		Glee.setSubText("Tab through and select the element you want to inspect and press Enter", "msg");
+		Glee.setState("Tab through and select the element you want to inspect and press Enter", "msg");
 		Glee.inspectMode = true;
 	}
 	else
 	{
 		result = SelectorGenerator.generate(Glee.selectedElement);
-		Glee.value(result);
-		Glee.setSubText("Now you can execute selector by adding * at the beginning or use !set vision=selector to add an esp vision for this page.", "msg");
+		var value = "*" + result;
+		Glee.value(value);
+		Glee.lastQuery = value;
+		Glee.Events.executeJQuerySelector(result);
 		return;
 	}
-	Glee.toggleSearchActivity();
+	Glee.setSearchActivity(false);
 }
 
 // share: Share current page in mail/twitter/facebook. Makes use of the AddThis service
@@ -163,7 +165,7 @@ Glee.shortenURL = function() {
 		var json = JSON.parse("["+data+"]");
 		var shortenedURL = json[0].results[location.href].shortUrl;
 		Glee.value(shortenedURL);
-		Glee.setSubText("You can now copy the shortened URL to your clipboard!","msg");
+		Glee.setState("You can now copy the shortened URL to your clipboard!", "msg");
 	});
 }
 
@@ -265,7 +267,7 @@ Glee.setOptionValue = function() {
 	// if failed validity test, return
 	if (!valid)
 	{
-		Glee.setSubText("Invalid !set syntax. Please refer manual using !help command","msg");
+		Glee.setState("Invalid !set syntax. Please refer manual using !help command", "msg");
 		return;
 	}
 	
