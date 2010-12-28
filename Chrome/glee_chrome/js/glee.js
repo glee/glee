@@ -836,13 +836,17 @@ var Glee = {
 	},
 	
 	attachWindowListener: function() {
+		// element types that can be used for input and need to be avoided
+		var blacklist = ['input', 'textarea', 'div', 'object', 'embed'];
+
 		// attach the window Listener
 		$(window).bind('keydown', function(e) {
     		var target = e.target || e.srcElement;
     		if (Glee.options.status && Glee.options.status != 0)
     		{
                 var node = target.nodeName.toLowerCase();
-    			if ((node != 'input' && node != 'textarea' && node != 'div' && node != 'object') || e.altKey)
+
+    			if (($.inArray(node, blacklist) === -1) || e.altKey)
     			{
     			    if (target.id === "gleeSearchField")
     			        return true;

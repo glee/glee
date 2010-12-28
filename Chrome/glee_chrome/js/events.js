@@ -39,7 +39,6 @@ Glee.Events = {
 	 *	When a key is released inside gleeBox
 	 */
 	onKeyUp: function(e) {
-		console.log(e);
 		// not using the Event object to fetch value as onKeyUp may be called explicitly
 		var value = Glee.value();
 		
