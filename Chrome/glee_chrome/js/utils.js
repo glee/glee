@@ -113,16 +113,17 @@ var Utils = {
 		var $el = $(el);
 		if ($el.css('display') === "none" || $el.css('visibility') === "hidden")
 			return false;
-		else
+		
+		// check parents visibility
+		var $parents = $el.parents();
+		var len = $parents.length;
+		
+		for (var i = 0; i < len; i++)
 		{
-			var $parents = $el.parents();
-			var len = $parents.length;
-			
-			for (var i = 0; i < len; i++)
-			{
-				if ($($parents[i]).css("display") === "none")
-					return false;
-			}
+			var $parent = $($parents[i]);
+			if ($parent.css("display") === "none" ||
+				$parent.css('visibility') === "hidden")
+				return false;
 		}
 		return true;
 	},

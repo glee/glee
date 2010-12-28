@@ -316,7 +316,7 @@ var Glee = {
 		}
 		
 		// Size
-		Glee.$searchField.attr('class', "");
+		Glee.$searchField.removeClass('gleeSmallSize gleeMediumSize gleeLargeSize');
 		Glee.$searchField.addClass("glee" + Glee.options.size.capitalize() + "Size");
 		
 		// Hyper mode
@@ -698,15 +698,14 @@ var Glee = {
 	scrollToElement: function(el) {
 		var target = $(el);
 		var scroll = false;
-		var boxHeight = Glee.height() + 50;
+		var boxHeight = Glee.height() + 80;
 		if (target.length != 0)
 		{
 			var targetOffsetTop = target.offset().top;
 			
 			// if the element is above / below the current visible view, scroll
 			if ( (targetOffsetTop > window.pageYOffset && (targetOffsetTop - window.pageYOffset) > (window.innerHeight - boxHeight)) ||
-				(targetOffsetTop < window.pageYOffset && (window.pageYOffset - targetOffsetTop) < window.innerHeight)
-			)
+				targetOffsetTop < window.pageYOffset)
 				scroll = true;
 			
 			// TODO: Set scroll to true if the element is overlapping with gleeBox
@@ -716,10 +715,11 @@ var Glee = {
 				// the top.
 				var targetOffset = targetOffsetTop - Glee.getOffsetFromTop();
 
+
 				// Stop any previous scrolling to prevent queueing
 				Glee.cache.jBody.stop(true);
 				Glee.cache.jBody.animate(
-					{scrollTop:targetOffset},
+					{scrollTop: targetOffset},
 					Glee.options.scrollingSpeed + 
 					Glee.getBufferDuration(window.pageYOffset - targetOffset),
 					"swing",
