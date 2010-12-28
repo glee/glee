@@ -308,32 +308,19 @@ var Glee = {
 		// Theme
 		Glee.addClass(Glee.ThemeOption);
 		
+		// only enable list manager in Chrome
 		if (IS_CHROME && Glee.ListManager != undefined)
 		{
 		    if (Glee.ListManager.box)
     			Glee.ListManager.box.addClass(Glee.ThemeOption);
 		}
 		
-		// Position
-		if (Glee.options.position == "top")
-			topSpace = 0;
-		else if (Glee.options.position == "middle")
-			topSpace = 35;
-		else
-			topSpace = 78;
-		Glee.$searchBox.css("top", topSpace + "%");
-		
 		// Size
-		if (Glee.options.size == "small")
-			fontsize = "30px"
-		else if (Glee.options.size == "medium")
-			fontsize = "50px"
-		else
-			fontsize = "100px"
-		Glee.$searchField.css("font-size", fontsize);
+		Glee.$searchField.attr('class', "");
+		Glee.$searchField.addClass("glee" + Glee.options.size.capitalize() + "Size");
 		
 		// Hyper mode
-		if (Glee.options.status != 0 && Glee.options.hyperMode == true) {
+		if (Glee.options.status != 0 && Glee.options.hyperMode === true) {
 			Glee.getHyperized();
 		}
 	},
@@ -351,6 +338,10 @@ var Glee = {
 	        Glee.open();
             Glee.lastQuery = null;
 	    }
+	},
+	
+	height: function() {
+		return this.$searchBox.height();
 	},
 	
 	value: function(value) {
@@ -707,15 +698,17 @@ var Glee = {
 	scrollToElement: function(el) {
 		var target = $(el);
 		var scroll = false;
+		var boxHeight = Glee.height() + 50;
 		if (target.length != 0)
 		{
 			var targetOffsetTop = target.offset().top;
-			if ((targetOffsetTop - window.pageYOffset > Glee.getOffsetFromTop()) ||
-				(window.innerHeight + window.pageYOffset < targetOffsetTop) || 
-				(window.pageYOffset > targetOffsetTop))
-			{
+			
+			// if the element is above / below the current visible view, scroll
+			if ( (targetOffsetTop > window.pageYOffset && (targetOffsetTop - window.pageYOffset) > (window.innerHeight - boxHeight)) ||
+				(targetOffsetTop < window.pageYOffset && (window.pageYOffset - targetOffsetTop) < window.innerHeight)
+			)
 				scroll = true;
-			}
+			
 			// TODO: Set scroll to true if the element is overlapping with gleeBox
 			if (scroll)
 			{
@@ -737,9 +730,9 @@ var Glee = {
 	},
 	
 	getOffsetFromTop: function() {
-		if (Glee.options.position == "top")
+		if (Glee.options.position === "top")
 			return 180;
-		else if (Glee.options.position == "middle")
+		else if (Glee.options.position === "middle")
 			return 70;
 		else
 			return 120;

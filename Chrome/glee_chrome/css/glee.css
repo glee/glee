@@ -13,7 +13,7 @@
 	padding: 4px 6px !important;
 	position: fixed !important;
 	text-align: left !important;
-	top: 35%;
+	top: 78%;
 	width: 90% !important;
     z-index: 2147483647 !important;
 }
@@ -29,6 +29,19 @@
 	height: auto !important;
 	font-size: 100px;
 	color: #fff;
+}
+
+/** Sizes **/
+.gleeSmallSize {
+	font-size: 30px !important;
+}
+
+.gleeMediumSize {
+	font-size: 50px !important;
+}
+
+.gleeLargeSize {
+	font-size: 100px !important;
 }
 
 #gleeSub {

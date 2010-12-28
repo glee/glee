@@ -42,15 +42,15 @@ Glee.Browser.sendRequest = function(url, method, callback){
 Glee.Browser.updateOptions = function(response) {
 	var prefs = response.preferences;
     // position
-	if (prefs.position != undefined)
-	{
-		if (prefs.position == 0)    // top
-			Glee.options.position = "top";
-		else if (prefs.position == 1)
-			Glee.options.position = "middle";
-		else 
-			Glee.options.position = "bottom"; 	// default
-	}
+	// if (prefs.position != undefined)
+	// {
+	// 	if (prefs.position == 0)    // top
+	// 		Glee.options.position = "top";
+	// 	else if (prefs.position == 1)
+	// 		Glee.options.position = "middle";
+	// 	else 
+	// 		Glee.options.position = "bottom"; 	// default
+	// }
 	
 	// size
 	if (prefs.size != undefined)

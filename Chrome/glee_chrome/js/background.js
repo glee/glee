@@ -183,11 +183,11 @@ function updateOption(option, value) {
 		                  savePreference(option, value);
 		                  break;
 		                  
-		case "pos"		: 
-		case "position" : option = "position";
-		                  cache.prefs[option] = value;
-		                  savePreference(option, value);
-		                  break;
+		// case "pos"		: 
+		// case "position" : option = "position";
+		//                   cache.prefs[option] = value;
+		//                   savePreference(option, value);
+		//                   break;
 
 		case "esp"		: option = "esp_status";
 		                  cache.prefs[option] = value;

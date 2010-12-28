@@ -5,7 +5,6 @@ var sync;
 
 // preference strings
 var prefStrings = [
-	"position",
 	"size",
 	"search_engine",
 	"command_engine",
@@ -19,7 +18,6 @@ var prefStrings = [
 
 // default values for preferences
 var prefDefaults = {
-	position: 2,
 	size: 1,
 	bookmark_search: 0,
 	scroll_animation: 1,
