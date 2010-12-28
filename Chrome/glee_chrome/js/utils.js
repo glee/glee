@@ -129,8 +129,8 @@ var Utils = {
 	},
 	
 	/**
-	 *	Simulates a click on an element. TODO: el should be DOM element here
-	 * 	@param {jQuery} el jQuery object of DOM element to simulate click upon
+	 *	Simulates a click on an element.
+	 * 	@param {Element} el DOM element to simulate click on
 	 *	@param {boolean} Set to true if the link should be opened in a new tab
 	 * 	@return {Event} The Click event
 	 */
@@ -141,7 +141,7 @@ var Utils = {
 			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, target, 0, null);
 		else // otherwise, pass target as e.ctrlKey	
 			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, target, false, false, false, 0, null);
-		return el[0].dispatchEvent(evt);
+		return el.dispatchEvent(evt);
 	},
 	
 	/**

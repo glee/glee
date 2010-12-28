@@ -52,10 +52,14 @@ Glee.inspectPage = function() {
 	else
 	{
 		result = SelectorGenerator.generate(Glee.selectedElement);
-		var value = "*" + result;
-		Glee.value(value);
-		Glee.lastQuery = value;
-		Glee.Events.executeJQuerySelector(result);
+		// if a valid selector is returned
+		if (result) {
+			var value = "*" + result;
+			Glee.value(value);
+			Glee.Events.executeJQuerySelector(result);
+		}
+		else
+			Glee.setState("No matching element found", "msg");
 		return;
 	}
 	Glee.setSearchActivity(false);

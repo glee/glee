@@ -713,8 +713,7 @@ var Glee = {
 			{
 				// We keep the scroll such that the element stays a little away from
 				// the top.
-				var targetOffset = targetOffsetTop - Glee.getOffsetFromTop();
-
+				var targetOffset = targetOffsetTop - 70;
 
 				// Stop any previous scrolling to prevent queueing
 				Glee.cache.jBody.stop(true);

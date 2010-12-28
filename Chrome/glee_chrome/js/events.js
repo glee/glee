@@ -1,6 +1,8 @@
 Glee.Events = {
 
-	// called when keydown event occurs inside gleeBox
+	/**
+	 *	When a key is pressed down inside gleeBox
+	 */
 	onKeyDown: function(e) {
 		// esc: hide gleeBox
 		if (e.keyCode === 27)
@@ -33,9 +35,12 @@ Glee.Events = {
 		}
 	},
 	
-	// called when keyup event occurs inside gleeBox
+	/**
+	 *	When a key is released inside gleeBox
+	 */
 	onKeyUp: function(e) {
-		
+		console.log(e);
+		// not using the Event object to fetch value as onKeyUp may be called explicitly
 		var value = Glee.value();
 		
 		// check if content of gleeBox has changed
@@ -75,15 +80,16 @@ Glee.Events = {
 						Glee.bookmarks = [];
 					Glee.resetTimer();
 					Glee.setSearchActivity(false);
-
+					
+					var command = value.substring(1);
 					if (Glee.isScraper())
-                        Glee.Events.queryScraper(value);
+                        Glee.Events.queryScraper(command);
 
 					else if (Glee.isColonCmd())
-                        Glee.Events.queryCommandEngine(value);
+                        Glee.Events.queryCommandEngine(command);
                     
                 	else if (Glee.isPageCmd())
-					    Glee.Events.queryPageCmd(value);
+					    Glee.Events.queryPageCmd(command);
 
 					else if (Glee.isJQueryCmd())
 						Glee.setState("Enter jQuery selector and press enter, at your own risk.", "msg");
@@ -101,6 +107,7 @@ Glee.Events = {
 					Glee.fireEsp();
 				}, 0);
 			}
+			
 			Glee.lastQuery = value;
 			Glee.lastjQuery = null;
 		}
@@ -109,15 +116,7 @@ Glee.Events = {
 		else if (e.keyCode === 13)
 		{
 			e.preventDefault();
-
-			if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
-			    Glee.Events.executeJQuerySelector(value);
-			}
-                
-			else if (Glee.isPageCmd())
-			    Glee.Events.executePageCmd(e, value);
-			else
-			    Glee.Events.execute(e, value);
+		    Glee.Events.execute(e, value);
 		}
 		
 		// Up / Down arrow keys: Stop scrolling
@@ -137,7 +136,9 @@ Glee.Events = {
 		}
 	},
 	
-    // called when tab key is pressed inside gleebox
+	/**
+	 *	When TAB is pressed down inside gleeBox
+	 */
     onTabKeyDown: function(e) {
         if (Glee.selectedElement)
 		{
@@ -166,7 +167,9 @@ Glee.Events = {
 		}
     },
     
-    // called when a non-command query is entered by user
+	/**
+	 *	Query text entered by user to search for matching links.
+	 */
     queryNonCommand: function() {
 		Glee.commandMode = false;
 
@@ -191,18 +194,20 @@ Glee.Events = {
 		}
     },
     
-    // when a scraper command is entered
+	/**
+	 *	Query Scraper
+	 *	@param {String} value Scraper command
+	 */
     queryScraper: function(value) {
-		if (value.length === 1) {
+		if (!value) {
 			Glee.setState("Enter Scraper Command", "msg");
 			return false;
 		}
-        var cmd = value.substr(1);
 		var len = Glee.scrapers.length;
 		
 		for (var i = 0; i < len; i++)
 		{
-			if (Glee.scrapers[i].command == cmd)
+			if (Glee.scrapers[i].command === value)
 			{
 				Glee.initScraper(Glee.scrapers[i]);
                 return true;
@@ -212,13 +217,16 @@ Glee.Events = {
 		return false;
     },
     
-    // when a yubnub/quix command is entered
+	/**
+	 *	Query Command Engine, set URL and update state
+	 *	@param {String} value Command Engine Command.
+	 */
     queryCommandEngine: function(value) {
-		if (value.length === 1) {
+		if (!value) {
 			Glee.setState("Enter " + Glee.options.commandEngine + " command", "msg");
 			return false;
 		}
-        c = value.substring(1);
+        c = value;
         c = c.replace("$", location.href);
 
 		// if no arguments, use default query
@@ -230,19 +238,23 @@ Glee.Events = {
 		Glee.setURL(Glee.getCommandEngineSyntax(c));
     },
     
-    // when a page command is entered
+	/**
+	 *	Query page commands and set state
+	 * 	@param {String}	value Page command.
+	 */
     queryPageCmd: function(value) {
-		if (value.length === 1) {
+		if (!value) {
 			Glee.setState("Enter Page Command", "msg");
 			return false;
 		}
-    	var trimVal = value.split(" ")[0].substr(1);
+		
+    	var trimVal = value.split(" ")[0];
 		Glee.URL = null;
 		var len = Glee.commands.length;
 		
 		for (var i = 0; i < len; i++)
 		{
-			if (trimVal == Glee.commands[i].name)
+			if (trimVal === Glee.commands[i].name)
 			{
 				Glee.setState(Glee.commands[i].description, "msg");
 				Glee.URL = Glee.commands[i];
@@ -254,20 +266,22 @@ Glee.Events = {
 			Glee.Browser.getBookmarklet(trimVal);
     },
     
-    // when a page command is executed
-    executePageCmd: function(e, value) {
-		if (value.length === 1)
+	/**
+	 *	Execute a page command
+	 *	@param {String}	value Page command.
+	 *	@param {boolean} executeInNewTab If true, command is executed in a new tab
+	 */
+    executePageCmd: function(value, executeInNewTab) {
+		if (!value)
 			return false;
-			
 	    Glee.addCommandToCache(value);
 
 		if (Glee.inspectMode)
 		{
 			Glee.inspectMode = false;
 			result = SelectorGenerator.generate(Glee.selectedElement);
-			var value = "*" + result; 
+			var value = "*" + result;
 			Glee.value(value);
-			Glee.lastQuery = value;
 			Glee.Events.executeJQuerySelector(result);
 			return true;
 		}
@@ -276,7 +290,7 @@ Glee.Events = {
 		// If it a valid page command, execute it
 		if (typeof(Glee.URL.name) != "undefined")
 		{
-		    if (e.shiftKey)
+			if (executeInNewTab)
 		        Glee.execCommand(Glee.URL, true);
 			else
 			    Glee.execCommand(Glee.URL, false);
@@ -305,10 +319,19 @@ Glee.Events = {
 		}
     },
     
-    executeCommandEngine: function(newTab) {
+	/**
+	 *	Execute a command engine (yubnub / quix) command
+	 *	@param {boolean} executeInNewTab If true, command is executed in a new tab
+	 */
+    executeCommandEngine: function(executeInNewTab) {
+		// Glee.URL contains the command
         var u = Glee.URL;
-        if (Glee.options.commandEngine == "yubnub") {
-            if (newTab) {
+		
+		// add command to cache (skip arguments)
+	    Glee.addCommandToCache(u.split(" ")[0]);
+
+        if (Glee.options.commandEngine === "yubnub") {
+            if (executeInNewTab) {
      		    Glee.reset();
                 Glee.Browser.openNewTab(u, false);
             }
@@ -319,12 +342,12 @@ Glee.Events = {
         }
 	    else {
      		var d = '' + document.location;
-     		u = u+'&t='+(document.title?encodeURIComponent(document.title):'')
+     		u = u+'&t='+(document.title ? encodeURIComponent(document.title):'')
   			+'&s='+Glee.options.quixUrl
   			+'&v=080'
   			+'&u='+(document.location?encodeURIComponent(document.location):'');
   			
-     		if (newTab) {
+     		if (executeInNewTab) {
                 Glee.reset();
      		    Glee.Browser.openNewTab(u + "&mode=direct", false);
      		}
@@ -352,40 +375,71 @@ Glee.Events = {
 	    }
 	},
     
-    // jquery selector is executed
-    executeJQuerySelector: function(value) {	
+	/**
+	 *	Execute jQuery Selector
+	 *	@param {String} value jQuery selector
+	 */
+    executeJQuerySelector: function(value) {
+		if (!value) {
+			Glee.nullMessage = "Nothing matched your selector";
+			Glee.setState(null, "el");
+			return false;
+		}
 	    Glee.addCommandToCache(value);
 
         if (Glee.selectedElement)
 			Glee.selectedElement.removeClass('GleeHL');
 		
-		LinkReaper.reapWhatever( value.substring(1) );
+		LinkReaper.reapWhatever(value);
 		Glee.nullMessage = "Nothing matched your selector";
 		Glee.selectedElement = LinkReaper.getFirst();
 		Glee.setState(Glee.selectedElement, "el");
 		Glee.scrollToElement(Glee.selectedElement);
-		Glee.lastjQuery = value;
+		Glee.lastjQuery = "*" + value;
+		return true;
     },
     
-    // general query execution
+	/**
+	 *	Execute gleeBox query
+	 * 	@param {Event} e Event object when enter is pressed in gleeBox
+	 *	@param {String}	Query to execute
+	 */
     execute: function(e, value) {
-        var anythingOnClick = true;
+		var executeInNewTab = e.shiftKey || e.ctrlKey || e.metaKey;
+
+		if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
+			if (value.length === 1)
+				value = null;
+			else
+				value = value.substring(1);
+		    Glee.Events.executeJQuerySelector(value);
+			return true;
+		}
+		
+		if (Glee.isPageCmd()) {
+			if (value.length === 1)
+				value = null;
+			Glee.Events.executePageCmd(value, executeInNewTab);
+			return true;
+		}
 
 		// if is a yubnub/quix command, add it to cache and execute
-		if (value[0] == ":") {
-		    Glee.Events.executeCommandEngine(e.shiftKey);
-		    Glee.addCommandToCache(value.split(" ")[0]);
+		if (Glee.isColonCmd()) {
+		    Glee.Events.executeCommandEngine(executeInNewTab);
 		    return true;
 		}
+		
+        var anythingOnClick = true;
 		
 		// If an element is selected
 		if (Glee.selectedElement)
 		{
 			// Check to see if an anchor element is associated with the selected element
 			var a_el = null;
-			if (Glee.selectedElement[0].tagName == "A")
+			var tag = Glee.selectedElement[0].tagName.toLowerCase();
+			if (tag === "a")
 				a_el = Glee.selectedElement;
-			else if (Glee.selectedElement[0].tagName == "IMG")
+			else if (tag === "img")
 				a_el = Glee.selectedElement.parents('a');
 			else
 				a_el = Glee.selectedElement.find('a');
@@ -395,8 +449,7 @@ Glee.Events = {
 			{
 				if (a_el.length != 0)
 				{
-					// If Shift is pressed, open in new tab
-					if (e.shiftKey)
+					if (executeInNewTab)
 						target = true;
 					else
 						target = false;
@@ -405,7 +458,7 @@ Glee.Events = {
 					a_el.attr("target", "_self");
 
 					// Simulating a click on the link
-					anythingOnClick = Utils.simulateClick(a_el, target);
+					anythingOnClick = Utils.simulateClick(a_el.get(0), target);
 
 					// If opening link on the same page, close gleeBox
 					if (!target)
@@ -434,7 +487,7 @@ Glee.Events = {
 			Glee.URL = Utils.makeURLAbsolute(Glee.URL, location.href);
 
 			// Open in new tab
-			if (e.shiftKey)
+			if (executeInNewTab)
 			{
 				Glee.Browser.openNewTab(Glee.URL, false);
                 // If it is not a scraper command, clear gleebox
@@ -454,33 +507,33 @@ Glee.Events = {
 			if (Glee.selectedElement)
 			{
 				var el = Glee.selectedElement[0];
-				var tag = el.tagName.toLowerCase();
-				if ((tag == "input" && (el.type == "button" || el.type == "submit" || el.type == "image")) ||
-				tag == "button")
+				tag = el.tagName.toLowerCase();
+				if ((tag === "input" && (el.type === "button" || el.type === "submit" || el.type === "image")) ||
+				tag === "button")
 				{
 					setTimeout(function() {
-						Utils.simulateClick(Glee.selectedElement, false);
+						Utils.simulateClick(el, false);
 						Glee.blur();
 					}, 0);
 				}
-				else if (tag == "input" && (el.type == "radio" || el.type == "checkbox"))
+				else if (tag === "input" && (el.type === "radio" || el.type === "checkbox"))
 				{
 					if (!Glee.selectedElement.is(':checked'))
-						Glee.selectedElement[0].checked = true;
-                    else if (el.type == "checkbox")
-		                Glee.selectedElement[0].checked = false;
+						el.checked = true;
+                    else if (el.type === "checkbox")
+						el.checked = false;
 					Glee.blur();
 				}
-				else if (tag == "input" || tag == "textarea")
+				else if (tag === "input" || tag === "textarea")
 				{
 					setTimeout(function() {
-						Glee.selectedElement[0].focus();
-						Utils.selectAllText(Glee.selectedElement[0]);
+						el.focus();
+						Utils.selectAllText(el);
 					}, 0);
 				}
 				else {
 				    setTimeout(function() {
-						Glee.selectedElement[0].focus();
+						el.focus();
 					}, 0);
 				}
 			}
