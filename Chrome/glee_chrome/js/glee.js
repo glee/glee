@@ -13,7 +13,7 @@ var Glee = {
 	    nullStateMessage: "",
 	    
     	// Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
-    	pageScrollSpeed: 4,
+    	pageScrollSpeed: 3,
     	
     	// autocomplete cache size
     	cacheSize: 20,
@@ -56,11 +56,13 @@ var Glee = {
     	
     	commandEngine: "yubnub",
     	
-    	quixUrl: "http://quixapp.com/quix.txt"
+    	quixUrl: "http://quixapp.com/quix.txt",
+
+		outsideScrollingStatus: true
 	},
 	
-	// State of scrolling. 0=None, 1=Up, -1=Down.
-	scrollState: 0,
+	// smooth document scroller
+	scroller: null,
 	
 	// if any text is selected when gleeBox is activated, it acts as the default query for cmd engine
 	defaultQuery: null,
@@ -323,6 +325,11 @@ var Glee = {
 		if (Glee.options.status != 0 && Glee.options.hyperMode === true) {
 			Glee.getHyperized();
 		}
+		
+		if (Glee.options.outsideScrollingStatus)
+			Glee.Events.attachOutsideScrollingListener();
+		else
+			Glee.Events.detachOutsideScrollingListener();
 	},
 	
 	getDefaultQuery: function() {
@@ -843,6 +850,7 @@ var Glee = {
 
 		// attach the window Listener
 		$(window).bind('keydown', function(e) {
+
     		var target = e.target || e.srcElement;
     		if (Glee.options.status && Glee.options.status != 0)
     		{

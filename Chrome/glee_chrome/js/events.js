@@ -21,9 +21,7 @@ Glee.Events = {
 		
 		// Up / Down Arrow keys: Begin scrolling
 		else if (e.keyCode === 40 || e.keyCode === 38)
-		{
-			Utils.simulateScroll((e.keyCode === 38 ? 1 : -1));
-		}
+			Glee.Events.startScrolling(e.keyCode === 38 ? 1 : -1)
 		
 		// Open Tab Manager when shortcut key is pressed inside gleeBox
 		else if (e.keyCode === Glee.options.tabShortcutKey && Glee.value().length === 0 && IS_CHROME)
@@ -122,7 +120,7 @@ Glee.Events = {
 		else if (e.keyCode === 40 || e.keyCode === 38)
 		{
 		    // stop scrolling
-			Utils.simulateScroll(0);
+			Glee.Events.stopScrolling();
 			// select the topmost element in view when scrolling using arrow keys ends
 			// so that when you scroll to another part of the page and then TAB,
 			// you're not pulled up to another position on the page
@@ -540,5 +538,55 @@ Glee.Events = {
 		setTimeout(function() {
 			Glee.closeWithoutBlur();
 		}, 0);
-    }
+    },
+
+	startScrolling: function(direction) {
+		if (!Glee.scroller)
+			Glee.scroller = new SmoothScroller(Glee.defaults.pageScrollSpeed);
+		
+		Glee.scroller.start(direction);
+	},
+	
+	stopScrolling: function() {
+		if (Glee.scroller)
+			Glee.scroller.stop();
+	},
+	
+	outsideScrollingListener: function(e) {
+		// element types that can be used for input and need to be avoided
+		var blacklist = ['input', 'textarea', 'div', 'object', 'embed'];
+		
+   		var target = e.target || e.srcElement;
+        var node = target.nodeName.toLowerCase();
+
+		if (($.inArray(node, blacklist) === -1))
+		{
+			// scroll using w / s
+			if (e.keyCode === 87 || e.keyCode === 83) 
+			{
+				if (e.metaKey || e.ctrlKey || e.shiftKey)
+					return true;
+				e.preventDefault();
+				e.stopPropagation();
+	
+				Glee.Events.startScrolling(e.keyCode === 87 ? 1 : -1);
+	
+				function stopOutsideScroll() {
+					Glee.Events.stopScrolling();
+					$(window).unbind('keyup', stopOutsideScroll);
+				}
+	
+				$(window).bind('keyup', stopOutsideScroll);
+				return false;
+			}
+		}
+	},
+	
+	attachOutsideScrollingListener: function() {
+		window.addEventListener('keydown', Glee.Events.outsideScrollingListener, true);
+	},
+	
+	detachOutsideScrollingListener: function() {
+		window.removeEventListener('keydown', Glee.Events.outsideScrollingListener, true);
+	}
 }

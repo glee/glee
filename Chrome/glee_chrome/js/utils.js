@@ -143,39 +143,7 @@ var Utils = {
 			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, target, false, false, false, 0, null);
 		return el.dispatchEvent(evt);
 	},
-	
-	/**
-	 *	Start/stop scrolling
-	 * 	@param {Integer} val If set to 0, scrolling is stopped. Else, it determines whether to scroll upward/downward
-	 */
-	simulateScroll: function(val) {
-		if (val == 0) {
-			Glee.cache.jBody.stop(true);
-			Glee.scrollState = 0;
-		}
-		else if (Glee.scrollState == 0) {
-			Glee.scrollState = val;
-            Utils.infiniteScroll();
-		}
-	},
-	
-	/**
-	 *	Set page into infinite scrolling mode
-	 */
-	infiniteScroll: function() {
-		if (Glee.scrollState < 0) {
-			loc = $(document).height();
-			duration = 2 * (loc - window.pageYOffset) / Glee.defaults.pageScrollSpeed;
-		}
-		else {
-			loc = 0;
-			duration = 2 * (window.pageYOffset / Glee.defaults.pageScrollSpeed);
-		}
-		Glee.cache.jBody.animate(
-			{ scrollTop: loc },
-			duration);
-	},
-	
+
 	/**
 	 *	Selects all text in a textfield
 	 *	@param {Element} el Textfield whose text is to be selected
