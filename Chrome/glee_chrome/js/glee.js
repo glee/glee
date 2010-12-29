@@ -13,7 +13,7 @@ var Glee = {
 	    nullStateMessage: "",
 	    
     	// Page scroll speed. This is used for arrow keys scrolling - value is 1 to 10
-    	pageScrollSpeed: 3,
+    	pageScrollSpeed: 4,
     	
     	// autocomplete cache size
     	cacheSize: 20,
