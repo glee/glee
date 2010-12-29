@@ -38,7 +38,7 @@ Glee.Events = {
 			if (window.getSelection().toString())
 				return;
 			// send the request to copy URL to clipboard
-			Glee.Browser.copyToClipboard(Glee.URL);
+			Glee.Browser.copyToClipboard(Utils.makeURLAbsolute(Glee.URL, location.href));
 		}
 	},
 	
