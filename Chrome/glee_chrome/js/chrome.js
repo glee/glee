@@ -289,3 +289,11 @@ Glee.Browser.updateBackgroundCommandCache = function() {
     chrome.extension.sendRequest({ value: "updateCommandCache", commands: Glee.cache.commands }, function(){
 	});
 }
+
+// send request to copy text to clipboard
+Glee.Browser.copyToClipboard = function(text) {
+	if (!text)
+		return false;
+	chrome.extension.sendRequest({ value: "copyToClipboard", text: text }, function(){});
+	return true;
+}

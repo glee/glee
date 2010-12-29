@@ -31,6 +31,15 @@ Glee.Events = {
 			Glee.Browser.openTabManager();
 			return;
 		}
+
+		// copy currently selected link to clipboard. Cmd/Ctrl + C
+		else if (e.keyCode === 67 && (e.metaKey || e.ctrlKey)) {
+			// if any text is selected, return
+			if (window.getSelection().toString())
+				return;
+			// send the request to copy URL to clipboard
+			Glee.Browser.copyToClipboard(Glee.URL);
+		}
 	},
 	
 	/**
