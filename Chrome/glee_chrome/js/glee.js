@@ -404,7 +404,7 @@ var Glee = {
 	isCommand: function() {
 		if (this.isScraper() ||
 			this.isPageCmd() ||
-			this.isColonCmd() ||
+			this.isEngineCmd() ||
 			this.isJQueryCmd() )
 			return true;
 		else
@@ -425,7 +425,7 @@ var Glee = {
 			return false;
 	},
 	
-	isColonCmd: function() {
+	isEngineCmd: function() {
 		if (this.value().indexOf(":") === 0)
 			return true;
 		else
@@ -795,6 +795,8 @@ var Glee = {
 		
 	// add command to recently executed commands cache
 	addCommandToCache: function(value) {
+		if (value === undefined)
+			value = Glee.value();
         var len = this.cache.commands.length;
         // is command already present? if yes, then move it to beginning of cache
         var index = $.inArray(value, Glee.cache.commands);

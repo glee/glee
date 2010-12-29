@@ -84,7 +84,7 @@ Glee.Events = {
 					if (Glee.isScraper())
                         Glee.Events.queryScraper(command);
 
-					else if (Glee.isColonCmd())
+					else if (Glee.isEngineCmd())
                         Glee.Events.queryCommandEngine(command);
                     
                 	else if (Glee.isPageCmd())
@@ -273,7 +273,7 @@ Glee.Events = {
     executePageCmd: function(value, executeInNewTab) {
 		if (!value)
 			return false;
-	    Glee.addCommandToCache(value);
+	    Glee.addCommandToCache();
 
 		if (Glee.inspectMode)
 		{
@@ -327,7 +327,7 @@ Glee.Events = {
         var u = Glee.URL;
 		
 		// add command to cache (skip arguments)
-	    Glee.addCommandToCache(u.split(" ")[0]);
+	    Glee.addCommandToCache(Glee.value().split(" ")[0]);
 
         if (Glee.options.commandEngine === "yubnub") {
             if (executeInNewTab) {
@@ -384,7 +384,7 @@ Glee.Events = {
 			Glee.setState(null, "el");
 			return false;
 		}
-	    Glee.addCommandToCache(value);
+	    Glee.addCommandToCache();
 
         if (Glee.selectedElement)
 			Glee.selectedElement.removeClass('GleeHL');
@@ -407,23 +407,17 @@ Glee.Events = {
 		var executeInNewTab = e.shiftKey || e.ctrlKey || e.metaKey;
 
 		if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
-			if (value.length === 1)
-				value = null;
-			else
-				value = value.substring(1);
-		    Glee.Events.executeJQuerySelector(value);
+		    Glee.Events.executeJQuerySelector(value.substring(1));
 			return true;
 		}
 		
 		if (Glee.isPageCmd()) {
-			if (value.length === 1)
-				value = null;
-			Glee.Events.executePageCmd(value, executeInNewTab);
+			Glee.Events.executePageCmd(value.substring(1), executeInNewTab);
 			return true;
 		}
 
 		// if is a yubnub/quix command, add it to cache and execute
-		if (Glee.isColonCmd()) {
+		if (Glee.isEngineCmd()) {
 		    Glee.Events.executeCommandEngine(executeInNewTab);
 		    return true;
 		}
