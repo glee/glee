@@ -8,8 +8,11 @@
 * When Esc is pressed, if gleeBox is not empty, it is emptied. If empty, it is closed
 * By default, gleeBox description text is empty
 * Ability to copy URL of selected link to clipboard by pressing Cmd / Ctrl + c (Chrome only)
+* Fixed issue where gleeBox stole focus from <embed> input fields
+* Ctrl+Enter also opens link in new tab (in addition to Shift+Enter)
 * !flags: Opens chrome://flags (Chrome only)
 * !webstore: Opens Chrome Webstore (Chrome only)
+* Under the hood: Code improvements
 
 **1.8**
 
