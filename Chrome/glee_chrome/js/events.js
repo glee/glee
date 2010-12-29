@@ -4,11 +4,14 @@ Glee.Events = {
 	 *	When a key is pressed down inside gleeBox
 	 */
 	onKeyDown: function(e) {
-		// esc: hide gleeBox
+		// esc: hide gleeBox if empty. otherwise, empty gleeBox
 		if (e.keyCode === 27)
 		{
 			e.preventDefault();
-		    Glee.close();
+			if (!Glee.value())
+				Glee.close();
+			else
+				Glee.empty();
 		}
 		
 		// tab: Scroll between elements / bookmarks
