@@ -169,7 +169,9 @@ Glee.shortenURL = function() {
 		var json = JSON.parse("["+data+"]");
 		var shortenedURL = json[0].results[location.href].shortUrl;
 		Glee.value(shortenedURL);
-		Glee.setState("You can now copy the shortened URL to your clipboard!", "msg");
+		Glee.setState("Shortened URL copied to your clipboard!", "msg");
+		// copy URL to clipboard.
+		Glee.Browser.copyToClipboard(shortenedURL);
 	});
 }
 
