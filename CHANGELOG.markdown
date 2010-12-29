@@ -1,4 +1,17 @@
-[To be released]
+[to be released]
+
+* Scrolling only takes place if selected element is not visible
+* Better document scrolling using arrow keys
+* Option to enable smooth scrolling outside of gleeBox
+* Highlighted text when gleeBox is launched is treated as default query for Yubnub/Quix commands
+* gleeBox works after executing !read
+* When Esc is pressed, if gleeBox is not empty, it is emptied. If empty, it is closed
+* By default, gleeBox description text is empty
+* Ability to copy URL of selected link to clipboard by pressing Cmd / Ctrl + c (Chrome only)
+* !flags: Opens chrome://flags (Chrome only)
+* !webstore: Opens Chrome Webstore (Chrome only)
+
+**1.8**
 
 * Added support for Quix
 * Added Developer Pack
