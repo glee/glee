@@ -110,7 +110,10 @@ var Utils = {
 	 * 	@return {boolean} If the element is visible, returns true.
 	 */
 	isVisible: function(el) {
+		if (!el)
+			return false;
 		var $el = $(el);
+		
 		if ($el.css('display') === "none" || $el.css('visibility') === "hidden")
 			return false;
 		
@@ -120,12 +123,39 @@ var Utils = {
 		
 		for (var i = 0; i < len; i++)
 		{
-			var $parent = $($parents[i]);
+			var $parent = $($parents.get(i));
 			if ($parent.css("display") === "none" ||
 				$parent.css('visibility') === "hidden")
 				return false;
 		}
+		
+		// check that it lies within screen coordinates
+		var offset = $el.offset();
+		
+		if (($el.width() + offset.left) < 0 ||
+			($el.height() + offset.top) < 0
+			) {
+			return false
+		}
 		return true;
+	},
+	
+	/**
+	 * 	Checks if a DOM element is visible to the user i.e. is in current view
+	 * 	@param {Element} el DOM element to check
+	 * 	@return {boolean} If the element is visible, returns true.
+	 */
+	isUserVisible: function(el) {
+		if (!el)
+			return false;
+		var $el = $(el);
+		var top = $el.offset().top;
+		if (top > window.pageYOffset &&
+			((top + $el.height()) < (window.innerHeight + window.pageYOffset))
+		)
+			return true;
+		else
+			return false;
 	},
 	
 	/**
@@ -219,7 +249,28 @@ var Utils = {
             $(document).bind('mousedown',{input: input, el: el, callback: callback}, onClose);
         });
 		return true;
-    }
+    },
+
+	sortElementsByPosition: function(els) {
+	    var len = els.length;
+	    for (var i = 0; i < len; i++) {
+            var small_diff = $(els[i]).offset().top - window.pageYOffset;
+            var pos = i;
+            for (var j = i + 1; j < len; j++) {
+                var j_diff = $(els[j]).offset().top - window.pageYOffset;
+                if ((j_diff > 0 && (j_diff < small_diff || small_diff < 0)) ||
+                (small_diff < 0 && j_diff < small_diff))
+                {
+                    small_diff = j_diff;
+                    pos = j;
+                }
+            }
+            temp = els[pos];
+            els[pos] = els[i];
+            els[i] = temp;
+	    }
+	    return els;
+	}
 };
 
 String.prototype.capitalize = function() {

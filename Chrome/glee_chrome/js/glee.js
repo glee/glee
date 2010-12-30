@@ -16,9 +16,7 @@ var Glee = {
     	pageScrollSpeed: 4,
     	
     	// autocomplete cache size
-    	cacheSize: 20,
-    	
-    	linkSearchTimer: 250
+    	cacheSize: 20
     },
 
 	options: {
@@ -78,6 +76,8 @@ var Glee = {
 	isEspRunning: false,
 	
 	isDOMSearchRequired: true,
+	
+	linkSearchTimer: 0,
 	
 	commandMode: false,
 	
@@ -261,6 +261,8 @@ var Glee = {
 
         // fill cache
         Glee.fillCache();
+
+		Glee.initLinkSearchTimer();
 	},
 	
 	fillCache: function() {
@@ -494,7 +496,7 @@ var Glee = {
 	initScraper: function(scraper) {
 		this.nullMessage = scraper.nullMessage;
 		this.cache.scraper = scraper;
-        LinkReaper.selectedLinks = Glee.sortElementsByPosition($.grep($(scraper.selector), Utils.isVisible));
+        LinkReaper.selectedLinks = Utils.sortElementsByPosition($.grep($(scraper.selector), Utils.isVisible));
         $(LinkReaper.selectedLinks).each(function() {
             $(this).addClass(scraper.cssStyle);
         });
@@ -513,7 +515,7 @@ var Glee = {
             if(!Utils.isVisible(this))
                 return;
             LinkReaper.selectedLinks.push(this);
-            LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
+            LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
             $this.addClass(scraper.cssStyle);
             LinkReaper.traversePosition = 0;
         });
@@ -524,27 +526,6 @@ var Glee = {
 	        $(this.cache.scraper.selector).expire();
 	        this.cache.scraper = null;
 	    }
-	},
-	
-	sortElementsByPosition: function(els) {
-	    var len = els.length;
-	    for (var i = 0; i < len; i++) {
-            var small_diff = $(els[i]).offset().top - window.pageYOffset;
-            var pos = i;
-            for (var j = i + 1; j < len; j++) {
-                var j_diff = $(els[j]).offset().top - window.pageYOffset;
-                if ((j_diff > 0 && (j_diff < small_diff || small_diff < 0)) ||
-                (small_diff < 0 && j_diff < small_diff))
-                {
-                    small_diff = j_diff;
-                    pos = j;
-                }
-            }
-            temp = els[pos];
-            els[pos] = els[i];
-            els[i] = temp;
-	    }
-	    return els;
 	},
 	
 	setState: function(value, type) {
@@ -876,6 +857,13 @@ var Glee = {
     			}
     		}
     	});
+	},
+	
+	// based on the no. of searchable elements on page, sets the search timer value
+	initLinkSearchTimer: function() {
+		var textSearchElements = $("a, a > img, input[type=button], input[type=submit], button");
+		if (textSearchElements.length > 200)
+			Glee.linkSearchTimer = 250;
 	}
 }
 

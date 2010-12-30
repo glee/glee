@@ -137,7 +137,7 @@ Glee.Events = {
 			// so that when you scroll to another part of the page and then TAB,
 			// you're not pulled up to another position on the page
 			if (Glee.selectedElement) {
-                LinkReaper.selectedLinks = Glee.sortElementsByPosition(LinkReaper.selectedLinks);
+                LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
                 LinkReaper.unHighlight(Glee.selectedElement);
                 Glee.selectedElement = LinkReaper.getFirst();
                 Glee.setState(Glee.selectedElement, "el");
@@ -194,7 +194,7 @@ Glee.Events = {
 				Glee.setState(Glee.selectedElement, "el");
 				Glee.scrollToElement(Glee.selectedElement);
 				Glee.setSearchActivity(false);
-			}, Glee.defaults.linkSearchTimer);
+			}, Glee.linkSearchTimer);
 		}
 		else
 		{
