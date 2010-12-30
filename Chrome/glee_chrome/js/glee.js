@@ -18,7 +18,7 @@ var Glee = {
     	// autocomplete cache size
     	cacheSize: 20,
 
-		linkSearchTimer: 250
+		linkSearchTimer: 0
     },
 
 	options: {
@@ -303,6 +303,9 @@ var Glee = {
 		}
 		Glee.getDefaultQuery();
 		Glee.focus();
+		setTimeout(function() {
+			LinkReaper.cacheLinks();
+		}, 0);
 	},
 	
 	// called when options are returned by background.html

@@ -2,10 +2,12 @@
 
 var LinkReaper = {
 	
+	linkSelectionSelector: "a, a > img, input[type=button], input[type=submit], button",
 	searchTerm: "",
 	selectedLinks: [],
 	traversePosition: 0,
-	lastMatchResults: [],
+	lastMatchedLinks: [],
+	cachedLinks: [],
 	
 	/**
 	 *	Returns all links on the page, except those containing images
@@ -33,7 +35,7 @@ var LinkReaper = {
 			if (LinkReaper.searchTerm != "" &&
 				(term.indexOf(LinkReaper.searchTerm) === 0)) {
 				LinkReaper.resetHighlight(LinkReaper.selectedLinks);
-				LinkReaper.selectedLinks = $(LinkReaper.getMatches(term, LinkReaper.lastMatchResults));
+				LinkReaper.selectedLinks = $(LinkReaper.getMatches(term, LinkReaper.lastMatchedLinks));
 			}				
 			// else start over
 			else
@@ -157,12 +159,13 @@ var LinkReaper = {
 	/**
 	 *	Get matching elements for text based query
 	 * 	@param {String} query The text query
+	 * 	@param {Object}	Last matched links
 	 *
-	 * 	Modified code by Leo Spalteholz in KeySurf
+	 * 	Modified version of code by Leo Spalteholz in KeySurf
 	 */
-	getMatches: function(query, elements) {
+	getMatches: function(query, links) {
 		// reset last match results
-		LinkReaper.lastMatchResults = [];
+		LinkReaper.lastMatchedLinks = [];
 
 		// links that start with query in current view 
 		var onScreenExactMatches = [];
@@ -173,41 +176,29 @@ var LinkReaper = {
 		// links that contain words that start with query not in current view
 		var offScreenWordMatches = [];
 		
-		// scrap all these types of elements while searching for links
-		var selector = "a, a > img, input[type=button], input[type=submit], button";
-		if (elements != undefined)
-			$el = $(elements);
-		else
-			$el = $(selector)
+		if (links === undefined)
+			links = LinkReaper.cachedLinks;
 
-		$el.each(function() {
-			if (!Utils.isVisible(this))
-				return;
-			var $this = $(this);
-			var text = LinkReaper.getText($this);
-			if (!text)
-				return;
-
-			var matchIndex = text.indexOf(query);
+		$.each(links, function(i, link) {
+			var matchIndex = link.text.indexOf(query);
 			var wordBarrier = /[^A-Za-z0-9]/;
-			var inView = Utils.isVisibleToUser(this);
+			var inView = Utils.isVisibleToUser(link.el);
 			
 			if (matchIndex >= 0) {
 				
 				if (matchIndex === 0) {
 					if (inView)
-						onScreenExactMatches.push(this);
+						onScreenExactMatches.push(link.el);
 					else
-						offScreenExactMatches.push(this);
+						offScreenExactMatches.push(link.el);
 				}
-				else if (text[matchIndex - 1].match(wordBarrier)) {
+				else if (link.text[matchIndex - 1].match(wordBarrier)) {
 					if (inView)
-						onScreenWordMatches.push(this);
+						onScreenWordMatches.push(link.el);
 					else
-						offScreenWordMatches.push(this);
+						offScreenWordMatches.push(link.el);
 				}
-				
-				LinkReaper.lastMatchResults.push(this);
+				LinkReaper.lastMatchedLinks.push(link);
 			}
 		});
 		
@@ -223,10 +214,11 @@ var LinkReaper = {
 	
 	/**
 	 *	Get the text for an element for matching purposes. Maybe an anchor, image or button
-	 *	@param {jQuery}	$el The element
+	 *	@param {Element} el The element
 	 */
-	getText: function($el) {
-		var tag = $el.get(0).tagName.toLowerCase();
+	getText: function(el) {
+		var tag = el.tagName.toLowerCase();
+		var $el = $(el);
 		
 		if (tag === "a" || tag === "button")
 			return $el.text().toLowerCase();
@@ -236,6 +228,22 @@ var LinkReaper = {
 			
 		else if (tag === "input" && ($el.attr('type') === "button" || $el.attr('type') === "submit"))
 			return $el.attr('value').toLowerCase();
+	},
+	
+	cacheLinks: function() {
+		var $el = $(LinkReaper.linkSelectionSelector);
+		
+		$el.each(function() {
+			if (!Utils.isVisible(this))
+				return;
+			var text = LinkReaper.getText(this);
+			if (!text)
+				return;
+			LinkReaper.cachedLinks.push({
+				el: this,
+				text: text
+			});
+		});
 	},
 	
 	highlight: function($el) {
