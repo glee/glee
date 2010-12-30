@@ -298,14 +298,16 @@ var Glee = {
 	open: function() {
 		if (!Glee.isVisible())
 		{
-			Glee.$searchBox.fadeIn(150);
+			Glee.$searchBox.fadeIn(150, LinkReaper.cacheLinks);
            	Glee.fireEsp();
+		}
+		else {
+			setTimeout(function() {
+				LinkReaper.cacheLinks();
+			}, 0);
 		}
 		Glee.getDefaultQuery();
 		Glee.focus();
-		setTimeout(function() {
-			LinkReaper.cacheLinks();
-		}, 130);
 	},
 	
 	// called when options are returned by background.html
@@ -740,7 +742,7 @@ var Glee = {
 		}
 		else {
 			Glee.isSearching = false;
-			Glee.$searchActivity.html("searching");
+			Glee.$searchActivity.html("");
 		}
 	},
 	
