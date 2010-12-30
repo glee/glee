@@ -342,7 +342,6 @@ var Glee = {
 		var text = window.getSelection().toString();
 		if (text)
 			Glee.defaultQuery = text;
-		Glee.Browser.copyToClipboard(Glee.URL);
 	},
 	
 	getHyperized: function() {

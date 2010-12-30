@@ -27,6 +27,8 @@ Glee.Events = {
 		{
 			e.preventDefault();
 		    Glee.Events.execute(e, e.target.value);
+			if (Glee.isEspRunning)
+				Glee.setState(Glee.selectedElement, "el");
 		}
 		
 		// Up / Down Arrow keys: Begin scrolling
@@ -68,7 +70,6 @@ Glee.Events = {
 	onKeyUp: function(e) {
 		// not using the Event object to fetch value as onKeyUp may be called explicitly
 		var value = Glee.value();
-		
 		// check if content of gleeBox has changed
 		if (Glee.lastQuery != value)
 		{
@@ -406,7 +407,7 @@ Glee.Events = {
         if (Glee.selectedElement)
 			Glee.selectedElement.removeClass('GleeHL');
 		
-		LinkReaper.reapWhatever(value);
+		LinkReaper.reapSelector(value);
 		Glee.nullMessage = "Nothing matched your selector";
 		Glee.selectedElement = LinkReaper.getFirst();
 		Glee.setState(Glee.selectedElement, "el");
@@ -480,8 +481,9 @@ Glee.Events = {
 					}
 
                     // If link is to be opened in a new tab & it isn't a scraper command, clear gleebox
-                    else if (!Glee.isScraper())
+                    else if (!Glee.isScraper()) {
 						Glee.empty();
+					}					
                     
 					return false;
 				}
