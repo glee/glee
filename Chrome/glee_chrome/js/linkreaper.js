@@ -231,6 +231,9 @@ var LinkReaper = {
 	},
 	
 	cacheLinks: function() {
+		// empty cached links 
+		LinkReaper.cachedLinks = [];
+		
 		var $el = $(LinkReaper.linkSelectionSelector);
 		
 		$el.each(function() {
