@@ -305,7 +305,7 @@ var Glee = {
 		Glee.focus();
 		setTimeout(function() {
 			LinkReaper.cacheLinks();
-		}, 0);
+		}, 130);
 	},
 	
 	// called when options are returned by background.html
