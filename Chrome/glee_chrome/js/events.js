@@ -22,9 +22,26 @@ Glee.Events = {
 		    Glee.Events.onTabKeyDown(e);
 		}
 		
+		// enter: execute query
+		else if (e.keyCode === 13)
+		{
+			e.preventDefault();
+		    Glee.Events.execute(e, e.target.value);
+		}
+		
 		// Up / Down Arrow keys: Begin scrolling
-		else if (e.keyCode === 40 || e.keyCode === 38)
+		else if (e.keyCode === 40 || e.keyCode === 38) {
+			// if meta / ctrl key, straight way scroll to top / bottom
+			if (e.metaKey || e.ctrlKey) {
+				if (e.keyCode === 38)
+					window.scrollTo(window.pageXOffset, 0);
+				else
+					window.scrollTo(window.pageXOffset, document.height);
+				Glee.selectTopElement();
+				return true;
+			}
 			Glee.Events.startScrolling(e.keyCode === 38 ? 1 : -1)
+		}
 		
 		// Open Tab Manager when shortcut key is pressed inside gleeBox
 		else if (e.keyCode === Glee.options.tabShortcutKey && Glee.value().length === 0 && IS_CHROME)
@@ -120,28 +137,18 @@ Glee.Events = {
 			Glee.lastQuery = value;
 			Glee.lastjQuery = null;
 		}
-
-        // enter: execute query
-		else if (e.keyCode === 13)
-		{
-			e.preventDefault();
-		    Glee.Events.execute(e, value);
-		}
 		
 		// Up / Down arrow keys: Stop scrolling
 		else if (e.keyCode === 40 || e.keyCode === 38)
 		{
+			if (e.metaKey || e.ctrlKey)
+				return;
 		    // stop scrolling
 			Glee.Events.stopScrolling();
 			// select the topmost element in view when scrolling using arrow keys ends
 			// so that when you scroll to another part of the page and then TAB,
 			// you're not pulled up to another position on the page
-			if (Glee.selectedElement) {
-                LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
-                LinkReaper.unHighlight(Glee.selectedElement);
-                Glee.selectedElement = LinkReaper.getFirst();
-                Glee.setState(Glee.selectedElement, "el");
-			}
+			Glee.selectTopElement();
 		}
 	},
 	

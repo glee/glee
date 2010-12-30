@@ -734,15 +734,13 @@ var Glee = {
 	},
 	
 	setSearchActivity: function(status) {
-		if (status)
-		{
+		if (status) {
 			Glee.isSearching = true;
 			Glee.$searchActivity.html("searching");
 		}
-		else
-		{
+		else {
 			Glee.isSearching = false;
-			Glee.$searchActivity.html("");
+			Glee.$searchActivity.html("searching");
 		}
 	},
 	
@@ -858,6 +856,16 @@ var Glee = {
     			}
     		}
     	});
+	},
+	
+	// select the top most visible element (if any elements are highlighted)
+	selectTopElement: function() {
+		if (Glee.selectedElement) {
+            LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
+            LinkReaper.unHighlight(Glee.selectedElement);
+            Glee.selectedElement = LinkReaper.getFirst();
+            Glee.setState(Glee.selectedElement, "el");
+		}
 	}
 }
 
