@@ -145,7 +145,7 @@ var Utils = {
 	 * 	@param {Element} el DOM element to check
 	 * 	@return {boolean} If the element is visible, returns true.
 	 */
-	isUserVisible: function(el) {
+	isVisibleToUser: function(el) {
 		if (!el)
 			return false;
 		var $el = $(el);

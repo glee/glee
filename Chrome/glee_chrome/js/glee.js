@@ -16,7 +16,9 @@ var Glee = {
     	pageScrollSpeed: 4,
     	
     	// autocomplete cache size
-    	cacheSize: 20
+    	cacheSize: 20,
+
+		linkSearchTimer: 250
     },
 
 	options: {
@@ -76,8 +78,6 @@ var Glee = {
 	isEspRunning: false,
 	
 	isDOMSearchRequired: true,
-	
-	linkSearchTimer: 0,
 	
 	commandMode: false,
 	
@@ -261,8 +261,6 @@ var Glee = {
 
         // fill cache
         Glee.fillCache();
-
-		Glee.initLinkSearchTimer();
 	},
 	
 	fillCache: function() {
@@ -818,12 +816,12 @@ var Glee = {
 	
 	attachListeners: function() {
 		Glee.$searchField.bind('keydown', Glee.Events.onKeyDown);
-		Glee.$searchField.bind('keyup', Glee.Events.onKeyUp);
+		Glee.$searchField.bind('keyup', Glee.Events.onKeyUp);		
 	},
 	
 	detachListeners: function() {
 		Glee.$searchField.unbind('keydown', Glee.Events.onKeyDown);
-    	Glee.$searchField.unbind('keyup', Glee.Events.onKeyUp);
+		Glee.$searchField.unbind('keyup', Glee.Events.onKeyUp);
 	},
 	
 	attachWindowListener: function() {
@@ -857,13 +855,6 @@ var Glee = {
     			}
     		}
     	});
-	},
-	
-	// based on the no. of searchable elements on page, sets the search timer value
-	initLinkSearchTimer: function() {
-		var textSearchElements = $("a, a > img, input[type=button], input[type=submit], button");
-		if (textSearchElements.length > 200)
-			Glee.linkSearchTimer = 250;
 	}
 }
 

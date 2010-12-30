@@ -12,13 +12,11 @@ var LinkReaper = {
 	 */
 	reapAllLinks: function() {
 		this.selectedLinks = $("a");
-		// get rid of the hidden links
-		this.selectedLinks = $.grep(this.selectedLinks, Utils.isVisible);
-		// get rid of the linked images. we only want textual links
-		var hasImage = function(el) {
-			return ($(el).find('img').length === 0);
+		// get rid of the linked images and hidden links. we only want textual links
+		var filterLinks = function(el) {
+			return ( ($(el).find('img').length === 0) && Utils.isVisible(el) );
 		};
-		this.selectedLinks = $($.grep(this.selectedLinks, hasImage));
+		this.selectedLinks = $($.grep(this.selectedLinks, filterLinks));
 		this.selectedLinks.addClass('GleeReaped');
 		this.traversePosition = 0;
 		this.searchTerm = "";
@@ -160,26 +158,28 @@ var LinkReaper = {
 	 *	Get matching elements for text based query
 	 * 	@param {String} query The text query
 	 *
-	 *	shout out to KeySurf for this algorithm. modified version of code by Leo Spalteholz.
+	 * 	Modified code by Leo Spalteholz in KeySurf
 	 */
 	getMatches: function(query, elements) {
 		// reset last match results
 		LinkReaper.lastMatchResults = [];
 
-		// links that start with query or contains words that start with query in current view
-		var onScreenMatches = [];
-		// links that start with query or contain words that start with query in whole page
-		var offScreenMatches = [];
+		// links that start with query in current view 
+		var onScreenExactMatches = [];
+		// links that contain words that start with query in current view
+		var onScreenWordMatches = [];
+		// links that start with query not in current view
+		var offScreenExactMatches = [];
+		// links that contain words that start with query not in current view
+		var offScreenWordMatches = [];
 		
 		// scrap all these types of elements while searching for links
 		var selector = "a, a > img, input[type=button], input[type=submit], button";
 		if (elements != undefined)
 			$el = $(elements);
 		else
-			$el = $(selector);
-		
-		var onScreenFound = 0;
-		
+			$el = $(selector)
+
 		$el.each(function() {
 			if (!Utils.isVisible(this))
 				return;
@@ -189,31 +189,36 @@ var LinkReaper = {
 				return;
 
 			var matchIndex = text.indexOf(query);
-			var isInView = Utils.isUserVisible(this);
 			var wordBarrier = /[^A-Za-z0-9]/;
+			var inView = Utils.isVisibleToUser(this);
 			
 			if (matchIndex >= 0) {
 				
-				if (isInView) {
-					if (matchIndex === 0 || text[matchIndex - 1].match(wordBarrier)) {
-						onScreenMatches.push(this);
-						onScreenFound = true;
-					}
+				if (matchIndex === 0) {
+					if (inView)
+						onScreenExactMatches.push(this);
+					else
+						offScreenExactMatches.push(this);
+				}
+				else if (text[matchIndex - 1].match(wordBarrier)) {
+					if (inView)
+						onScreenWordMatches.push(this);
+					else
+						offScreenWordMatches.push(this);
 				}
 				
-				else if (!onScreenFound) {
-					if (matchIndex === 0 || text[matchIndex - 1].match(wordBarrier))
-						offScreenMatches.push(this);
-				}
-
 				LinkReaper.lastMatchResults.push(this);
 			}
 		});
 		
-		if (onScreenMatches.length != 0)
-			return onScreenMatches;
+		if (onScreenExactMatches.length != 0)
+			return onScreenExactMatches;
+		else if (onScreenWordMatches.length != 0)
+			return onScreenWordMatches;
+		else if (offScreenExactMatches.length != 0)
+			return offScreenExactMatches;
 		else
-			return offScreenMatches;
+			return offScreenWordMatches;
 	},
 	
 	/**

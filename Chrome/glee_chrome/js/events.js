@@ -194,7 +194,7 @@ Glee.Events = {
 				Glee.setState(Glee.selectedElement, "el");
 				Glee.scrollToElement(Glee.selectedElement);
 				Glee.setSearchActivity(false);
-			}, Glee.linkSearchTimer);
+			}, Glee.defaults.linkSearchTimer);
 		}
 		else
 		{
