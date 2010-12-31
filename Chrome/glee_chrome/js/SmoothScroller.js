@@ -20,6 +20,7 @@ SmoothScroller.prototype.stop = function() {
 }
 
 SmoothScroller.prototype.scrollDown = function() {
+	this.documentHeight = $(document).height();
 	this.scrollState = -1;
 	var duration = this.factor * ((this.documentHeight - window.pageYOffset) / this.speed);
 	this.$body.animate(
@@ -32,7 +33,7 @@ SmoothScroller.prototype.scrollDown = function() {
 	
 }
 
-SmoothScroller.prototype.scrollUp = function() {
+SmoothScroller.prototype.scrollUp = function() {	
 	this.scrollState = 1;
 	var duration = this.factor * ((window.pageYOffset) / this.speed);
 	this.$body.animate(

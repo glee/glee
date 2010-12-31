@@ -28,8 +28,8 @@ var LinkReaper = {
 	 *	Search links based on textual query
 	 *	@param {String}	term String to search for
 	 */
-	reapLinks: function(term) {
-		if ((term != "") && (LinkReaper.searchTerm != term))
+	reapLinks: function(term, override) {
+		if ((term != "") && ((LinkReaper.searchTerm != term) || override))
 		{
 			// If this term is a specialization of the last term, restrict search to currently selected links
 			if (LinkReaper.searchTerm != "" &&
@@ -43,7 +43,6 @@ var LinkReaper = {
 				LinkReaper.unreapAllLinks();
 				LinkReaper.selectedLinks = $(LinkReaper.getMatches(term));
 			}
-			
 			LinkReaper.selectedLinks.addClass('GleeReaped');
 			LinkReaper.searchTerm = term;
 			LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
@@ -167,15 +166,25 @@ var LinkReaper = {
 		// reset last match results
 		LinkReaper.lastMatchedLinks = [];
 
-		// links that start with query in current view 
-		var onScreenExactMatches = [];
+		// links that start with query in current view
+		var onscreenExactMatches = [];
+
 		// links that contain words that start with query in current view
-		var onScreenWordMatches = [];
-		// links that start with query not in current view
-		var offScreenExactMatches = [];
-		// links that contain words that start with query not in current view
-		var offScreenWordMatches = [];
+		var onscreenWordMatches = [];
 		
+		// links that start with query not in current view
+		var offscreenExactMatches = [];
+
+		// links that contain words that start with query not in current view
+		var offscreenWordMatches = [];
+		
+		// links that are labelled to be included at any level of match in current view
+		var onscreenLabelMatches = [];
+
+		// links that are labelled to be included at any level of match not in current view		
+		var offscreenLabelMatches = [];
+		
+		query = query.toLowerCase();
 		if (links === undefined)
 			links = LinkReaper.cachedLinks;
 
@@ -185,31 +194,38 @@ var LinkReaper = {
 			var inView = Utils.isVisibleToUser(link.el);
 			
 			if (matchIndex >= 0) {
-				
-				if (matchIndex === 0) {
+				if (link.allMatches) {
 					if (inView)
-						onScreenExactMatches.push(link.el);
+						onscreenLabelMatches.push(link.el);
 					else
-						offScreenExactMatches.push(link.el);
+						offscreenLabelMatches.push(link.el);
+				}
+				else if (matchIndex === 0) {
+					if (inView)
+						onscreenExactMatches.push(link.el);
+					else
+						offscreenExactMatches.push(link.el);
 				}
 				else if (link.text[matchIndex - 1].match(wordBarrier)) {
 					if (inView)
-						onScreenWordMatches.push(link.el);
+						onscreenWordMatches.push(link.el);
 					else
-						offScreenWordMatches.push(link.el);
+						offscreenWordMatches.push(link.el);					
 				}
 				LinkReaper.lastMatchedLinks.push(link);
 			}
 		});
 		
-		if (onScreenExactMatches.length != 0)
-			return onScreenExactMatches;
-		else if (onScreenWordMatches.length != 0)
-			return onScreenWordMatches;
-		else if (offScreenExactMatches.length != 0)
-			return offScreenExactMatches;
+		if (onscreenExactMatches.length != 0)
+ 			return onscreenExactMatches.concat(onscreenLabelMatches).concat(offscreenExactMatches);
+		else if (onscreenWordMatches.length != 0)
+ 			return onscreenWordMatches.concat(onscreenLabelMatches).concat(offscreenExactMatches).concat(offscreenWordMatches);
+		else if (onscreenLabelMatches.length != 0)
+			return onscreenLabelMatches.concat(offscreenExactMatches).concat(offscreenWordMatches);
+		else if (offscreenExactMatches.length != 0)
+			return offscreenExactMatches.concat(offscreenLabelMatches);
 		else
-			return offScreenWordMatches;
+			return offscreenWordMatches.concat(offscreenLabelMatches);
 	},
 	
 	/**
@@ -219,15 +235,15 @@ var LinkReaper = {
 	getText: function(el) {
 		var tag = el.tagName.toLowerCase();
 		var $el = $(el);
-		
-		if (tag === "a" || tag === "button")
-			return $el.text().toLowerCase();
 			
-		else if (tag === "img")
-			return $el.attr('alt').toLowerCase();
+		if (tag === "img")
+			return $.trim($el.attr('alt').toLowerCase());
 			
 		else if (tag === "input" && ($el.attr('type') === "button" || $el.attr('type') === "submit"))
-			return $el.attr('value').toLowerCase();
+			return $.trim($el.attr('value').toLowerCase());
+		
+		else
+			return $.trim($el.text().toLowerCase());
 	},
 	
 	cacheLinks: function() {
@@ -238,14 +254,16 @@ var LinkReaper = {
 		
 		$el.each(function() {
 			if (!Utils.isVisible(this))
-				return;
+				return;			
 			var text = LinkReaper.getText(this);
-			if (!text)
-				return;
-			LinkReaper.cachedLinks.push({
-				el: this,
-				text: text
-			});
+			if (text) {
+				LinkReaper.cachedLinks.push({
+					el: this,
+					text: text,
+					// HACK: for links / file paths, enable query through any part of string
+					allMatches: (text.indexOf('/') != -1)
+				});
+			}
 		});
 	},
 	

@@ -861,12 +861,15 @@ var Glee = {
 	
 	// select the top most visible element (if any elements are highlighted)
 	selectTopElement: function() {
-		if (Glee.selectedElement) {
-            LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
-            LinkReaper.unHighlight(Glee.selectedElement);
-            Glee.selectedElement = LinkReaper.getFirst();
-            Glee.setState(Glee.selectedElement, "el");
+		if (Glee.isEspRunning && Glee.selectedElement) {
+			LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
+        	LinkReaper.unHighlight(Glee.selectedElement);
 		}
+		else if (!Glee.isCommand() && !Glee.isEmpty()) {
+			LinkReaper.reapLinks(Glee.value(), true);
+		}
+        Glee.selectedElement = LinkReaper.getFirst();
+        Glee.setState(Glee.selectedElement, "el");
 	}
 }
 
