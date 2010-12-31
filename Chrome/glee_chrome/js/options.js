@@ -628,3 +628,24 @@ function filterScraper(value) {
             $div.show();
     }
 }
+
+// Initialize tabs
+$(document).ready(function() {
+
+	//When page loads...
+	//$("#options").hide(); //Hide all content
+	$("ul.menu li:first").addClass("tabActive").show(); //Activate first tab
+	$("#options > div").hide(); //Show first tab content
+	$("#features").show();
+	//On Click Event
+	$("ul.menu li").click(function() {
+
+		$("ul.menu li").removeClass("tabActive"); //Remove any "active" class
+		$(this).addClass("tabActive"); //Add "active" class to selected tab
+		$("#options > div").hide();
+		var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+		$(activeTab).fadeIn(); //Fade in the active ID content
+		return false;
+	});
+
+});

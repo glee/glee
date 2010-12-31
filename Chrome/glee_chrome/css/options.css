@@ -1,10 +1,10 @@
 /** Options Page CSS for gleeBox **/
 
 body {
-	background-color: #fbfbfb;
+	background-color: #ff;
 	font-size: 16px;
 	line-height: 28px;
-	font-family: Georgia, Utopia, Palatino, 'Palatino Linotype', serif;
+	font-family: Helvetica, Arial, sans-serif;
 	color: #535353;
 	margin: 0;
 	padding: 0;
@@ -12,17 +12,30 @@ body {
 
 #wrap {
 	margin: 0 auto;
-	width: 840px;
+	width: 100%;
 }
 
 #options {
-    margin: 0 auto;
-	width: 800px;
+	position: absolute;
+	margin: 0 0 20px 300px;
 	background-color: #fff;
-	border-radius: 5px;
-	-webkit-box-shadow: #d3d3d3 0px 0px 8px;
 	padding: 20px;
-	margin-bottom: 20px;
+}
+
+#tabmenu {
+	position: fixed;
+	width: 299px;
+	margin: 0;
+	float: left;
+	height: 100%;
+	background-color: #E9E9E9;
+	border-right: 1px solid;
+	border-color: #C3C3C3;
+	text-align: right;
+}
+
+#tabmenu h3 {
+	padding: 27 10 17 5;
 }
 
 a,
@@ -91,6 +104,30 @@ ul li ul {
 	margin: 0;
 	padding: 0;
 }
+
+ul.menu {
+	float: right;
+	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif;
+	font-size: 14px;
+	margin: 0;
+}
+
+.tabActive {
+	font-weight: bold;
+	background-color: #fff;
+}
+
+ul.menu li {
+	text-align: right;
+	width: 300px;
+	padding: 3 10 3 3;
+	margin: 5 0 0 0;
+}
+
+ul.menu li a, ul.menu li a:visited {
+	text-decoration: none;
+}
+
 
 .option-label {
 	float: left;

@@ -5,16 +5,26 @@
 	<link rel="stylesheet" href="css/options.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/key-combo.js"></script>
-	<script type="text/javascript" src="js/options.js"></script>
 	<script type="text/javascript" src="js/chrome-options.js"></script>
 	<script type="text/javascript" src="js/db.js"></script>
 	<script type="text/javascript" src="js/defaults.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/options.js"></script>
 </head>
 <body>
 	<div id="wrap">
-		<h1>gleeBox Options</h1>
+		<div id="tabMenu">
+			<h3>gleeBox Options</h3>
+			<ul class="menu">
+				<li><a href="#features">Features</a></li>
+				<li><a href="#appearance">Appearance</a></li>
+				<li><a href="#advanced">Advanced</a></li>
+				<li><a href="#backup">Backup</a></li>
+				<li><a href="#sync">Sync</a></li>
+			</ul>
+		</div>
 		<div id="options">
+			<div id="features">
 			<h2>Features</h2>
 			<ul class="options">
 				<li>
@@ -74,6 +84,8 @@
 					</div>
 				</li>
 			</ul>
+			</div>
+			<div id="appearance">
 			<h2>Appearance</h2>
 			<ul class="options">
 				<!-- <li>
@@ -104,6 +116,8 @@
 					</div>
 				</li>
 			</ul>
+			</div>
+			<div id="advanced">
 			<h2>Advanced</h2>
 			<ul class="options">
 				<li style="font-size:14px;color:gray">
@@ -134,6 +148,8 @@
 					</ul>
 				</li>
 			</ul>
+			</div>
+			<div id="backup">
 			<h2>Backup</h2>
 			<ul class="options">
 				<li style="font-size:14px;color:gray;line-height:20px;margin-bottom:10px">
@@ -146,6 +162,8 @@
 				</div>
 				<br>
 			</ul>
+			</div>
+			<div id="sync">
 			<h2>Sync <span style="color: #aaa; font-size: 14px; font-style: italic;">(experimental)</span></h2>
 			<ul class="options">
 				<li style="font-size:14px;color:gray;line-height:20px;margin-bottom:10px">
@@ -154,13 +172,14 @@
 				<div style="clear:both">
 					<input id="sync-button" type="button" class="button" value="&nbsp;&nbsp;Enable Sync&nbsp;&nbsp;" onclick= "toggleSyncing();"/>&nbsp;&nbsp;
 			</ul>
+			</div>		
 					<br><br>
 					<div id="footer">
 						<a href="http://thegleebox.com/manual.html">User Manual</a>&nbsp; • &nbsp;<a href="http://tipjar.thegleebox.com">TipJar</a>&nbsp; • &nbsp;<a href="http://github.com/glee/glee/issues">Report Issues</a>&nbsp; • &nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">Donate</a>
 <br/>
 Created by <a href="http://ankitahuja.com">Ankit Ahuja</a> (<a href="http://twitter.com/ahujaankit">@ahujaankit</a>) and <a href="http://sameerahuja.com">Sameer Ahuja</a> (<a href="http://twitter.com/sam33r">@sam33r</a>)
 					</div>
-				</div>
-			</div>
-	</body>
+		</div>
+	</div>
+</body>
 </html>
