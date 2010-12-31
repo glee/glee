@@ -632,19 +632,20 @@ function filterScraper(value) {
 // Initialize tabs
 $(document).ready(function() {
 
-	//When page loads...
-	//$("#options").hide(); //Hide all content
-	$("ul.menu li:first").addClass("tabActive").show(); //Activate first tab
-	$("#options > div").hide(); //Show first tab content
+	$("ul.menu li:first").addClass("tabActive").show(); 
+	$("#options > div").hide();
 	$("#features").show();
-	//On Click Event
+	
+	//Click event for tab menu items
 	$("ul.menu li").click(function() {
 
-		$("ul.menu li").removeClass("tabActive"); //Remove any "active" class
-		$(this).addClass("tabActive"); //Add "active" class to selected tab
+		$("ul.menu li").removeClass("tabActive"); 
+		$(this).addClass("tabActive");
 		$("#options > div").hide();
-		var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
-		$(activeTab).fadeIn(); //Fade in the active ID content
+		
+		// Get DIV ID for content from the href of the menu link
+		var activeTab = $(this).find("a").attr("href");
+		$(activeTab).fadeIn();
 		return false;
 	});
 
