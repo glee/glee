@@ -18,7 +18,10 @@
 			<ul class="menu">
 				<li><a href="#features">Features</a></li>
 				<li><a href="#appearance">Appearance</a></li>
-				<li><a href="#advanced">Advanced</a></li>
+				<!-- <div class="menu-separator"></div> -->
+				<li><a href="#scrapers">Scrapers</a></li>
+				<li><a href="#ESP">ESP Visions</a></li>
+				<!-- <div class="menu-separator"></div> -->				
 				<li><a href="#backup">Backup</a></li>
 				<li><a href="#sync">Sync</a></li>
 			</ul>
@@ -31,7 +34,7 @@
 					<label class="option-label">Disabled URLs<br/><span class="subtext">Enter part of a URL to disable gleeBox on all pages with matching URLs</span></label>
 					<ul id="domains" class="option-field">
 						<li>chrome.google.com/extensions <span style="float:right;font-size:14px;color:gray">Disabled by Google</span></li>
-						<li id="addDomainLI"><form onsubmit="addItem('domain', null, null, true);return false;"><input id="add_domain" type="text" value="Page URL" size=50 />&nbsp;<input type="submit" value="Add" class="button"/></form></li>
+						<li id="addDomainLI"><form onsubmit="addItem('domain', null, null, true);return false;"><input id="add_domain" type="text" size=50 placeholder="Page URL"/>&nbsp;<input type="submit" value="Add" class="button"/></form></li>
 					</ul>
 				</li>
 				<li>
@@ -88,14 +91,6 @@
 			<div id="appearance">
 			<h2>Appearance</h2>
 			<ul class="options">
-				<!-- <li>
-					<label class="option-label">Position</label>
-					<div class="option-field">
-						<input name="position" type="radio" value="0"> Top&nbsp; 
-						<input name="position" type="radio" value="1"> Middle&nbsp;
-						<input name="position" type="radio" value="2"> Bottom
-					</div>
-				</li> -->
 				<li>
 					<label class="option-label">Size</label>
 					<div class="option-field">
@@ -117,37 +112,44 @@
 				</li>
 			</ul>
 			</div>
-			<div id="advanced">
-			<h2>Advanced</h2>
-			<ul class="options">
-				<li style="font-size:14px;color:gray">
-					Some of these options require an understanding of <a href="http://docs.jquery.com/Selectors">jQuery selectors</a>. Find and share advanced gleeBox tips at <a href="http://tipjar.thegleebox.com">TipJar</a>.
-				</li>
-				<li>
-					<label>Scraper commands<br/><span class="subtext">Create your own scraper commands by adding command name and a corresponding jQuery selector</span></label><br><br>
-					<b>?</b><input type="text" id="scraper-search-field" value="Search..." class="before-focus" />
-					<ul id="scraper-commands">
-						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
-						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-						<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-						<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" value="Name" style="float:left;margin-right:5px;width:100px" /><span style="float:left;line-height:20px"> : </span><input id="scraper-selector" type="text" value="jQuery Selector" style="float:left;margin-left:5px;width:550px" /><input style="float:right;" type="submit" value="Add" class="button"/></form></li>
-					</ul>
-				</li>
-				<li>
-					<label class="option-label">ESP Mode<br/><span class="subtext">Gives gleeBox powers of 'ESP'. In this mode, you can make gleeBox run a jQuery selector on a page as soon as you open it.</span></label>
-					<div class="option-field">
-						<input name="esp_status" type="checkbox" />
-					</div>
-				</li>
-				<li>
-					<label>ESP Visions<br/><span class="subtext">Specify part of a page's URL and the default jQuery selector to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is set to On.</span></label><br><br>
-					<input type="text" id="esp-search-field" value="Search..." class="before-focus" />
-					<ul id="esp-modifiers">
-						<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" value="Page URL" style="width:300px;float:left;margin-right:5px;" /><span style="float:left;line-height:20px"> : </span><input id="add-esp-selector" type="text" value="jQuery Selector" style="width:360px;float:left;margin-left:5px"/><input type="submit" value="Add" style="float:right;" class="button"/></form></li>
-					</ul>
-				</li>
-			</ul>
+			<div id="scrapers">
+				<h2>Scraper Commands</h2>
+				<ul class="options">
+					<li class="description">
+					Create your own scraper commands by adding command name and a corresponding <a href="http://docs.jquery.com/Selectors">jQuery selector</a>.
+					</li>
+					<li>
+						<b>?</b>&nbsp;<input type="text" id="scraper-search-field" placeholder="Search" />
+						<ul id="scraper-commands">
+							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
+							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
+							<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" placeholder="Name" /><span class="separator"> : </span><input id="scraper-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div id="ESP">
+				<h2>ESP Visions</h2>
+				<ul class="options">
+					<li class="description">
+					Specify part of a page's URL and the default <a href="http://docs.jquery.com/Selectors">jQuery selector</a> to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is set to On.
+					</li>
+					<li>
+						<label class="option-label">ESP Mode<br/><span class="subtext">Gives gleeBox powers of 'ESP'. In this mode, you can make gleeBox run a jQuery selector on a page as soon as you open it.</span></label>
+						<div class="option-field">
+							<input name="esp_status" type="checkbox" />
+						</div>
+					</li>
+					<li>
+						<input type="text" id="esp-search-field" placeholder="Search" />
+						<ul id="esp-modifiers">
+							<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" placeholder="Page URL" /><span class="separator"> : </span><input id="add-esp-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form></li>
+						</ul>
+					</li>
+				</ul>
 			</div>
 			<div id="backup">
 			<h2>Backup</h2>

@@ -33,7 +33,6 @@ $(document).ready(function() {
 function initSettings(response)
 {
     prefs = response;
-	initDefaultTexts();
 	initFiltering();
 	
 	// set all the preferences in UI

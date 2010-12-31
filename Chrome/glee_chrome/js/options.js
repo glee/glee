@@ -112,25 +112,13 @@ function addItem(type, value1, value2, shouldSave) {
 	   id: type + no,
 	   className: type
 	});
-	var inputBt = $("<input>", {
-	    className: 'button',
-	    style: 'float: right;',
-	    type: 'button',
-	    value: 'Remove'
-	})
-	.click(function(e) {
-	    removeItem(e, type);
-	});
-
-    container.append(inputBt);
-    
 	switch (type) {
 		case "domain":
 			var domainName = document.getElementById("add_domain");
 			if (!value1)
 			{
 				value1 = domainName.value;
-			    domainName.value = domainName.defaultText;
+			    domainName.value = "";
 			}
 
 			if (validateURL(value1))
@@ -159,8 +147,8 @@ function addItem(type, value1, value2, shouldSave) {
 			{
 				value1 = scraperName.value;
 				value2 = scraperSel.value;
-				scraperName.value = scraperName.defaultText;
-				scraperSel.value = scraperSel.defaultText;
+				scraperName.value = "";
+				scraperSel.value = "";
 			}
 
 			if (validateScraper(value1, value2))
@@ -206,8 +194,8 @@ function addItem(type, value1, value2, shouldSave) {
 			{
 				value1 = espUrl.value;
 				value2 = espSel.value;
-				espUrl.value = espUrl.defaultText;
-				espSel.value = espSel.defaultText;
+				espUrl.value = "";
+				espSel.value = "";
 			}
 			if (validateEspModifier(value1, value2))
 			{
@@ -243,6 +231,17 @@ function addItem(type, value1, value2, shouldSave) {
 			else
 				return false;
 	}
+	var removeBt = $("<input>", {
+	    className: 'button',
+		style: 'float: right',
+	    type: 'button',
+	    value: 'Remove'
+	})
+	.click(function(e) {
+	    removeItem(e, type);
+	})
+	.appendTo(container);
+	
 	listOfItems.insertBefore(container[0], lastEl);
 }
 
@@ -320,46 +319,6 @@ function validateEspModifier(name,selector)
 	if (name == "" || selector == "" || name == "Page URL" || selector == "jQuery Selector")
 		return false;
 	return true;
-}
-
-/** Manage default texts **/
-
-function clearDefaultText(e) {
-    var target = window.event ? window.event.srcElement : e ? e.target : null;
-    if (!target) return;
-    
-    if (target.value == target.defaultText) {
-        target.value = '';
-    }
-    else if (e.type == "click") {
-        Utils.selectAllText(target);
-    }
-}
-
-function replaceDefaultText(e) {
-    var target = window.event ? window.event.srcElement : e ? e.target : null;
-    if (!target) return;
-    
-    if (target.value == '' && target.defaultText) {
-        target.value = target.defaultText;
-    }
-}
-
-function initDefaultTexts() {
-    var formInputs = document.getElementsByTagName('input');
-    for (var i = 0; i < formInputs.length; i++) {
-        var theInput = formInputs[i];
-        
-        if (theInput.type == 'text') {
-            /* Add event handlers */
-            $(theInput).bind('focus click', clearDefaultText)
-            .bind('blur', replaceDefaultText);
-            /* Save the current value */
-            if (theInput.value != '') {
-                theInput.defaultText = theInput.value;
-            }
-        }
-	}
 }
 
 /** Backup: Export / Import **/
@@ -650,3 +609,44 @@ $(document).ready(function() {
 	});
 
 });
+
+
+/** Manage default texts **/
+// 
+// function clearDefaultText(e) {
+//     var target = window.event ? window.event.srcElement : e ? e.target : null;
+//     if (!target) return;
+//     
+//     if (target.value == target.defaultText) {
+//         target.value = '';
+//     }
+//     else if (e.type == "click") {
+//         Utils.selectAllText(target);
+//     }
+// }
+// 
+// function replaceDefaultText(e) {
+//     var target = window.event ? window.event.srcElement : e ? e.target : null;
+//     if (!target) return;
+//     
+//     if (target.value == '' && target.defaultText) {
+//         target.value = target.defaultText;
+//     }
+// }
+// 
+// function initDefaultTexts() {
+//     var formInputs = document.getElementsByTagName('input');
+//     for (var i = 0; i < formInputs.length; i++) {
+//         var theInput = formInputs[i];
+//         
+//         if (theInput.type == 'text') {
+//             /* Add event handlers */
+//             $(theInput).bind('focus click', clearDefaultText)
+//             .bind('blur', replaceDefaultText);
+//             /* Save the current value */
+//             if (theInput.value != '') {
+//                 theInput.defaultText = theInput.value;
+//             }
+//         }
+// 	}
+// }
