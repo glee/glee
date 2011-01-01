@@ -573,14 +573,10 @@ Glee.Events = {
 			Glee.scroller.stop();
 	},
 	
-	outsideScrollingListener: function(e) {
-		// element types that can be used for input and need to be avoided
-		var blacklist = ['input', 'textarea', 'div', 'object', 'embed'];
-		
+	outsideScrollingListener: function(e) {		
    		var target = e.target || e.srcElement;
-        var node = target.nodeName.toLowerCase();
 
-		if (($.inArray(node, blacklist) === -1))
+		if (!Utils.elementCanReceiveUserInput(target))
 		{
 			// scroll using w / s
 			if (e.keyCode === 87 || e.keyCode === 83) 

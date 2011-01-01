@@ -270,6 +270,18 @@ var Utils = {
             els[i] = temp;
 	    }
 	    return els;
+	},
+	
+	/**
+	 *	Check if an element can receive user input
+	 * 	@param el Element to check
+	 */
+	elementCanReceiveUserInput: function(el) {
+        var tag = el.tagName.toLowerCase();
+		// list of elements which can receive input. Should be avoided while listening to window keystrokes
+	 	var blacklist = ['input', 'textarea', 'div', 'object', 'embed'];
+	
+		return ($.inArray(tag, blacklist) != -1) || el.contentEditable === "true";
 	}
 };
 
