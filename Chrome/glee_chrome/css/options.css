@@ -110,6 +110,7 @@ ul.menu {
 	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif;
 	font-size: 14px;
 	margin: 0;
+	margin-bottom: 200px;
 }
 
 .tabActive {
@@ -304,13 +305,14 @@ textarea {
 }
 
 #footer {
-	margin-top: 10px;
-	border-top: 1px solid #ccc;
-	font-size: 14px;
+	font-size: 12px;
 	line-height: 25px;
-	text-align: center;
 	color: #555;
-	clear: both;
+	padding-right: 10px;	
+}
+
+#footer a {
+	text-decoration: none;
 }
 
 /* Modal popup */

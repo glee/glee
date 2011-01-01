@@ -2,7 +2,7 @@ var prefs = {};
 var textfieldTimer = null;
 
 function makeItemEditable(el, type) {
-    if (type == "domain") {
+    if (type === "domain") {
         Utils.makeEditable(el, function(newValue) {
 	        var id = el.parent().attr('id').slice(6);
             prefs.disabledUrls[id] = newValue;
@@ -12,7 +12,7 @@ function makeItemEditable(el, type) {
 		});
     }
     
-    else if (type == "scraper-name") {
+    else if (type === "scraper-name") {
         Utils.makeEditable(el, function(newValue) {
             var id = el.parent().attr('id').slice(7);
             prefs.scrapers[id].command = newValue;
@@ -20,7 +20,7 @@ function makeItemEditable(el, type) {
         });
     }
     
-    else if (type == "scraper-sel") {
+    else if (type === "scraper-sel") {
         Utils.makeEditable(el, function(newValue) {
             var id = el.parent().attr('id').slice(7);
             prefs.scrapers[id].selector = newValue;
@@ -28,7 +28,7 @@ function makeItemEditable(el, type) {
         });
     }
     
-    else if (type == "esp-url") {
+    else if (type === "esp-url") {
         Utils.makeEditable(el, function(newValue) {
             var id = el.parent().attr('id').slice(3);
 		    prefs.espModifiers[id].url = newValue;
@@ -36,7 +36,7 @@ function makeItemEditable(el, type) {
         });
     }
     
-    else if (type == "esp-sel") {
+    else if (type === "esp-sel") {
         Utils.makeEditable(el, function(newValue) {
             var id = el.parent().attr('id').slice(3);
             prefs.espModifiers[id].selector = newValue;
@@ -300,23 +300,23 @@ function validateURL(url)
     return true;
 }
 
-function validateScraper(name,selector)
+function validateScraper(name, selector)
 {
 	// check that command name/selector should not be blank
-	if (name == "" || selector == "" || name == "Name" || selector == "jQuery Selector")
+	if (name === "" || selector === "")
 		return false;
 	// check that command name does not conflict with the default scraper command names
-	if (name == "h" || name == "?" || name == "img" || name == "a")
+	if (name === "h" || name === "?" || name === "img" || name === "a")
 		return false;
 	if (name.indexOf('`')!=-1 || selector.indexOf('`')!= -1)
 		return false;
 	return true;
 }
 
-function validateEspModifier(name,selector)
+function validateEspModifier(name, selector)
 {
 	// check that name/selector should not be blank
-	if (name == "" || selector == "" || name == "Page URL" || selector == "jQuery Selector")
+	if (name === "" || selector === "")
 		return false;
 	return true;
 }
@@ -348,7 +348,7 @@ function importDevPack() {
 // called when import button is clicked
 function importAndApply() {
     try {
-        var jsonString = $('#settingsText')[0].value;
+        var jsonString = $('#settingsText').get(0).value;
         var tempPref = translateForImport(JSON.parse(jsonString));
         // merge
         // tempPref = mergeSettings(tempPref, prefs);
@@ -361,13 +361,13 @@ function importAndApply() {
     }
     catch(e) {
         $('#backupInfo').text("The import format is incorrect!");
-        $('#settingsText')[0].focus();
+        $('#settingsText').get(0).focus();
     }
 }
 
 function applyDevPack() {
     try {
-        var jsonString = $('#settingsText')[0].value;
+        var jsonString = $('#settingsText').get(0).value;
         var tempPref = translateForImport(JSON.parse(jsonString));
         // merge
         tempPref = mergeSettings(tempPref, prefs);
@@ -381,7 +381,7 @@ function applyDevPack() {
     }
     catch(e) {
         $('#backupInfo').text("The import format is incorrect!");
-        $('#settingsText')[0].focus();
+        $('#settingsText').get(0).focus();
     }
 }
 
@@ -393,7 +393,7 @@ function mergeSettings(a, b) {
     for (var i = 0; i < b_len; i++) {
         var found = false;
         for (var j = 0; j < a_len; j++) {
-            if (b.scrapers[i].command == a.scrapers[j].command) {
+            if (b.scrapers[i].command === a.scrapers[j].command) {
                 found = true;
                 break;
             }
@@ -409,7 +409,7 @@ function mergeSettings(a, b) {
     for (var i = 0; i < b_len; i++) {
         var found = false;
         for (var j = 0; j < a_len; j++) {
-            if (b.espModifiers[i].url == a.espModifiers[j].url) {
+            if (b.espModifiers[i].url === a.espModifiers[j].url) {
                 found = true;
                 break;
             }
@@ -424,18 +424,18 @@ function mergeSettings(a, b) {
 
 function showBackupPopup(infoText, func) {
     var popup = $('#popup');
-    if (popup.length == 0)
+    if (popup.length === 0)
         initBackupPopup();
         
-    if (func == 'import') {
+    if (func === 'import') {
         $('#importButton').show();
         $('#importDevPackButton').hide();
     }
-    else if (func == 'export'){
+    else if (func === 'export'){
         $('#importButton').hide();
         $('#importDevPackButton').hide();
     }
-    else if (func == 'importDevPack') {
+    else if (func === 'importDevPack') {
         $('#importDevPackButton').show();
         $('#importButton').hide();
     }
@@ -444,7 +444,7 @@ function showBackupPopup(infoText, func) {
     $('#popup').fadeIn(200);
     
     setTimeout(function() {
-        var field = $('#settingsText')[0];
+		var field = $('#settingsText').get(0);
         Utils.selectAllText(field);
         field.focus();
     }, 0);
@@ -479,7 +479,7 @@ function initBackupPopup() {
     
     // add events
     $(document).keyup(function(e) {
-        if (e.keyCode == 27)
+        if (e.keyCode === 27)
         {
             var backupPopup = $('#popup');
             if (backupPopup.length != 0)
@@ -488,7 +488,7 @@ function initBackupPopup() {
     });
     
     $(document).click(function(e) {
-        if (e.target.id == "popup" || e.target.id == "settingsText" || e.target.id == "backupInfo" || e.target.type == "button")
+        if (e.target.id === "popup" || e.target.id === "settingsText" || e.target.id === "backupInfo" || e.target.type === "button")
             return true;
         var backupPopup = $('#popup');
         if (backupPopup.length != 0)
@@ -512,7 +512,7 @@ function attachListeners() {
     // radio
     // for some reason, change event does not fire when using keyboard
     $('.option-field input[type=radio]').bind('change keyup', function(e) {
-        if (e.type == 'keyup' && e.keyCode == 9)
+        if (e.type === 'keyup' && e.keyCode === 9)
             return true;
         saveOption(e.target.name, e.target.value);
     });
@@ -537,8 +537,8 @@ function attachListeners() {
 function changeSearchEngine(engine) {
     var value = "http://www.google.com/search?q=";
     switch (engine) {
-		case "gssl": value = "https://encrypted.google.com/search?q="; break;
-        case "bing": value = "http://www.bing.com/search?q="; break;
+		case "gssl"	: value = "https://encrypted.google.com/search?q="; break;
+        case "bing"	: value = "http://www.bing.com/search?q="; break;
         case "yahoo": value = "http://search.yahoo.com/search?p="; break;
     }
     var ui = $('#search_engine');
