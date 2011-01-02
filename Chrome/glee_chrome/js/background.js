@@ -10,19 +10,19 @@ var cache = {
 };
 
 function checkVersion() {
-    if (localStorage['gleebox_version'] != "1.9")
+    if (localStorage['gleebox_version'] != "2")
     {
         // create the new preferences as part of update
         updateDB();
         // open the update page
-        chrome.tabs.create({url:"http://thegleebox.com/update.html", selected: true}, null);
+        chrome.tabs.create({ url:"http://thegleebox.com/update.html", selected: true }, null);
         // update version
-        localStorage['gleebox_version'] = "1.9";
+        localStorage['gleebox_version'] = "2";
     }
 }
 
 function updateDB() {
-	// for 1.9
+	// for 2.0
 	loadPreference('outside_scrolling_status', function(value) {
 		if (value === null) {
             createPreference('outside_scrolling_status', 0);

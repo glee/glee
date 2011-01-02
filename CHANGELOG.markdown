@@ -1,4 +1,4 @@
-[to be released]
+**2**
 
 * Smarter and faster link search
 * Scrolling only takes place if selected element is not visible
