@@ -24,9 +24,10 @@
 			</ul>
 			<div class="menu-separator"></div>
 			<div id="footer">
-				<a href="http://thegleebox.com/manual.html">User Manual</a>&nbsp; • &nbsp;<a href="http://tipjar.thegleebox.com">TipJar</a>&nbsp; • &nbsp;<a href="http://github.com/glee/glee/issues">Report Issues</a>&nbsp; • &nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">Donate</a>
-	<br/>
-	Created by <a href="http://ankitahuja.com">Ankit Ahuja</a> and <a href="http://sameerahuja.com">Sameer Ahuja</a>.
+	Created by <a href="http://ankitahuja.com">Ankit Ahuja</a> and <a href="http://sameerahuja.com">Sameer Ahuja</a>.<br>
+	Have an idea or facing an issue? Report <a href="http://github.com/glee/glee/issues">here</a>.
+	<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">Donate</a> to help us keep adding more awesome to gleeBox!<br><br>
+			<a href="http://thegleebox.com/manual.html">User Manual</a>&nbsp; / &nbsp;<a href="http://tipjar.thegleebox.com">TipJar</a>&nbsp; / &nbsp;<a href="http://thegleebox.com/releases.html">Release Notes</a>
 			</div>
 		</div>
 		<div id="options">
@@ -70,9 +71,9 @@
 					</div>
 				</li>
 				<li>
-					<label class="option-label">Global shortcut for Glee Tab Manager<br/><span class="subtext">Launch tab manager without needing to go into gleeBox</span></label>
+					<label class="option-label">Smooth Scrolling outside gleeBox<br/><span class="subtext">Enable smooth scrolling using <em>w / s</em> keys outside gleeBox</span></label>
 					<div class="option-field">
-						<input name="tab_shortcut_status" type="checkbox" />
+						<input name="outside_scrolling_status" type="checkbox" />
 					</div>
 				</li>
 				<li>
@@ -80,6 +81,15 @@
 					<div class="option-field">
 						<input name="shortcut_key" size="5" type="text" /><span name="shortcut_key_span" style="display:none"></span>&nbsp;&nbsp;
 						<a href="#" onclick='javascript:document.getElementsByName("shortcut_key_span")[0].innerText = "71";document.getElementsByName("shortcut_key")[0].value = "g";'>Revert to default</a>
+					</div>
+				</li>
+			</ul>
+			<h2>Tab Manager</h2>
+			<ul class="options">
+				<li>
+					<label class="option-label">Enable Glee Tab Manager<br/><span class="subtext">Adds navigation between tabs. Close existing tabs by pressing backspace / delete.</span></label>
+					<div class="option-field">
+						<input name="tab_shortcut_status" type="checkbox" />
 					</div>
 				</li>
 				<li>

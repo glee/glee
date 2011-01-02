@@ -13,7 +13,8 @@ var prefStrings = [
 	"bookmark_search",
 	"scroll_animation",
 	"tab_shortcut_status",
-	"esp_status"
+	"esp_status",
+	"outside_scrolling_status"
 ];
 
 // default values for preferences
@@ -42,7 +43,7 @@ function initSettings(response)
 		var $el = $("[name=" + prefName + "]");
 		var el = $el.get(0);
 		
-		if (el.type == "radio") {
+		if (el.type === "radio") {
 			var r_len = $el.length;
 			for (var j = 0; j < r_len; j++) {
 				var radio = $el.get(j);
@@ -54,13 +55,13 @@ function initSettings(response)
 			}
 		}
 		
-		else if (el.type == "checkbox") {
+		else if (el.type === "checkbox") {
 			if (prefs[prefName] == 1 || (prefs[prefName] == undefined && prefDefaults[prefName] == 1))
 				el.checked = true;
 				
 		}
 		
-		else if (el.type == "text") {
+		else if (el.type === "text") {
 			if (prefs[prefName] != undefined)
 				el.value = prefs[prefName];
 		}
