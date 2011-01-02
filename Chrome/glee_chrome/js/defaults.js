@@ -3,7 +3,6 @@
 function getDefaultPreferences() {
 	var prefs = {
 		size: 1,
-		position: 2,
 		status: 1,
 		search_engine: "http://www.google.com/search?q=",
 		command_engine: "yubnub",
@@ -16,7 +15,8 @@ function getDefaultPreferences() {
 		shortcut_key: 71,
 		tab_shortcut_key: 190,
         hyper: 0,
-        sync: 0
+        sync: 0,
+		outside_scrolling_status: 0
 	};
 	return prefs;
 }

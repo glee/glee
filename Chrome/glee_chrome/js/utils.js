@@ -89,21 +89,7 @@ var Utils = {
 		}
 		return text;
 	},
-	
-	/**
-	 *	Check if the current URL belongs to the list of disabled URLs. TODO: Does not belong here.
-	 *	@return {Integer} Returns 0 if yes. Else, 1.
-	 */
-	checkDomain: function() {
-	    var len = Glee.domainsToBlock.length;
-		for (var i = 0; i < len; i++)
-		{
-			if (location.href.indexOf(Glee.domainsToBlock[i]) != -1)
-				return 0;
-		}
-		return 1;
-	},
-	
+		
 	/**
 	 * 	Checks if a DOM element and its parents are currently visible
 	 * 	@param {Element} el DOM element to check

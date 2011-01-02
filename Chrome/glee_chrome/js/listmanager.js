@@ -48,8 +48,26 @@ Glee.ListManager = {
 	
 	createBox: function() {
 		this.box = $("<div id='gleeListManager' ></div>");
-		this.box.addClass(Glee.ThemeOption);
-		$(document.body).append(Glee.ListManager.box);
+		this.box.addClass(Glee.options.theme)
+		.appendTo(document.body);
+	},
+	
+	exists: function() {
+		if (this.box)
+			return true;
+		else
+			return false;
+	},
+	
+	applyTheme: function() {
+		if (this.exists()) {
+			this.resetTheme;
+			this.box.addClass(Glee.options.theme);
+		}
+	},
+	
+	resetTheme: function() {
+		this.box.removeClass(Glee.defaults.themes.join(" "));
 	},
 	
 	initKeyBindings: function() {

@@ -18,12 +18,14 @@ var Glee = {
     	// autocomplete cache size
     	cacheSize: 20,
 
-		linkSearchTimer: 0
+		linkSearchTimer: 0,
+		
+		themes: ["GleeThemeDefault", "GleeThemeWhite", "GleeThemeRuby", "GleeThemeGreener", "GleeThemeConsole", "GleeThemeGlee"]
     },
 
 	options: {
-	    // gleeBox status (1 = enabled, 0 = disabled).
-    	status: 1,
+	    // should gleeBox run?
+    	status: true,
 
         // Keydown code of shortcut key to launch gleeBox
     	shortcutKey: 71,
@@ -58,7 +60,9 @@ var Glee = {
     	
     	quixUrl: "http://quixapp.com/quix.txt",
 
-		outsideScrollingStatus: true
+		outsideScrollingStatus: false,
+		
+		theme: "GleeThemeDefault"
 	},
 	
 	// smooth document scroller
@@ -93,7 +97,7 @@ var Glee = {
 	bookmarks: [],
 	
 	// URL blacklist
-	domainsToBlock: [
+	disabledUrls: [
 		"mail.google.com",
 		"wave.google.com",
 		"mail.yahoo.com"
@@ -247,8 +251,8 @@ var Glee = {
 	init: function() {
 	    // Chrome hack: disable status while options are received
 	    if (IS_CHROME)
-	        Glee.options.status = 0;
-	    
+	        Glee.options.status = false;
+
 	    // get options from cache in background.html
         Glee.Browser.getOptions();
         
@@ -312,22 +316,18 @@ var Glee = {
 	
 	// called when options are returned by background.html
 	applyOptions: function() {
-		// Theme
-		Glee.addClass(Glee.ThemeOption);
+		Glee.applyTheme();
 		
 		// only enable list manager in Chrome
 		if (IS_CHROME && Glee.ListManager != undefined)
-		{
-		    if (Glee.ListManager.box)
-    			Glee.ListManager.box.addClass(Glee.ThemeOption);
-		}
+			Glee.ListManager.applyTheme();
 		
 		// Size
 		Glee.$searchField.removeClass('gleeSmallSize gleeMediumSize gleeLargeSize');
 		Glee.$searchField.addClass("glee" + Glee.options.size.capitalize() + "Size");
 		
 		// Hyper mode
-		if (Glee.options.status != 0 && Glee.options.hyperMode === true) {
+		if (Glee.options.status && Glee.options.hyperMode) {
 			Glee.getHyperized();
 		}
 		
@@ -396,14 +396,15 @@ var Glee = {
 		this.setState(null);
 	},
 	
-	addClass: function(class) {
-		this.$searchBox.addClass(class);
-		this.$searchField.addClass(class);
+	applyTheme: function(class) {
+		this.resetTheme();
+		this.$searchBox.addClass(Glee.options.theme);
+		this.$searchField.addClass(Glee.options.theme);
 	},
 	
-	removeClass: function(class) {
-		this.$searchBox.removeClass(class);
-		this.$searchField.removeClass(class);		
+	resetTheme: function() {
+		this.$searchBox.removeClass(Glee.defaults.themes.join(" "));
+		this.$searchField.removeClass(Glee.defaults.themes.join(" "));
 	},
 	
 	isVisible: function() {
@@ -865,6 +866,20 @@ var Glee = {
 		}
         Glee.selectedElement = LinkReaper.getFirst();
         Glee.setState(Glee.selectedElement, "el");
+	},
+	
+	/**
+	 *	Check if the current URL belongs to the list of disabled URLs.
+	 *	@return {boolean} If found, returns false.
+	 */
+	shouldRunOnCurrentUrl: function() {
+	    var len = Glee.disabledUrls.length;
+		for (var i = 0; i < len; i++)
+		{
+			if (location.href.indexOf(Glee.disabledUrls[i]) != -1)
+				return false;
+		}
+		return true;
 	}
 }
 

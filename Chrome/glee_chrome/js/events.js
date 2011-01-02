@@ -478,13 +478,7 @@ Glee.Events = {
 							Glee.blur();
 						}, 0);
 						Glee.closeWithoutBlur();
-					}
-
-                    // If link is to be opened in a new tab & it isn't a scraper command, clear gleebox
-                    else if (!Glee.isScraper()) {
-						Glee.empty();
-					}					
-                    
+					}                    
 					return false;
 				}
 			}

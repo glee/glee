@@ -43,7 +43,8 @@
 			"js/listmanager.js",
 			"js/selectorGenerator.js",
 			"js/jquery.autocomplete.js",
-			"js/SmoothScroller.js"
+			"js/SmoothScroller.js",
+			"js/logger.js"
 		],
 		
 		"run_at":"document_start"

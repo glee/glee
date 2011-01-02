@@ -1,15 +1,18 @@
 [to be released]
 
+* Smarter and faster link search
 * Scrolling only takes place if selected element is not visible
 * Better document scrolling using arrow keys
 * Option to enable smooth scrolling outside of gleeBox
 * Highlighted text when gleeBox is launched is treated as default query for Yubnub/Quix commands
 * gleeBox works after executing !read
 * When Esc is pressed, if gleeBox is not empty, it is emptied. If empty, it is closed
+* gleeBox is not emptied when a link is opened in a new tab
 * By default, gleeBox description text is empty
+* Revamped Options page
 * Ability to copy URL of selected link to clipboard by pressing Cmd / Ctrl + c (Chrome only)
 * Fixed issue where gleeBox stole focus from <embed> input fields
-* Ctrl+Enter also opens link in new tab (in addition to Shift+Enter)
+* Ctrl/Cmd+Enter also opens link in new tab (in addition to Shift+Enter)
 * !flags: Opens chrome://flags (Chrome only)
 * !webstore: Opens Chrome Webstore (Chrome only)
 * Under the hood: Code improvements
