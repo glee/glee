@@ -31,12 +31,14 @@
 				<string>js/events.js</string>
 				<string>js/safari_browser.js</string>
 				<string>js/safari_page_cmds.js</string>
-				<string>js/utils.js</string>
-				<string>js/elementState.js</string>
+				<string>js/LinkReaper.js</string>
+				<string>js/SelectorGenerator.js</string>
 				<string>js/logger.js</string>
 				<string>js/SmoothScroller.js</string>
 				<string>js/injectcss.js</string>
 				<string>js/LinkReaper.js</string>
+				<string>js/ElementState.js</string>
+				<string>js/Utils.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

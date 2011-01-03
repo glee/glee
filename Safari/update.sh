@@ -71,5 +71,3 @@ do
 		cp -v $chrome_css_dir""$f $safari_css_dir
 	fi
 done
-
-cd
