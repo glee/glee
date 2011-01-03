@@ -63,7 +63,7 @@ Glee.Browser = {
                 default             :   Glee.options[opt] = options[opt];
             }
         }
-        if (Utils.checkDomain() != 1)
+        if (!Glee.shouldRunOnCurrentUrl())
             Glee.options.status = false;
         else 
             Glee.options.status = true;

@@ -26,17 +26,17 @@
 			<key>Start</key>
 			<array>
 				<string>js/jquery.js</string>
-				<string>js/glee.js</string>
-				<string>js/safari.js</string>
-				<string>js/events.js</string>
-				<string>js/page-cmds.js</string>
-				<string>js/linkreaper.js</string>
-				<string>js/utils.js</string>
 				<string>js/jquery.autocomplete.js</string>
-				<string>js/safari-page-cmds.js</string>
-				<string>js/selectorGenerator.js</string>
+				<string>js/glee.js</string>
+				<string>js/events.js</string>
+				<string>js/safari_browser.js</string>
+				<string>js/safari_page_cmds.js</string>
+				<string>js/utils.js</string>
+				<string>js/elementState.js</string>
+				<string>js/logger.js</string>
+				<string>js/SmoothScroller.js</string>
 				<string>js/injectcss.js</string>
-				<string>js/jquery.livequery.js</string>
+				<string>js/LinkReaper.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

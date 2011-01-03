@@ -227,6 +227,7 @@ function saveOption(pref, value) {
 }
 
 function initCommandCache() {
+	if (localStorage['gleebox_command_cache'])
     cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
 }
 

@@ -396,7 +396,7 @@ var Glee = {
 		this.setState(null);
 	},
 	
-	applyTheme: function(class) {
+	applyTheme: function() {
 		this.resetTheme();
 		this.$searchBox.addClass(Glee.options.theme);
 		this.$searchField.addClass(Glee.options.theme);
