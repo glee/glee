@@ -1,5 +1,6 @@
 // Chrome specific methods for options page
 
+var IS_CHROME = true;
 var bg_window;
 var sync;
 

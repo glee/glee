@@ -150,5 +150,11 @@
 		<key>Secure</key>
 		<false/>
 	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>outsideScrollingStatus</string>
+	</dict>
 </array>
 </plist>

@@ -1,11 +1,12 @@
 // safari specific methods for options page
+var IS_CHROME = false;
 
 $(document).ready(function() {
     safari.self.tab.dispatchMessage("getOptionsFromOptionsPage", null);
 });
 
 function respondToMessage(e) {
-    if (e.name == "sendOptionsToOptionsPage") {
+    if (e.name === "sendOptionsToOptionsPage") {
         initSettings(e.message);
     }
 }
@@ -17,8 +18,7 @@ safari.self.addEventListener("message", respondToMessage, false);
 function initSettings(response)
 {
     prefs = response;
-    prefs.version = "1.6.3";
-	initDefaultTexts();
+    prefs.version = "2";
     initFiltering();
     
     // disabled urls
@@ -27,18 +27,6 @@ function initSettings(response)
 	{
 		for (var i = 0; i < len; i++)
 			addItem('domain', prefs.disabledUrls[i]);
-	}
-	
-	// position
-    var tRadios = document.getElementsByName("position");
-	var r_len = tRadios.length;
-	for (var i = 0; i < r_len; i++)
-	{
-		if (prefs.position == tRadios[i].value)
-		{
-			tRadios[i].checked = true;
-			break;
-		}
 	}
 
 	// size
@@ -83,10 +71,18 @@ function initSettings(response)
 	}
 
 	// scroll animation
-	if (prefs.scrollingSpeed == 0)
-		document.getElementsByName("scrollingSpeed")[1].checked = true;
+	el = $("[name=scrollingSpeed]").get(0);
+	if (!prefs.scrollingSpeed)
+		el.checked = false;
 	else
-		document.getElementsByName("scrollingSpeed")[0].checked = true;
+		el.checked = true;
+	
+	// outside scrolling
+	el = $("[name=outsideScrollingStatus]").get(0);
+	if (prefs.outsideScrollingStatus)
+		el.checked = true;
+	else
+		el.checked = false;	
 
 	// scraper commands
 	var len = prefs.scrapers.length;
@@ -98,10 +94,11 @@ function initSettings(response)
 	}	
 
 	// esp status
+	el = $("[name=espStatus]").get(0);
 	if (prefs.espStatus == 0)
-		document.getElementsByName("espStatus")[1].checked = true;
+		el.checked = false;
 	else
-		document.getElementsByName("espStatus")[0].checked = true;
+		el.checked = true;
 	
 	// esp visions
 	var espList = document.getElementById("esp-modifiers");
@@ -150,6 +147,29 @@ function saveOption(name, value) {
 function translateOptionValue(name, value) {
     switch (name) {
         case "shortcutKey": return document.getElementsByName("shortcut_key_span")[0].innerText; break;
+
+		case "outsideScrollingStatus": 
+		if (value) {
+			return true;
+		}
+		else
+			return false;
+		break;
+		
+		case "scrollingSpeed":
+		if (value)
+			return 500;
+		else
+			return false;
+		break;
+		
+		case "espStatus":
+		if (value)
+			return true;
+		else
+			return false;
+		break;
+
     }
     return value;
 }

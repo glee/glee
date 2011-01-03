@@ -519,7 +519,11 @@ function attachListeners() {
     
 	// checkbox
 	$('.option-field input[type=checkbox]').bind('change', function(e) {
-		saveOption(e.target.name, (e.target.value) ? 1 : 0);
+		if (IS_CHROME)
+			saveOption(e.target.name, (e.target.value) ? 1 : 0);
+		else {
+			saveOption(e.target.name, translateOptionValue(e.target.name, e.target.value));
+		}
 	});
     
     // textfields
@@ -609,44 +613,3 @@ $(document).ready(function() {
 	});
 
 });
-
-
-/** Manage default texts **/
-// 
-// function clearDefaultText(e) {
-//     var target = window.event ? window.event.srcElement : e ? e.target : null;
-//     if (!target) return;
-//     
-//     if (target.value == target.defaultText) {
-//         target.value = '';
-//     }
-//     else if (e.type == "click") {
-//         Utils.selectAllText(target);
-//     }
-// }
-// 
-// function replaceDefaultText(e) {
-//     var target = window.event ? window.event.srcElement : e ? e.target : null;
-//     if (!target) return;
-//     
-//     if (target.value == '' && target.defaultText) {
-//         target.value = target.defaultText;
-//     }
-// }
-// 
-// function initDefaultTexts() {
-//     var formInputs = document.getElementsByTagName('input');
-//     for (var i = 0; i < formInputs.length; i++) {
-//         var theInput = formInputs[i];
-//         
-//         if (theInput.type == 'text') {
-//             /* Add event handlers */
-//             $(theInput).bind('focus click', clearDefaultText)
-//             .bind('blur', replaceDefaultText);
-//             /* Save the current value */
-//             if (theInput.value != '') {
-//                 theInput.defaultText = theInput.value;
-//             }
-//         }
-// 	}
-// }

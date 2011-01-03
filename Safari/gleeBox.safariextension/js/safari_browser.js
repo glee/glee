@@ -3,21 +3,18 @@ IS_CHROME = false;
 Glee.Browser = {
     
     openNewTab: function(url) {
-        Glee.searchField.attr('value', '');
-    	Glee.setSubText(null);
+		Glee.empty();
         safari.self.tab.dispatchMessage("openNewTab", url);
     },
     
     openPageInThisTab: function(url) {
-        Glee.searchField.attr('value', '');
-    	Glee.setSubText(null);
+		Glee.empty();
         document.location = url;
     },
     
     openPageIfNotExist: function(url) {
         safari.self.tab.dispatchMessage("openPageIfNotExist", url);
-        Glee.searchField.attr('value', '');
-        Glee.setSubText(null);
+		Glee.empty();
     },
     
     sendRequest: function(url, method, callback) {
@@ -52,12 +49,7 @@ Glee.Browser = {
                                 		    Glee.scrapers[ 4 + i ] = scrapers[i];
                                 		break;
                                 		
-                case "theme"        :   if (Glee.ThemeOption)
-                                		{
-                                		    Glee.searchBox.removeClass(Glee.ThemeOption);
-                                            Glee.searchField.removeClass(Glee.ThemeOption);
-                                		}
-                                        Glee.ThemeOption = options.theme;
+                case "theme"        :   Glee.ThemeOption = options.theme;
                                         break;
                 
                 default             :   Glee.options[opt] = options[opt];
@@ -82,10 +74,9 @@ Glee.Browser = {
     
     setOption: function(option, value) {
         safari.self.tab.dispatchMessage("updateOption", { option: option, value: value });
-		Glee.searchField.attr('value','');
-		Glee.setSubText(null);
-		setTimeout(function(){
-		    Glee.searchField.keyup();
+		Glee.empty();
+		setTimeout(function() {
+		    Glee.$searchField.keyup();
 		}, 100);
     },
     
