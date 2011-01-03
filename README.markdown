@@ -3,7 +3,7 @@ gleeBox
 
 gleeBox takes a keyboard-centric approach to navigating the web and provides alternatives to actions that are traditionally performed via the mouse. It is mostly meant for keyboard and command line lovers.
 
-See screencasts and more at [http://thegleebox.com](http://thegleebox.com).
+Screencasts and more at [http://thegleebox.com](http://thegleebox.com).
 
 Installation
 -------------
@@ -16,15 +16,16 @@ Chrome: [https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbam
 
 Safari: [http://thegleebox.com/safari/gleeBox.safariextz](http://thegleebox.com/safari/gleeBox.safariextz)
 
-Firefox: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191) *(less frequently updated)*
+Firefox ***(outdated)***: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191)
 
-**Development Version** *(if you like to live on the edge)*
+
+**Development Version** *(if you like living on the edge)*
 
 Chrome: Load `Chrome/glee_chrome` as unpacked extension (in Developer mode).
 
-Safari: Add `Safari/gleeBox.safariextension` as a new extension in the Extension Builder. Many files are symlinked from `Chrome/glee_chrome`, so make sure you fetch the entire repository.
+Safari: Add `Safari/gleeBox.safariextension` as a new extension in the Extension Builder.
 
-Firefox: Drag `FF/gleebox.xpi` to Firefox to install.
+Firefox *(Currently not under development. Help us out!)*: Drag `FF/gleebox.xpi` to Firefox to install.
 
 Usage
 ------
@@ -34,4 +35,4 @@ To learn how to use gleeBox, read the [user manual](http://thegleebox.com/manual
 License
 -------
 
-[GNU General Public License](http://github.com/glee/glee/blob/master/LICENSE).
+[GNU General Public License](http://github.com/glee/glee/blob/master/LICENSE)
