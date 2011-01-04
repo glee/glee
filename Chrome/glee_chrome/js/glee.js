@@ -864,12 +864,14 @@ var Glee = {
 		if (Glee.isEspRunning && Glee.selectedElement) {
 			LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
         	LinkReaper.unHighlight(Glee.selectedElement);
+			Glee.selectedElement = LinkReaper.getFirst();
 		}
 		else if (!Glee.isCommand() && !Glee.isEmpty()) {
 			LinkReaper.reapLinks(Glee.value(), true);
+			Glee.selectedElement = LinkReaper.getFirst();
 		}
-        Glee.selectedElement = LinkReaper.getFirst();
-        Glee.setState(Glee.selectedElement, "el");
+		if (Glee.selectedElement)
+			Glee.setState(Glee.selectedElement, "el");
 	},
 	
 	/**
