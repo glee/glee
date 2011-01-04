@@ -573,14 +573,14 @@ Glee.Events = {
 		if (!Utils.elementCanReceiveUserInput(target))
 		{
 			// scroll using w / s
-			if (e.keyCode === 87 || e.keyCode === 83) 
+			if (e.keyCode === Glee.options.upScrollingKey || e.keyCode === Glee.options.downScrollingKey) 
 			{
 				if (e.metaKey || e.ctrlKey || e.shiftKey)
 					return true;
 				e.preventDefault();
 				e.stopPropagation();
 	
-				Glee.Events.startScrolling(e.keyCode === 87 ? 1 : -1);
+				Glee.Events.startScrolling(e.keyCode === Glee.options.upScrollingKey ? 1 : -1);
 	
 				function stopOutsideScroll() {
 					Glee.Events.stopScrolling();

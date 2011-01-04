@@ -16,7 +16,9 @@ function getDefaultPreferences() {
 		tab_shortcut_key: 190,
         hyper: 0,
         sync: 0,
-		outside_scrolling_status: 0
+		outside_scrolling_status: 0,
+		up_scrolling_key: 87,
+		down_scrolling_key: 83
 	};
 	return prefs;
 }

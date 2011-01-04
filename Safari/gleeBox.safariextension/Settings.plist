@@ -156,5 +156,17 @@
 		<key>Key</key>
 		<string>outsideScrollingStatus</string>
 	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<real>87</real>
+		<key>Key</key>
+		<string>upScrollingKey</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<real>83</real>
+		<key>Key</key>
+		<string>downScrollingKey</string>
+	</dict>
 </array>
 </plist>

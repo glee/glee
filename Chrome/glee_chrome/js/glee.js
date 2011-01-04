@@ -62,6 +62,10 @@ var Glee = {
 
 		outsideScrollingStatus: false,
 		
+		upScrollingKey: 87, // w
+		
+		downScrollingKey: 83, // s
+		
 		theme: "GleeThemeDefault"
 	},
 	

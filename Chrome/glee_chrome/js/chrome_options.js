@@ -15,7 +15,8 @@ var prefStrings = [
 	"scroll_animation",
 	"tab_shortcut_status",
 	"esp_status",
-	"outside_scrolling_status"
+	"outside_scrolling_status",
+	"up_scrolling_key"
 ];
 
 // default values for preferences
@@ -44,7 +45,16 @@ function initSettings(response)
 		var $el = $("[name=" + prefName + "]");
 		var el = $el.get(0);
 		
-		if (el.type === "radio") {
+		// preference specific
+		if (prefName === "up_scrolling_key") {
+			var $scrollingEl = $('[name=scrolling_key]');
+			if (parseInt(prefs[prefName]) === 38)
+				$scrollingEl.get(1).checked = true;
+			else
+				$scrollingEl.get(0).checked = true;
+		}
+		
+		else if (el.type === "radio") {
 			var r_len = $el.length;
 			for (var j = 0; j < r_len; j++) {
 				var radio = $el.get(j);

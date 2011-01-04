@@ -120,7 +120,6 @@ Glee.Events = {
 
 					else if (Glee.isJQueryCmd())
 						Glee.setState("Enter jQuery selector and press enter, at your own risk.", "msg");
-
 					else
 						Glee.setState("Command not found", "msg");
 				}
@@ -299,6 +298,7 @@ Glee.Events = {
 			result = SelectorGenerator.generate(Glee.selectedElement);
 			var value = "*" + result;
 			Glee.value(value);
+			Glee.lastQuery = value;
 			Glee.Events.executeJQuerySelector(result);
 			return true;
 		}
@@ -425,7 +425,7 @@ Glee.Events = {
 		var executeInNewTab = e.shiftKey || e.ctrlKey || e.metaKey;
 
 		if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
-		    Glee.Events.executeJQuerySelector(value.substring(1));
+	    	Glee.Events.executeJQuerySelector(value.substring(1));
 			return true;
 		}
 		
@@ -573,14 +573,14 @@ Glee.Events = {
 		if (!Utils.elementCanReceiveUserInput(target))
 		{
 			// scroll using w / s
-			if (e.keyCode === 87 || e.keyCode === 83) 
+			if (e.keyCode === Glee.options.upScrollingKey || e.keyCode === Glee.options.downScrollingKey) 
 			{
 				if (e.metaKey || e.ctrlKey || e.shiftKey)
 					return true;
 				e.preventDefault();
 				e.stopPropagation();
 	
-				Glee.Events.startScrolling(e.keyCode === 87 ? 1 : -1);
+				Glee.Events.startScrolling(e.keyCode === Glee.options.upScrollingKey ? 1 : -1);
 	
 				function stopOutsideScroll() {
 					Glee.Events.stopScrolling();

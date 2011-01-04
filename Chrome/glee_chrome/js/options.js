@@ -1,5 +1,6 @@
 var prefs = {};
 var textfieldTimer = null;
+var scroller;
 
 function makeItemEditable(el, type) {
     if (type === "domain") {
@@ -514,6 +515,9 @@ function attachListeners() {
     $('.option-field input[type=radio]').bind('change keyup', function(e) {
         if (e.type === 'keyup' && e.keyCode === 9)
             return true;
+		if (e.target.name === "scrolling_key") {
+			changeScrollingKey(e.target.value); return true;
+		}
         saveOption(e.target.name, e.target.value);
     });
     
@@ -548,6 +552,27 @@ function changeSearchEngine(engine) {
     var ui = $('#search_engine');
     ui.attr('value', value)
     .keyup();
+}
+
+function changeScrollingKey(keyset) {
+	var up;
+	var down;
+	if (keyset === "ws") {
+		up = 87;
+		down = 83;
+	}
+	else if (keyset === "arrowkeys") {
+		up = 38;
+		down = 40;
+	}
+	if (IS_CHROME) {
+		saveOption('up_scrolling_key', up);
+		saveOption('down_scrolling_key', down);
+	}
+	else {
+		saveOption('upScrollingKey', up);
+		saveOption('downScrollingKey', down);
+	}
 }
 
 /** filtering **/
@@ -611,5 +636,26 @@ $(document).ready(function() {
 		$(activeTab).fadeIn();
 		return false;
 	});
+});
 
+// smooth scrolling using arrow keys
+window.addEventListener('keydown', function(e) {
+	if ((e.keyCode === 38 || e.keyCode === 40) && !Utils.elementCanReceiveUserInput(e.target)) {
+		if (e.metaKey || e.ctrlKey || e.shiftKey)
+			return true;
+		e.preventDefault();
+		e.stopPropagation();
+		if (!scroller)
+			scroller = new SmoothScroller(4);
+		scroller.start((e.keyCode === 38) ? 1 : -1);
+		
+		function stopScrolling() {
+			if (scroller)
+				scroller.stop();
+			$(window).unbind('keyup', stopScrolling);
+		}
+
+		$(window).bind('keyup', stopScrolling);
+		return false;
+	}
 });

@@ -13,7 +13,10 @@ var cache = {
         espStatus: null,
         scrapers: [],
         espModifiers: [],
-        version: null
+        version: null,
+		outsideScrollingStatus: null,
+		upScrollingKey: null,
+		downScrollingKey: null
     }
 };
 

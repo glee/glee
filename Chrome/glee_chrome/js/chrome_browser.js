@@ -19,7 +19,9 @@ var optionStrings = {
 	"shortcut_key"				: { name: "shortcutKey" },
 	"tab_shortcut_key"			: { name: "tabShortcutKey" },
 	"outside_scrolling_status"	: { name: "outsideScrollingStatus", values: [false, true] },
-	"theme"						: { name: "theme" }
+	"theme"						: { name: "theme" },
+	"up_scrolling_key"			: { name: "upScrollingKey" },
+	"down_scrolling_key"		: { name: "downScrollingKey" }
 };
 
 Glee.Browser.isBookmark = function(text) {

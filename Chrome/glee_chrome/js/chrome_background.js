@@ -10,25 +10,34 @@ var cache = {
 };
 
 function checkVersion() {
-    if (localStorage['gleebox_version'] != "2")
+    if (localStorage['gleebox_version'] != "2.01")
     {
         // create the new preferences as part of update
         updateDB();
         // open the update page
         chrome.tabs.create({ url:"http://thegleebox.com/update.html", selected: true }, null);
         // update version
-        localStorage['gleebox_version'] = "2";
+        localStorage['gleebox_version'] = "2.01";
     }
 }
 
 function updateDB() {
-	// for 2.0
+	// for 2
 	loadPreference('outside_scrolling_status', function(value) {
-		if (value === null) {
+		if (value === null)
             createPreference('outside_scrolling_status', 0);
-		}
 	});
 	
+	loadPreference('up_scrolling_key', function(value) {
+		if (value === null)
+            createPreference('up_scrolling_key', 87);
+	});
+	
+	loadPreference('down_scrolling_key', function(value) {
+		if (value === null)
+            createPreference('down_scrolling_key', 83);
+	});
+
 	// for 1.8
     loadPreference('command_engine', function(value) {
         if (value === null) {

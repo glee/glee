@@ -83,6 +83,13 @@ function initSettings(response)
 		el.checked = true;
 	else
 		el.checked = false;	
+	
+	// smooth scrolling keys
+	el = $("[name=scrolling_key]");
+	if (prefs.upScrollingKey === 38)
+		el.get(1).checked = true;
+	else
+		el.get(0).checked = true;
 
 	// scraper commands
 	var len = prefs.scrapers.length;
