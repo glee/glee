@@ -42,7 +42,7 @@ Glee.Events = {
 				Glee.selectTopElement();
 				return true;
 			}
-			Glee.Events.startScrolling(e.keyCode === 38 ? 1 : -1)
+			Glee.Events.startScrolling(e.keyCode === 38 ? 1 : -1);
 		}
 		
 		// Open Tab Manager when shortcut key is pressed inside gleeBox
@@ -569,7 +569,6 @@ Glee.Events = {
 	
 	outsideScrollingListener: function(e) {		
    		var target = e.target || e.srcElement;
-
 		if (!Utils.elementCanReceiveUserInput(target))
 		{
 			// scroll using w / s

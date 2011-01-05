@@ -327,8 +327,11 @@ var Glee = {
 			Glee.ListManager.applyTheme();
 		
 		// Size
-		Glee.$searchField.removeClass('gleeSmallSize gleeMediumSize gleeLargeSize');
-		Glee.$searchField.addClass("glee" + Glee.options.size.capitalize() + "Size");
+		try {
+			Glee.$searchField.removeClass('gleeSmallSize gleeMediumSize gleeLargeSize');
+			Glee.$searchField.addClass("glee" + Glee.options.size.capitalize() + "Size");
+		}
+		catch(e) {}
 		
 		// Hyper mode
 		if (Glee.options.status && Glee.options.hyperMode) {
@@ -402,13 +405,19 @@ var Glee = {
 	
 	applyTheme: function() {
 		this.resetTheme();
-		this.$searchBox.addClass(Glee.options.theme);
-		this.$searchField.addClass(Glee.options.theme);
+		try {
+			this.$searchBox.addClass(Glee.options.theme);
+			this.$searchField.addClass(Glee.options.theme);
+		}
+		catch(e) {}
 	},
 	
 	resetTheme: function() {
-		this.$searchBox.removeClass(Glee.defaults.themes.join(" "));
-		this.$searchField.removeClass(Glee.defaults.themes.join(" "));
+		try {
+			this.$searchBox.removeClass(Glee.defaults.themes.join(" "));
+			this.$searchField.removeClass(Glee.defaults.themes.join(" "));
+		}
+		catch(e) {} // just to prevent errors popping up in safari. TODO: find why they come up
 	},
 	
 	isVisible: function() {
@@ -816,9 +825,12 @@ var Glee = {
 	updateCommandCache: function(commands) {
 	    this.cache.commands = commands;
 	    
-        this.$searchField.setOptions({
-            data: Glee.cache.commands
-        });
+		try {
+			this.$searchField.setOptions({
+	            data: Glee.cache.commands
+	        });
+		}
+        catch(e) {}
 	},
 	
 	attachListeners: function() {
@@ -834,8 +846,7 @@ var Glee = {
 	attachWindowListener: function() {
 		// attach the window Listener
 		$(window).bind('keydown', function(e) {
-
-    		var target = e.target || e.srcElement;
+			var target = e.target || e.srcElement;
     		if (Glee.options.status && Glee.options.status != 0)
     		{
     			if ( !Utils.elementCanReceiveUserInput(target) || e.altKey )
@@ -856,7 +867,7 @@ var Glee = {
     				}
     			}
     		}
-    	});
+		});
 	},
 	
 	// select the top most visible element (if any elements are highlighted)
