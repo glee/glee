@@ -61,8 +61,6 @@ Glee.Browser.sendRequest = function(url, method, callback){
 
 Glee.Browser.updateOptions = function(response) {
 	var prefs = response.preferences;
-
-	log("Options from DB", prefs);
 	
 	$.each(prefs, function(key, value) {
 		if (key === "scrapers") {
@@ -93,7 +91,7 @@ Glee.Browser.updateOptions = function(response) {
 	else
 		Glee.options.status = true;
 
-	log("After loading from DB, Glee options", Glee.options);
+	log("Updated options", Glee.options);
 
 	Glee.applyOptions();
 }

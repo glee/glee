@@ -516,7 +516,8 @@ function attachListeners() {
         if (e.type === 'keyup' && e.keyCode === 9)
             return true;
 		if (e.target.name === "scrolling_key") {
-			changeScrollingKey(e.target.value); return true;
+			changeScrollingKey(e.target.value); 
+			return true;
 		}
         saveOption(e.target.name, e.target.value);
     });
@@ -532,6 +533,8 @@ function attachListeners() {
     
     // textfields
     $('.option-field input[type=text]:not(#add_domain, #scraper-name, #scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e) {
+		if (e.keyCode === 9)
+			return true;
         if (textfieldTimer) {
             clearTimeout(textfieldTimer);
             textfieldTimer = null;
@@ -561,9 +564,9 @@ function changeScrollingKey(keyset) {
 		up = 87;
 		down = 83;
 	}
-	else if (keyset === "arrowkeys") {
-		up = 38;
-		down = 40;
+	else if (keyset === "hj") {
+		up = 72;
+		down = 74;
 	}
 	if (IS_CHROME) {
 		saveOption('up_scrolling_key', up);

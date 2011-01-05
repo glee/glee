@@ -15,8 +15,7 @@ var prefStrings = [
 	"scroll_animation",
 	"tab_shortcut_status",
 	"esp_status",
-	"outside_scrolling_status",
-	"up_scrolling_key"
+	"outside_scrolling_status"
 ];
 
 // default values for preferences
@@ -36,6 +35,7 @@ $(document).ready(function() {
 function initSettings(response)
 {
     prefs = response;
+	
 	initFiltering();
 	
 	// set all the preferences in UI
@@ -45,16 +45,7 @@ function initSettings(response)
 		var $el = $("[name=" + prefName + "]");
 		var el = $el.get(0);
 		
-		// preference specific
-		if (prefName === "up_scrolling_key") {
-			var $scrollingEl = $('[name=scrolling_key]');
-			if (parseInt(prefs[prefName]) === 38)
-				$scrollingEl.get(1).checked = true;
-			else
-				$scrollingEl.get(0).checked = true;
-		}
-		
-		else if (el.type === "radio") {
+		if (el.type === "radio") {
 			var r_len = $el.length;
 			for (var j = 0; j < r_len; j++) {
 				var radio = $el.get(j);
@@ -78,8 +69,19 @@ function initSettings(response)
 		}
 	}
 	
+	// preference specific
+	var $scrollingEl = $('[name=scrolling_key]');
+	// parse as int
+	prefs.up_scrolling_key = parseInt(prefs.up_scrolling_key);
+	prefs.down_scrolling_key = parseInt(prefs.down_scrolling_key);
+	
+	if (prefs.up_scrolling_key === 72)
+		$scrollingEl.get(1).checked = true;
+	else
+		$scrollingEl.get(0).checked = true;
+	
 	// display the Quix URL field, if Quix is selected as the command engine
-    if (prefs.command_engine == "quix")
+    if (prefs.command_engine === "quix")
         $("#quix_url").show();
 
     // disabled urls
@@ -139,7 +141,7 @@ function initSettings(response)
 	    if (prefs.tab_shortcut_key)
     		document.getElementsByName("tab_shortcut_key_span")[0].innerText = prefs.tab_shortcut_key;
     	else
-    		document.getElementsByName("tab_shortcut_key_span")[0].innerText = 190; //default is .
+    		document.getElementsByName("tab_shortcut_key_span")[0].innerText = 190; // default is .
 	}
 	KeyCombo.init(document.getElementsByName("tab_shortcut_key")[0], document.getElementsByName("tab_shortcut_key_span")[0]);
 	
@@ -192,7 +194,7 @@ function propagate()
 			{
 				chrome.tabs.sendRequest(windows[i].tabs[j].id,
 				    {value: "updateOptions", preferences: prefs},
-				    function(response){}
+				    function(response) {}
 				);
 			}
 		}

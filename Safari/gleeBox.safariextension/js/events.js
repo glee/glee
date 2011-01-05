@@ -120,7 +120,6 @@ Glee.Events = {
 
 					else if (Glee.isJQueryCmd())
 						Glee.setState("Enter jQuery selector and press enter, at your own risk.", "msg");
-
 					else
 						Glee.setState("Command not found", "msg");
 				}
@@ -299,6 +298,7 @@ Glee.Events = {
 			result = SelectorGenerator.generate(Glee.selectedElement);
 			var value = "*" + result;
 			Glee.value(value);
+			Glee.lastQuery = value;
 			Glee.Events.executeJQuerySelector(result);
 			return true;
 		}
@@ -425,7 +425,7 @@ Glee.Events = {
 		var executeInNewTab = e.shiftKey || e.ctrlKey || e.metaKey;
 
 		if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
-		    Glee.Events.executeJQuerySelector(value.substring(1));
+	    	Glee.Events.executeJQuerySelector(value.substring(1));
 			return true;
 		}
 		

@@ -56,6 +56,7 @@ Glee.inspectPage = function() {
 		if (result) {
 			var value = "*" + result;
 			Glee.value(value);
+			Glee.lastQuery = value;
 			Glee.Events.executeJQuerySelector(result);
 		}
 		else

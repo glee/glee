@@ -62,7 +62,7 @@ function init() {
 
 function initCommandCache() {
     cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
-    console.log("Commands in gleeBox cache: " + localStorage['gleebox_commands_cache']);
+	log("Command cache: " + localStorage['gleebox_commands_cache']);
 }
 
 // add listener to respond to requests from content script
@@ -199,12 +199,6 @@ function updateOption(option, value) {
 		                  cache.prefs[option] = value;
 		                  savePreference(option, value);
 		                  break;
-		                  
-		// case "pos"		: 
-		// case "position" : option = "position";
-		//                   cache.prefs[option] = value;
-		//                   savePreference(option, value);
-		//                   break;
 
 		case "esp"		: option = "esp_status";
 		                  cache.prefs[option] = value;
