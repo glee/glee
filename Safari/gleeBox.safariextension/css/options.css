@@ -17,14 +17,14 @@ body {
 
 #options {
 	position: absolute;
-	margin: 0 0 20px 300px;
+	margin: 0 0 20px 270px;
 	background-color: #fff;
 	padding: 20px;
 }
 
 #tabmenu {
 	position: fixed;
-	width: 299px;
+	width: 269px;
 	margin: 0;
 	float: left;
 	height: 100%;
@@ -62,14 +62,12 @@ h2 {
 	clear: both;
 	color: #555;
 	font-size: 20px;
-	background-color: #edf2f2;
 	font-weight: normal;
 	letter-spacing: 1px;
 	margin: 20px 0px;
-	border-radius: 5px;
-	padding-left: 7px;
 	padding-top: 5px;
 	padding-bottom: 3px;
+	border-bottom: 1px dotted #CFCFCF;
 }
 
 ul.options {
@@ -107,7 +105,7 @@ ul li ul {
 
 ul.menu {
 	float: right;
-	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif;
+	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
 	font-size: 14px;
 	margin: 0;
 	margin-bottom: 200px;
@@ -128,7 +126,6 @@ ul.menu li {
 ul.menu li a, ul.menu li a:visited {
 	text-decoration: none;
 }
-
 
 .option-label {
 	float: left;
@@ -155,7 +152,7 @@ textarea {
 	color: #333;
 	font-size: 13px;
 	line-height: 17px;
-	font-family: "Lucida Grande", "Trebuchet MS", sans-serif;
+	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
 	margin: 0;
 }
 
@@ -197,7 +194,7 @@ textarea {
 .subtext {
 	font-size: 12px;
 	color: #888;
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
 	line-height: 14px;
 }
 
@@ -258,7 +255,7 @@ textarea {
     width: 550px;
     display: inline-block;
     font-size: 12px;
-    font-family: Monaco, "Lucida Console", monospace;
+    font-family: Menlo, Monaco, "Lucida Console", "Courier New", monospace;
     float: left;
 }
 
@@ -299,6 +296,14 @@ textarea {
 	line-height: 20px;
 }
 
+.menu-separator {
+	width: 100%;
+	height: 1px;
+	float: right;
+	background-color: #ccc;
+	-webkit-box-shadow: 0px 1px 1px #fff;
+}
+
 .description {
 	font-size: 14px;
 	color: gray;
@@ -315,7 +320,8 @@ textarea {
 	text-decoration: none;
 }
 
-/* Modal popup */
+/** Popup **/
+
 #popup {
     display: none;
     position: fixed;
@@ -339,7 +345,7 @@ textarea {
     border: 1px solid #ccc;
     display: block;
     font-size: 12px !important;
-    font-family: Monaco, 'Lucida Console', monospace !important;
+    font-family: Menlo, Monaco, 'Lucida Console', 'Courier New', monospace !important;
     line-height: 18px;
     height: 75%;
     margin: 10px 0;
@@ -351,7 +357,8 @@ textarea {
     display: block;
 }
 
-/* Scrollbar styling */
+/** Scrollbar **/
+
 #popup textarea::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
@@ -381,12 +388,4 @@ textarea {
 #popup textarea::-webkit-scrollbar-corner:vertical, 
 #popup textarea::-webkit-scrollbar-resizer:vertical {
     background-color: #ededed;
-}
-
-.menu-separator {
-	width: 100%;
-	height: 1px;
-	float: right;
-	background-color: #ccc;
-	-webkit-box-shadow: 0px 1px 1px #fff;
 }

@@ -7,7 +7,6 @@
 * Highlighted text when gleeBox is launched is treated as default query for Yubnub/Quix commands
 * gleeBox works after executing !read
 * When Esc is pressed, if gleeBox is not empty, it is emptied. If empty, it is closed
-* gleeBox is not emptied when a link is opened in a new tab
 * By default, gleeBox description text is empty
 * Revamped Options page
 * Ability to copy URL of selected link to clipboard by pressing Cmd / Ctrl + c (Chrome only)

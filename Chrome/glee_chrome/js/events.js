@@ -29,6 +29,7 @@ Glee.Events = {
 		    Glee.Events.execute(e, e.target.value);
 			if (Glee.isEspRunning)
 				Glee.setState(Glee.selectedElement, "el");
+			
 		}
 		
 		// Up / Down Arrow keys: Begin scrolling
@@ -478,7 +479,11 @@ Glee.Events = {
 							Glee.blur();
 						}, 0);
 						Glee.closeWithoutBlur();
-					}                    
+					}
+					// If link is being opened in a new tab & it isn't a scraper command, clear gleebox
+					else if (!Glee.isScraper()) {
+						Glee.empty();
+					}
 					return false;
 				}
 			}
