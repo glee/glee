@@ -171,13 +171,8 @@ function addItem(type, value1, value2, shouldSave) {
                 makeItemEditable(contentSelector, "scraper-sel");
                 
                 var prefix = $("<span class='scraper-prefix'>?</span>");
-                var separator = $("<span>", {
-                    className: 'separator',
-                    html: ':'
-                });
                 container.append(prefix)
                 .append(contentName)
-                .append(separator)
                 .append(contentSelector);
                 
  				if (shouldSave) {
@@ -202,10 +197,6 @@ function addItem(type, value1, value2, shouldSave) {
 			{
  				listOfItems = document.getElementById("esp-modifiers");
 				lastEl = document.getElementById("addEspModifier");
-				var separator = $("<span>", {
-                    className: "separator",
-                    html: ':'
-                });
                 
                 var contentName = $('<span>', {
                     className: "esp-url",
@@ -222,7 +213,6 @@ function addItem(type, value1, value2, shouldSave) {
                 makeItemEditable(contentSelector, "esp-sel");
                 
  				container.append(contentName)
- 				.append(separator)
  				.append(contentSelector);
  				
  				if (shouldSave) {

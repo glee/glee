@@ -110,13 +110,47 @@
 					Create your own scraper commands by adding command name and a corresponding <a href="http://docs.jquery.com/Selectors">jQuery selector</a>.
 					</li>
 					<li>
-						<b>?</b>&nbsp;<input type="text" id="scraper-search-field" placeholder="Search" />
+						<div class='scraper-prefix'>?</div><input type="text" id="scraper-search-field" placeholder="Search" />
 						<ul id="scraper-commands">
-							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
-							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-							<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" placeholder="Name" /><span class="separator"> : </span><input id="scraper-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form></li>
+							<li class="default-scraper">
+								<span class="scraper-prefix">?</span>
+								<span class="default-scraper-name">?</span>
+								<div class='selector'>
+									Input Elements
+									<span class='inbuilt'>In-built</span>
+								</div>
+							</li>
+							<li class="default-scraper">
+								<span class="scraper-prefix">?</span>
+								<span class="default-scraper-name">img</span>
+								<div class='selector'>
+									Linked Images
+									<span class='inbuilt'>In-built</span>
+								</div>
+							</li>
+							<li class="default-scraper">
+								<span class="scraper-prefix">?</span>
+								<span class="default-scraper-name">h</span>
+								<div class='selector'>
+									H1, H2 and H3 elements
+									<span class='inbuilt'>In-built</span>
+								</div>
+							</li>
+							<li class="default-scraper">
+								<span class="scraper-prefix">?</span>
+								<span class="default-scraper-name">a</span>
+								<div class='selector'>
+									Links
+									<span class='inbuilt'>In-built</span>
+								</div>
+							</li>
+							<li id="addScraper">
+								<form onsubmit="addItem('scraper', null, null, true);return false;">
+									<span class='scraper-prefix'>?</span>
+									<input id="scraper-name" type="text" placeholder="Name" />
+									<input class='selector' id="scraper-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/>
+								</form>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -136,7 +170,12 @@
 					<li>
 						<input type="text" id="esp-search-field" placeholder="Search" />
 						<ul id="esp-modifiers">
-							<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" placeholder="Page URL" /><span class="separator"> : </span><input id="add-esp-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form></li>
+							<li id="addEspModifier">
+								<form onsubmit="addItem('esp', null, null, true);return false;">
+									<input id="add-esp-url" type="text" placeholder="Page URL" />
+									<input class='selector' id="add-esp-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/>
+								</form>
+							</li>
 						</ul>
 					</li>
 				</ul>
