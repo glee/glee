@@ -176,7 +176,7 @@ ul li ul {
 
 .description {
 	font-size: 14px;
-	color: gray;
+	color: #555;
 }
 
 .editable:hover {
@@ -239,9 +239,9 @@ ul.options {
     font-size: 12px;
     font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
     float: left;
-	padding: 6px 0px 1px 0px;
+	padding: 5px 0px 1px 0px;
 	line-height: 20px;
-	margin-left: 5px;
+	margin-left: 10px;
 }
 
 input.selector {
