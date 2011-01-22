@@ -189,7 +189,7 @@ ul li ul {
     background: url(../images/remove.png) no-repeat;
 	height: 16px;
 	margin-left: 5px;
-	margin-top: 6px;
+	margin-top: 2px;
 	width: 16px;
 }
 
@@ -233,15 +233,20 @@ ul.options {
 
 /** Common to ESP and Scrapers **/
 
+.separator {
+	width: 10px;
+	float: left;
+	display: block;
+	height: 10px;
+}
+
 .selector {
 	width: 350px;
-    display: inline-block;
     font-size: 12px;
     font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
     float: left;
-	padding: 5px 0px 1px 0px;
-	line-height: 20px;
-	margin-left: 10px;
+	line-height: 23px;
+	word-wrap: break-word;
 }
 
 input.selector {
@@ -254,7 +259,7 @@ input.selector {
 {
 	float: left;
     font-size: 14px;
-	padding: 2px 0;
+	padding: 5px 0px;
 	margin: 0;
 	word-wrap: break-word;
 }
@@ -285,9 +290,8 @@ li.esp {
     width: 200px;
 }
 
-.esp_url {
-	line-height: 20px;	
-	padding: 3px 0px;
+.esp-url {
+	line-height: 20px;
 }
 
 #esp-search-field {
@@ -302,7 +306,6 @@ li.esp {
     font-weight: bold;
     float: left;
 	line-height: 20px;
-	padding: 3px 0px;
 }
 
 /** Scraper Names **/
@@ -319,8 +322,7 @@ li.esp {
 
 .default-scraper-name,
 .scraper-name {
-	line-height: 20px;	
-	padding: 3px 0px;
+	line-height: 20px;
 }
 
 /** Popup **/

@@ -161,6 +161,7 @@ function addItem(type, value1, value2, shouldSave) {
                     tabIndex: 0,
                     html: value1
                 });
+
                 makeItemEditable(contentName, "scraper-name");
                 
                 var contentSelector = $('<span>', {
@@ -168,11 +169,18 @@ function addItem(type, value1, value2, shouldSave) {
                     tabIndex: 0,
                     html: value2
                 });
+
                 makeItemEditable(contentSelector, "scraper-sel");
                 
                 var prefix = $("<span class='scraper-prefix'>?</span>");
+
+				var separator = $('<div>', {
+					className: 'separator'
+				});
+
                 container.append(prefix)
                 .append(contentName)
+				.append(separator)
                 .append(contentSelector);
                 
  				if (shouldSave) {
@@ -212,7 +220,12 @@ function addItem(type, value1, value2, shouldSave) {
                 });
                 makeItemEditable(contentSelector, "esp-sel");
                 
+				var separator = $('<div>', {
+					className: 'separator'
+				});
+				
  				container.append(contentName)
+				.append(separator)
  				.append(contentSelector);
  				
  				if (shouldSave) {
