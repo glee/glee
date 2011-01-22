@@ -189,7 +189,7 @@ ul li ul {
     background: url(../images/remove.png) no-repeat;
 	height: 16px;
 	margin-left: 5px;
-	margin-top: 7px;
+	margin-top: 6px;
 	width: 16px;
 }
 
@@ -237,17 +237,18 @@ ul.options {
 	width: 350px;
     display: inline-block;
     font-size: 12px;
-    font-family: Menlo, Monaco, 'Lucida Console', 'Courier New', monospace;
+    font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
     float: left;
-	line-height: 20px;
-	padding: 0;
+	margin-top: 3px;
 	padding: 3px 0px;
+	line-height: 20px;
 	margin-left: 5px;
 }
 
 input.selector {
 	padding: 2px 3px;
 	line-height: 17px;
+	margin-top: 0px;
 }
 
 #esp-modifiers li,
@@ -303,7 +304,7 @@ li.esp {
     font-weight: bold;
     float: left;
 	line-height: 20px;
-	padding:3px 0px;
+	padding: 3px 0px;
 }
 
 /** Scraper Names **/
