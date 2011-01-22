@@ -239,8 +239,7 @@ ul.options {
     font-size: 12px;
     font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
     float: left;
-	margin-top: 3px;
-	padding: 3px 0px;
+	padding: 6px 0px 1px 0px;
 	line-height: 20px;
 	margin-left: 5px;
 }
@@ -248,7 +247,6 @@ ul.options {
 input.selector {
 	padding: 2px 3px;
 	line-height: 17px;
-	margin-top: 0px;
 }
 
 #esp-modifiers li,
@@ -350,7 +348,7 @@ li.esp {
     border: 1px solid #ccc;
     display: block;
     font-size: 12px !important;
-    font-family: Menlo, Monaco, 'Lucida Console', 'Courier New', monospace !important;
+    font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
     line-height: 18px;
     height: 75%;
     margin: 10px 0;
