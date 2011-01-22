@@ -20,7 +20,10 @@ var Glee = {
 
 		linkSearchTimer: 0,
 		
-		themes: ["GleeThemeDefault", "GleeThemeWhite", "GleeThemeRuby", "GleeThemeGreener", "GleeThemeConsole", "GleeThemeGlee"]
+		themes: ["GleeThemeDefault", "GleeThemeWhite", "GleeThemeRuby", "GleeThemeGreener", "GleeThemeConsole", "GleeThemeGlee"],
+		
+		// space between the window bottom edge and gleeBox top
+		windowBottomDiff: null
     },
 
 	options: {
@@ -703,7 +706,14 @@ var Glee = {
 	scrollToElement: function(el) {
 		var target = $(el);
 		var scroll = false;
-		var boxHeight = Glee.height() + 80;
+		
+		// if window bottom diff is not previously calculated, let's do that
+		if (!Glee.defaults.windowBottomDiff) {
+			// since gleeBox top is at 78%, the diff will be 22%. It will include the gleeBox height
+			Glee.defaults.windowBottomDiff = (window.innerHeight * 0.22);
+		}
+		var boxHeight = Glee.defaults.windowBottomDiff + (target.height() ? target.height() : 50);
+		
 		if (target.length != 0)
 		{
 			var targetOffsetTop = target.offset().top;
