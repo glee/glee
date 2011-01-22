@@ -490,23 +490,23 @@ var Glee = {
 		this.reset();
 		setTimeout(function() {
 			LinkReaper.unreapAllLinks();
+			Glee.$searchBox.fadeOut(150, function() {
+	            if (callback) {
+	                callback();
+	            }
+			});			
 		}, 0);
-		this.$searchBox.fadeOut(150, function() {
-            if (callback) {
-                callback();
-            }
-		});
 	},
 	
 	closeWithoutBlur: function(callback) {
 		this.reset();
 		setTimeout(function() {
 			LinkReaper.unreapAllLinks();
-		}, 0);		
-		this.$searchBox.fadeOut(150, function() {
-			if (callback)
-				callback();
-		});
+			Glee.$searchBox.fadeOut(150, function() {
+				if (callback)
+					callback();
+			});
+		}, 0);
 	},
 	
 	initScraper: function(scraper) {
