@@ -15,18 +15,39 @@ body {
 	width: 100%;
 }
 
+h1 {
+	font-size: 20px;
+	color: #555;
+	font-weight: normal;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+}
+
+h2 {
+	clear: both;
+	color: #555;
+	font-size: 20px;
+	font-weight: normal;
+	letter-spacing: 1px;
+	margin: 20px 0px;
+	padding-top: 5px;
+	padding-bottom: 3px;
+	border-bottom: 1px dotted #CFCFCF;
+}
+
 /** Tabs **/
 
 #options {
 	position: absolute;
-	margin: 0 0 20px 200px;
+	margin: 0 0 20px 220px;
 	background-color: #fff;
 	padding: 20px;
 }
 
 #tabmenu {
 	position: fixed;
-	width: 199px;
+	width: 219px;
 	margin: 0;
 	float: left;
 	height: 100%;
@@ -36,8 +57,9 @@ body {
 	text-align: right;
 }
 
-#tabmenu h3 {
-	padding: 27 10 17 5;
+#tabmenu h1 {
+	padding: 45 10 17 5;
+	float: right;
 }
 
 ul.menu {
@@ -74,28 +96,6 @@ a:active {
 
 a:hover {
 	color: #39719b;
-}
-
-h1 {
-	clear: both;
-	margin-top: 40px;
-	margin-bottom: 40px;
-	font-size: 40px;
-	color: #555;
-	font-weight: normal;
-	text-align: center;
-}
-
-h2 {
-	clear: both;
-	color: #555;
-	font-size: 20px;
-	font-weight: normal;
-	letter-spacing: 1px;
-	margin: 20px 0px;
-	padding-top: 5px;
-	padding-bottom: 3px;
-	border-bottom: 1px dotted #CFCFCF;
 }
 
 input,
