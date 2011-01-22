@@ -22,14 +22,8 @@
 				<li><a href="#scrapers">Scrapers</a></li>
 				<li><a href="#ESP">ESP Visions</a></li>			
 				<li><a href="#backup">Backup and Sync</a></li>
+				<li><a href="#about">About</a></li>
 			</ul>
-			<div class="menu-separator"></div>
-			<div id="footer">
- 	Developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> and <a href="http://sameerahuja.com">Sameer Ahuja</a><br/>
-	Report an <a href="http://github.com/glee/glee/issues">issue</a><br/>
-	If you like gleeBox, please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">donate</a><br/><br/>
-			<a href="http://thegleebox.com/manual.html">User Manual</a>&nbsp; · &nbsp;<a href="http://twitter.com/thegleebox">Twitter</a>&nbsp; · &nbsp;<a href="http://thegleebox.com/releases.html">Release Notes</a>
-			</div>
 		</div>
 		<div id="options">
 			<div id="features">
@@ -140,13 +134,13 @@
 					Create your own scraper commands by adding command name and a corresponding <a href="http://docs.jquery.com/Selectors">jQuery selector</a>.
 					</li>
 					<li>
-						<b>?</b>&nbsp;<input type="text" id="scraper-search-field" placeholder="Search" />
+						<div class='scraper-prefix'>?</div><input type="text" id="scraper-search-field" placeholder="Search" />
 						<ul id="scraper-commands">
 							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">?</span><span class="separator">:</span>Input Elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray;">In-built</span></li>
 							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">img</span><span class="separator">:</span>Linked Images<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
 							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">h</span><span class="separator">:</span>H1, H2 and H3 elements<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
 							<li class="default-scraper"><span class="scraper-prefix">?</span><span class="default-scraper-name">a</span><span class="separator">:</span>Links<span style="float:right;margin-left: 20px;font-size:12px;color:gray">In-built</span></li>
-							<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" placeholder="Name" /><span class="separator"> : </span><input id="scraper-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form>
+							<li id="addScraper"><form onsubmit="addItem('scraper', null, null, true);return false;"><span style="float:left;font-weight:bold">?</span><input id="scraper-name" type="text" placeholder="Name" /><span class="separator"> : </span><input id="scraper-selector" type="text" class='selector' placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form>
 							</li>
 						</ul>
 					</li>
@@ -167,7 +161,7 @@
 					<li>
 						<input type="text" id="esp-search-field" placeholder="Search" />
 						<ul id="esp-modifiers">
-							<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" placeholder="Page URL" /><span class="separator"> : </span><input id="add-esp-selector" type="text" placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form></li>
+							<li id="addEspModifier"><form onsubmit="addItem('esp', null, null, true);return false;"><input id="add-esp-url" type="text" placeholder="Page URL" /><span class="separator"> : </span><input id="add-esp-selector" type="text" class='selector' placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/></form></li>
 						</ul>
 					</li>
 				</ul>
@@ -193,6 +187,17 @@
 				<div style="clear:both">
 					<input id="sync-button" type="button" class="button" value="&nbsp;&nbsp;Enable Sync&nbsp;&nbsp;" onclick= "toggleSyncing();"/>&nbsp;&nbsp;
 			</ul>
+			</div>
+			<div id="about">
+				<h2>About</h2>
+					gleeBox is developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> and <a href="http://sameerahuja.com">Sameer Ahuja</a>.<br/> If you like gleeBox, please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">donate</a>.<br/><br/>
+					Report issues and feature requests on <a href="http://github.com/glee/glee/issues">Github</a>.<br/><br/>
+					Other useful links:<br/>
+					<a href="http://thegleebox.com/manual.html">User Manual</a><br/>
+					<a href="http://thegleebox.com/releases.html">Release Notes</a><br/>
+					<a href="http://tipjar.thegleebox.com">Tipjar</a><br/>
+					<a href="http://twitter.com/thegleebox">gleeBox on Twitter</a><br/>
+				</div>
 			</div>
 		</div>
 	</div>

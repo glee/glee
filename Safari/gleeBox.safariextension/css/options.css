@@ -2,7 +2,7 @@
 
 body {
 	background-color: #ff;
-	font-size: 16px;
+	font-size: 14px;
 	line-height: 28px;
 	font-family: Helvetica, Arial, sans-serif;
 	color: #535353;
@@ -15,16 +15,18 @@ body {
 	width: 100%;
 }
 
+/** Tabs **/
+
 #options {
 	position: absolute;
-	margin: 0 0 20px 270px;
+	margin: 0 0 20px 200px;
 	background-color: #fff;
 	padding: 20px;
 }
 
 #tabmenu {
 	position: fixed;
-	width: 269px;
+	width: 199px;
 	margin: 0;
 	float: left;
 	height: 100%;
@@ -37,6 +39,32 @@ body {
 #tabmenu h3 {
 	padding: 27 10 17 5;
 }
+
+ul.menu {
+	float: right;
+	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
+	font-size: 14px;
+	margin: 0;
+	margin-bottom: 10px;
+}
+
+.tabActive {
+	font-weight: bold;
+	background-color: #fff;
+}
+
+ul.menu li {
+	text-align: right;
+	width: 250px;
+	padding: 3 10 3 3;
+	margin: 5 0 0 0;
+}
+
+ul.menu li a, ul.menu li a:visited {
+	text-decoration: none;
+}
+
+/** End of Tabs **/
 
 a,
 a:visited,
@@ -70,18 +98,19 @@ h2 {
 	border-bottom: 1px dotted #CFCFCF;
 }
 
-ul.options {
-	list-style-type:  none;
+input,
+textarea {
+	border: 0;
+	background-color: #f1f1f1;
+	border: 1px solid #aaa;
+	border-radius: 2px;
+	padding: 2px 3px;
+	display: inline;
+	color: #333;
+	font-size: 13px;
+	line-height: 17px;
+	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
 	margin: 0;
-	margin-bottom: 10px;
-	margin-left: 20px;
-	margin-top: 5px;
-	padding: 0;
-	width: 100%;
-	display: block;
-	float: left;
-	clear: both;
-	width: 800px;
 }
 
 ul li {
@@ -101,59 +130,6 @@ ul li li {
 ul li ul {
 	margin: 0;
 	padding: 0;
-}
-
-ul.menu {
-	float: right;
-	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
-	font-size: 14px;
-	margin: 0;
-	margin-bottom: 200px;
-}
-
-.tabActive {
-	font-weight: bold;
-	background-color: #fff;
-}
-
-ul.menu li {
-	text-align: right;
-	width: 300px;
-	padding: 3 10 3 3;
-	margin: 5 0 0 0;
-}
-
-ul.menu li a, ul.menu li a:visited {
-	text-decoration: none;
-}
-
-.option-label {
-	float: left;
-	width: 330px;
-}
-
-.option-field {
-	float: left;
-	margin-left: 20px;
-}
-
-.option-field input[type=checkbox] {
-	margin-top: 10px;
-}
-
-input,
-textarea {
-	border: 0;
-	background-color: #f1f1f1;
-	border: 1px solid #aaa;
-	border-radius: 2px;
-	padding: 2px 3px;
-	display: inline;
-	color: #333;
-	font-size: 13px;
-	line-height: 17px;
-	font-family: Helvetica, "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
-	margin: 0;
 }
 
 .button:hover {
@@ -187,10 +163,6 @@ textarea {
 	float: right;
 }
 
-#addDomainLi {
-	margin-top: 10px;
-}
-
 .subtext {
 	font-size: 12px;
 	color: #888;
@@ -198,110 +170,8 @@ textarea {
 	line-height: 14px;
 }
 
-#esp-modifiers li,
-#scraper-commands li {
-	float: left;
-    font-size: 14px;
-	margin: 5px 0px;
-	word-wrap: break-word;
-}
-
-#esp-modifiers input,
-#scraper-commands input {
-    float: left;
-}
-
-#esp-modifiers .button,
-#scraper-commands .button {
-    margin-left: 10px;
-}
-
-.scraper-name:hover,
-.scraper-sel:hover,
-.domain-name:hover,
-.esp-url:hover,
-.esp-sel:hover {
-	background-color: #f1f1f1;
-	outline: 1px solid #777;
-	border-radius: 2px;
-}
-
-.separator {
-    float: left;
-    margin: 0px 5px;
-}
-
-.scraper-prefix {
-    font-weight: bold;
-    float: left;
-}
-
-.esp-url, .scraper-name, .default-scraper-name {
-    font-weight: bold;
-	float: left;
-    display: inline-block;
-    width: 100px;
-}
-
-#scraper-search-field {
-    width: 100px;
-}
-
-.esp-url, #esp-search-field {
-    width: 300px;
-}
-
-.esp-sel, .scraper-sel {
-    width: 550px;
-    display: inline-block;
-    font-size: 12px;
-    font-family: Menlo, Monaco, "Lucida Console", "Courier New", monospace;
-    float: left;
-}
-
-.esp-sel {
-    width: 360px;
-}
-
-#add-esp-url {
-	width: 300px;
-	float: left;
-	margin-right: 5px;
-}
-
-#add-esp-selector {
-	width: 360px;
-	float: left;
-	margin-left: 5px;
-}
-
-#scraper-name {
-	float: left;
-	margin-right: 5px;
-	width: 100px;
-}
-
-#scraper-selector {
-	float: left;
-	margin-left: 5px;
-	width: 550px;
-}
-
 .submit {
 	float: right;
-}
-
-.separator {
-	float: left;
-	line-height: 20px;
-}
-
-.menu-separator {
-	width: 100%;
-	height: 1px;
-	float: right;
-	background-color: #ccc;
-	-webkit-box-shadow: 0px 1px 1px #fff;
 }
 
 .description {
@@ -309,15 +179,143 @@ textarea {
 	color: gray;
 }
 
-#footer {
-	font-size: 12px;
-	line-height: 25px;
-	color: #555;
-	padding-right: 10px;	
+.editable:hover {
+	background-color: #f1f1f1;
+	outline: 1px solid #555;
 }
 
-#footer a {
-	text-decoration: none;
+.removeBt {
+	display: block;
+    background: url(../images/remove.png) no-repeat;
+	height: 16px;
+	margin-left: 5px;
+	margin-top: 7px;
+	width: 16px;
+}
+
+.removeBt:hover {
+    background: url(../images/remove_hover.png) no-repeat;
+}
+
+/** Options **/
+
+ul.options {
+	list-style-type:  none;
+	margin: 0;
+	padding: 0;
+	margin-left: 10px;
+}
+
+.option-label {
+	float: left;
+	width: 250px;
+}
+
+.option-field {
+	float: left;
+	margin-left: 20px;
+}
+
+.option-field input[type=checkbox] {
+	margin-top: 10px;
+}
+
+#addDomainLi {
+	margin-top: 10px;
+}
+
+/** Common to ESP and Scrapers **/
+
+.selector {
+	width: 350px;
+    display: inline-block;
+    font-size: 12px;
+    font-family: Menlo, Monaco, 'Lucida Console', 'Courier New', monospace;
+    float: left;
+	line-height: 20px;
+	padding: 0;
+	padding: 3px 0px;
+}
+
+input.selector {
+	padding: 2px 3px;
+	line-height: 17px;
+}
+
+.separator {
+	float: left;
+    margin: 0px 5px;
+	line-height: 24px;
+}
+
+#esp-modifiers li,
+#scrapers li
+{
+	float: left;
+    font-size: 14px;
+	padding: 2px 0;
+	margin: 0;
+	word-wrap: break-word;
+}
+
+li.scraper,
+li.esp {
+	border-bottom: 1px dotted #ccc;
+}
+
+#esp-modifiers .button,
+#scrapers .button {
+	margin-left: 5px;
+}
+
+#esp-modifiers input,
+#scrapers input {
+	float: left;
+}
+
+/** ESP **/
+
+#esp-search-field, 
+.esp-url, 
+#add-esp-url 
+{
+	float: left;
+    font-weight: bold;
+    width: 200px;
+}
+
+.esp_url {
+	line-height: 20px;	
+	padding: 3px 0px;
+}
+
+/** Scrapers **/
+
+/** ? prepended before scrapers **/
+
+.scraper-prefix {
+    font-weight: bold;
+    float: left;
+	line-height: 20px;
+	padding:3px 0px;
+}
+
+/** Scraper Names **/
+
+#scraper-search-field,
+.default-scraper-name,
+.scraper-name,
+#scraper-name 
+{
+	float: left;
+	font-weight: bold;
+    width: 150px;
+}
+
+.default-scraper-name,
+.scraper-name {
+	line-height: 20px;	
+	padding: 3px 0px;
 }
 
 /** Popup **/

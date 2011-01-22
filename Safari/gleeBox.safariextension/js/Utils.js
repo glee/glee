@@ -181,6 +181,7 @@ var Utils = {
 	 * 	@return {true}
 	 */
     makeEditable: function(el, callback, options) {
+		el.addClass('editable');
         el.bind('click keyup', {callback: callback}, function(e) {
             if (e.type == 'keyup' && e.keyCode != 13)
                 return true;

@@ -164,7 +164,7 @@ function addItem(type, value1, value2, shouldSave) {
                 makeItemEditable(contentName, "scraper-name");
                 
                 var contentSelector = $('<span>', {
-                    className: "scraper-sel",
+                    className: "scraper-sel selector",
                     tabIndex: 0,
                     html: value2
                 });
@@ -215,7 +215,7 @@ function addItem(type, value1, value2, shouldSave) {
                 makeItemEditable(contentName, "esp-url");
                 
                 var contentSelector = $('<span>', {
-                    className: "esp-sel",
+                    className: "esp-sel selector",
                     tabIndex: 0,
                     html: value2
                 });
@@ -232,13 +232,15 @@ function addItem(type, value1, value2, shouldSave) {
 			else
 				return false;
 	}
-	var removeBt = $("<input>", {
-	    className: 'button',
+	var removeBt = $("<a>", {
+	    className: 'removeBt',
 		style: 'float: right',
 	    type: 'button',
-	    value: 'Remove'
+		title: 'Remove',
+		href: '#'
 	})
 	.click(function(e) {
+		e.preventDefault();
 	    removeItem(e, type);
 	})
 	.appendTo(container);
@@ -627,7 +629,7 @@ $(document).ready(function() {
 	$("#options > div").hide();
 	$("#features").show();
 	
-	//Click event for tab menu items
+	// Click event for tab menu items
 	$("ul.menu li").click(function() {
 
 		$("ul.menu li").removeClass("tabActive"); 
