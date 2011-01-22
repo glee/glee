@@ -194,8 +194,11 @@ var Utils = {
                 elWidth = options.fixedWidth;
             else 
                 elWidth = el.width();
+
             var fontSize = el.css('font-size');
             var fontFamily = el.css('font-family');
+			var fontWeight = el.css('font-weight');
+
             var value = el.text();
             // create a textfield
             var input = $('<input>', {
@@ -206,7 +209,8 @@ var Utils = {
             .width(elWidth)
             .css({
                 'font-family': fontFamily,
-                'font-size': fontSize
+                'font-size': fontSize,
+				'font-weight': fontWeight
             });
             
             el.before(input);
@@ -230,6 +234,7 @@ var Utils = {
                 e.data.callback(value);
                 $(document).unbind("mousedown", onClose);
                 $(document).unbind("keyup", onClose);
+				e.data.el.focus();
             }
             
             input.bind('keyup', {input: input, el: el, callback: callback}, onClose);
