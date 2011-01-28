@@ -54,7 +54,7 @@ function init() {
 	function initGlobals() {
 		loadAllPrefs(function(prefs) {
 			cache.prefs = prefs;
-            initSync();
+			initSync();
 		});
 	}
 	initCommandCache();
@@ -62,7 +62,6 @@ function init() {
 
 function initCommandCache() {
     cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
-	log("Command cache: " + localStorage['gleebox_commands_cache']);
 }
 
 // add listener to respond to requests from content script
@@ -264,7 +263,7 @@ function updateOption(option, value) {
 
 function updatePreferencesLocally(prefs) {
     cache.prefs = prefs;
-    saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function(){});
+    saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function() {});
 }
 
 function mergePreferencesLocally(prefs) {

@@ -91,8 +91,6 @@ Glee.Browser.updateOptions = function(response) {
 	else
 		Glee.options.status = true;
 
-	log("Updated options", Glee.options);
-
 	Glee.applyOptions();
 }
 

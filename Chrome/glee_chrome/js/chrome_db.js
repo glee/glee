@@ -31,7 +31,7 @@ function initdb(callback) {
 		A.transaction(function(B){
 			B.executeSql("SELECT * from preferences",
 			[],
-			function(C,D){
+			function(C,D) {
 				if (D.rows.length == 0)
 				{
 					initPrefsTable(A);
@@ -41,11 +41,11 @@ function initdb(callback) {
 				}
 				callback();
 			},
-			function(C,D){
+			function(C,D) {
 				console.log(D)
 				callback();
 			}
-			)});
+		)});
 	}
 }
 
@@ -131,7 +131,7 @@ function createESPTable(A) {
 	}
 }
 
-function initScrapersTable(A){
+function initScrapersTable(A) {
 	//no default scrapers
 }
 
@@ -139,12 +139,12 @@ function createScrapersTable(A)
 {
 	if (A)
 	{
-		A.transaction(function(B){
+		A.transaction(function(B) {
  			B.executeSql("CREATE TABLE IF NOT EXISTS scrapers(name varchar(255) PRIMARY KEY, selector varchar(255), CONSTRAINT scrapertype UNIQUE (name))",
 			[],
 			function(C,D){},
-			function(C,D){console.log(D)}
-			)});
+			function(C,D){ console.log(D) }
+		)});
 	}
 }
 
@@ -192,7 +192,7 @@ function saveScrapers(scrapers, callback) {
 			var count = 0;
 			for (var i in scrapers)
 			{
-				D.executeSql("INSERT INTO scrapers (name, selector) VALUES (?, ?)",[scrapers[i].command,scrapers[i].selector],
+				D.executeSql("INSERT INTO scrapers (name, selector) VALUES (?, ?)",[scrapers[i].command, scrapers[i].selector],
 				function(E,F){
 					if (count == scrapers.length-1)
 						callback();

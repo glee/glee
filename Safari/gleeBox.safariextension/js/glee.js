@@ -265,11 +265,10 @@ var Glee = {
         
         // create the DOM elements
 	    Glee.createBox();
-	    
-		// attach the event listeners
-	    Glee.attachWindowListener();
+		
+		Glee.attachWindowListener();
 		Glee.attachListeners();
-
+	    
         // fill cache
         Glee.fillCache();
 	},
@@ -845,12 +844,7 @@ var Glee = {
 	
 	attachListeners: function() {
 		Glee.$searchField.bind('keydown', Glee.Events.onKeyDown);
-		Glee.$searchField.bind('keyup', Glee.Events.onKeyUp);		
-	},
-	
-	detachListeners: function() {
-		Glee.$searchField.unbind('keydown', Glee.Events.onKeyDown);
-		Glee.$searchField.unbind('keyup', Glee.Events.onKeyUp);
+		Glee.$searchField.bind('keyup', Glee.Events.onKeyUp);	
 	},
 	
 	attachWindowListener: function() {
@@ -877,6 +871,7 @@ var Glee = {
     				}
     			}
     		}
+			return true;
 		});
 	},
 	

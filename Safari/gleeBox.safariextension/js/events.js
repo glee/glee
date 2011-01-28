@@ -4,7 +4,8 @@ Glee.Events = {
 	 *	When a key is pressed down inside gleeBox
 	 */
 	onKeyDown: function(e) {
-		// esc: hide gleeBox if empty. otherwise, empty gleeBox
+
+		//	esc: hide gleeBox if empty. otherwise, empty gleeBox
 		if (e.keyCode === 27)
 		{
 			e.preventDefault();
@@ -13,16 +14,16 @@ Glee.Events = {
 			else
 				Glee.empty();
 		}
-		
-		// tab: Scroll between elements / bookmarks
+
+		//	tab: Scroll between elements / bookmarks
 		else if (e.keyCode === 9)
 		{
 			e.stopPropagation();
 			e.preventDefault();
 		    Glee.Events.onTabKeyDown(e);
 		}
-		
-		// enter: execute query
+
+		//	enter: execute query
 		else if (e.keyCode === 13)
 		{
 			e.preventDefault();
@@ -32,10 +33,12 @@ Glee.Events = {
 			
 		}
 		
-		// Up / Down Arrow keys: Begin scrolling
-		else if (e.keyCode === 40 || e.keyCode === 38) {
+		//	Up / Down Arrow keys: Begin scrolling
+		else if (e.keyCode === 40 || e.keyCode === 38)
+		{
 			// if meta / ctrl key, straight way scroll to top / bottom
-			if (e.metaKey || e.ctrlKey) {
+			if (e.metaKey || e.ctrlKey)
+			{
 				if (e.keyCode === 38)
 					window.scrollTo(window.pageXOffset, 0);
 				else
@@ -43,20 +46,22 @@ Glee.Events = {
 				Glee.selectTopElement();
 				return true;
 			}
+			
 			Glee.Events.startScrolling(e.keyCode === 38 ? 1 : -1);
 		}
-		
-		// Open Tab Manager when shortcut key is pressed inside gleeBox
-		else if (e.keyCode === Glee.options.tabShortcutKey && Glee.value().length === 0 && IS_CHROME)
+
+		//	Open Tab Manager when shortcut key is pressed inside gleeBox
+		else if (e.keyCode == Glee.options.tabShortcutKey && Glee.value().length === 0 && IS_CHROME)
 		{
 		    if (e.metaKey || e.ctrlKey || e.shiftKey)
-		        break;
+				return true;
 			Glee.Browser.openTabManager();
-			return;
+			return true;
 		}
 
-		// copy currently selected link to clipboard. Cmd/Ctrl + C
-		else if (e.keyCode === 67 && (e.metaKey || e.ctrlKey)) {
+		//	Cmd/Ctrl + C: Copy currently selected link to clipboard
+		else if (e.keyCode === 67 && (e.metaKey || e.ctrlKey))
+		{
 			// if any text is selected, return
 			if (window.getSelection().toString())
 				return;
@@ -69,6 +74,7 @@ Glee.Events = {
 	 *	When a key is released inside gleeBox
 	 */
 	onKeyUp: function(e) {
+
 		// not using the Event object to fetch value as onKeyUp may be called explicitly
 		var value = Glee.value();
 		// check if content of gleeBox has changed
