@@ -11,9 +11,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.1</string>
+	<string>2.0.2</string>
 	<key>CFBundleVersion</key>
-	<string>2.0.1</string>
+	<string>2.0.2</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -39,6 +39,7 @@
 				<string>js/LinkReaper.js</string>
 				<string>js/ElementState.js</string>
 				<string>js/Utils.js</string>
+				<string>js/page_cmds.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
