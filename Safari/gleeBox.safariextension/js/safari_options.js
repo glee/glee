@@ -86,7 +86,7 @@ function initSettings(response)
 	
 	// smooth scrolling keys
 	el = $("[name=scrolling_key]");
-	if (prefs.upScrollingKey === 72)
+	if (prefs.upScrollingKey === 75) // 75 is keycode for 'k'
 		el.get(1).checked = true;
 	else
 		el.get(0).checked = true;

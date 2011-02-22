@@ -74,8 +74,7 @@ function initSettings(response)
 	// parse as int
 	prefs.up_scrolling_key = parseInt(prefs.up_scrolling_key);
 	prefs.down_scrolling_key = parseInt(prefs.down_scrolling_key);
-	
-	if (prefs.up_scrolling_key === 72)
+	if (prefs.up_scrolling_key === 75) // 75 is keycode for 'k'
 		$scrollingEl.get(1).checked = true;
 	else
 		$scrollingEl.get(0).checked = true;
