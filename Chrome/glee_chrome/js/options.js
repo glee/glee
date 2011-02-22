@@ -569,9 +569,9 @@ function changeScrollingKey(keyset) {
 		up = 87;
 		down = 83;
 	}
-	else if (keyset === "hj") {
-		up = 72;
-		down = 74;
+	else if (keyset === "jk") {
+		up = "K".charCodeAt(0);
+		down = "J".charCodeAt(0);
 	}
 	if (IS_CHROME) {
 		saveOption('up_scrolling_key', up);
