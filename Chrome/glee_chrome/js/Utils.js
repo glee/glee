@@ -271,7 +271,7 @@ var Utils = {
 	elementCanReceiveUserInput: function(el) {
         var tag = el.tagName.toLowerCase();
 		// list of elements which can receive input. Should be avoided while listening to window keystrokes
-	 	var blacklist = ['input', 'textarea', 'div', 'object', 'embed'];
+	 	var blacklist = ['input', 'textarea', 'div', 'object', 'embed', 'select'];
 	
 		return ($.inArray(tag, blacklist) != -1) || el.contentEditable === "true";
 	}
