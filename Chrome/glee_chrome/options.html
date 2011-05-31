@@ -1,250 +1,392 @@
 <html>
 <head>
-	<title>gleeBox Options</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="css/options.css" type="text/css" media="screen" title="no title" charset="utf-8">
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/KeyCombo.js"></script>
-	<script type="text/javascript" src="js/chrome_options.js"></script>
-	<script type="text/javascript" src="js/chrome_db.js"></script>
-	<script type="text/javascript" src="js/chrome_defaults.js"></script>
-	<script type="text/javascript" src="js/Utils.js"></script>
-	<script type="text/javascript" src="js/options.js"></script>
-	<script type="text/javascript" src="js/SmoothScroller.js"></script>
+    <title>gleeBox Options</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/options.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/KeyCombo.js"></script>
+    <script type="text/javascript" src="js/chrome_options.js"></script>
+    <script type="text/javascript" src="js/chrome_db.js"></script>
+    <script type="text/javascript" src="js/chrome_defaults.js"></script>
+    <script type="text/javascript" src="js/Utils.js"></script>
+    <script type="text/javascript" src="js/options.js"></script>
+    <script type="text/javascript" src="js/SmoothScroller.js"></script>
 </head>
 <body>
-	<div id="wrap">
-		<div id="tabMenu">
-			<h1>gleeBox Options</h1>
-			<ul class="menu">
-				<li><a href="#features">Features</a></li>
-				<li><a href="#appearance">Appearance</a></li>
-				<li><a href="#scrapers">Scrapers</a></li>
-				<li><a href="#ESP">ESP Visions</a></li>			
-				<li><a href="#backup">Backup and Sync</a></li>
-				<li><a href="#about">About</a></li>
-			</ul>
-		</div>
-		<div id="options">
-			<div id="features">
-			<h2>Features</h2>
-			<ul class="options">
-				<li>
-					<label class="option-label">Disabled URLs<br/><span class="subtext">Enter part of a URL to disable gleeBox on all pages with matching URLs</span></label>
-					<ul id="domains" class="option-field">
-						<li>chrome.google.com/extensions <span style="float:right;font-size:14px;color:gray">Disabled by Google</span></li>
-						<li id="addDomainLI"><form onsubmit="addItem('domain', null, null, true);return false;"><input id="add_domain" type="text" size=50 placeholder="Page URL"/>&nbsp;<input type="submit" value="Add" class="button"/></form></li>
-					</ul>
-				</li>
-				<li>
-					<label class="option-label">Search Engine</label>
-					<div class="option-field">
-						<input id="search_engine" name="search_engine" type="text" size=56><br/>
-						<a href="#" onclick='javascript:changeSearchEngine("google");return false;'>Google</a>&nbsp;&nbsp;
-						<a href="#" onclick='javascript:changeSearchEngine("gssl");return false;'>Google SSL</a>&nbsp;&nbsp;
-						<a href="#" onclick='javascript:changeSearchEngine("bing");return false;'>Bing</a>&nbsp;&nbsp;
-						<a href="#" onclick='javascript:changeSearchEngine("yahoo");return false;'>Yahoo</a>
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Command Engine<br/><span class="subtext">Choose between <a href="http://yubnub.org/">Yubnub</a> or <a href="http://quixapp.com/">Quix</a> for : commands</span></label>
-					<div class="option-field">
-						<input name="command_engine" type="radio" value="yubnub" onclick="$('#quix_url').hide();"> Yubnub&nbsp;
-						<input name="command_engine" type="radio" value="quix" onclick="$('#quix_url').show();"> Quix&nbsp;&nbsp;<input style="display:none" id="quix_url" name="quix_url" type="text" size=36>
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Search bookmarks</label>
-					<div class="option-field">
-						<input name="bookmark_search" type="checkbox" />
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Animated scrolling between elements</label>
-					<div class="option-field">
-						<input name="scroll_animation" type="checkbox" />
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Smooth scrolling outside gleeBox</label>
-					<div class="option-field">
-						<input name="outside_scrolling_status" type="checkbox" />
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Shortcuts for Smooth Scrolling</label>
-					<div class="option-field">
-						<input name="scrolling_key" value="ws" type="radio" />&nbsp;w / s&nbsp;&nbsp;
-						<input name="scrolling_key" value="jk" type="radio" />&nbsp;j / k
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Shortcut to launch gleeBox<br/><span class="subtext">Enter a single character in the text field. Use Alt + Shortcut when text fields or other input elements are focussed.</span></label>
-					<div class="option-field">
-						<input name="shortcut_key" size="5" type="text" /><span name="shortcut_key_span" style="display:none"></span>&nbsp;&nbsp;
-						<a href="#" onclick='javascript:document.getElementsByName("shortcut_key_span")[0].innerText = "71";document.getElementsByName("shortcut_key")[0].value = "g";'>Revert to default</a>
-					</div>
-				</li>
-			</ul>
-			<h2>Tab Manager</h2>
-			<ul class="options">
-				<li>
-					<label class="option-label">Enable Glee Tab Manager<br/><span class="subtext">Adds navigation between tabs. Close existing tabs by pressing backspace / delete.</span></label>
-					<div class="option-field">
-						<input name="tab_shortcut_status" type="checkbox" />
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Shortcut to launch Glee Tab Manager<br/><span class="subtext">Enter a single character in the text field. Use Alt + Shortcut when text fields or other input elements are focussed.</span></label>
-					<div class="option-field">
-						<input name="tab_shortcut_key" size="5" type="text" /><span name="tab_shortcut_key_span" style="display:none"></span>&nbsp;&nbsp;
-						<a href="#" onclick='javascript:document.getElementsByName("tab_shortcut_key_span")[0].innerText = "190";document.getElementsByName("tab_shortcut_key")[0].value = ".";'>Revert to default</a>
-					</div>
-				</li>
-			</ul>
-			</div>
-			<div id="appearance">
-			<h2>Appearance</h2>
-			<ul class="options">
-				<li>
-					<label class="option-label">Size</label>
-					<div class="option-field">
-						<input name="size" type="radio" value="0"> Small&nbsp;
-						<input name="size" type="radio" value="1"> Medium&nbsp;
-						<input name="size" type="radio" value="2"> Large
-					</div>
-				</li>
-				<li>
-					<label class="option-label">Theme</label>
-					<div class="option-field">
-						<input name="theme" value="GleeThemeDefault" type="radio"> Default <br>
-						<input name="theme" value="GleeThemeWhite"  type="radio"> White <br>
-						<input name="theme" value="GleeThemeConsole" type="radio"> Console <br>
-						<input name="theme" value="GleeThemeGreener" type="radio"> Greener <br>
-						<input name="theme" value="GleeThemeRuby" type="radio"> Ruby <br>
-						<input name="theme" value="GleeThemeGlee" type="radio"> New Directions
-					</div>
-				</li>
-			</ul>
-			</div>
-			<div id="scrapers">
-				<h2>Scraper Commands</h2>
-				<ul class="options">
-					<li class="description">
-					Create your own scraper commands by adding command name and a corresponding <a href="http://docs.jquery.com/Selectors">jQuery selector</a>.
-					</li>
-					<li>
-						<div class='scraper-prefix'>?</div><input type="text" id="scraper-search-field" placeholder="Search" />
-						<ul id="scraper-commands">
-							<li class="default-scraper">
-								<span class="scraper-prefix">?</span>
-								<span class="default-scraper-name">?</span>
-								<div class='separator'></div>
-								<div class='selector'>
-									Input Elements
-									<span class='inbuilt'>In-built</span>
-								</div>
-							</li>
-							<li class="default-scraper">
-								<span class="scraper-prefix">?</span>
-								<span class="default-scraper-name">img</span>
-								<div class='separator'></div>								
-								<div class='selector'>
-									Linked Images
-									<span class='inbuilt'>In-built</span>
-								</div>
-							</li>
-							<li class="default-scraper">
-								<span class="scraper-prefix">?</span>
-								<span class="default-scraper-name">h</span>
-								<div class='separator'></div>								
-								<div class='selector'>
-									H1, H2 and H3 elements
-									<span class='inbuilt'>In-built</span>
-								</div>
-							</li>
-							<li class="default-scraper">
-								<span class="scraper-prefix">?</span>
-								<span class="default-scraper-name">a</span>
-								<div class='separator'></div>								
-								<div class='selector'>
-									Links
-									<span class='inbuilt'>In-built</span>
-								</div>
-							</li>
-							<li id="addScraper">
-								<form onsubmit="addItem('scraper', null, null, true);return false;">
-									<span class='scraper-prefix'>?</span>
-									<input id="scraper-name" type="text" placeholder="Name" />
-									<div class='separator'></div>									
-									<input id="scraper-selector" type="text" class='selector' placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/>
-								</form>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div id="ESP">
-				<h2>ESP Visions</h2>
-				<ul class="options">
-					<li class="description">
-					Specify part of a page's URL and the default <a href="http://docs.jquery.com/Selectors">jQuery selector</a> to run when you open gleeBox on that page. These 'Visions' get executed only when the ESP mode is enabled.
-					</li>
-					<li>
-						<label class="option-label">ESP Mode</label>
-						<div class="option-field">
-							<input name="esp_status" type="checkbox" />
-						</div>
-					</li>
-					<li>
-						<input type="text" id="esp-search-field" placeholder="Search" />
-						<ul id="esp-modifiers">
-							<li id="addEspModifier">
-								<form onsubmit="addItem('esp', null, null, true);return false;">
-									<input id="add-esp-url" type="text" placeholder="Page URL" />
-									<div class='separator'></div>									
-									<input id="add-esp-selector" type="text" class='selector' placeholder="jQuery Selector" /><input type="submit" value="Add" class="button submit"/>
-								</form>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div id="backup">
-				<h2>Backup</h2>
-				<ul class="options">
-					<li class='description'>
-						Export your current gleeBox settings to a file or import previously backed up settings from a gleeBox installation.
-					</li>
-					<div style="clear:both">
-						<input type="button" class="button" value="&nbsp;&nbsp;Export&nbsp;&nbsp;" onclick= "exportSettings();"/>&nbsp;&nbsp;
-						<input type="button" class="button" value="&nbsp;&nbsp;Import&nbsp;&nbsp;" onclick= "importSettings();"/>&nbsp;&nbsp;
-						<input type="button" class="button" value="&nbsp;&nbsp;Import Developer Pack&nbsp;&nbsp;" onclick= "importDevPack();"/>
-					</div>
-					<br><br>
-				</ul>
-				<h2>Sync</h2>
-				<ul class="options">
-					<li class='description'>
-						Sync your gleeBox preferences, scrapers, ESP Visions, etc. across multiple computers. <br>You need to have <a href="http://www.google.com/support/chrome/bin/answer.py?hl=en&answer=165139">Bookmark Sync</a> enabled.
-					</li>
-					<div style="clear:both">
-						<input id="sync-button" type="button" class="button" value="&nbsp;&nbsp;Enable Sync&nbsp;&nbsp;" onclick= "toggleSyncing();"/>&nbsp;&nbsp;
-				</ul>
-			</div>
-			<div id="about">
-				<h2>About</h2>
-				<ul class='options'>
-					gleeBox is developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> and <a href="http://sameerahuja.com">Sameer Ahuja</a>.<br/> If you like gleeBox, please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">donate</a>.<br/><br/>
-					Report issues and feature requests on <a href="http://github.com/glee/glee/issues">Github</a>.<br/><br/>
-					Other useful links:<br/>
-					<a href="http://thegleebox.com/manual.html">User Manual</a><br/>
-					<a href="http://thegleebox.com/releases.html">Release Notes</a><br/>
-					<a href="http://tipjar.thegleebox.com">Tipjar</a><br/>
-					<a href="http://twitter.com/thegleebox">gleeBox on Twitter</a><br/>
-				</ul>
-			</div>
-		</div>
-	</div>
+    <div id="wrap">
+        <div id="tabMenu">
+            <h1>gleeBox Options</h1>
+            <ul class="menu">
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#appearance">Appearance</a></li>
+                <li><a href="#scrapers">Scrapers</a></li>
+                <li><a href="#ESP">ESP Visions</a></li>
+                <li><a href="#backup">Backup and Sync</a></li>
+                <li class='menu-separator'></li>
+                <li><a href="#tabmanager">Tab Manager</a></li>
+                <li class='menu-separator'></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+        <div id="options">
+            <div id="basics">
+                <h2>Basics</h2>
+                <ul class='option-section'>
+                    <h3>Search Engine</h3>
+                    <ul class='option-subsection'>
+                        <li class='option'>
+                            <span class="option-field">
+                                <input id="search_engine" name="search_engine" type="text" size=60><br/>
+                                <a href="#" onclick='javascript:changeSearchEngine("google");return false;'>
+                                    Google
+                                </a>&nbsp;&nbsp;
+                                <a href="#" onclick='javascript:changeSearchEngine("gssl");return false;'>
+                                    Google SSL
+                                </a>&nbsp;&nbsp;
+                                <a href="#" onclick='javascript:changeSearchEngine("bing");return false;'>
+                                    Bing
+                                </a>&nbsp;&nbsp;
+                                <a href="#" onclick='javascript:changeSearchEngine("duckduckgo");return false;'>
+                                    DuckDuckGo
+                                </a>
+                            </span>
+                        </li>
+                    </ul>
+                </ul>
+                <ul class='option-section'>
+                    <h3>Command Engine</h3>
+                    <ul class='option-subsection'>
+                        <li class='option'>
+                            <span class="option-field">
+                                <input name="command_engine" type="radio" value="yubnub" onclick="$('#quix_url').hide();">
+                                Yubnub&nbsp;
+                                <input name="command_engine" type="radio" value="quix" onclick="$('#quix_url').show();">
+                                 Quix&nbsp;&nbsp;
+                                <input style="display:none" id="quix_url" name="quix_url" type="text" size=36>
+                            </span>
+                        </li>
+                    </ul>
+                </ul>
+                <ul class='option-section'>
+                    <h3>Default Behavior</h3>
+                    <ul class='option-subsection'>
+                        <li class='option'>
+                            <label>
+                                <input name="bookmark_search" type="checkbox" />
+                                <span class="option-field">
+                                    Search Bookmarks
+                                </span>
+                            </label>
+                        </li>
+                        
+                        <li class='option'>
+                            <label>
+                                <input name="scroll_animation" type="checkbox" />
+                                <span class="option-field">
+                                    Animate Scrolling between Elements
+                                </span>
+                            </label>
+                        </li>
+                        
+                        <li class='option'>
+                            <label>
+                                <input name="outside_scrolling_status" type="checkbox" />
+                                <span class="option-field">
+                                    Enable Smooth Scrolling outside gleeBox
+                                </span>
+                            </label>
+                        </li>
+                    </ul>
+                </ul>
+                <ul class='option-section'>
+                    <h3>Shortcuts</h3>
+                    <ul class='option-subsection'>
+                        <li class='option'>
+                            <label class="option-label">
+                                <span class="option-field">
+                                    gleeBox Launch Key:
+                                </span>
+                            </label>
+                            <span class="option-value">
+                                <input name="shortcut_key" size="5" type="text" />
+                                <span name="shortcut_key_span" style="display:none"></span>
+                                <a href="#" onclick='javascript:document.getElementsByName("shortcut_key_span")[0].innerText = "71";document.getElementsByName("shortcut_key")[0].value = "g";' class='button'>
+                                    Revert to Default
+                                </a>
+                            </span>
+                        </li>
+                        
+                        <li class='option'>
+                            <label>
+                                <span class="option-field">
+                                    Smooth Scrolling Shortcut:
+                                </span>
+                            </label>
+                            <span class="option-value">
+                                <input name="scrolling_key" value="ws" type="radio" />&nbsp;w / s&nbsp;&nbsp;
+                                <input name="scrolling_key" value="jk" type="radio" />&nbsp;j / k
+                            </span>
+                        </li>
+                        
+                    </ul>
+                </ul>
+                <ul class="option-section">
+                    <h3>Disabled URLs</h3>
+                    <ul class='option-subsection'>
+                        <li class='option'>
+                            <span class="option-field">
+                                <ul id="domains">
+                                    <li>chrome.google.com/extensions</li>
+                                    <li id="addDomainLI">
+                                        <form onsubmit="addItem('domain', null, null, true);return false;">
+                                            <input id="add_domain" type="text" size=50 placeholder="Page URL"/>&nbsp;
+                                            <input type="submit" value="Add" class="button"/>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </span>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+            <div id='tabmanager'>
+                <h2>Tab Manager</h2>
+                <ul class='options'>
+                    <ul class='option-section'>
+                        <h3>Status</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <label>
+                                    <div class="option-field">
+                                        <input name="tab_shortcut_status" type="checkbox" />
+                                        Enable Tab Manager
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+                    </ul>
+                    <ul class='option-section'>
+                        <h3>Launch Key</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <span class="option-field">
+                                        <input name="tab_shortcut_key" size="5" type="text" />
+                                        <span name="tab_shortcut_key_span" style="display:none"></span>
+                                        
+                                        <a class='button' href="#" onclick='javascript:document.getElementsByName("tab_shortcut_key_span")[0].innerText = "190";document.getElementsByName("tab_shortcut_key")[0].value = ".";'>
+                                            Revert to Default
+                                        </a>
+                                </span>
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            <div id="appearance">
+                <h2>Appearance</h2>
+                <ul class="options">
+                    <ul class='option-section'>
+                        <h3>Size</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <input name="size" type="radio" value="0"> Small <br>
+                                <input name="size" type="radio" value="1"> Medium <br>
+                                <input name="size" type="radio" value="2"> Large
+                            </li>
+                        </ul>
+                    </ul>
+                    <ul class='option-section'>
+                        <h3>Theme</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <input name="theme" value="GleeThemeDefault" type="radio"> Default <br>
+                                <input name="theme" value="GleeThemeWhite"  type="radio"> White <br>
+                                <input name="theme" value="GleeThemeConsole" type="radio"> Console <br>
+                                <input name="theme" value="GleeThemeGreener" type="radio"> Greener <br>
+                                <input name="theme" value="GleeThemeRuby" type="radio"> Ruby <br>
+                                <input name="theme" value="GleeThemeGlee" type="radio"> New Directions
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            <div id="scrapers">
+                <h2>Scraper Commands</h2>
+                <ul class="options">
+                    <ul class='option-section'>
+                        <h3>Add Scraper</h3>
+                        <ul class='option-subsection'>
+                            <li id="addScraper">
+                                <form onsubmit="addItem('scraper', null, null, true);return false;">
+                                    <span class='scraper-prefix'>?</span>
+                                    <input id="add-scraper-name" type="text" placeholder="Name" />
+                                    <div class='separator'></div>
+                                    <input id="add-scraper-selector" class='selector' type="text" placeholder="jQuery Selector" />
+                                    <input type="submit" value="Add" class="button"/>
+                                </form>
+                            </li>
+                        </ul>
+                    </ul>
+                    <ul class='option-section'>
+                        <h3>Search</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <div class='scraper-prefix'>
+                                    ?
+                                </div>
+                                <input type="search" id="scraper-search-field" placeholder="Search..." />
+                            </li>
+                        </ul>
+                    </ul>
+                    <ul class='option-section'>
+                        <h3>Scrapers</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <ul id="scraper-commands">
+                                    <li class="default-scraper">
+                                        <span class="scraper-prefix">?</span>
+                                        <span class="default-scraper-name">?</span>
+                                        <div class='separator'></div>
+                                        <div class='scraper-sel'>
+                                            Input Elements
+                                            <span class='inbuilt'>In-built</span>
+                                        </div>
+                                    </li>
+                                    <li class="default-scraper">
+                                        <span class="scraper-prefix">?</span>
+                                        <span class="default-scraper-name">img</span>
+                                        <div class='separator'></div>
+                                        <div class='scraper-sel'>
+                                            Linked Images
+                                            <span class='inbuilt'>In-built</span>
+                                        </div>
+                                    </li>
+                                    <li class="default-scraper">
+                                        <span class="scraper-prefix">?</span>
+                                        <span class="default-scraper-name">h</span>
+                                        <div class='separator'></div>
+                                        <div class='scraper-sel'>
+                                            H1, H2 and H3 elements
+                                            <span class='inbuilt'>In-built</span>
+                                        </div>
+                                    </li>
+                                    <li class="default-scraper">
+                                        <span class="scraper-prefix">?</span>
+                                        <span class="default-scraper-name">a</span>
+                                        <div class='separator'></div>
+                                        <div class='scraper-sel'>
+                                            Links
+                                            <span class='inbuilt'>In-built</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            <div id="ESP">
+                <h2>ESP Visions</h2>
+                <ul class="options">
+                    
+                    <ul class='option-section'>
+                        <h3>Status</h3>
+                        <ul class='option-subsection'>
+                            <label>
+                                <input name="esp_status" type="checkbox" />
+                                <span class='option-field'>
+                                    Enable ESP
+                                </span>
+                            </label>
+                        </ul>
+                    </ul>
+                    
+                    <ul class='option-section'>
+                        <h3>Add Vision</h3>
+                        <ul class='option-subsection'>
+                            <li id="addEspModifier">
+                                <form onsubmit="addItem('esp', null, null, true);return false;">
+                                    <input id="add-esp-url" type="text" placeholder="Page URL" />
+                                    <div class='separator'></div>
+                                    <input id="add-esp-selector" type="text" class='selector' placeholder="jQuery Selector" />
+                                    &nbsp;
+                                    <input type="submit" value="Add" class="button"/>
+                                </form>
+                            </li>
+                        </ul>
+                    </ul>
+                    
+                    <ul class='option-section'>
+                        <h3>Search</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <input type="search" id="esp-search-field" placeholder="Enter URL to search..." />
+                            </li>
+                        </ul>
+                    </ul>
+                    
+                    <ul class='option-section'>
+                        <h3>Visions</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <ul id="esp-modifiers"></ul>
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            <div id="backup">
+                <h2>Backup and Sync</h2>
+                <ul class="options">
+                    
+                    <ul class='option-section'>
+                        <h3>Backup</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <input type="button" class="button" value="Export..." onclick= "exportSettings();" />
+                                <input type="button" class="button" value="Import..." onclick= "importSettings();" />
+                            </li>
+                        </ul>
+                    </ul>
+                    
+                    <ul class='option-section'>
+                        <h3>Developer Pack</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                <input type="button" class="button" value="Import Developer Pack..." onclick= "importDevPack();"/>
+                            </li>
+                        </ul>
+                    </ul>
+                    
+                    <ul class='option-section'>
+                        <h3>Sync</h3>
+                        <ul class='option-subsection'>
+                            <li>
+                                Sync your Scrapers and ESP Visions across multiple computers. <br>
+                                Requires <a href='http://www.google.com/support/chrome/bin/answer.py&answer=185277'>
+                                    Bookmark Sync</a>.
+                                <br><br>
+                                <input id="sync-button" type="button" class="button" value="Enable Sync" onclick= "toggleSyncing();"/>
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            <div id="about">
+                <h2>About</h2>
+                <ul class='options'>
+                    <ul class='option-section'>
+                        gleeBox is developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> and <a href="http://sameerahuja.com">Sameer Ahuja</a>.<br/> If you like gleeBox, please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">donate</a>.<br/><br/>
+                        Report issues and feature requests on <a href="http://github.com/glee/glee/issues">Github</a>.<br/><br/>
+                        Other useful links:<br/>
+                        <a href="http://thegleebox.com/manual.html">User Manual</a><br/>
+                        <a href="http://thegleebox.com/releases.html">Release Notes</a><br/>
+                        <a href="http://tipjar.thegleebox.com">Tipjar</a><br/>
+                        <a href="http://twitter.com/thegleebox">gleeBox on Twitter</a><br/>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

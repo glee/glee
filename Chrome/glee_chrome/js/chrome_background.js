@@ -1,6 +1,5 @@
 var response = {};
 
-// cache.
 var cache = {
     // recently executed commands
     commands: [],
@@ -22,23 +21,23 @@ function checkVersion() {
 }
 
 function updateDB() {
-	// for 2
-	loadPreference('outside_scrolling_status', function(value) {
-		if (value === null)
+    // for 2
+    loadPreference('outside_scrolling_status', function(value) {
+        if (value === null)
             createPreference('outside_scrolling_status', 0);
-	});
-	
-	loadPreference('up_scrolling_key', function(value) {
-		if (value === null)
+    });
+    
+    loadPreference('up_scrolling_key', function(value) {
+        if (value === null)
             createPreference('up_scrolling_key', 87);
-	});
-	
-	loadPreference('down_scrolling_key', function(value) {
-		if (value === null)
+    });
+    
+    loadPreference('down_scrolling_key', function(value) {
+        if (value === null)
             createPreference('down_scrolling_key', 83);
-	});
-
-	// for 1.8
+    });
+    
+    // for 1.8
     loadPreference('command_engine', function(value) {
         if (value === null) {
             createPreference('command_engine', 'yubnub');
@@ -48,16 +47,18 @@ function updateDB() {
 }
 
 function init() {
-	// initialize the db
-	initdb(initGlobals);
+    // initialize the db
+    initdb(initGlobals);
     checkVersion();
-	function initGlobals() {
-		loadAllPrefs(function(prefs) {
-			cache.prefs = prefs;
-			initSync();
-		});
-	}
-	initCommandCache();
+    
+    function initGlobals() {
+        loadAllPrefs(function(prefs) {
+            cache.prefs = prefs;
+            initSync();
+        });
+    }
+    
+    initCommandCache();
 }
 
 function initCommandCache() {
@@ -70,7 +71,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         case "createTab"        :   chrome.tabs.create({ url: request.url, selected: request.selected }, null);
                                     sendResponse({});
                                     break;
-
+                                    
         case "openInThisTab"    :   chrome.tabs.getSelected(null, function(tab){
                                         chrome.tabs.update(tab.id, { url: request.url }, function(){});
                                     }); break;
@@ -78,73 +79,73 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         case "getTabs"          :   chrome.windows.getCurrent(function(currWindow){
                                         chrome.tabs.getAllInWindow(currWindow.id, function(tabs){
                                             sendResponse({ tabs: tabs });
-                            			});
-                            		}); 
-                            		break;
+                                        });
+                                    });
+                                    break;
         
         case "removeTab"        :   chrome.tabs.remove(request.id, function(){
-                            			sendResponse({});
-                            		});
+                                        sendResponse({});
+                                    });
                                     break;
         
         case "moveToTab"        :   chrome.tabs.update(request.id, { selected: true }, function(){
-                            			sendResponse({});
-                            		});
-                            		break;
-                            		
+                                        sendResponse({});
+                                    });
+                                    break;
+                                    
         case "sendRequest"      :   var req = new XMLHttpRequest();
-                            		req.open(request.method, request.url, true);
-                            		req.onreadystatechange = function(){
-                            			if (req.readyState == 4)
-                            			{
-                            				sendResponse({ data: req.responseText });
-                            			}
-                            		}
-                            		req.send();
-                            		break; 
+                                    req.open(request.method, request.url, true);
+                                    req.onreadystatechange = function(){
+                                        if (req.readyState == 4)
+                                        {
+                                            sendResponse({ data: req.responseText });
+                                        }
+                                    }
+                                    req.send();
+                                    break;
         
         case "getBookmarks"     :   var bookmarks = [];
-                            		chrome.bookmarks.search(request.text, function(results){
-                            		    var len = results.length;
-                            			for (i = 0; i < len; i++)
-                            			{
-                            				if (results[i].url)
-                            				{
-                            					// exclude bookmarks whose URLs begin with 'javascript:' i.e. bookmarklets
-                            					if (results[i].url.indexOf("javascript:") != 0)
-                            						bookmarks.push(results[i]);
-                            				}
-                            			}
-                            			sendResponse({ bookmarks: bookmarks });
-                            		});
-                            		break;
-                            		
+                                    chrome.bookmarks.search(request.text, function(results){
+                                        var len = results.length;
+                                        for (i = 0; i < len; i++)
+                                        {
+                                            if (results[i].url)
+                                            {
+                                                // exclude bookmarks whose URLs begin with 'javascript:' i.e. bookmarklets
+                                                if (results[i].url.indexOf("javascript:") != 0)
+                                                    bookmarks.push(results[i]);
+                                            }
+                                        }
+                                        sendResponse({ bookmarks: bookmarks });
+                                    });
+                                    break;
+                                    
         case "getBookmarklet"   :   var query = request.text;
                                     chrome.bookmarks.search(query, function(results) {
-                                 		var len = results.length;
+                                        var len = results.length;
 
-                                 		for (i = 0; i < len; i++)
-                                 		{
-                                 			if (results[i].url)
-                                 			{
-                                 				// check if it is a bookmarklet
-                                 				if (results[i].url.indexOf("javascript:") == 0 
-                                 				&& results[i].title.toLowerCase().indexOf(query.toLowerCase()) != -1)
+                                        for (i = 0; i < len; i++)
+                                        {
+                                            if (results[i].url)
+                                            {
+                                                // check if it is a bookmarklet
+                                                if (results[i].url.indexOf("javascript:") == 0
+                                                && results[i].title.toLowerCase().indexOf(query.toLowerCase()) != -1)
                                                     sendResponse({ bookmarklet: results[i] });
-                                 			}
-                                 		}
+                                            }
+                                        }
                                         sendResponse({ bookmarklet: null});
-                                 	});
-                                 	break;
-                                 	
+                                    });
+                                    break;
+                                    
         case "getCommandCache"  :   sendResponse({ commands: cache.commands });
                                     break;
                                     
         case "updateCommandCache":  cache.commands = request.commands;
-                            	    localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
+                                    localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
                                     sendRequestToAllTabs({ value: 'updateCommandCache', commands: cache.commands });
-                            	    break;
-                            	    
+                                    break;
+                                    
         case "getOptions"       :   sendResponse({ preferences: cache.prefs });
                                     break;
                                     
@@ -165,94 +166,94 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 function updateOption(option, value) {
     // this transformation needs to be performed as values in db are stored this way
     switch (value)
-	{
-		case "off"		:
-		case "small"	:
-		case "top"		: value = 0; break;
-		
-		case "on"		:
-		case "medium"	:
-		case "med"		:
-		case "middle"	:
-		case "mid"		: value = 1; break;
-		
-		case "large"	:
-		case "bottom"	: value = 2; break;
-		
-		case 'default'	: value = "GleeThemeDefault"; break;
-		case 'white'	: value = "GleeThemeWhite"; break;
-		case 'console'	: value = "GleeThemeConsole"; break;
-		case 'greener'	: value = "GleeThemeGreener"; break;
-		case 'ruby'		: value = "GleeThemeRuby"; break;
-		case 'glee'		: value = "GleeThemeGlee"; break;
-	}
-	
-	switch (option)
-	{
-		case "scroll"	: option = "scroll_animation";
-		                  cache.prefs[option] = value;
-		                  savePreference(option, value);
-		                  break;
-		                  
-		case "bsearch"  : option = "bookmark_search";
-		                  cache.prefs[option] = value;
-		                  savePreference(option, value);
-		                  break;
+    {
+        case "off"      :
+        case "small"    :
+        case "top"      : value = 0; break;
+        
+        case "on"       :
+        case "medium"   :
+        case "med"      :
+        case "middle"   :
+        case "mid"      : value = 1; break;
+        
+        case "large"    :
+        case "bottom"   : value = 2; break;
+        
+        case 'default'  : value = "GleeThemeDefault"; break;
+        case 'white'    : value = "GleeThemeWhite"; break;
+        case 'console'  : value = "GleeThemeConsole"; break;
+        case 'greener'  : value = "GleeThemeGreener"; break;
+        case 'ruby'     : value = "GleeThemeRuby"; break;
+        case 'glee'     : value = "GleeThemeGlee"; break;
+    }
+    
+    switch (option)
+    {
+        case "scroll"   : option = "scroll_animation";
+                          cache.prefs[option] = value;
+                          savePreference(option, value);
+                          break;
+                          
+        case "bsearch"  : option = "bookmark_search";
+                          cache.prefs[option] = value;
+                          savePreference(option, value);
+                          break;
 
-		case "esp"		: option = "esp_status";
-		                  cache.prefs[option] = value;
-		                  savePreference(option, value);
-		                  break;
-		
-		case "theme"    : 
-		case "hyper"    :
-		case "size"     : cache.prefs[option] = value;
-  		                  savePreference(option, value);
-  		                  break;
-  		                  
-		case "vision"	: 
-		
-		case "visions+"	: var len = cache.prefs.espModifiers.length;
-						  for (var i = 0; i < len; i++)
-						  {
-						    // if an esp vision already exists for url, modify it
-							if (cache.prefs.espModifiers[i].url == value.url)
-							{
-							    cache.prefs.espModifiers[i].selector = value.selector;
+        case "esp"      : option = "esp_status";
+                          cache.prefs[option] = value;
+                          savePreference(option, value);
+                          break;
+        
+        case "theme"    :
+        case "hyper"    :
+        case "size"     : cache.prefs[option] = value;
+                          savePreference(option, value);
+                          break;
+                          
+        case "vision"   :
+        
+        case "visions+" : var len = cache.prefs.espModifiers.length;
+                          for (var i = 0; i < len; i++)
+                          {
+                            // if an esp vision already exists for url, modify it
+                            if (cache.prefs.espModifiers[i].url == value.url)
+                            {
+                                cache.prefs.espModifiers[i].selector = value.selector;
                                 return true;
-							}
-						  }
-						  cache.prefs.espModifiers.push(
-						  {
+                            }
+                          }
+                          cache.prefs.espModifiers.push(
+                          {
                               url: value.url,
                               selector: value.selector
-						  });
-						  // save in db
-						  saveESP(cache.prefs.espModifiers, function(){});
-						  break;
+                          });
+                          // save in db
+                          saveESP(cache.prefs.espModifiers, function(){});
+                          break;
 
-		case "scrapers+": var len = cache.prefs.scrapers.length;
-						  
-						  for (var i = 0; i < len; i++)
-						  {
-							if (cache.prefs.scrapers[i].command == value.command)
-							{
-							    cache.prefs.scrapers[i].selector = value.selector;
+        case "scrapers+": var len = cache.prefs.scrapers.length;
+                          
+                          for (var i = 0; i < len; i++)
+                          {
+                            if (cache.prefs.scrapers[i].command == value.command)
+                            {
+                                cache.prefs.scrapers[i].selector = value.selector;
                                 return true;
-							}
-						  }
-						  cache.prefs.scrapers.push( {
-                              command: value.command, 
+                            }
+                          }
+                          cache.prefs.scrapers.push( {
+                              command: value.command,
                               selector: value.selector,
                               cssStyle: "GleeReaped",
                               nullMessage : "Could not find any matching elements on the page."
-						  });
-						  // save in db
-						  saveScrapers(cache.prefs.scrapers, function(){});
-						  break;
-	}
-	
-	// send request to update options in all tabs
+                          });
+                          // save in db
+                          saveScrapers(cache.prefs.scrapers, function(){});
+                          break;
+    }
+    
+    // send request to update options in all tabs
     sendRequestToAllTabs({ value: 'updateOptions', preferences: cache.prefs });
     
     // if sync is enabled, also update data in bookmark
@@ -318,16 +319,16 @@ function mergePreferencesLocally(prefs) {
 
 function sendRequestToAllTabs(req){
     chrome.windows.getAll({populate: true}, function(windows) {
-	    var w_len = windows.length;
-		for (i = 0; i < w_len; i++)
-		{
+        var w_len = windows.length;
+        for (i = 0; i < w_len; i++)
+        {
             var t_len = windows[i].tabs.length;
-			for (j = 0; j < t_len; j++)
-			{
-				chrome.tabs.sendRequest( windows[i].tabs[j].id, req, function(response){} );
-			}
-		}
-	});
+            for (j = 0; j < t_len; j++)
+            {
+                chrome.tabs.sendRequest( windows[i].tabs[j].id, req, function(response){} );
+            }
+        }
+    });
 }
 
 // Copy to Clipboard
