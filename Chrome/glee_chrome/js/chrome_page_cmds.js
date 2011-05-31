@@ -44,9 +44,9 @@ Glee.viewWebstore = function(newTab) {
 Glee.displayOptionsPage = function(newTab) {
     var url = chrome.extension.getURL("options.html");
     if (newTab)
-	    Glee.Browser.openPageIfNotExist(url);
-	else
-	    Glee.Browser.openPageInThisTab(url);
+        Glee.Browser.openPageIfNotExist(url);
+    else
+        Glee.Browser.openPageInThisTab(url);
 }
 
 // snap: Take a screenshot of the current page

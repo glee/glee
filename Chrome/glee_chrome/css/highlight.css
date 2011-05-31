@@ -1,4 +1,4 @@
-/** Highlighting css 
+/** Highlighting css
     Used only for debugging and editing purposes
     Minimize and include this in injectcss.js
 **/
@@ -25,5 +25,5 @@
 }
 
 .GleeHL a, a.GleeHL {
-	color: #000 !important;
+    color: #000 !important;
 }

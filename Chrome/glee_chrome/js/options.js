@@ -103,8 +103,10 @@ function addItem(type, value1, value2, shouldSave) {
                     addScraper({ command: value1, selector: value2, cssStyle: "GleeReaped", nullMessage: "Could not find any elements" });
                 }
             }
+            
             else
                 return false;
+            
             break;
 
         case "esp":
@@ -146,6 +148,7 @@ function addItem(type, value1, value2, shouldSave) {
                     addESP({url: value1, selector: value2});
                 }
             }
+            
             else
                 return false;
     }
@@ -769,4 +772,14 @@ function editESP($esp) {
     
     $(document).bind('keydown', onEditingComplete);
     $(document).bind('mousedown', onEditingComplete);
+}
+
+function setDefaultShortcutKey() {
+    $('[name=shortcut_key]').attr('value', 'g').keyup();
+    $('[name=shortcut_key_span]').text(71);
+}
+
+function setDefaultTabShortcutKey() {
+    $('[name=tab_shortcut_key]').attr('value', '.').keyup();
+    $('[name=tab_shortcut_key_span]').text(190);
 }

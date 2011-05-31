@@ -23,7 +23,7 @@ var SelectorGenerator =  {
         var elId = el.attr('id');
         var elClass = $.trim(el.attr("class").replace('GleeHL', ''));
         
-        if (elClass.length != 0) 
+        if (elClass.length != 0)
         {
             var classes = elClass.split(" ");
             var len = classes.length;
@@ -34,15 +34,15 @@ var SelectorGenerator =  {
 
             return response;
         }
-        if (elId.length != 0) 
+        if (elId.length != 0)
         {
             return "#" + elId;
         }
         
         // don't go beyond 2 levels up
-    	if (level < 2)
+        if (level < 2)
             return this.inspect(el.parent(), level + 1) + " " + el[0].tagName.toLowerCase();
-    	else
+        else
             return el[0].tagName.toLowerCase();
     },
 

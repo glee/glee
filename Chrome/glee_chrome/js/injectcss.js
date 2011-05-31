@@ -1,5 +1,5 @@
-/** 
-    Used to inject the highlighting css for gleeBox 
+/**
+    Used to inject the highlighting css for gleeBox
     The reason this is appended to the end of document is that it takes precedence over any CSS of the selected element
 **/
 

@@ -293,6 +293,11 @@ section > div:only-of-type {
     width: 290px;
 }
 
+.domain {
+    overflow: auto;
+    padding: 3px 5px;
+}
+
 .domain-name {
     width: 400px;
 }

@@ -106,7 +106,7 @@
                             <span class="option-value">
                                 <input name="shortcut_key" size="5" type="text" />
                                 <span name="shortcut_key_span" style="display:none"></span>
-                                <a href="#" onclick='javascript:document.getElementsByName("shortcut_key_span")[0].innerText = "71";document.getElementsByName("shortcut_key")[0].value = "g";' class='button'>
+                                <a href="#" onclick='javascript:setDefaultShortcutKey();' class='button'>
                                     Revert to Default
                                 </a>
                             </span>
@@ -129,8 +129,8 @@
                     <h3>Disabled URLs</h3>
                     <div>
                         <span class="option-field">
-                            <ul id="domains">
-                                <li>chrome.google.com/extensions</li>
+                            <ul style='margin-left: -5px;' id="domains">
+                                <li style='margin-left: 5px;'>chrome.google.com/extensions</li>
                                 <li id="addDomainLI">
                                     <form onsubmit="addItem('domain', null, null, true);return false;">
                                         <input id="add_domain" type="text" size=50 placeholder="Page URL"/>&nbsp;
@@ -162,7 +162,7 @@
                             <input name="tab_shortcut_key" size="5" type="text" />
                             <span name="tab_shortcut_key_span" style="display:none"></span>
                             
-                            <a class='button' href="#" onclick='javascript:document.getElementsByName("tab_shortcut_key_span")[0].innerText = "190";document.getElementsByName("tab_shortcut_key")[0].value = ".";'>
+                            <a class='button' href="#" onclick='javascript:setDefaultTabShortcutKey();'>
                                 Revert to Default
                             </a>
                         </span>
