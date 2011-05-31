@@ -4,11 +4,11 @@ Glee.Events = {
      *  When a key is pressed down inside gleeBox
      */
     onKeyDown: function(e) {
-
         //  esc: hide gleeBox if empty. otherwise, empty gleeBox
         if (e.keyCode === 27)
         {
             e.preventDefault();
+            
             if (!Glee.value())
                 Glee.close();
             else
@@ -20,6 +20,7 @@ Glee.Events = {
         {
             e.stopPropagation();
             e.preventDefault();
+            
             Glee.Events.onTabKeyDown(e);
         }
 
@@ -27,10 +28,11 @@ Glee.Events = {
         else if (e.keyCode === 13)
         {
             e.preventDefault();
+            
             Glee.Events.execute(e, e.target.value);
+            
             if (Glee.isEspRunning)
                 Glee.setState(Glee.selectedElement, "el");
-            
         }
         
         //  Up / Down Arrow keys: Begin scrolling
@@ -57,7 +59,9 @@ Glee.Events = {
         {
             if (e.metaKey || e.ctrlKey || e.shiftKey)
                 return true;
+            
             Glee.Browser.openTabManager();
+            
             return true;
         }
 
@@ -69,6 +73,11 @@ Glee.Events = {
                 return;
             // send the request to copy URL to clipboard
             Glee.Browser.copyToClipboard(Utils.makeURLAbsolute(Glee.URL, location.href));
+        }
+        
+        //  Backspace takes user back in history if gleeBox is empty
+        else if (e.keyCode === 8 && Glee.isEmpty()) {
+            window.history.back();
         }
     },
     
