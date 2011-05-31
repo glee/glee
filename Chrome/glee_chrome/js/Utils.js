@@ -98,6 +98,7 @@ var Utils = {
     isVisible: function(el) {
         if (!el)
             return false;
+        
         var $el = $(el);
         
         if ($el.css('display') === "none" || $el.css('visibility') === "hidden")
@@ -117,12 +118,13 @@ var Utils = {
         
         // check that it lies within screen coordinates
         var offset = $el.offset();
+        var left = $el.width() + offset.left;
+        var top = $el.height() + offset.top;
         
-        if (($el.width() + offset.left) < 0 ||
-            ($el.height() + offset.top) < 0
-            ) {
-            return false
+        if (left < 0 || top < 0) {
+            return false;
         }
+        
         return true;
     },
     
@@ -134,8 +136,10 @@ var Utils = {
     isVisibleToUser: function(el) {
         if (!el)
             return false;
+        
         var $el = $(el);
         var top = $el.offset().top;
+        
         if (top > window.pageYOffset &&
             ((top + $el.height()) < (window.innerHeight + window.pageYOffset))
         )
