@@ -51,6 +51,7 @@ function addItem(type, value1, value2, shouldSave) {
                 });
                 
                 container.append(content);
+                
                 if (shouldSave) {
                     addURL(value1);
                 }
@@ -62,8 +63,8 @@ function addItem(type, value1, value2, shouldSave) {
             break;
             
         case "scraper":
-            var scraperName = document.getElementById("scraper-name");
-            var scraperSel = document.getElementById("scraper-selector");
+            var scraperName = document.getElementById("add-scraper-name");
+            var scraperSel = document.getElementById("add-scraper-selector");
             
             if (!value1)
             {

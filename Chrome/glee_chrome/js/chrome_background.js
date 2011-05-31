@@ -1,5 +1,7 @@
 var response = {};
 
+var CURRENT_VERSION = "2.1";
+
 var cache = {
     // recently executed commands
     commands: [],
@@ -9,15 +11,28 @@ var cache = {
 };
 
 function checkVersion() {
-    if (localStorage['gleebox_version'] != "2.01")
+    if (localStorage['gleebox_version'] != CURRENT_VERSION)
     {
         // create the new preferences as part of update
         updateDB();
-        // open the update page
-        chrome.tabs.create({ url:"http://thegleebox.com/update.html", selected: true }, null);
-        // update version
-        localStorage['gleebox_version'] = "2.01";
+        
+        // show update notification only for X.X releases
+        if (parseFloat(localStorage['gleebox_version']) < parseFloat(CURRENT_VERSION)) {
+            showUpdateNotification();
+        }
+        
+        // update version string
+        console.log("Updating to version " + CURRENT_VERSION);
+        localStorage['gleebox_version'] = CURRENT_VERSION;
     }
+}
+
+function showUpdateNotification() {
+    var notification = webkitNotifications.createHTMLNotification(
+      'notification.html'
+    );
+    
+    notification.show();
 }
 
 function updateDB() {

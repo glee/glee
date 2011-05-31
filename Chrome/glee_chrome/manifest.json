@@ -1,6 +1,6 @@
 {
     "name": "gleeBox",
-    "version": "2.0.3",
+    "version": "2.1",
     "description": "Keyboard glee for your web",
     "background_page": "background.html",
     "options_page": "options.html",
@@ -55,6 +55,7 @@
         "http://api.bit.ly/",
         "http://thegleebox.com/*",
         "bookmarks",
-        "unlimitedStorage"
+        "unlimitedStorage",
+        "notifications"
     ]
 }
