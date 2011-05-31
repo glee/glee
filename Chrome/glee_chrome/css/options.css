@@ -352,7 +352,7 @@ section > div:only-of-type {
     top: 20%;
     left: 30%;
     color: gray;
-    font-size: 16px;
+    font-size: 13px;
     z-index: 10000;
     padding: 10px;
     border-radius: 5px;
@@ -371,47 +371,15 @@ section > div:only-of-type {
     font-size: 12px !important;
     font-family: Menlo, Monaco, 'Lucida Console', monospace;
     line-height: 18px;
-    height: 75%;
+    height: 80%;
     margin: 10px 0;
     width: 100%;
 }
 
 #popup .button {
     float: right;
+    margin-right: 0px;
     display: block;
-}
-
-/** Scrollbar **/
-
-#popup textarea::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-#popup textarea::-webkit-scrollbar-button:start:decrement,
-#popup textarea::-webkit-scrollbar-button:end:increment {
-    display: none;
-}
-
-#popup textarea::-webkit-scrollbar-button:start:increment,
-#popup textarea::-webkit-scrollbar-button:end:decrement {
-    display: none;
-}
-
-#popup textarea::-webkit-scrollbar-track-piece {
-    border-radius: 7px;
-    background-color: #ddd;
-}
-
-#popup textarea::-webkit-scrollbar-thumb:vertical {
-    height: 100px;
-    border-radius: 7px;
-    background-color: #aaa;
-}
-
-#popup textarea::-webkit-scrollbar-corner:vertical,
-#popup textarea::-webkit-scrollbar-resizer:vertical {
-    background-color: #ededed;
 }
 
 /** CONTROLS: CSS from Chromium Project **/

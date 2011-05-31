@@ -267,7 +267,7 @@ function importSettings() {
 }
 
 function devPackCallback(data) {
-    var text = "A collection of our favorite scrapers and visions. Your other settings will be preserved. Follow <a href='http://twitter.com/thegleebox'>@thegleebox</a> to know when we update it.";
+    var text = "A collection of our favorite scrapers and visions.";
     showBackupPopup(text, 'importDevPack');
     $("#settingsText").text(data);
 }
@@ -362,21 +362,25 @@ function showBackupPopup(infoText, func) {
         
     if (func === 'import') {
         $('#importButton').show();
+        $('#exportButton').hide();
         $('#importDevPackButton').hide();
     }
     else if (func === 'export'){
         $('#importButton').hide();
+        $('#exportButton').show();
         $('#importDevPackButton').hide();
     }
     else if (func === 'importDevPack') {
         $('#importDevPackButton').show();
         $('#importButton').hide();
+        $('#exportButton').hide();
     }
 
     $('#backupInfo').html(infoText);
     $('#popup').fadeIn(200);
     
-    setTimeout(function() {
+    setTimeout(function()
+    {
         var field = $('#settingsText').get(0);
         Utils.selectAllText(field);
         field.focus();
@@ -402,11 +406,13 @@ function initBackupPopup() {
     .click(applyDevPack);
     
     // copy to clipboard button (displayed in export)
-    // $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
-    // .appendTo(popup)
-    // .click(function(e) {
-    //     copyToClipboard($('#settingsText')[0].value);
-    // });
+    if (copyToClipboard != undefined) {
+        $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
+        .appendTo(popup)
+        .click(function(e) {
+            copyToClipboard($('#settingsText')[0].value);
+        });
+    }
     
     $('body').append(popup);
     
