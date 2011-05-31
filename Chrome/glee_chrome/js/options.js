@@ -526,7 +526,7 @@ function changeSearchEngine(engine) {
         case "gssl" : value = "https://encrypted.google.com/search?q="; break;
         case "bing" : value = "http://www.bing.com/search?q="; break;
         case "yahoo": value = "http://search.yahoo.com/search?p="; break;
-        case "duckduckgo": value = "http://duckduckgo.com/?q="; break;
+        case "duckduckgo": value = "http://duckduckgo.com/"; break;
     }
     
     var ui = $('#search_engine');
