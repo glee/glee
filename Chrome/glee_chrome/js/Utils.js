@@ -166,10 +166,12 @@ var Utils = {
      *  @return {boolean} If not a valid element or textfield is empty, returns false. Else, true.
      */
     selectAllText: function(el) {
-        if (!el || !el.value || el.value === "")
+        if (!el || !el.value || el.value.length === 0)
             return false;
+        
         var len = el.value.length;
         el.setSelectionRange(0, len);
+        
         return true;
     },
     
@@ -190,20 +192,20 @@ var Utils = {
             if (e.type === 'keydown' && e.keyCode != 13)
                 return true;
 
-            var el = $(this);
-            el.hide();
+            var $el = $(this);
+            $el.hide();
             
             var elWidth;
             if (options && options.fixedWidth)
                 elWidth = options.fixedWidth;
             else
-                elWidth = el.width();
+                elWidth = $el.width();
 
-            var fontSize = el.css('font-size');
-            var fontFamily = el.css('font-family');
-            var fontWeight = el.css('font-weight');
+            var fontSize = $el.css('font-size');
+            var fontFamily = $el.css('font-family');
+            var fontWeight = $el.css('font-weight');
 
-            var value = el.text();
+            var value = $el.text();
             
             // get the required height of textarea by creating a temporary div
             //
@@ -220,14 +222,14 @@ var Utils = {
             .width(elWidth)
             .height(tempDiv.height() + 20)
             .css({
-                'font-family': fontFamily,
-                'font-size': fontSize,
-                'font-weight': fontWeight
+                'font-family'   : fontFamily,
+                'font-size'     : fontSize,
+                'font-weight'   : fontWeight
             });
             
             tempDiv.remove();
             
-            el.before(textarea);
+            $el.before(textarea);
             textarea.focus();
 
             // if selectText is set to true, select all text in input field
@@ -266,54 +268,84 @@ var Utils = {
                 e.data.el.focus();
             }
             
-            textarea.bind('keydown', { textarea: textarea, el: el, callback: callback }, onClose);
-            $(document).bind('mousedown', { textarea: textarea, el: el, callback: callback }, onClose);
+            textarea.bind('keydown', { textarea: textarea, el: $el, callback: callback }, onClose);
+            $(document).bind('mousedown', { textarea: textarea, el: $el, callback: callback }, onClose);
         });
         
         return true;
     },
     
-    editElement: function(el, options) {
-        var EDIT_FIELD_CLASS = "gleebox-editing-field";
+    editElement: function($el, someOptions) {
+        // default options
+        var options = {
+            editFieldClass: 'gleebox-editing-field',
+            selectText: true,
+            fixedWidth: false
+        };
         
-        el = $(el);
-        el.hide();
+        if (someOptions) {
+            for (var option in someOptions)
+                options[option] = someOptions[option];
+        }
+        
+        $el.hide();
         
         var elWidth;
         if (options && options.fixedWidth)
             elWidth = options.fixedWidth;
         else
-            elWidth = el.width();
+            elWidth = $el.width();
 
-        var fontSize = el.css('font-size');
-        var fontFamily = el.css('font-family');
-        var fontWeight = el.css('font-weight');
+        var fontSize = $el.css('font-size');
+        var fontFamily = $el.css('font-family');
+        var fontWeight = $el.css('font-weight');
+        var lineHeight = $el.css('line-height');
 
-        var value = el.text();
+        var value = $el.text();
         
         // get the required height of textarea by creating a temporary div
         //
         var tempDiv = $('<div>', {
             html: value
         })
-        .width(elWidth)
-        .appendTo(document.body);
+        .css({
+            'line-height'   : lineHeight,
+            'word-wrap'     : 'break-word'
+        })
+        .width(elWidth);
+        
+        $el.before(tempDiv);
+        
+        var height = tempDiv.height();
 
         var textarea = $('<textarea>', {
             value: value,
-            className: EDIT_FIELD_CLASS
+            className: options.editFieldClass
         })
         .width(elWidth)
-        .height(tempDiv.height() + 20)
+        .height(height)
         .css({
-            'font-family': fontFamily,
-            'font-size': fontSize,
-            'font-weight': fontWeight
+            'font-family'   : fontFamily,
+            'font-size'     : fontSize,
+            'font-weight'   : fontWeight,
+            'line-height'   : lineHeight,
+            'overflow-y'    : 'hidden',
+            'padding'       : 0,
+            'resize'        : 'none'
         });
+        
+        if (options.selectText) {
+            textarea.bind('click keyup', function(e) {
+                if (e.type === 'keyup' && e.keyCode != 9) return true;
+                e.preventDefault();
+                e.target.focus();
+                e.target.select();
+            });
+        }
         
         tempDiv.remove();
         
-        el.before(textarea);
+        $el.before(textarea);
         textarea.focus();
 
         // if selectText is set to true, select all text in input field
@@ -326,11 +358,9 @@ var Utils = {
         
         if (options && options.selectText)
             textarea.get(0).setSelectionRange(0, len);
-        else
-            textarea.get(0).setSelectionRange(len, len);
-            
-        el.data('value', value);
-        el.data('textarea', textarea);
+        
+        $el.data('value', value);
+        $el.data('textarea', textarea);
     },
     
     endEditing: function($el) {

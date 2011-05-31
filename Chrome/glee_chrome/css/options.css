@@ -148,7 +148,6 @@ ul li ul {
 }
 
 .gleebox-editing-field {
-    outline: none;
     padding: 2px;
     margin: 0;
     float: left;
@@ -192,7 +191,8 @@ ul li ul {
     float: right;
     margin-left: 20px;
     font-size: 12px;
-    color: gray;
+    color: #555;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 /** Options **/
@@ -281,11 +281,6 @@ li.option:first-of-type {
 
 .scraper-sel {
     width: 450px;
-}
-
-textarea {
-    line-height: 23px;
-    word-wrap: break-word;
 }
 
 #esp-modifiers li,
@@ -424,7 +419,8 @@ textarea {
 
 /** CONTROLS: CSS from Chromium Project **/
 
-input[type=text]
+input[type=text],
+textarea
 {
     border: 1px solid #ccc;
     border-radius: 2px;

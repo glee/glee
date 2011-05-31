@@ -2,104 +2,6 @@ var prefs = {};
 var textfieldTimer = null;
 var scroller;
 
-function makeItemEditable(el, type) {
-    if (type === "domain")
-    {
-        Utils.makeEditable(el, function(newValue)
-        {
-            var id = el.parent().attr('id').slice(6);
-            prefs.disabledUrls[id] = newValue;
-            saveOption("disabledUrls", prefs.disabledUrls);
-        }, {
-            fixedWidth: 300
-        });
-    }
-    
-    else if (type === "scraper-name")
-    {
-        Utils.makeEditable(el, function(newValue) {
-            var id = el.parent().attr('id').slice(7);
-            prefs.scrapers[id].command = newValue;
-            saveOption("scrapers", prefs.scrapers);
-        });
-    }
-    
-    else if (type === "scraper-sel")
-    {
-        Utils.makeEditable(el, function(newValue) {
-            var id = el.parent().attr('id').slice(7);
-            prefs.scrapers[id].selector = newValue;
-            saveOption("scrapers", prefs.scrapers);
-        });
-    }
-    
-    else if (type === "esp-url")
-    {
-        Utils.makeEditable(el, function(newValue) {
-            var id = el.parent().attr('id').slice(3);
-            prefs.espModifiers[id].url = newValue;
-            saveOption("espModifiers", prefs.espModifiers);
-        });
-    }
-    
-    else if (type === "esp-sel")
-    {
-        Utils.makeEditable(el, function(newValue) {
-            var id = el.parent().attr('id').slice(3);
-            prefs.espModifiers[id].selector = newValue;
-            saveOption("espModifiers", prefs.espModifiers);
-        });
-    }
-}
-
-// function makeItemsEditable() {
-//     // make domains editable
-//     var domainNames = document.getElementsByClassName("domain-name");
-//     var len = domainNames.length;
-//
-//     for (var i = 0; i < len; i++) {
-//         Utils.makeEditable(domainNames[i], function(newValue) {
-//             prefs.disabledUrls[i] = val;
-//             saveOption("disabledUrls", prefs.disabledUrls);
-//         });
-//     }
-//
-//     // make scrapers editable
-//     var scraperNames = document.getElementsByClassName("scraper-name");
-//     var scraperSels = document.getElementsByClassName("scraper-sel");
-//     len = scraperNames.length;
-//
-//     for (var i = 0; i < len; i++)
-//     {
-//         Utils.makeEditable(scraperNames[i], function(newValue) {
-//             prefs.scrapers[i].command = newValue;
-//             saveOption("scrapers", prefs.scrapers);
-//         });
-//
-//         Utils.makeEditable(scraperSels[i], function(newValue) {
-//             prefs.scrapers[i].selector = newValue;
-//             saveOption("scrapers", prefs.scrapers);
-//         });
-//     }
-//
-//     // make visions editable
-//     var espUrls = document.getElementsByClassName("esp-url");
-//     var espSels = document.getElementsByClassName("esp-sel");
-//     len = espUrls.length;
-//
-//     for (var i = 0; i < len; i++)
-//     {
-//         Utils.makeEditable(espUrls[i], function(newValue) {
-//             prefs.espModifiers[i].url = newValue;
-//             saveOption("espModifiers", prefs.espModifiers);
-//         });
-//         Utils.makeEditable(espSels[i], function(newValue) {
-//             prefs.espModifiers[i].selector = newValue;
-//             saveOption("espModifiers", prefs.espModifiers);
-//         });
-//     }
-// }
-
 function addURL(value) {
     prefs.disabledUrls.push(value);
     saveOption("disabledUrls", prefs.disabledUrls);
@@ -252,7 +154,8 @@ function addItem(type, value1, value2, shouldSave) {
         href: '#'
     })
     
-    .click(function(e) {
+    .bind('click keydown', function(e) {
+        if (e.type === 'keydown' && e.keyCode !=13) return true;
         e.preventDefault();
         removeItem(e, type);
     })
@@ -267,6 +170,7 @@ function addItem(type, value1, value2, shouldSave) {
 function removeItem(e, type) {
     var listOfItems;
     var i = e.target.parentNode.id.substr(type.length);
+
     switch (type)
     {
         case "domain":
@@ -544,27 +448,31 @@ function clearSettings() {
 function attachListeners() {
     // radio
     // for some reason, change event does not fire when using keyboard
-    $('.option-field input[type=radio]').bind('change keyup', function(e) {
+    $('input[type=radio]').bind('change keyup', function(e) {
         if (e.type === 'keyup' && e.keyCode === 9)
             return true;
+        
         if (e.target.name === "scrolling_key") {
             changeScrollingKey(e.target.value);
             return true;
         }
+        
         saveOption(e.target.name, e.target.value);
     });
     
     // checkbox
-    $('.option-field input[type=checkbox]').bind('change', function(e) {
-        if (IS_CHROME)
+    $('input[type=checkbox]').bind('change', function(e) {
+        if (IS_CHROME) {
             saveOption(e.target.name, (e.target.value) ? 1 : 0);
+        }
+            
         else {
             saveOption(e.target.name, translateOptionValue(e.target.name, e.target.value));
         }
     });
     
     // textfields
-    $('.option-field input[type=text]:not(#add_domain, #add-scraper-name, #add-scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e)
+    $('input[type=text]:not(#add_domain, #add-scraper-name, #add-scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e)
     {
         if (e.keyCode === 9)
             return true;
@@ -583,22 +491,19 @@ function attachListeners() {
     attachFilteringListeners();
     
     // attach listeners for editing
-    $('.scraper').live('click keydown', function(e) {
-        if ($(this).hasClass('selected')) return true;
+    $('.scraper, .esp, .domain').live('click keydown', function(e) {
+        var $this = $(this);
+        
+        if ($this.hasClass('selected')) return true;
         if (e.type === 'keydown' && e.keyCode != 13) return true;
-        editScraper($(this));
-    });
-    
-    $('.esp').live('click', function(e) {
-        if ($(this).hasClass('selected')) return true;
-        if (e.type === 'keydown' && e.keyCode != 13) return true;
-        editESP($(this));
-    });
-    
-    $('.domain').live('click', function(e) {
-        if ($(this).hasClass('selected')) return true;
-        if (e.type === 'keydown' && e.keyCode != 13) return true;
-        editDomain($(this));
+        e.preventDefault();
+        
+        if ($this.hasClass('scraper'))
+            editScraper($(this));
+        else if ($this.hasClass('esp'))
+            editESP($(this));
+        else if ($this.hasClass('domain'))
+            editDomain($(this));
     });
 }
 
@@ -704,7 +609,6 @@ function filterScraper(value) {
 
 // Initialize tabs
 $(document).ready(function() {
-
     $("ul.menu li:first").addClass("tabActive").show();
     $("#options > div").hide();
     $("#basics").show();
@@ -729,8 +633,10 @@ window.addEventListener('keydown', function(e) {
     {
         if (e.metaKey || e.ctrlKey || e.shiftKey)
             return true;
+        
         e.preventDefault();
         e.stopPropagation();
+        
         if (!scroller)
             scroller = new SmoothScroller(4);
         scroller.start((e.keyCode === 38) ? 1 : -1);
@@ -776,6 +682,8 @@ function editScraper($scraper) {
         
         $(document).unbind("mousedown", onEditingComplete);
         $(document).unbind("keydown", onEditingComplete);
+        
+        $scraper.focus();
     }
     
     $(document).bind('keydown', onEditingComplete);
@@ -810,6 +718,8 @@ function editDomain($domain) {
         
         $(document).unbind("mousedown", onEditingComplete);
         $(document).unbind("keydown", onEditingComplete);
+        
+        $domain.focus();
     }
     
     $(document).bind('keydown', onEditingComplete);
@@ -847,6 +757,8 @@ function editESP($esp) {
         
         $(document).unbind("mousedown", onEditingComplete);
         $(document).unbind("keydown", onEditingComplete);
+        
+        $esp.focus();
     }
     
     $(document).bind('keydown', onEditingComplete);
