@@ -37,11 +37,13 @@ h2 {
     border-bottom: 1px solid #DDD;
 }
 
-.option-section h3 {
+h3 {
     font-size: 14px;
     font-weight: bold;
     width: 180px;
     vertical-align: middle;
+    margin: 0;
+    padding: 0;
 }
 
 /** Tabs **/
@@ -51,7 +53,7 @@ h2 {
     margin: 0 0 20px 235px;
     float: left;
     max-width: 888px;
-    min-width: 630px;
+    min-width: 600px;
     background-color: #fff;
     padding: 20px;
 }
@@ -123,21 +125,8 @@ a:hover {
     color: #39719b;
 }
 
-ul li {
-    margin-bottom: 30px;
-    display: block;
-    float: left;
-    clear: both;
-}
-
-ul li li {
-    border: none;
-    float: none;
-    margin: 0;
-    margin-bottom: 5px;
-}
-
-ul li ul {
+ul {
+    list-style-type: none;
     margin: 0;
     padding: 0;
 }
@@ -189,7 +178,7 @@ ul li ul {
 
 .inbuilt {
     float: right;
-    margin-left: 20px;
+    margin-right: 5px;
     font-size: 12px;
     color: #555;
     font-family: Helvetica, Arial, sans-serif;
@@ -227,19 +216,20 @@ li.option:first-of-type {
     display: inline;
 }
 
-.option-section {
+section {
     display: -webkit-box;
     -webkit-box-orient: horizontal;
     border-bottom: 1px solid #DDD;
-    padding: 10px 0 14px 0;
-    margin-bottom: 6px;
+    margin-top: 17px;
+    padding-bottom: 20px;
 }
 
-.option-section .option-subsection {
-    font-size: 13px;
-    width: 600px;
+section:last-of-type {
+    border: none;
+}
+
+section > div:only-of-type {
     -webkit-box-flex: 1;
-    clear: both;
 }
 
 #addDomainLi {
@@ -255,41 +245,13 @@ li.option:first-of-type {
     height: 10px;
 }
 
-.esp-sel,
-.scraper-sel,
-#add-esp-selector,
-#add-scraper-selector {
-    font-size: 12px;
-    font-family: Menlo, Monaco, 'Lucida Console', monospace;
-    float: left;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-#add-esp-selector {
-    width: 320px;
-}
-
-.esp-sel {
-    width: 360px;
-}
-
-#add-scraper-selector {
-    width: 350px;
-}
-
-.scraper-sel {
-    width: 450px;
-}
-
 #esp-modifiers li,
 #scrapers li
 {
     float: left;
-    font-size: 14px;
-    padding: 5px 0px;
+    padding: 5px;
     margin: 0;
+    clear: both;
 }
 
 #esp-modifiers .button,
@@ -302,6 +264,39 @@ li.option:first-of-type {
     float: left;
 }
 
+.esp-sel,
+.scraper-sel,
+#add-esp-selector,
+#add-scraper-selector
+{
+    font-size: 12px;
+    font-family: Menlo, Monaco, 'Lucida Console', monospace;
+    float: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.esp-sel {
+    width: 250px;
+}
+
+#add-esp-selector {
+    width: 200px;
+}
+
+.scraper-sel {
+    width: 340px;
+}
+
+#add-scraper-selector {
+    width: 290px;
+}
+
+.domain-name {
+    width: 400px;
+}
+
 /** ESP **/
 
 #esp-search-field,
@@ -309,7 +304,7 @@ li.option:first-of-type {
 #add-esp-url
 {
     float: left;
-    font-weight: bold;
+    color: #333;
     width: 200px;
 }
 
@@ -323,13 +318,18 @@ li.option:first-of-type {
     margin-bottom: 10px;
 }
 
+.page {
+    min-width: 680px;
+}
+
 /** Scrapers **/
 
 /** ? prepended before scrapers **/
 
 .scraper-prefix {
-    font-weight: bold;
+    color: #333;
     float: left;
+    margin-right: 2px;
 }
 
 /** Scraper Names **/
@@ -337,16 +337,13 @@ li.option:first-of-type {
 #scraper-search-field,
 .default-scraper-name,
 .scraper-name,
-#scraper-name
+#add-scraper-name
 {
     float: left;
-    font-weight: bold;
+    color: #333;
     width: 100px;
 }
 
-#about {
-    width: 600px;
-}
 /** Popup **/
 
 #popup {
@@ -424,7 +421,6 @@ textarea
 {
     border: 1px solid #ccc;
     border-radius: 2px;
-    color: #333;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 13px;
     padding: 2px;

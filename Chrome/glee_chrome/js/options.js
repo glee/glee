@@ -76,6 +76,7 @@ function addItem(type, value1, value2, shouldSave) {
             if (validateScraper(value1, value2))
             {
                 listOfItems = document.getElementById("scraper-commands");
+                lastEl = document.getElementById("addScraper");
                 
                 var contentName = $('<span>', {
                     className: "scraper-name",
@@ -121,6 +122,7 @@ function addItem(type, value1, value2, shouldSave) {
             if (validateEspModifier(value1, value2))
             {
                 listOfItems = document.getElementById("esp-modifiers");
+                lastEl = document.getElementById("addEspModifier");
                 
                 var contentName = $('<span>', {
                     className: "esp-url",
@@ -695,9 +697,7 @@ function editDomain($domain) {
     
     var $domainName = $domain.find('.domain-name');
     
-    Utils.editElement($domainName, {
-        fixedWidth: 300
-    });
+    Utils.editElement($domainName);
     
     function onEditingComplete(e) {
         var el = e.target;
