@@ -282,6 +282,12 @@ var Glee = {
 			method:"Glee.makeReadable",
 			domain:"*",
 			statusText:"Wait while Glee+Readability work up the magic"
+		},
+		{
+			name: "kindle",
+			method:"Glee.sendToKindle",
+			domain:"*",
+			statusText:"Wait while Glee+Readability work up the magic"
 		}
 	],
 	
@@ -648,11 +654,18 @@ var Glee = {
 		eval(method);
 	},
 	
-	makeReadable: function(){
-		//code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
-		location.href = "javascript:(function(){readStyle='style-newspaper';readSize='size-large';readMargin='margin-wide';_readability_script=document.createElement('SCRIPT');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(_readability_script);_readability_css=document.createElement('LINK');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='screen';document.getElementsByTagName('head')[0].appendChild(_readability_css);_readability_print_css=document.createElement('LINK');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();";
-	},
-	
+    /* read: Make the current page readable using Readability */
+    makeReadable: function(){
+    	//code from the Readability bookmarklets (http://www.readability.com/bookmarklet/)
+    	location.href = "javascript:(%28function%28%29%7Bwindow.baseUrl%3D%27https%3A//www.readability.com%27%3Bwindow.readabilityToken%3D%27%27%3Bvar%20s%3Ddocument.createElement%28%27script%27%29%3Bs.setAttribute%28%27type%27%2C%27text/javascript%27%29%3Bs.setAttribute%28%27charset%27%2C%27UTF-8%27%29%3Bs.setAttribute%28%27src%27%2CbaseUrl%2B%27/bookmarklet/read.js%27%29%3Bdocument.documentElement.appendChild%28s%29%3B%7D%29%28%29)";
+    },
+
+    /* kindle: Send the current page to your Kindle using Readability */
+    sendToKindle: function(){
+    	//code from the Readability bookmarklets (http://www.readability.com/bookmarklet/)
+    	location.href = "javascript:(%28function%28%29%7Bwindow.baseUrl%3D%27https%3A//www.readability.com%27%3Bwindow.readabilityToken%3D%27%27%3Bvar%20s%3Ddocument.createElement%28%27script%27%29%3Bs.setAttribute%28%27type%27%2C%27text/javascript%27%29%3Bs.setAttribute%28%27charset%27%2C%27UTF-8%27%29%3Bs.setAttribute%28%27src%27%2CbaseUrl%2B%27/bookmarklet/send-to-kindle.js%27%29%3Bdocument.documentElement.appendChild%28s%29%3B%7D%29%28%29)";
+    },
+
 	shortenURL: function(){
 		//creating an XMLHTTPRequest to bit.ly using GM_xmlhttpRequest
 		Glee.sendRequest("http://api.bit.ly/shorten?version=2.0.1&longUrl="+escape(location.href)+"&login=gleebox&apiKey=R_136db59d8b8541e2fd0bd9459c6fad82","GET",
