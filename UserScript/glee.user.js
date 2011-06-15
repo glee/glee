@@ -420,6 +420,13 @@ var Glee = {
 			statusText:"Please wait while Glee+Readability work up the magic..."
 		},
 		{
+			name: "kindle",
+			method:"Glee.sendToKindle",
+			domain:"*",
+			description:"Send this page to your Kindle using Readability",
+			statusText:"Please wait while Glee+Readability work up the magic..."
+		},
+		{
 			name: "rss",
 			method:"Glee.getRSSLink",
 			domain:"*",
