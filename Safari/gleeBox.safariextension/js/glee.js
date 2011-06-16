@@ -131,6 +131,12 @@ var Glee = {
 			statusText: "Please wait while gleeBox + Readability work up the magic..."
 		},
 		{
+			name: "kindle",
+			method:"sendToKindle",
+			description:"Send this page to your Kindle using Readability",
+			statusText:"Please wait while Glee+Readability work up the magic..."
+		},
+		{
 			name: "rss",
 			method: "getRSSLink",
 			description: "Open the RSS feed of this page in GReader",
