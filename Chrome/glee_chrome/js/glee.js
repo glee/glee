@@ -210,8 +210,13 @@ var Glee = {
         },
         {
             name: 'ext',
-            method: 'viewWebStore',
-            description: 'Open the Chrome Web Store'
+            method: 'viewExtensions',
+            description: 'Open the Extensions Page'
+        },
+        {
+            name: 'extensions',
+            method: 'viewExtensions',
+            description: 'Open the Extensions Page'
         },
         {
             name: 'snap',

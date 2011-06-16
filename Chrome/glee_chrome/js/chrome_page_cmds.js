@@ -1,5 +1,11 @@
 // Chrome specific Page commands
 
+// ext: Open the Extensions page
+Glee.viewExtensions = function(newtab) {
+    Glee.Browser.openURL('chrome://extensions', newtab, true);
+    if (newtab) Glee.empty();
+};
+
 // down: Open the Downloads page
 Glee.viewDownloads = function(newtab) {
     Glee.Browser.openURL('chrome://downloads', newtab, true);
@@ -18,7 +24,7 @@ Glee.viewFlags = function(newtab) {
     if (newtab) Glee.empty();
 };
 
-// ext, webstore: Open the Chrome Web Store
+// webstore: Open the Chrome Web Store
 Glee.viewWebStore = function(newtab) {
     Glee.Browser.openURL('https://chrome.google.com/webstore', newtab, true);
     if (newtab) Glee.empty();
