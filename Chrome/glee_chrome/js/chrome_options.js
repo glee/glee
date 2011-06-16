@@ -6,16 +6,16 @@ var sync;
 
 // preference strings
 var prefStrings = [
-    "size",
-    "search_engine",
-    "command_engine",
-    "quix_url",
-    "theme",
-    "bookmark_search",
-    "scroll_animation",
-    "tab_shortcut_status",
-    "esp_status",
-    "outside_scrolling_status"
+    'size',
+    'search_engine',
+    'command_engine',
+    'quix_url',
+    'theme',
+    'bookmark_search',
+    'scroll_animation',
+    'tab_shortcut_status',
+    'esp_status',
+    'outside_scrolling_status'
 ];
 
 // default values for preferences
@@ -25,7 +25,7 @@ var prefDefaults = {
     scroll_animation: 1,
     tab_shortcut_status: 1,
     esp_status: 1
-}
+};
 
 $(document).ready(function() {
     loadAllPrefs(initSettings);
@@ -35,25 +35,25 @@ $(document).ready(function() {
 function initSettings(response)
 {
     prefs = response;
-    
+
     // set all the preferences in UI
     var prefsLen = prefStrings.length;
-    
+
     for (var i = 0; i < prefsLen; i++)
     {
         var prefName = prefStrings[i];
-        var $el = $("[name=" + prefName + "]");
+        var $el = $('[name=' + prefName + ']');
         var el = $el.get(0);
-        
-        if (el.type === "radio")
+
+        if (el.type === 'radio')
         {
             var r_len = $el.length;
-            
+
             for (var j = 0; j < r_len; j++)
             {
                 var radio = $el.get(j);
                 var prefIntValue = parseInt(prefs[prefName]);
-                
+
                 if (prefs[prefName] == radio.value || prefIntValue == radio.value)
                 {
                     radio.checked = true;
@@ -61,20 +61,20 @@ function initSettings(response)
                 }
             }
         }
-        
-        else if (el.type === "checkbox")
+
+        else if (el.type === 'checkbox')
         {
             if (prefs[prefName] == 1 || (prefs[prefName] == undefined && prefDefaults[prefName] == 1))
                 el.checked = true;
         }
-        
-        else if (el.type === "text")
+
+        else if (el.type === 'text')
         {
             if (prefs[prefName] != undefined)
                 el.value = prefs[prefName];
         }
     }
-    
+
     // preference specific
     var $scrollingEl = $('[name=scrolling_key]');
     // parse as int
@@ -84,10 +84,10 @@ function initSettings(response)
         $scrollingEl.get(1).checked = true;
     else
         $scrollingEl.get(0).checked = true;
-    
+
     // display the Quix URL field, if Quix is selected as the command engine
-    if (prefs.command_engine === "quix")
-        $("#quix_url").show();
+    if (prefs.command_engine === 'quix')
+        $('#quix_url').show();
 
     // disabled urls
     var len = prefs.disabledUrls.length;
@@ -96,7 +96,7 @@ function initSettings(response)
         for (var i = 0; i < len; i++)
             addItem('domain', prefs.disabledUrls[i]);
     }
-    
+
     // scraper commands
     var len = prefs.scrapers.length;
     if (len != 0)
@@ -105,9 +105,9 @@ function initSettings(response)
         for (var i = 0; i < len; i++)
             addItem('scraper', prefs.scrapers[i].command, prefs.scrapers[i].selector);
     }
-    
+
     // esp visions
-    var espList = document.getElementById("esp-modifiers");
+    var espList = document.getElementById('esp-modifiers');
     var len = prefs.espModifiers.length;
     if (len != 0)
     {
@@ -119,37 +119,37 @@ function initSettings(response)
         // add default examples
         var newLI = document.createElement('li');
         var inputBt = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\")'/>";
-        newLI.className = "esp";
-        newLI.id = "esp0";
+        newLI.className = 'esp';
+        newLI.id = 'esp0';
         newLI.innerHTML = "<span class='esp-url'>google.com/search</span> : <span class='esp-sel'>h3:not(ol.nobr>li>h3)</span>" + inputBt;
-        espList.insertBefore(newLI, document.getElementById("addEspModifier"));
+        espList.insertBefore(newLI, document.getElementById('addEspModifier'));
 
         var newLI_2 = document.createElement('li');
         var inputBt_2 = "<input class='button' style='float:right' type='button' value='Remove' onclick='removeItem(\"esp\")'/>";
-        newLI_2.className = "esp";
-        newLI_2.id = "esp1";
+        newLI_2.className = 'esp';
+        newLI_2.id = 'esp1';
         newLI_2.innerHTML = "<span class='esp-url'>bing.com/search</span> : <span class='esp-sel'>div.sb_tlst</span>" + inputBt_2;
-        espList.insertBefore(newLI_2, document.getElementById("addEspModifier"));
+        espList.insertBefore(newLI_2, document.getElementById('addEspModifier'));
     }
-    
+
     // gleebox shortcut key
     if (prefs.shortcut_key)
-        document.getElementsByName("shortcut_key_span")[0].innerText = prefs.shortcut_key;
+        document.getElementsByName('shortcut_key_span')[0].innerText = prefs.shortcut_key;
     else
-        document.getElementsByName("shortcut_key_span")[0].innerText = 71; // default is g
+        document.getElementsByName('shortcut_key_span')[0].innerText = 71; // default is g
 
-    KeyCombo.init(document.getElementsByName("shortcut_key")[0], document.getElementsByName("shortcut_key_span")[0]);
-    
+    KeyCombo.init(document.getElementsByName('shortcut_key')[0], document.getElementsByName('shortcut_key_span')[0]);
+
     // tab manager shortcut key
     if (prefs.tab_shortcut_key != undefined)
     {
         if (prefs.tab_shortcut_key)
-            document.getElementsByName("tab_shortcut_key_span")[0].innerText = prefs.tab_shortcut_key;
+            document.getElementsByName('tab_shortcut_key_span')[0].innerText = prefs.tab_shortcut_key;
         else
-            document.getElementsByName("tab_shortcut_key_span")[0].innerText = 190; // default is .
+            document.getElementsByName('tab_shortcut_key_span')[0].innerText = 190; // default is .
     }
-    KeyCombo.init(document.getElementsByName("tab_shortcut_key")[0], document.getElementsByName("tab_shortcut_key_span")[0]);
-    
+    KeyCombo.init(document.getElementsByName('tab_shortcut_key')[0], document.getElementsByName('tab_shortcut_key_span')[0]);
+
     setSyncUI();
     attachListeners();
     bg_window = chrome.extension.getBackgroundPage();
@@ -157,12 +157,12 @@ function initSettings(response)
 
 function saveOption(name, value) {
     switch (name) {
-        case "disabledUrls": saveDisabledUrls(value, function(){}); break;
-        
-        case "scrapers": saveScrapers(value, function(){}); break;
-        
-        case "espModifiers": saveESP(value, function(){}); break;
-        
+        case 'disabledUrls': saveDisabledUrls(value, function() {}); break;
+
+        case 'scrapers': saveScrapers(value, function() {}); break;
+
+        case 'espModifiers': saveESP(value, function() {}); break;
+
         default:
         value = translateOptionValue(name, value);
         savePreference(name, value);
@@ -174,14 +174,14 @@ function saveOption(name, value) {
 
 function translateOptionValue(name, value) {
     switch (name) {
-        case "shortcut_key": return document.getElementsByName("shortcut_key_span")[0].innerText; break;
-        case "tab_shortcut_key": return document.getElementsByName("tab_shortcut_key_span")[0].innerText; break;
+        case 'shortcut_key': return document.getElementsByName('shortcut_key_span')[0].innerText; break;
+        case 'tab_shortcut_key': return document.getElementsByName('tab_shortcut_key_span')[0].innerText; break;
     }
     return value;
 }
 
 function saveAllOptions() {
-    saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function(){});
+    saveAllPrefs(prefs, prefs.scrapers, prefs.disabledUrls, prefs.espModifiers, function() {});
     propagate();
 }
 
@@ -190,15 +190,15 @@ function saveAllOptions() {
 // also, if sync is enabled, save data in bookmark as well
 function propagate()
 {
-    chrome.windows.getAll({populate:true}, function(windows){
+    chrome.windows.getAll({populate: true}, function(windows) {
         var w_len = windows.length;
-        for(var i = 0; i < w_len; i++)
+        for (var i = 0; i < w_len; i++)
         {
             var t_len = windows[i].tabs.length;
             for (var j = 0; j < t_len; j++)
             {
                 chrome.tabs.sendRequest(windows[i].tabs[j].id,
-                    {value: "updateOptions", preferences: prefs},
+                    {value: 'updateOptions', preferences: prefs},
                     function(response) {}
                 );
             }
@@ -206,7 +206,7 @@ function propagate()
     });
     // update background.html cache
     bg_window.cache.prefs = prefs;
-    
+
     // if sync is enabled, also save data in bookmark
     if (localStorage['gleebox_sync'] == 1) {
         bg_window.saveSyncData(prefs);
@@ -227,10 +227,10 @@ function toggleSyncing() {
 
 function setSyncUI() {
     if (localStorage['gleebox_sync'] == 1) {
-        $('#sync-button').attr("value", "Disable Sync");
+        $('#sync-button').attr('value', 'Disable Sync');
     }
     else {
-        $('#sync-button').attr("value", "Enable Sync");
+        $('#sync-button').attr('value', 'Enable Sync');
     }
 }
 
@@ -246,5 +246,5 @@ function translateForImport(importPrefs) {
 }
 
 function copyToClipboard(text) {
-    chrome.extension.sendRequest({value: "copyToClipboard", text: text}, function(){});
+    chrome.extension.sendRequest({value: 'copyToClipboard', text: text}, function() {});
 }

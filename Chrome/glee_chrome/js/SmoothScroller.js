@@ -5,19 +5,19 @@ var SmoothScroller = function(speed) {
     this.speed = speed;
     // initialize factor
     this.factor = 5;
-}
+};
 
 SmoothScroller.prototype.start = function(direction) {
     if (direction === 1)
         this.scrollUp();
     else
         this.scrollDown();
-}
+};
 
 SmoothScroller.prototype.stop = function() {
     this.scrollState = 0;
     this.$body.stop(true);
-}
+};
 
 SmoothScroller.prototype.scrollDown = function() {
     this.$body.stop(true);
@@ -29,10 +29,10 @@ SmoothScroller.prototype.scrollDown = function() {
             scrollTop: this.documentHeight
         },
         duration,
-        "linear"
+        'linear'
     );
-    
-}
+
+};
 
 SmoothScroller.prototype.scrollUp = function() {
     this.$body.stop(true);
@@ -43,6 +43,6 @@ SmoothScroller.prototype.scrollUp = function() {
             scrollTop: 0
         },
         duration,
-        "linear"
+        'linear'
     );
-}
+};

@@ -1,6 +1,6 @@
 var response = {};
 
-var CURRENT_VERSION = "2.1";
+var CURRENT_VERSION = '2.1';
 
 var cache = {
     // recently executed commands
@@ -15,14 +15,14 @@ function checkVersion() {
     {
         // create the new preferences as part of update
         updateDB();
-        
+
         // show update notification only for X.X releases
         if (parseFloat(localStorage['gleebox_version']) < parseFloat(CURRENT_VERSION)) {
             showUpdateNotification();
         }
-        
+
         // update version string
-        console.log("Updating to version " + CURRENT_VERSION);
+        console.log('Updating to version ' + CURRENT_VERSION);
         localStorage['gleebox_version'] = CURRENT_VERSION;
     }
 }
@@ -31,7 +31,7 @@ function showUpdateNotification() {
     var notification = webkitNotifications.createHTMLNotification(
       'notification.html'
     );
-    
+
     notification.show();
 }
 
@@ -41,17 +41,17 @@ function updateDB() {
         if (value === null)
             createPreference('outside_scrolling_status', 0);
     });
-    
+
     loadPreference('up_scrolling_key', function(value) {
         if (value === null)
             createPreference('up_scrolling_key', 87);
     });
-    
+
     loadPreference('down_scrolling_key', function(value) {
         if (value === null)
             createPreference('down_scrolling_key', 83);
     });
-    
+
     // for 1.8
     loadPreference('command_engine', function(value) {
         if (value === null) {
@@ -65,14 +65,14 @@ function init() {
     // initialize the db
     initdb(initGlobals);
     checkVersion();
-    
+
     function initGlobals() {
         loadAllPrefs(function(prefs) {
             cache.prefs = prefs;
             initSync();
         });
     }
-    
+
     initCommandCache();
 }
 
@@ -83,34 +83,34 @@ function initCommandCache() {
 // add listener to respond to requests from content script
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     switch (request.value) {
-        case "createTab"        :   chrome.tabs.create({ url: request.url, selected: request.selected }, null);
+        case 'createTab' : chrome.tabs.create({ url: request.url, selected: request.selected }, null);
                                     sendResponse({});
                                     break;
-                                    
-        case "openInThisTab"    :   chrome.tabs.getSelected(null, function(tab){
-                                        chrome.tabs.update(tab.id, { url: request.url }, function(){});
+
+        case 'openInThisTab' : chrome.tabs.getSelected(null, function(tab) {
+                                        chrome.tabs.update(tab.id, { url: request.url }, function() {});
                                     }); break;
-        
-        case "getTabs"          :   chrome.windows.getCurrent(function(currWindow){
-                                        chrome.tabs.getAllInWindow(currWindow.id, function(tabs){
+
+        case 'getTabs' : chrome.windows.getCurrent(function(currWindow) {
+                                        chrome.tabs.getAllInWindow(currWindow.id, function(tabs) {
                                             sendResponse({ tabs: tabs });
                                         });
                                     });
                                     break;
-        
-        case "removeTab"        :   chrome.tabs.remove(request.id, function(){
+
+        case 'removeTab' : chrome.tabs.remove(request.id, function() {
                                         sendResponse({});
                                     });
                                     break;
-        
-        case "moveToTab"        :   chrome.tabs.update(request.id, { selected: true }, function(){
+
+        case 'moveToTab' : chrome.tabs.update(request.id, { selected: true }, function() {
                                         sendResponse({});
                                     });
                                     break;
-                                    
-        case "sendRequest"      :   var req = new XMLHttpRequest();
+
+        case 'sendRequest' : var req = new XMLHttpRequest();
                                     req.open(request.method, request.url, true);
-                                    req.onreadystatechange = function(){
+                                    req.onreadystatechange = function() {
                                         if (req.readyState == 4)
                                         {
                                             sendResponse({ data: req.responseText });
@@ -118,24 +118,24 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                                     }
                                     req.send();
                                     break;
-        
-        case "getBookmarks"     :   var bookmarks = [];
-                                    chrome.bookmarks.search(request.text, function(results){
+
+        case 'getBookmarks' : var bookmarks = [];
+                                    chrome.bookmarks.search(request.text, function(results) {
                                         var len = results.length;
                                         for (i = 0; i < len; i++)
                                         {
                                             if (results[i].url)
                                             {
                                                 // exclude bookmarks whose URLs begin with 'javascript:' i.e. bookmarklets
-                                                if (results[i].url.indexOf("javascript:") != 0)
+                                                if (results[i].url.indexOf('javascript:') != 0)
                                                     bookmarks.push(results[i]);
                                             }
                                         }
                                         sendResponse({ bookmarks: bookmarks });
                                     });
                                     break;
-                                    
-        case "getBookmarklet"   :   var query = request.text;
+
+        case 'getBookmarklet' : var query = request.text;
                                     chrome.bookmarks.search(query, function(results) {
                                         var len = results.length;
 
@@ -144,7 +144,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                                             if (results[i].url)
                                             {
                                                 // check if it is a bookmarklet
-                                                if (results[i].url.indexOf("javascript:") == 0
+                                                if (results[i].url.indexOf('javascript:') == 0
                                                 && results[i].title.toLowerCase().indexOf(query.toLowerCase()) != -1)
                                                     sendResponse({ bookmarklet: results[i] });
                                             }
@@ -152,29 +152,29 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                                         sendResponse({ bookmarklet: null});
                                     });
                                     break;
-                                    
-        case "getCommandCache"  :   sendResponse({ commands: cache.commands });
+
+        case 'getCommandCache' : sendResponse({ commands: cache.commands });
                                     break;
-                                    
-        case "updateCommandCache":  cache.commands = request.commands;
+
+        case 'updateCommandCache': cache.commands = request.commands;
                                     localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
                                     sendRequestToAllTabs({ value: 'updateCommandCache', commands: cache.commands });
                                     break;
-                                    
-        case "getOptions"       :   sendResponse({ preferences: cache.prefs });
+
+        case 'getOptions' : sendResponse({ preferences: cache.prefs });
                                     break;
-                                    
-        case "updateOption"     :   updateOption(request.option, request.option_value);
+
+        case 'updateOption' : updateOption(request.option, request.option_value);
                                     sendResponse({});
                                     break;
-                                    
-        case "updatePrefCache"  :   cache.prefs = request.preferences;
+
+        case 'updatePrefCache' : cache.prefs = request.preferences;
                                     sendResponse({});
                                     break;
-                                    
-        case "copyToClipboard"  :   copyToClipboard(request.text); sendResponse({}); break;
-        
-        case "takeScreenshot"   :   takeScreenshot(); sendResponse({}); break;
+
+        case 'copyToClipboard' : copyToClipboard(request.text); sendResponse({}); break;
+
+        case 'takeScreenshot' : takeScreenshot(); sendResponse({}); break;
     }
 });
 
@@ -182,53 +182,53 @@ function updateOption(option, value) {
     // this transformation needs to be performed as values in db are stored this way
     switch (value)
     {
-        case "off"      :
-        case "small"    :
-        case "top"      : value = 0; break;
-        
-        case "on"       :
-        case "medium"   :
-        case "med"      :
-        case "middle"   :
-        case "mid"      : value = 1; break;
-        
-        case "large"    :
-        case "bottom"   : value = 2; break;
-        
-        case 'default'  : value = "GleeThemeDefault"; break;
-        case 'white'    : value = "GleeThemeWhite"; break;
-        case 'console'  : value = "GleeThemeConsole"; break;
-        case 'greener'  : value = "GleeThemeGreener"; break;
-        case 'ruby'     : value = "GleeThemeRuby"; break;
-        case 'glee'     : value = "GleeThemeGlee"; break;
+        case 'off' :
+        case 'small' :
+        case 'top' : value = 0; break;
+
+        case 'on' :
+        case 'medium' :
+        case 'med' :
+        case 'middle' :
+        case 'mid' : value = 1; break;
+
+        case 'large' :
+        case 'bottom' : value = 2; break;
+
+        case 'default' : value = 'GleeThemeDefault'; break;
+        case 'white' : value = 'GleeThemeWhite'; break;
+        case 'console' : value = 'GleeThemeConsole'; break;
+        case 'greener' : value = 'GleeThemeGreener'; break;
+        case 'ruby' : value = 'GleeThemeRuby'; break;
+        case 'glee' : value = 'GleeThemeGlee'; break;
     }
-    
+
     switch (option)
     {
-        case "scroll"   : option = "scroll_animation";
-                          cache.prefs[option] = value;
-                          savePreference(option, value);
-                          break;
-                          
-        case "bsearch"  : option = "bookmark_search";
+        case 'scroll' : option = 'scroll_animation';
                           cache.prefs[option] = value;
                           savePreference(option, value);
                           break;
 
-        case "esp"      : option = "esp_status";
+        case 'bsearch' : option = 'bookmark_search';
                           cache.prefs[option] = value;
                           savePreference(option, value);
                           break;
-        
-        case "theme"    :
-        case "hyper"    :
-        case "size"     : cache.prefs[option] = value;
+
+        case 'esp' : option = 'esp_status';
+                          cache.prefs[option] = value;
                           savePreference(option, value);
                           break;
-                          
-        case "vision"   :
-        
-        case "visions+" : var len = cache.prefs.espModifiers.length;
+
+        case 'theme' :
+        case 'hyper' :
+        case 'size' : cache.prefs[option] = value;
+                          savePreference(option, value);
+                          break;
+
+        case 'vision' :
+
+        case 'visions+' : var len = cache.prefs.espModifiers.length;
                           for (var i = 0; i < len; i++)
                           {
                             // if an esp vision already exists for url, modify it
@@ -244,11 +244,11 @@ function updateOption(option, value) {
                               selector: value.selector
                           });
                           // save in db
-                          saveESP(cache.prefs.espModifiers, function(){});
+                          saveESP(cache.prefs.espModifiers, function() {});
                           break;
 
-        case "scrapers+": var len = cache.prefs.scrapers.length;
-                          
+        case 'scrapers+': var len = cache.prefs.scrapers.length;
+
                           for (var i = 0; i < len; i++)
                           {
                             if (cache.prefs.scrapers[i].command == value.command)
@@ -257,20 +257,20 @@ function updateOption(option, value) {
                                 return true;
                             }
                           }
-                          cache.prefs.scrapers.push( {
+                          cache.prefs.scrapers.push({
                               command: value.command,
                               selector: value.selector,
-                              cssStyle: "GleeReaped",
-                              nullMessage : "Could not find any matching elements on the page."
+                              cssStyle: 'GleeReaped',
+                              nullMessage: 'Could not find any matching elements on the page.'
                           });
                           // save in db
-                          saveScrapers(cache.prefs.scrapers, function(){});
+                          saveScrapers(cache.prefs.scrapers, function() {});
                           break;
     }
-    
+
     // send request to update options in all tabs
     sendRequestToAllTabs({ value: 'updateOptions', preferences: cache.prefs });
-    
+
     // if sync is enabled, also update data in bookmark
     if (localStorage['gleebox_sync'] == 1) {
         saveSyncData(cache.prefs);
@@ -299,7 +299,7 @@ function mergePreferencesLocally(prefs) {
             if (!found)
                 cache.prefs.disabledUrls.push(prefs.disabledUrls[i]);
         }
-        
+
         // scrapers
         len = prefs.scrapers.length;
         len2 = cache.prefs.scrapers.length;
@@ -313,7 +313,7 @@ function mergePreferencesLocally(prefs) {
             if (!found)
                 cache.prefs.scrapers.push(prefs.scrapers[i]);
         }
-        
+
         // esp visions
         len = prefs.espModifiers.length;
         len2 = cache.prefs.espModifiers.length;
@@ -328,11 +328,11 @@ function mergePreferencesLocally(prefs) {
                 cache.prefs.espModifiers.push(prefs.espModifiers[i]);
         }
     }
-    saveAllPrefs(cache.prefs, cache.prefs.scrapers, cache.prefs.disabledUrls, cache.prefs.espModifiers, function(){});
+    saveAllPrefs(cache.prefs, cache.prefs.scrapers, cache.prefs.disabledUrls, cache.prefs.espModifiers, function() {});
     return cache.prefs;
 }
 
-function sendRequestToAllTabs(req){
+function sendRequestToAllTabs(req) {
     chrome.windows.getAll({populate: true}, function(windows) {
         var w_len = windows.length;
         for (i = 0; i < w_len; i++)
@@ -340,7 +340,7 @@ function sendRequestToAllTabs(req){
             var t_len = windows[i].tabs.length;
             for (j = 0; j < t_len; j++)
             {
-                chrome.tabs.sendRequest( windows[i].tabs[j].id, req, function(response){} );
+                chrome.tabs.sendRequest(windows[i].tabs[j].id, req, function(response) {});
             }
         }
     });
@@ -359,15 +359,15 @@ function copyToClipboard(text) {
 // take a screenshot of the current page
 function takeScreenshot() {
     // code from Samples (http://code.google.com/chrome/extensions/samples.html)
-    chrome.tabs.captureVisibleTab(null, {format: "png"}, function(img) {
+    chrome.tabs.captureVisibleTab(null, {format: 'png'}, function(img) {
         var screenshotUrl = img;
         var viewTabUrl = [chrome.extension.getURL('screenshot.html'), '?id=', cache.screenshotId++].join('');
         // create a new page and display the image
-        chrome.tabs.create({url: viewTabUrl}, function(tab){
+        chrome.tabs.create({url: viewTabUrl}, function(tab) {
             var targetId = tab.id;
-            
+
             var addSnapshotImageToTab = function(tabId, changedProps) {
-              if (tabId != targetId || changedProps.status != "complete")
+              if (tabId != targetId || changedProps.status != 'complete')
                 return;
               chrome.tabs.onUpdated.removeListener(addSnapshotImageToTab);
               var views = chrome.extension.getViews();

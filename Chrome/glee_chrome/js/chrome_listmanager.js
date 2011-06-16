@@ -2,18 +2,18 @@
 
 Glee.ListManager = {
     items: null,
-    
+
     box: null,
-    
+
     searchField: null,
-    
+
     selected: null,
-    
+
     currentIndex: null,
-    
+
     // method to be called once an action is executed on any item
     callback: null,
-    
+
     openBox: function(data, callback) {
         this.callback = callback;
         this.items = data;
@@ -24,15 +24,15 @@ Glee.ListManager = {
         this.createSearchField();
         this.createList();
         this.initKeyBindings();
-        this.box.fadeIn(150, function(){
-            setTimeout(function(){
+        this.box.fadeIn(150, function() {
+            setTimeout(function() {
                 Glee.ListManager.currentIndex = -1;
                 Glee.ListManager.selectSearchField();
             }, 0);
         });
     },
-    
-    
+
+
     closeBox: function(returnFocus, callback) {
         this.box.fadeOut(150, function() {
             Glee.ListManager.box.html('');
@@ -45,33 +45,33 @@ Glee.ListManager = {
                 callback();
         });
     },
-    
+
     createBox: function() {
         this.box = $("<div id='gleeListManager' ></div>");
         this.box.addClass(Glee.options.theme)
         .appendTo(document.body);
     },
-    
+
     exists: function() {
         if (this.box)
             return true;
         else
             return false;
     },
-    
+
     applyTheme: function() {
         if (this.exists()) {
             this.resetTheme;
             this.box.addClass(Glee.options.theme);
         }
     },
-    
+
     resetTheme: function() {
-        this.box.removeClass(Glee.defaults.themes.join(" "));
+        this.box.removeClass(Glee.defaults.themes.join(' '));
     },
-    
+
     initKeyBindings: function() {
-        $('#gleeListSearchField, .gleeListItem').bind('keydown', function(e){
+        $('#gleeListSearchField, .gleeListItem').bind('keydown', function(e) {
             if (e.keyCode == 27) // ESC
             {
                 Glee.ListManager.closeBox(true);
@@ -100,10 +100,10 @@ Glee.ListManager = {
                 Glee.ListManager.openItem();
             }
         });
-        $('#gleeListSearchField').bind('keyup', function(e){
+        $('#gleeListSearchField').bind('keyup', function(e) {
             Glee.ListManager.refreshList();
         });
-        $('.gleeListItem').bind('keydown', function(e){
+        $('.gleeListItem').bind('keydown', function(e) {
             if (e.keyCode == 8 || e.keyCode == 67) //delete on mac/backspace or c
             {
                 e.preventDefault();
@@ -116,12 +116,12 @@ Glee.ListManager = {
             }
         });
     },
-    
+
     createSearchField: function() {
         this.searchField = $("<input id='gleeListSearchField' type='text' />");
         this.box.append(this.searchField);
     },
-    
+
     createList: function() {
         var listDIV = $('<div id="gleeList"></div>');
         var len = this.items.length;
@@ -132,14 +132,14 @@ Glee.ListManager = {
             if (this.items[i].title)
                 item.html(this.items[i].title);
             else
-                item.html("Untitled");
+                item.html('Untitled');
             listDIV.append(item);
         }
         this.box.append(listDIV);
     },
-    
+
     refreshList: function() {
-        var query = this.searchField.attr("value");
+        var query = this.searchField.attr('value');
         var listItems = $('.gleeListItem');
         var len = listItems.length;
         for (var i = 0; i < len; i++)
@@ -152,43 +152,43 @@ Glee.ListManager = {
         this.currentIndex = -1;
         this.selected = $('.gleeListItem:visible')[0];
     },
-    
+
     getSelectedItemIndex: function() {
         var idString = this.selected.id;
         return idString.substring(8, idString.length);
     },
-    
+
     hideFromList: function(index) {
         $($('.gleeListItem')[index])
-        .css("display", "none");
+        .css('display', 'none');
     },
-    
+
     showInList: function(index) {
         $($('.gleeListItem')[index])
-        .css("display", "block");
+        .css('display', 'block');
     },
-    
+
     selectSearchField: function() {
         this.selected = $('.gleeListItem:visible')[0];
-        setTimeout(function(){
+        setTimeout(function() {
                 Glee.ListManager.searchField.focus();
         },0);
     },
-    
+
     select: function(index) {
         if (index == -1) return;
         this.selected = $('.gleeListItem:visible')[index];
-        setTimeout(function(){
+        setTimeout(function() {
                 Glee.ListManager.selected.focus();
         },0);
-        $(this.selected).addClass("gleeListItemHover");
+        $(this.selected).addClass('gleeListItemHover');
     },
-    
+
     deselect: function(index) {
         if (index == -1) return;
         $($('.gleeListItem:visible')[index]).removeClass('gleeListItemHover');
     },
-    
+
     getNextItem: function() {
         this.deselect(this.currentIndex);
         var listLen = $('.gleeListItem:visible').length;
@@ -203,7 +203,7 @@ Glee.ListManager = {
             this.select(this.currentIndex);
         }
     },
-    
+
     getPreviousItem: function() {
         this.deselect(this.currentIndex);
         var listLen = $('.gleeListItem:visible').length;
@@ -217,31 +217,31 @@ Glee.ListManager = {
             this.currentIndex = listLen - 1;
         else
             this.currentIndex -= 1;
-            
+
         this.select(this.currentIndex);
     },
-    
+
     removeItem: function() {
         var itemIndex = this.getSelectedItemIndex();
         var item = this.items[itemIndex];
         $(Glee.ListManager.selected)
         .animate({
-            height: "0",
+            height: '0',
             paddingTop: 0,
             paddingBottom: 0
         }, 200,
-        function(){
+        function() {
             $(Glee.ListManager.selected).remove();
             Glee.ListManager.currentIndex -= 1;
             Glee.ListManager.getNextItem();
         });
-        this.callback("remove", item);
+        this.callback('remove', item);
     },
-    
+
     openItem: function() {
         var item = this.items[Glee.ListManager.getSelectedItemIndex()];
-        this.closeBox(true, function(){
-            Glee.ListManager.callback("open", item);
+        this.closeBox(true, function() {
+            Glee.ListManager.callback('open', item);
         });
     }
-}
+};

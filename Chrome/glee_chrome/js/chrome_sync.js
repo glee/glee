@@ -1,6 +1,6 @@
-/** 
+/**
  * Sync for chrome extensions
- * 
+ *
  * dependencies: bookmark.js
  *
  * Copyright (c) 2010 Ankit Ahuja
@@ -13,7 +13,7 @@
 // DATA SOURCE is a JSON object in background.html which stores your data.
 
 // Extension name. used to create titles for bookmark / containing folder
-var syncName = "gleebox";
+var syncName = 'gleebox';
 
 // method to be called when sync occurs. Updated JSON data returned from the bookmark is passed to this method
 var onSync = updatePreferencesLocally;
@@ -39,8 +39,8 @@ var onMerge = mergePreferencesLocally;
 // bookmark's id in which data is stored
 var syncId;
 var syncFolderId;
-var syncBookmarkName = syncName + "_data";
-var syncURL = "http://" + syncName + "/?data=";
+var syncBookmarkName = syncName + '_data';
+var syncURL = 'http://' + syncName + '/?data=';
 
 // to prevent sync() from getting called when saveSyncData() changes bookmark url
 var saveSyncDataWasCalled = false;
@@ -115,17 +115,17 @@ function loadSyncData(callback) {
                 // iterate through all the surplus bookmarks and merge data from them
                 var len = bookmarks.length;
                 for (var i = 1; i < len; i++) {
-                    
+
                     if (onMerge && url != bookmarks[i].url)
                         url = getURLFromData(onMerge(getDataFromURL(bookmarks[i].url), getDataFromURL(url)));
-                        
+
                     if (bookmarks[i].parentId != bookmark.parentId)
                         removeBookmarkTree(bookmarks[i].parentId);
                     else
                         removeBookmark(bookmarks[i].id);
                 }
                 saveSyncDataWasCalled = true;
-                saveBookmark(syncId, url, function(){
+                saveBookmark(syncId, url, function() {
                     saveSyncDataWasCalled = false;
                 });
             }
@@ -150,13 +150,13 @@ function saveSyncData(data) {
             });
         }
         // create folder to contain the bookmark
-        createBookmark(syncName + "Sync", null, null, function(folder) {
+        createBookmark(syncName + 'Sync', null, null, function(folder) {
             create(folder.id);
         });
     }
     else {
         saveSyncDataWasCalled = true;
-        saveBookmark(syncId, url, function(bookmark){
+        saveBookmark(syncId, url, function(bookmark) {
             saveSyncDataWasCalled = false;
             // some develish power deleted the bookmark. reset syncId and create a new bookmark
             if (!bookmark) {
@@ -177,13 +177,13 @@ function loadSyncId() {
 
 // returns json object from url of the form http://syncName?data={...}
 function getDataFromURL(url) {
-    if (!url || url == "")
+    if (!url || url == '')
         return null;
-    var jsonString = unescape(url.replace(syncURL, ""));
+    var jsonString = unescape(url.replace(syncURL, ''));
     try {
         return JSON.parse(jsonString);
     }
-    catch(e) {
+    catch (e) {
         return null;
     }
 }
@@ -191,11 +191,11 @@ function getDataFromURL(url) {
 // returns url of the form http://syncName?data={...}
 // takes json string or object as input
 function getURLFromData(data) {
-    if (typeof data != "string") {
+    if (typeof data != 'string') {
         try {
             data = JSON.stringify(data);
         }
-        catch(e) {
+        catch (e) {
             return null;
         }
     }

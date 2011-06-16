@@ -5,7 +5,7 @@
   * Dual licensed under GPL and MIT licenses.
  **/
 
-var SelectorGenerator =  {
+var SelectorGenerator = {
     generate: function(el, granularityLevel) {
             if (!el)
                 return null;
@@ -17,31 +17,31 @@ var SelectorGenerator =  {
             else
                 return this.inspect(el, 0);
     },
-    
+
     // inspect an element and return a CSS selector for it. this is the default mode
     inspect: function(el, level) {
         var elId = el.attr('id');
-        var elClass = $.trim(el.attr("class").replace('GleeHL', ''));
-        
+        var elClass = $.trim(el.attr('class').replace('GleeHL', ''));
+
         if (elClass.length != 0)
         {
-            var classes = elClass.split(" ");
+            var classes = elClass.split(' ');
             var len = classes.length;
             var response = el[0].tagName.toLowerCase();
 
             for (var i = 0; i < len; i++)
-                response += "." + classes[i];
+                response += '.' + classes[i];
 
             return response;
         }
         if (elId.length != 0)
         {
-            return "#" + elId;
+            return '#' + elId;
         }
-        
+
         // don't go beyond 2 levels up
         if (level < 2)
-            return this.inspect(el.parent(), level + 1) + " " + el[0].tagName.toLowerCase();
+            return this.inspect(el.parent(), level + 1) + ' ' + el[0].tagName.toLowerCase();
         else
             return el[0].tagName.toLowerCase();
     },
@@ -49,23 +49,23 @@ var SelectorGenerator =  {
     inspectHigh: function(el, level) {
         var elId = el.attr('id');
         if (elId.length != 0)
-            return "#" + elId;
+            return '#' + elId;
 
-        var elClass = $.trim(el.attr("class").replace('GleeHL', ''));
+        var elClass = $.trim(el.attr('class').replace('GleeHL', ''));
         var elTag = el[0].tagName.toLowerCase();
         var val;
 
         if (level < 1)
         {
-            val = this.inspectHigh(el.parent(), level + 1) + " " + elTag;
+            val = this.inspectHigh(el.parent(), level + 1) + ' ' + elTag;
             if (elClass.length != 0)
-                val += "." + elClass;
+                val += '.' + elClass;
         }
         else
         {
             val = elTag;
             if (elClass.length != 0)
-                val += "." + elClass;
+                val += '.' + elClass;
         }
         return val;
     },

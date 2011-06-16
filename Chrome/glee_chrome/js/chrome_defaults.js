@@ -4,10 +4,10 @@ function getDefaultPreferences() {
     var prefs = {
         size: 1,
         status: 1,
-        search_engine: "http://www.google.com/search?q=",
-        command_engine: "yubnub",
-        quix_url: "http://quixapp.com/quix.txt",
-        theme: "GleeThemeDefault",
+        search_engine: 'http://www.google.com/search?q=',
+        command_engine: 'yubnub',
+        quix_url: 'http://quixapp.com/quix.txt',
+        theme: 'GleeThemeDefault',
         bookmark_search: 0,
         scroll_animation: 1,
         tab_shortcut_status: 1,
@@ -24,18 +24,18 @@ function getDefaultPreferences() {
 }
 
 function getDefaultDisabledUrls() {
-    return ["mail.google.com", "wave.google.com", "mail.yahoo.com"];
+    return ['mail.google.com', 'wave.google.com', 'mail.yahoo.com'];
 }
 
 function getDefaultESP() {
     var esp = [
     {
-        url: "google.com/search",
-        selector: "h3:not(ol.nobr>li>h3),a:contains(Next)"
+        url: 'google.com/search',
+        selector: 'h3:not(ol.nobr>li>h3),a:contains(Next)'
     },
     {
-        url: "bing.com/search",
-        selector: "div.sb_tlst"
+        url: 'bing.com/search',
+        selector: 'div.sb_tlst'
     }];
     return esp;
 }

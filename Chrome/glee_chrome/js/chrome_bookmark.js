@@ -13,7 +13,7 @@ function createBookmark(name, url, parentId, callback) {
         };
         if (url)
             properties.url = url;
-        
+
         chrome.bookmarks.create(properties, callback);
     }
     if (!parentId)
@@ -31,7 +31,7 @@ function loadBookmark(id, title, callback) {
         chrome.bookmarks.get(id, callback);
         return;
     }
-    
+
     if (title) {
         chrome.bookmarks.search(title, function(bookmarks) {
             callback(bookmarks);
