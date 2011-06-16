@@ -189,11 +189,6 @@ var Glee = {
             description: 'Play/Pause video (currently only supports videos on YouTube)'
         },
         {
-            name: 'ext',
-            method: 'viewExtensions',
-            description: 'View the Extensions page'
-        },
-        {
             name: 'down',
             method: 'viewDownloads',
             description: 'View the Downloads page'
@@ -210,13 +205,23 @@ var Glee = {
         },
         {
             name: 'webstore',
-            method: 'viewWebstore',
+            method: 'viewWebStore',
+            description: 'Open the Chrome Web Store'
+        },
+        {
+            name: 'ext',
+            method: 'viewWebStore',
             description: 'Open the Chrome Web Store'
         },
         {
             name: 'snap',
             method: 'takeScreenshot',
             description: 'Take a screenshot of this page'
+        },
+        {
+            name: 'developer',
+            method: 'viewDeveloperDashboard',
+            description: 'Open Chrome Web Store Developer Dashboard'
         }
     ],
 
@@ -797,19 +802,18 @@ var Glee = {
             clearTimeout(this.timer);
     },
 
-    execCommand: function(command, openInNewTab) {
+    execCommand: function(command, newtab) {
         // call the method
         var method = command.method;
         // set text
         this.setState(command.statusText, 'msg');
 
-        if (method.indexOf('Browser.') == 0)
-        {
+        if (method.indexOf('Browser.') === 0) {
             method = method.slice(7);
-            Glee.Browser[method](openInNewTab);
+            Glee.Browser[method](newtab);
         }
         else
-            Glee[method](openInNewTab);
+            Glee[method](newtab);
     },
 
     getCommandEngineSyntax: function(c) {

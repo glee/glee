@@ -1,52 +1,39 @@
 // Chrome specific Page commands
 
-// ext: Open the Extensions page
-Glee.viewExtensions = function(newTab) {
-    if (newTab)
-        Glee.Browser.openPageIfNotExist('chrome://extensions/');
-    else
-        Glee.Browser.openPageInThisTab('chrome://extensions/');
-};
-
 // down: Open the Downloads page
-Glee.viewDownloads = function(newTab) {
-    if (newTab)
-        Glee.Browser.openPageIfNotExist('chrome://downloads/');
-    else
-        Glee.Browser.openPageInThisTab('chrome://downloads/');
+Glee.viewDownloads = function(newtab) {
+    Glee.Browser.openURL('chrome://downloads', newtab, true);
+    if (newtab) Glee.empty();
 };
 
 // plugins: Open the Plugins page
-Glee.viewPlugins = function(newTab) {
-    if (newTab)
-        Glee.Browser.openPageIfNotExist('chrome://plugins');
-    else
-        Glee.Browser.openPageInThisTab('chrome://plugins');
+Glee.viewPlugins = function(newtab) {
+    Glee.Browser.openURL('chrome://plugins', newtab, true);
+    if (newtab) Glee.empty();
 };
 
 // flags: Open the Flags page
-Glee.viewFlags = function(newTab) {
-    if (newTab)
-        Glee.Browser.openPageIfNotExist('chrome://flags/');
-    else
-        Glee.Browser.openPageInThisTab('chrome://flags/');
+Glee.viewFlags = function(newtab) {
+    Glee.Browser.openURL('chrome://flags', newtab, true);
+    if (newtab) Glee.empty();
 };
 
-// webstore: Open the Chrome Webstore
-Glee.viewWebstore = function(newTab) {
-    if (newTab)
-        Glee.Browser.openPageIfNotExist('https://chrome.google.com/webstore');
-    else
-        Glee.Browser.openPageInThisTab('https://chrome.google.com/webstore');
+// ext, webstore: Open the Chrome Web Store
+Glee.viewWebStore = function(newtab) {
+    Glee.Browser.openURL('https://chrome.google.com/webstore', newtab, true);
+    if (newtab) Glee.empty();
 };
+
+// developer: View Developer Dashboard for Chrome Web Store
+Glee.viewDeveloperDashboard = function(newtab) {
+    Glee.Browser.openURL('https://chrome.google.com/webstore/developer/dashboard', newtab, true);
+    if (newtab) Glee.empty();
+}
 
 // options: Open the Options page for gleeBox
-Glee.displayOptionsPage = function(newTab) {
-    var url = chrome.extension.getURL('options.html');
-    if (newTab)
-        Glee.Browser.openPageIfNotExist(url);
-    else
-        Glee.Browser.openPageInThisTab(url);
+Glee.displayOptionsPage = function(newtab) {
+    Glee.Browser.openURL(chrome.extension.getURL('options.html'), newtab, true);
+    if (newtab) Glee.empty();
 };
 
 // snap: Take a screenshot of the current page

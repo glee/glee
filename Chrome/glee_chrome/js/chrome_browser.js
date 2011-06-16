@@ -27,15 +27,14 @@ var optionStrings = {
 Glee.Browser.isBookmark = function(text) {
     //send request to search the bookmark tree for the bookmark whose title matches text
     chrome.extension.sendRequest({ value: 'getBookmarks', text: text }, function(response) {
-        if (response.bookmarks.length != 0)
-        {
+        if (response.bookmarks.length != 0) {
             Glee.bookmarks = response.bookmarks;
             Glee.bookmarks[Glee.bookmarks.length] = text;
             Glee.currentResultIndex = 0;
             Glee.setState(0, 'bookmark');
         }
-        else // search it
-        {
+        // search it
+        else {
             Glee.setState(text, 'search');
         }
     });
@@ -44,7 +43,6 @@ Glee.Browser.isBookmark = function(text) {
 Glee.Browser.getBookmarklet = function(text) {
     // sending request to get the first matched bookmarklet
     chrome.extension.sendRequest({ value: 'getBookmarklet', text: text}, function(response) {
-
         if (response.bookmarklet)
             Glee.setState(response.bookmarklet, 'bookmarklet');
         else
@@ -94,39 +92,36 @@ Glee.Browser.updateOptions = function(response) {
     Glee.applyOptions();
 };
 
-Glee.Browser.openNewTab = function(url, selected) {
-    //sending request to background.html to create a new tab
-    chrome.extension.sendRequest({ value: 'createTab', url: url, selected: selected }, function(response) {
-    });
-};
+Glee.Browser.openURL = function(url, newtab, selected) {
+    if (newtab)
+        Glee.Browser.openURLInNewTab(url, selected);
+    else
+        chrome.extension.sendRequest({value: 'openInThisTab', url: url}, function(response) {});
+}
 
-Glee.Browser.openPageInNewTab = function(url) {
-    Glee.empty();
-    Glee.Browser.openNewTab(url, true);
-};
-
-Glee.Browser.openPageIfNotExist = function(url) {
-    chrome.extension.sendRequest({ value: 'getTabs' }, function(response) {
-       var len = response.tabs.length;
-       for (var i = 0; i < len; i++)
-       {
-           if (response.tabs[i].url == url)
-           {
-                Glee.empty();
-                Glee.Browser.moveToTab(response.tabs[i]);
-                return;
+Glee.Browser.openURLInNewTab = function(url, selected) {
+    if (selected) {
+        chrome.extension.sendRequest({value: 'getTabs'}, function(response) {
+           var len = response.tabs.length;
+           for (var i = 0; i < len; i++) {
+               // if found, set focus to tab
+               if (response.tabs[i].url === url) {
+                    Glee.empty();
+                    Glee.Browser.moveToTab(response.tabs[i]);
+                    return;
+               }
            }
-       }
-       Glee.Browser.openPageInNewTab(url);
-    });
-};
-
-// required for URLs beginning with 'chrome://'
-Glee.Browser.openPageInThisTab = function(url) {
-    Glee.empty();
-    chrome.extension.sendRequest({ value: 'openInThisTab', url: url }, function(response) {
-    });
-};
+           // not found, open in a new tab
+           chrome.extension.sendRequest({value: 'createTab', url: url, selected: selected}, function(response) {
+           });
+        });
+    }
+    else {
+        // open in a new tab
+        chrome.extension.sendRequest({value: 'createTab', url: url, selected: selected}, function(response) {
+        });
+    }
+}
 
 Glee.Browser.setOption = function(option, value) {
     chrome.extension.sendRequest({ value: 'updateOption', option: option, option_value: value }, function(response) {
@@ -171,8 +166,7 @@ Glee.Browser.moveToTab = function(tab) {
 // adding a listener to respond to requests from background.html to update the status/settings
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
-        if (request.value === 'initStatus')
-        {
+        if (request.value === 'initStatus') {
             if (request.status && Glee.shouldRunOnCurrentUrl())
                 Glee.status = true;
             else

@@ -1,24 +1,20 @@
 // Glee Page (!) Commands
 
 // help: Opens the gleeBox manual page in a new tab
-Glee.help = function(newTab) {
-    if (newTab)
-        Glee.Browser.openPageIfNotExist('http://thegleebox.com/manual.html');
-    else
-        location.href = 'http://thegleebox.com/manual.html';
+Glee.help = function(newtab) {
+    Glee.Browser.openURL('http://thegleebox.com/manual.html', newtab, true);
+    if (newtab) Glee.empty();
 };
 
 // tipjar: Opens the gleeBox TipJar site
-Glee.tipjar = function(newTab) {
-    if (newTab)
-        Glee.Browser.openPageIfNotExist('http://tipjar.thegleebox.com/');
-    else
-        location.href = 'http://tipjar.thegleebox.com/';
+Glee.tipjar = function(newtab) {
+    Glee.Browser.openURL('http://tipjar.thegleebox.com/', newtab, true);
+    if (newtab) Glee.empty();
 };
 
 // rss: Opens the rss feed of page in google reader
-Glee.getRSSLink = function(newTab) {
-    //code via bookmark for google reader
+Glee.getRSSLink = function(newtab) {
+    // code via bookmark for google reader
      var b = document.body;var GR________bookmarklet_domain = 'http://www.google.com';if (b && !document.xmlVersion) {void(z = document.createElement('script'));void(z.src = 'http://www.google.com/reader/ui/subscribe-bookmarklet.js');void(b.appendChild(z));}else {location = 'http://www.google.com/reader/view/feed/' + encodeURIComponent(location.href)}
 };
 
@@ -44,13 +40,11 @@ Glee.inspectPage = function() {
     LinkReaper.reapLinks(query);
     Glee.selectedElement = LinkReaper.getFirst();
     Glee.scrollToElement(Glee.selectedElement);
-    if (LinkReaper.selectedLinks.length > 1)
-    {
+    if (LinkReaper.selectedLinks.length > 1) {
         Glee.setState('Tab through and select the element you want to inspect and press Enter', 'msg');
         Glee.inspectMode = true;
     }
-    else
-    {
+    else {
         result = SelectorGenerator.generate(Glee.selectedElement);
         // if a valid selector is returned
         if (result) {
@@ -67,16 +61,15 @@ Glee.inspectPage = function() {
 };
 
 // share: Share current page in mail/twitter/facebook. Makes use of the AddThis service
-Glee.sharePage = function(newTab) {
+Glee.sharePage = function(newtab) {
     var site = Glee.value().substring(6).replace(' ', '');
     var loc = null;
     // get description
     var desc = $('meta[name=description],meta[name=Description],meta[name=DESCRIPTION]').attr('content');
-    if ((!desc) || (desc == ''))
-        {
-            mailDesc = '';
-            desc = '';
-        }
+    if ((!desc) || (desc == '')) {
+        mailDesc = '';
+        desc = '';
+    }
     else
         mailDesc = '  -  ' + desc;
 
@@ -96,8 +89,7 @@ Glee.sharePage = function(newTab) {
     else if (site === 'reader')
         site = 'googlereader';
 
-    switch (site)
-    {
+    switch (site) {
         case 'g':
         case 'gmail':
             loc = 'https://mail.google.com/mail/?view=cm&ui=1&tf=0&to=&fs=1&su='
@@ -125,7 +117,7 @@ Glee.sharePage = function(newTab) {
             break;
         case 't':
         case 'twitter':
-            Glee.sendTweet(newTab);
+            Glee.sendTweet(newtab);
             return;
         case '':
             loc = 'http://api.addthis.com/oexchange/0.8/offer?url='
@@ -141,10 +133,9 @@ Glee.sharePage = function(newTab) {
                 + '&title='
                 + enTitle;
     }
-    if (loc)
-    {
-        if (newTab)
-            Glee.Browser.openPageInNewTab(loc);
+    if (loc) {
+        if (newtab)
+            Glee.Browser.openURL(loc, true, true);
         else
             location.href = loc;
     }
@@ -154,26 +145,12 @@ Glee.sharePage = function(newTab) {
 Glee.makeReadable = function() {
     // code from the Readability bookmarklet (http://lab.arc90.com/experiments/readability/)
     location.href = 'javascript:(%28function%28%29%7Bwindow.baseUrl%3D%27https%3A//www.readability.com%27%3Bwindow.readabilityToken%3D%27%27%3Bvar%20s%3Ddocument.createElement%28%27script%27%29%3Bs.setAttribute%28%27type%27%2C%27text/javascript%27%29%3Bs.setAttribute%28%27charset%27%2C%27UTF-8%27%29%3Bs.setAttribute%28%27src%27%2CbaseUrl%2B%27/bookmarklet/read.js%27%29%3Bdocument.documentElement.appendChild%28s%29%3B%7D%29%28%29);';
-
-    setTimeout(function() {
-        // reinitialize gleeBox
-        Glee.init();
-        // reinject CSS
-        injectCSS(highlight_css);
-    }, 3000);
 };
 
 // kindle: Send the current page to your Kindle using Readability
 Glee.sendToKindle = function() {
-	//code from the Readability bookmarklets (http://www.readability.com/bookmarklet/)
-	location.href = 'javascript:(%28function%28%29%7Bwindow.baseUrl%3D%27https%3A//www.readability.com%27%3Bwindow.readabilityToken%3D%27%27%3Bvar%20s%3Ddocument.createElement%28%27script%27%29%3Bs.setAttribute%28%27type%27%2C%27text/javascript%27%29%3Bs.setAttribute%28%27charset%27%2C%27UTF-8%27%29%3Bs.setAttribute%28%27src%27%2CbaseUrl%2B%27/bookmarklet/send-to-kindle.js%27%29%3Bdocument.documentElement.appendChild%28s%29%3B%7D%29%28%29)';
-
-    setTimeout(function() {
-        // reinitialize gleeBox
-        Glee.init();
-        // reinject CSS
-        injectCSS(highlight_css);
-    }, 3000);
+    //code from the Readability bookmarklets (http://www.readability.com/bookmarklet/)
+    location.href = 'javascript:(%28function%28%29%7Bwindow.baseUrl%3D%27https%3A//www.readability.com%27%3Bwindow.readabilityToken%3D%27%27%3Bvar%20s%3Ddocument.createElement%28%27script%27%29%3Bs.setAttribute%28%27type%27%2C%27text/javascript%27%29%3Bs.setAttribute%28%27charset%27%2C%27UTF-8%27%29%3Bs.setAttribute%28%27src%27%2CbaseUrl%2B%27/bookmarklet/send-to-kindle.js%27%29%3Bdocument.documentElement.appendChild%28s%29%3B%7D%29%28%29)';
 };
 
 // shorten: Shortens the current page's URL using bit.ly and displays the shortened URL in gleeBox
@@ -193,8 +170,7 @@ Glee.shortenURL = function() {
 Glee.controlVideo = function() {
     var yPlayer = document.getElementById('movie_player'); //for YouTube
     var func = Glee.value().substring(2).replace(' ', '');
-    if (yPlayer)
-    {
+    if (yPlayer) {
         setTimeout(function() {
             Glee.scrollToElement(yPlayer);
         }, 0);
@@ -237,56 +213,58 @@ Glee.setOptionValue = function() {
     var eqPos = input.indexOf('=');
     if (eqPos == -1)
         valid = false;
-    else
-    {
+    else {
         var option = input.substring(0, eqPos).replace(/\s+|\s+/g, '');
         var value = $.trim(input.substring(eqPos + 1));
     }
-    if (option == 'vision') {
-        //TODO: implement for all protocols
+
+    if (option === 'vision') {
+        // TODO: implement for all protocols
         var url = location.href.replace('http://', '');
-        //remove trailing / (if present)
+        // remove trailing / (if present)
         if (url[url.length - 1] == '/')
             url = url.substring(0, url.length - 1);
         value = {url: url, selector: value};
     }
-    if (option == 'visions+')
-    {
+    if (option === 'visions+') {
         var separator = value.indexOf(':');
-        if ($.inArray($.trim(value.substring(0, separator)), ['http', 'https']) != -1)
-        {
+
+        if ($.inArray($.trim(value.substring(0, separator)), ['http', 'https']) != -1) {
             separator = separator + 1 + value.substring(separator + 1, value.length).indexOf(':');
         }
+
         var url = $.trim(value.substring(0, separator));
         var sel = value.substring(separator + 1, value.length);
-        if (url == '$')
-        {
+        if (url === '$') {
             url = location.href.replace('http://', '');
             url = (url[url.length - 1] == '/') ? url.substring(0, url.length - 1) : url;
         }
         value = {url: url, selector: sel};
     }
-    if (option == 'scrapers+')
-    {
+    if (option === 'scrapers+') {
         var separator = value.indexOf(':');
         var cmd = $.trim(value.substring(0, separator));
         var sel = value.substring(separator + 1, value.length);
         value = {command: cmd, selector: sel};
     }
 
-    if (option == '' || $.inArray(option, validOptions) == -1)
+    if (option === '' || $.inArray(option, validOptions) == -1)
         valid = false;
-    else if ((option == 'scroll' || option == 'hyper' || option == 'bsearch' || option == 'esp') && $.inArray(value, ['on', 'off']) == -1)
+
+    else if ((option === 'scroll' || option === 'hyper' || option === 'bsearch' || option === 'esp')
+            && $.inArray(value, ['on', 'off']) == -1)
         valid = false;
-    else if (option == 'size' && $.inArray(value, ['small', 'medium', 'med', 'large']) == -1)
+
+    else if (option === 'size' && $.inArray(value, ['small', 'medium', 'med', 'large']) == -1)
         valid = false;
-    else if ((option == 'position' || option == 'pos') && $.inArray(value, ['top', 'mid', 'middle', 'bottom']) == -1)
+
+    else if ((option === 'position' || option === 'pos') && $.inArray(value, ['top', 'mid', 'middle', 'bottom']) == -1)
         valid = false;
-    else if (option == 'theme' && $.inArray(value, ['default', 'white', 'console', 'greener', 'ruby', 'glee']) == -1)
+
+    else if (option === 'theme' && $.inArray(value, ['default', 'white', 'console', 'greener', 'ruby', 'glee']) == -1)
         valid = false;
     // if failed validity test, return
-    if (!valid)
-    {
+    if (!valid) {
         Glee.setState('Invalid !set syntax. Please refer manual using !help command', 'msg');
         return;
     }
