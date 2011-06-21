@@ -230,8 +230,13 @@ var LinkReaper = {
         var tag = el.tagName.toLowerCase();
         var $el = $(el);
 
-        if (tag === 'img')
-            return $.trim($el.attr('alt').toLowerCase());
+        if (tag === 'img') {
+            var altText = $el.attr('alt');
+            if (altText != undefined)
+                return $.trim(altText.toLowerCase());
+            else
+                return '';
+        }
 
         else if (tag === 'input' && ($el.attr('type') === 'button' || $el.attr('type') === 'submit'))
             return $.trim($el.attr('value').toLowerCase());

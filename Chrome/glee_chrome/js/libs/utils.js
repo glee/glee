@@ -282,7 +282,7 @@ var Utils = {
 
         var textarea = $('<textarea>', {
             value: value,
-            class: options.editFieldClass
+            'class': options.editFieldClass
         })
         .width(elWidth)
         .height(height)

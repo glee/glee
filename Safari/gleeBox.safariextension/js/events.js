@@ -93,7 +93,10 @@ Glee.Events = {
             // if not empty
             if (value != '') {
                 // determine if a DOM search is required
-                if (value.indexOf(Glee.lastQuery) != -1 && Glee.lastQuery && !Glee.selectedElement && !Glee.isSearching)
+                if (value.indexOf(Glee.lastQuery) != -1 &&
+                Glee.lastQuery &&
+                !Glee.selectedElement &&
+                !Glee.isSearching)
                     Glee.isDOMSearchRequired = false;
                 else
                     Glee.isDOMSearchRequired = true;
@@ -174,7 +177,6 @@ Glee.Events = {
                 Glee.selectedElement = LinkReaper.getNext();
 
             Glee.scrollToElement(Glee.selectedElement);
-
             // do not update subtext in case of inspect command
             if (Glee.commandMode && Glee.inspectMode)
                 return;
@@ -225,15 +227,15 @@ Glee.Events = {
             Glee.setState('Enter Scraper Command', 'msg');
             return false;
         }
-        var len = Glee.scrapers.length;
 
+        var len = Glee.scrapers.length;
         for (var i = 0; i < len; i++) {
-            if (Glee.scrapers[i].command === value)
-            {
+            if (Glee.scrapers[i].command === value) {
                 Glee.initScraper(Glee.scrapers[i]);
                 return true;
             }
         }
+
         Glee.setState('Command not found', 'msg');
         return false;
     },
@@ -274,8 +276,9 @@ Glee.Events = {
         var len = Glee.commands.length;
 
         for (var i = 0; i < len; i++) {
-            if (trimVal === Glee.commands[i].name
-                && Glee[Glee.commands[i].method] != undefined) {
+            if (trimVal === Glee.commands[i].name &&
+                Glee[Glee.commands[i].method] != undefined)
+            {
                 Glee.setState(Glee.commands[i].description, 'msg');
                 Glee.URL = Glee.commands[i];
                 break;

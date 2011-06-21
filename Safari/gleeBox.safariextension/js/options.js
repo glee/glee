@@ -25,7 +25,7 @@ function addItem(type, value1, value2, shouldSave) {
 
     var container = $('<li>', {
        id: type + no,
-       className: type,
+       'class': type,
        tabIndex: 0
     });
 
@@ -34,27 +34,24 @@ function addItem(type, value1, value2, shouldSave) {
 
             var domainName = document.getElementById('add_domain');
 
-            if (!value1)
-            {
+            if (!value1) {
                 value1 = domainName.value;
                 domainName.value = '';
             }
 
-            if (validateURL(value1))
-            {
+            if (validateURL(value1)) {
                 listOfItems = document.getElementById('domains');
                 lastEl = document.getElementById('addDomainLI');
 
                 content = $('<span>', {
-                    className: 'domain-name',
+                    'class': 'domain-name',
                     html: value1
                 });
 
                 container.append(content);
 
-                if (shouldSave) {
+                if (shouldSave)
                     addURL(value1);
-                }
             }
 
             else
@@ -66,8 +63,7 @@ function addItem(type, value1, value2, shouldSave) {
             var scraperName = document.getElementById('add-scraper-name');
             var scraperSel = document.getElementById('add-scraper-selector');
 
-            if (!value1)
-            {
+            if (!value1) {
                 value1 = scraperName.value;
                 value2 = scraperSel.value;
                 scraperName.value = '';
@@ -80,19 +76,19 @@ function addItem(type, value1, value2, shouldSave) {
                 lastEl = document.getElementById('addScraper');
 
                 var contentName = $('<span>', {
-                    className: 'scraper-name',
+                    'class': 'scraper-name',
                     html: value1
                 });
 
                 var contentSelector = $('<span>', {
-                    className: 'scraper-sel selector',
+                    'class': 'scraper-sel selector',
                     html: value2
                 });
 
                 var prefix = $("<span class='scraper-prefix'>?</span>");
 
                 var separator = $('<div>', {
-                    className: 'separator'
+                    'class': 'separator'
                 });
 
                 container.append(prefix)
@@ -114,31 +110,29 @@ function addItem(type, value1, value2, shouldSave) {
             var espUrl = document.getElementById('add-esp-url');
             var espSel = document.getElementById('add-esp-selector');
 
-            if (!value1)
-            {
+            if (!value1) {
                 value1 = espUrl.value;
                 value2 = espSel.value;
                 espUrl.value = '';
                 espSel.value = '';
             }
 
-            if (validateEspModifier(value1, value2))
-            {
+            if (validateEspModifier(value1, value2)) {
                 listOfItems = document.getElementById('esp-modifiers');
                 lastEl = document.getElementById('addEspModifier');
 
                 var contentName = $('<span>', {
-                    className: 'esp-url',
+                    'class': 'esp-url',
                     html: value1
                 });
 
                 var contentSelector = $('<span>', {
-                    className: 'esp-sel selector',
+                    'class': 'esp-sel selector',
                     html: value2
                 });
 
                 var separator = $('<div>', {
-                    className: 'separator'
+                    'class': 'separator'
                 });
 
                 container.append(contentName)
@@ -155,7 +149,7 @@ function addItem(type, value1, value2, shouldSave) {
     }
 
     var closeButton = $('<a>', {
-        className: 'close-button',
+        'class': 'close-button',
         type: 'button',
         href: '#'
     })
@@ -207,8 +201,7 @@ function removeItem(e, type) {
 function updateItemIndexes(type) {
     var li = $('li.' + type);
     var len = li.length;
-    for (var i = 0; i < len; i++)
-    {
+    for (var i = 0; i < len; i++) {
         li[i].id = type + i;
     }
 }
@@ -216,8 +209,7 @@ function updateItemIndexes(type) {
 function filter(text) {
     var index1 = 0;
     var index2 = 0;
-    while (index1 != -1 || index2 != -1)
-    {
+    while (index1 != -1 || index2 != -1) {
         text = text.replace('&lt;', '<').replace('&gt;', '>');
         index1 = text.indexOf('&lt;');
         index2 = text.indexOf('&gt;');
@@ -351,9 +343,9 @@ function mergeSettings(a, b) {
                 break;
             }
         }
-        if (!found) {
+
+        if (!found)
             a.espModifiers.push(b.espModifiers[i]);
-        }
     }
 
     return a;
@@ -422,8 +414,7 @@ function initBackupPopup() {
 
     // add events
     $(document).keyup(function(e) {
-        if (e.keyCode === 27)
-        {
+        if (e.keyCode === 27) {
             var backupPopup = $('#popup');
             if (backupPopup.length != 0)
                 hideBackupPopup();
@@ -434,12 +425,10 @@ function initBackupPopup() {
         if (e.target.id === 'popup'
         || e.target.id === 'settingsText'
         || e.target.id === 'backupInfo'
-        || e.target.type === 'button') {
+        || e.target.type === 'button')
             return true;
-        }
 
         var backupPopup = $('#popup');
-
         if (backupPopup.length != 0)
             hideBackupPopup();
     });
@@ -474,13 +463,10 @@ function attachListeners() {
 
     // checkbox
     $('input[type=checkbox]').bind('change', function(e) {
-        if (IS_CHROME) {
+        if (IS_CHROME)
             saveOption(e.target.name, (e.target.value) ? 1 : 0);
-        }
-
-        else {
+        else
             saveOption(e.target.name, translateOptionValue(e.target.name, e.target.value));
-        }
     });
 
     // textfields
@@ -489,8 +475,7 @@ function attachListeners() {
         if (e.keyCode === 9)
             return true;
 
-        if (textfieldTimer)
-        {
+        if (textfieldTimer) {
             clearTimeout(textfieldTimer);
             textfieldTimer = null;
         }
@@ -567,10 +552,8 @@ function attachFilteringListeners() {
         filterScraper(e.target.value);
     })
 
-    .keyup(function(e)
-    {
-        if (e.keyCode === 27)
-        {
+    .keyup(function(e) {
+        if (e.keyCode === 27) {
             $(this).val('');
             filterScraper('');
         }
@@ -583,10 +566,8 @@ function attachFilteringListeners() {
         filterESP(e.target.value);
     })
 
-    .keyup(function(e)
-    {
-        if (e.keyCode === 27)
-        {
+    .keyup(function(e) {
+        if (e.keyCode === 27) {
             $(this).val('');
             filterESP('');
         }
@@ -641,8 +622,9 @@ $(document).ready(function() {
 
 // smooth scrolling using arrow keys
 window.addEventListener('keydown', function(e) {
-    if ((e.keyCode === 38 || e.keyCode === 40) && !Utils.elementCanReceiveUserInput(e.target))
-    {
+    if ((e.keyCode === 38 || e.keyCode === 40) &&
+    !Utils.elementCanReceiveUserInput(e.target)) {
+
         if (e.metaKey || e.ctrlKey || e.shiftKey)
             return true;
 
@@ -672,8 +654,8 @@ function editScraper($scraper) {
     var $scraperName = $scraper.find('.scraper-name');
     var $scraperSel = $scraper.find('.scraper-sel');
 
-    Utils.editElement($scraperSel);
-    Utils.editElement($scraperName);
+    Utils.editElement($scraperSel, {editFieldClass: 'gleebox-editing-field'});
+    Utils.editElement($scraperName, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
         var el = e.target;
@@ -706,8 +688,7 @@ function editDomain($domain) {
     $domain.addClass('selected');
 
     var $domainName = $domain.find('.domain-name');
-
-    Utils.editElement($domainName);
+    Utils.editElement($domainName, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
         var el = e.target;
@@ -741,9 +722,8 @@ function editESP($esp) {
 
     var $espURL = $esp.find('.esp-url');
     var $espSel = $esp.find('.esp-sel');
-
-    Utils.editElement($espSel);
-    Utils.editElement($espURL);
+    Utils.editElement($espSel, {editFieldClass: 'gleebox-editing-field'});
+    Utils.editElement($espURL, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
         var el = e.target;

@@ -210,8 +210,13 @@ var Glee = {
         },
         {
             name: 'ext',
-            method: 'viewWebStore',
-            description: 'Open the Chrome Web Store'
+            method: 'viewExtensions',
+            description: 'Open the Extensions Page'
+        },
+        {
+            name: 'extensions',
+            method: 'viewExtensions',
+            description: 'Open the Extensions Page'
         },
         {
             name: 'snap',
@@ -324,8 +329,7 @@ var Glee = {
     },
 
     open: function() {
-        if (!Glee.isVisible())
-        {
+        if (!Glee.isVisible()) {
             Glee.$searchBox.fadeIn(150, LinkReaper.cacheLinks);
             Glee.fireEsp();
         }
@@ -354,9 +358,8 @@ var Glee = {
         catch (e) {}
 
         // Hyper mode
-        if (Glee.options.status && Glee.options.hyperMode) {
+        if (Glee.options.status && Glee.options.hyperMode)
             Glee.getHyperized();
-        }
 
         if (Glee.options.outsideScrollingStatus)
             Glee.Events.attachOutsideScrollingListener();
@@ -372,8 +375,7 @@ var Glee = {
     },
 
     getHyperized: function() {
-        if (Glee.getEspSelector())
-        {
+        if (Glee.getEspSelector()) {
             Glee.open();
             Glee.lastQuery = null;
         }
@@ -550,6 +552,7 @@ var Glee = {
             $this = $(this);
             if (!Utils.isVisible(this))
                 return;
+
             LinkReaper.selectedLinks.push(this);
             LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
             $this.addClass(scraper.cssStyle);
@@ -566,8 +569,7 @@ var Glee = {
 
     setState: function(value, type) {
         // in case of element
-        if (type === 'el')
-        {
+        if (type === 'el') {
             // value is the element here
             if (value && value != undefined) {
                 var state = new ElementState(value);
@@ -580,14 +582,12 @@ var Glee = {
                 return true;
             }
 
-            else
-            {
+            else {
                 var text = this.value();
                 this.selectedElement = null;
 
                 // if it is a URL, open it
-                if (Utils.isURL(text))
-                {
+                if (Utils.isURL(text)) {
                     this.description('Go to ' + text, true);
                     var regex = new RegExp('((https?|ftp|file):((//)|(\\\\))+)');
                     if (!text.match(regex))
@@ -597,8 +597,7 @@ var Glee = {
                 }
 
                 // bookmark search, if enabled
-                else if (this.options.bookmarkSearchStatus)
-                {
+                else if (this.options.bookmarkSearchStatus) {
                     // emptying the bookmarks array
                     this.bookmarks = [];
                     this.Browser.isBookmark(text); // check if the text matches a bookmark
@@ -614,45 +613,39 @@ var Glee = {
             }
         }
 
-        // set state for bookmark
-        else if (type === 'bookmark') // value is the bookmark no. in Glee.bookmarks
-        {
+        // set state for bookmark. value is the bookmark no. in Glee.bookmarks
+        else if (type === 'bookmark') {
             this.description('Open bookmark (' + (value + 1) + ' of '+ (this.bookmarks.length - 1) + '): ' + this.bookmarks[value].title, true);
             this.setURL(this.bookmarks[value].url);
         }
 
-        // set state for bookmarklet
-        else if (type === 'bookmarklet') // value is the bookmarklet returned
-        {
+        // set state for bookmarklet. value is the bookmarklet returned
+        else if (type === 'bookmarklet') {
             this.description('Closest matching bookmarklet: ' + value.title + ' (press enter to execute)', true);
             this.setURL(value, '');
         }
 
-        // search web
-        else if (type === 'search') // value is the text query
-        {
+        // search web. value is the text query
+        else if (type === 'search') {
             this.description('Search for ' + value, true);
             this.setURL(Glee.options.searchEngineUrl + value);
         }
 
-        // display a message
-        else if (type === 'msg') // value is the message to be displayed
-        {
+        // display a message. value is the message to be displayed
+        else if (type === 'msg') {
             this.description(value);
             this.setURL('');
         }
 
         // return to default state.
-        else
-        {
+        else {
             this.description(Glee.defaults.nullStateMessage);
             this.setURL('');
         }
     },
 
     getNextBookmark: function() {
-        if (this.bookmarks.length > 1)
-        {
+        if (this.bookmarks.length > 1) {
             if (this.currentResultIndex == this.bookmarks.length - 1)
                 this.currentResultIndex = 0;
             else
@@ -669,8 +662,7 @@ var Glee = {
     },
 
     getPrevBookmark: function() {
-        if (this.bookmarks.length > 1)
-        {
+        if (this.bookmarks.length > 1) {
             if (this.currentResultIndex == 0)
                 this.currentResultIndex = this.bookmarks.length - 1;
             else
@@ -690,11 +682,12 @@ var Glee = {
         var url = document.location.href;
         var len = Glee.espModifiers.length;
         var sel = [];
-        for (var i = 0; i < len; i++)
-        {
+
+        for (var i = 0; i < len; i++) {
             if (url.indexOf(Glee.espModifiers[i].url) != -1)
                 sel[sel.length] = Glee.espModifiers[i].selector;
         }
+
         if (sel.length != 0)
             return sel.join(',');
         else // search for any default selector defined by meta tag in current page
@@ -706,8 +699,7 @@ var Glee = {
             return false;
         Glee.isEspRunning = true;
         var selStr = Glee.getEspSelector();
-        if (selStr)
-        {
+        if (selStr) {
             // Temporary scraper object
             var tempScraper = {
                 nullMessage: '',
@@ -732,8 +724,7 @@ var Glee = {
 
         var boxHeight = Glee.defaults.windowBottomDiff + (target.height() ? target.height() : 50);
 
-        if (target.length != 0)
-        {
+        if (target.length != 0) {
             var targetOffsetTop = target.offset().top;
 
             // if the element is above / below the current visible view, scroll
@@ -742,8 +733,7 @@ var Glee = {
                 scroll = true;
 
             // TODO: Set scroll to true if the element is overlapping with gleeBox
-            if (scroll)
-            {
+            if (scroll) {
                 // We keep the scroll such that the element stays a little away from
                 // the top.
                 var targetOffset = targetOffsetTop - 70;
@@ -782,7 +772,6 @@ var Glee = {
             Glee.isSearching = true;
             Glee.$searchActivity.html('searching');
         }
-
         else {
             Glee.isSearching = false;
             Glee.$searchActivity.html('');
@@ -817,12 +806,10 @@ var Glee = {
     },
 
     getCommandEngineSyntax: function(c) {
-        if (Glee.options.commandEngine === 'yubnub') {
+        if (Glee.options.commandEngine === 'yubnub')
             return 'http://yubnub.org/parser/parse?command=' + c;
-        }
-        else {
+        else
              return 'http://quixapp.com/go/?c=' + encodeURIComponent(c);
-        }
     },
 
     // add command to recently executed commands cache
@@ -830,21 +817,21 @@ var Glee = {
         if (value === undefined)
             value = Glee.value();
         var len = this.cache.commands.length;
+
         // is command already present? if yes, then move it to beginning of cache
         var index = $.inArray(value, Glee.cache.commands);
-        if (index != -1)
-        {
+        if (index != -1) {
             // remove command
             Glee.cache.commands.splice(index, 1);
             // add command to beginning
             Glee.cache.commands.unshift(value);
         }
-        else
-        {
+        else {
             if (len == Glee.defaults.cacheSize)
                 this.cache.commands.pop();
             this.cache.commands.unshift(value);
         }
+
         this.$searchField.setOptions({
             data: Glee.cache.commands
         });
@@ -871,15 +858,15 @@ var Glee = {
         // attach the window Listener
         $(window).bind('keydown', function(e) {
             var target = e.target || e.srcElement;
-            if (Glee.options.status && Glee.options.status != 0)
-            {
-                if (!Utils.elementCanReceiveUserInput(target) || e.altKey)
-                {
+            if (Glee.options.status && Glee.options.status != 0) {
+
+                if (!Utils.elementCanReceiveUserInput(target) || e.altKey) {
                     if (target.id === 'gleeSearchField')
                         return true;
 
-                    if (e.keyCode == Glee.options.shortcutKey || (e.keyCode == Glee.options.tabShortcutKey && Glee.options.tabShortcutStatus))
-                    {
+                    if (e.keyCode == Glee.options.shortcutKey ||
+                        (e.keyCode == Glee.options.tabShortcutKey && Glee.options.tabShortcutStatus)) {
+
                         if (e.metaKey || e.ctrlKey || e.shiftKey)
                             return true;
                         e.preventDefault();
@@ -897,8 +884,7 @@ var Glee = {
 
     // select the top most visible element (if any elements are highlighted)
     selectTopElement: function() {
-        if (Glee.isEspRunning && Glee.selectedElement)
-        {
+        if (Glee.isEspRunning && Glee.selectedElement) {
             LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
             LinkReaper.unHighlight(Glee.selectedElement);
             Glee.selectedElement = LinkReaper.getFirst();
@@ -910,8 +896,7 @@ var Glee = {
             }
         }
 
-        else if (!Glee.isCommand() && !Glee.isEmpty())
-        {
+        else if (!Glee.isCommand() && !Glee.isEmpty()) {
             LinkReaper.reapLinks(Glee.value(), true);
             Glee.selectedElement = LinkReaper.getFirst();
         }
@@ -926,8 +911,7 @@ var Glee = {
      */
     shouldRunOnCurrentUrl: function() {
         var len = Glee.disabledUrls.length;
-        for (var i = 0; i < len; i++)
-        {
+        for (var i = 0; i < len; i++) {
             if (location.href.indexOf(Glee.disabledUrls[i]) != -1)
                 return false;
         }
