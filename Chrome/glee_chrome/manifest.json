@@ -4,52 +4,52 @@
     "description": "Keyboard glee for your web",
     "background_page": "background.html",
     "options_page": "options.html",
-    
+
     "icons": {
         "128": "images/icon_128.png"
     },
-    
+
     "content_scripts": [
     {
         "matches":["http://*/*", "https://*/*"],
-        
+
         "js": [
             "js/injectcss.js"
         ],
-        
+
         "run_at": "document_end",
         "all_frames": true
     },
     {
         "matches": [ "http://*/*", "https://*/*" ],
-        
+
         "css": [
             "css/glee.css",
-            "css/chrome_listmanager.css",
             "css/themes.css",
-            "css/jquery.autocomplete.css"
+            "css/jquery.autocomplete.css",
+            "css/chrome/listmanager.css"
         ],
-        
+
         "js": [
-            "js/jquery.js",
-            "js/jquery.autocomplete.js",
+            "js/libs/jquery.js",
+            "js/libs/jquery.autocomplete.js",
             "js/glee.js",
-            "js/chrome_browser.js",
+            "js/chrome/browser.js",
             "js/events.js",
             "js/page_cmds.js",
-            "js/Utils.js",
+            "js/libs/Utils.js",
             "js/LinkReaper.js",
             "js/ElementState.js",
-            "js/SelectorGenerator.js",
-            "js/SmoothScroller.js",
+            "js/libs/SelectorGenerator.js",
+            "js/libs/SmoothScroller.js",
             "js/logger.js",
-            "js/chrome_page_cmds.js",
-            "js/chrome_listmanager.js"
+            "js/chrome/page_cmds.js",
+            "js/chrome/listmanager.js"
         ],
-        
+
         "run_at": "document_start"
     }],
-    
+
     "permissions": [
         "tabs",
         "http://api.bit.ly/",

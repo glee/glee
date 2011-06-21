@@ -181,108 +181,56 @@ var Utils = {
 
     /**
      *  Make text editable in place. Replaces text with textarea for editing.
+     *  Requires Utils.editElement and Utils.endEditing
      *  @param {Element} el Element which contains the text.
      *  @param {Function} callback Function to be called when user finishes editing.
      *  @param {Object} options Options for edit in place field.
      *  @return {true}
      */
-    makeEditable: function(el, callback, options) {
-        var EDIT_FIELD_CLASS = 'gleebox-editing-field';
+    makeEditable: function($el, callback, options) {
+        var editFieldClass = 'editing-field';
 
-        el.addClass('editable');
+        if (options && options.editFieldClass) {
+            editFieldClass = options.editFieldClass;
+        }
 
-        el.bind('click keydown', {callback: callback}, function(e)
+        $el.addClass('editable');
+
+        $el.bind('click keydown', {callback: callback}, function(e)
         {
             if (e.type === 'keydown' && e.keyCode != 13)
                 return true;
 
-            var $el = $(this);
-            $el.hide();
-
-            var elWidth;
-            if (options && options.fixedWidth)
-                elWidth = options.fixedWidth;
-            else
-                elWidth = $el.width();
-
-            var fontSize = $el.css('font-size');
-            var fontFamily = $el.css('font-family');
-            var fontWeight = $el.css('font-weight');
-
-            var value = $el.text();
-
-            // get the required height of textarea by creating a temporary div
-            //
-            var tempDiv = $('<div>', {
-                html: value
-            })
-            .width(elWidth)
-            .appendTo(document.body);
-
-            var textarea = $('<textarea>', {
-                value: value,
-                className: EDIT_FIELD_CLASS
-            })
-            .width(elWidth)
-            .height(tempDiv.height() + 20)
-            .css({
-                'font-family' : fontFamily,
-                'font-size' : fontSize,
-                'font-weight' : fontWeight
-            });
-
-            tempDiv.remove();
-
-            $el.before(textarea);
-            textarea.focus();
-
-            // if selectText is set to true, select all text in input field
-            // else set cursor to the end of field
-            //
-            var len = value.length;
-            if (value[len - 1] === '\n')
-                len = len - 1;
-
-            if (options && options.selectText)
-                textarea.get(0).setSelectionRange(0, len);
-            else
-                textarea.get(0).setSelectionRange(len, len);
+            Utils.editElement($el, options);
 
             var onClose = function(e) {
                 if (e.type === 'keydown' && e.keyCode != 13 && e.keyCode != 27)
                     return true;
-                if (e.type === 'mousedown' && e.target.className === EDIT_FIELD_CLASS)
+
+                if (e.type === 'mousedown' && e.target.className === editFieldClass)
                     return true;
 
                 e.preventDefault();
 
-                var value = e.data.textarea.attr('value');
-                e.data.textarea.remove();
+                Utils.endEditing($el);
 
-                if (value === '')
-                    value = e.data.el.text();
-
-                e.data.el.html(value);
-                e.data.el.show();
-                e.data.callback(value);
+                e.data.callback($el.text());
 
                 $(document).unbind('mousedown', onClose);
                 $(document).unbind('keydown', onClose);
-
-                e.data.el.focus();
             }
 
-            textarea.bind('keydown', { textarea: textarea, el: $el, callback: callback }, onClose);
-            $(document).bind('mousedown', { textarea: textarea, el: $el, callback: callback }, onClose);
+            $(document).bind('keydown mousedown', { callback: callback }, onClose);
         });
 
         return true;
     },
 
     editElement: function($el, someOptions) {
+        console.log('editElement');
         // default options
         var options = {
-            editFieldClass: 'gleebox-editing-field',
+            editFieldClass: 'editing-field',
             selectText: true,
             fixedWidth: false
         };
@@ -295,6 +243,7 @@ var Utils = {
         $el.hide();
 
         var elWidth;
+
         if (options && options.fixedWidth)
             elWidth = options.fixedWidth;
         else
@@ -304,6 +253,13 @@ var Utils = {
         var fontFamily = $el.css('font-family');
         var fontWeight = $el.css('font-weight');
         var lineHeight = $el.css('line-height');
+
+        var padding = {
+            top: parseInt($el.css('padding-top').replace('px', '')),
+            right: parseInt($el.css('padding-right').replace('px', '')),
+            bottom: parseInt($el.css('padding-bottom').replace('px', '')),
+            left: parseInt($el.css('padding-left').replace('px', ''))
+        };
 
         var value = $el.text();
 
@@ -320,11 +276,13 @@ var Utils = {
 
         $el.before(tempDiv);
 
-        var height = tempDiv.height();
+        var height = tempDiv.height() + padding.top + padding.bottom;
+
+        tempDiv.remove();
 
         var textarea = $('<textarea>', {
             value: value,
-            className: options.editFieldClass
+            class: options.editFieldClass
         })
         .width(elWidth)
         .height(height)
@@ -334,7 +292,6 @@ var Utils = {
             'font-weight' : fontWeight,
             'line-height' : lineHeight,
             'overflow-y' : 'hidden',
-            'padding' : 0,
             'resize' : 'none'
         });
 
@@ -346,8 +303,6 @@ var Utils = {
                 e.target.select();
             });
         }
-
-        tempDiv.remove();
 
         $el.before(textarea);
         textarea.focus();
@@ -364,16 +319,18 @@ var Utils = {
             textarea.get(0).setSelectionRange(0, len);
 
         $el.data('value', value);
-        $el.data('textarea', textarea);
     },
 
     endEditing: function($el) {
-        var value = $el.prev('textarea').attr('value');
+        if ($el === undefined)
+            return;
 
-        $el.data('textarea').remove();
+        var value = $.trim($el.prev('textarea').attr('value'));
+
+        $el.prev('textarea').remove();
 
         if (value === '')
-            value = $el.text($el.data('value'));
+            value = $el.data('value');
 
         $el.data('value', null);
 

@@ -45,13 +45,14 @@ Glee.inspectPage = function() {
         Glee.inspectMode = true;
     }
     else {
-        result = SelectorGenerator.generate(Glee.selectedElement);
+        var generator = new SelectorGenerator();
+        var selector = generator.generate(Glee.selectedElement);
         // if a valid selector is returned
-        if (result) {
-            var value = '*' + result;
+        if (selector) {
+            var value = '*' + selector;
             Glee.value(value);
             Glee.lastQuery = value;
-            Glee.Events.executeJQuerySelector(result);
+            Glee.Events.executeJQuerySelector(selector);
         }
         else
             Glee.setState('No matching element found', 'msg');

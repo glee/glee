@@ -3,14 +3,15 @@
     <title>gleeBox Options</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="css/options.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/KeyCombo.js"></script>
-    <script type="text/javascript" src="js/chrome_options.js"></script>
-    <script type="text/javascript" src="js/chrome_db.js"></script>
-    <script type="text/javascript" src="js/chrome_defaults.js"></script>
-    <script type="text/javascript" src="js/Utils.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.js"></script>
+    <script type="text/javascript" src="js/libs/KeyCombo.js"></script>
+    <script type="text/javascript" src="js/libs/Utils.js"></script>
+    <script type="text/javascript" src="js/libs/SmoothScroller.js"></script>
     <script type="text/javascript" src="js/options.js"></script>
-    <script type="text/javascript" src="js/SmoothScroller.js"></script>
+
+    <script type="text/javascript" src="js/chrome/options.js"></script>
+    <script type="text/javascript" src="js/chrome/db.js"></script>
+    <script type="text/javascript" src="js/chrome/defaults.js"></script>
 </head>
 <body>
     <div id="wrap">
@@ -74,7 +75,7 @@
                                 </span>
                             </label>
                         </div>
-                        
+
                         <div>
                             <label>
                                 <input name="scroll_animation" type="checkbox" />
@@ -83,7 +84,7 @@
                                 </span>
                             </label>
                         </div>
-                        
+
                         <div>
                             <label>
                                 <input name="outside_scrolling_status" type="checkbox" />
@@ -111,7 +112,7 @@
                                 </a>
                             </span>
                         </div>
-                        
+
                         <div>
                             <label>
                                 <span class="option-field">
@@ -161,7 +162,7 @@
                         <span class="option-field">
                             <input name="tab_shortcut_key" size="5" type="text" />
                             <span name="tab_shortcut_key_span" style="display:none"></span>
-                            
+
                             <a class='button' href="#" onclick='javascript:setDefaultTabShortcutKey();'>
                                 Revert to Default
                             </a>
@@ -268,14 +269,14 @@
                         </label>
                     </div>
                 </section>
-                
+
                 <section>
                     <h3>Search</h3>
                     <div>
                         <input type='search' id='esp-search-field' placeholder='Enter URL to search...' />
                     </div>
                 </section>
-                
+
                 <section>
                     <h3>Visions</h3>
                     <div>
@@ -301,14 +302,14 @@
                         <input type="button" class="button" value="Import..." onclick= "importSettings();" />
                     </div>
                 </section>
-                
+
                 <section>
                     <h3>Developer Pack</h3>
                     <div>
                         <input type="button" class="button" value="Import Developer Pack..." onclick= "importDevPack();"/>
                     </div>
                 </section>
-                
+
                 <section>
                     <h3>Sync</h3>
                     <div>

@@ -25,7 +25,7 @@ function addItem(type, value1, value2, shouldSave) {
 
     var container = $('<li>', {
        id: type + no,
-       className: type,
+       class: type,
        tabIndex: 0
     });
 
@@ -46,7 +46,7 @@ function addItem(type, value1, value2, shouldSave) {
                 lastEl = document.getElementById('addDomainLI');
 
                 content = $('<span>', {
-                    className: 'domain-name',
+                    class: 'domain-name',
                     html: value1
                 });
 
@@ -80,19 +80,19 @@ function addItem(type, value1, value2, shouldSave) {
                 lastEl = document.getElementById('addScraper');
 
                 var contentName = $('<span>', {
-                    className: 'scraper-name',
+                    class: 'scraper-name',
                     html: value1
                 });
 
                 var contentSelector = $('<span>', {
-                    className: 'scraper-sel selector',
+                    class: 'scraper-sel selector',
                     html: value2
                 });
 
                 var prefix = $("<span class='scraper-prefix'>?</span>");
 
                 var separator = $('<div>', {
-                    className: 'separator'
+                    class: 'separator'
                 });
 
                 container.append(prefix)
@@ -128,17 +128,17 @@ function addItem(type, value1, value2, shouldSave) {
                 lastEl = document.getElementById('addEspModifier');
 
                 var contentName = $('<span>', {
-                    className: 'esp-url',
+                    class: 'esp-url',
                     html: value1
                 });
 
                 var contentSelector = $('<span>', {
-                    className: 'esp-sel selector',
+                    class: 'esp-sel selector',
                     html: value2
                 });
 
                 var separator = $('<div>', {
-                    className: 'separator'
+                    class: 'separator'
                 });
 
                 container.append(contentName)
@@ -155,7 +155,7 @@ function addItem(type, value1, value2, shouldSave) {
     }
 
     var closeButton = $('<a>', {
-        className: 'close-button',
+        class: 'close-button',
         type: 'button',
         href: '#'
     })
@@ -672,8 +672,8 @@ function editScraper($scraper) {
     var $scraperName = $scraper.find('.scraper-name');
     var $scraperSel = $scraper.find('.scraper-sel');
 
-    Utils.editElement($scraperSel);
-    Utils.editElement($scraperName);
+    Utils.editElement($scraperSel, {editFieldClass: 'gleebox-editing-field'});
+    Utils.editElement($scraperName, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
         var el = e.target;
@@ -707,7 +707,7 @@ function editDomain($domain) {
 
     var $domainName = $domain.find('.domain-name');
 
-    Utils.editElement($domainName);
+    Utils.editElement($domainName, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
         var el = e.target;
@@ -742,8 +742,8 @@ function editESP($esp) {
     var $espURL = $esp.find('.esp-url');
     var $espSel = $esp.find('.esp-sel');
 
-    Utils.editElement($espSel);
-    Utils.editElement($espURL);
+    Utils.editElement($espSel, {editFieldClass: 'gleebox-editing-field'});
+    Utils.editElement($espURL, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
         var el = e.target;
