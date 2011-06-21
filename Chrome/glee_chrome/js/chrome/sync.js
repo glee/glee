@@ -9,18 +9,18 @@
 
 /***** Edit these options for your extension *****/
 
-/***** IMPORTANT: Replace all instances of 'cache.prefs' in this code with your DATA SOURCE. *****/
+/***** IMPORTANT: Replace all instances of 'cache.options' in this code with your DATA SOURCE. *****/
 // DATA SOURCE is a JSON object in background.html which stores your data.
 
 // Extension name. used to create titles for bookmark / containing folder
 var syncName = 'gleebox';
 
 // method to be called when sync occurs. Updated JSON data returned from the bookmark is passed to this method
-var onSync = updatePreferencesLocally;
+var onSync = updateOptionsLocally;
 
 // method to be called when data is to be merged. It's called when sync is enabled. Should return updated JSON data.
 // If set to null, onSync is called.
-var onMerge = mergePreferencesLocally;
+var onMerge = mergeOptionsLocally;
 
 // API: Call the following methods to manage sync.
 
@@ -49,12 +49,11 @@ var saveSyncDataWasCalled = false;
 function sync() {
     loadSyncData(function(data) {
         if (data) {
-            if (data != cache.prefs)
+            if (data != cache.options)
                 onSync(data);
         }
-        else {
-            saveSyncData(cache.prefs);
-        }
+        else
+            saveSyncData(cache.options);
     });
 }
 
@@ -63,15 +62,14 @@ function sync() {
 function syncWithMerge() {
     loadSyncData(function(data) {
         if (data) {
-            if (onMerge && data != cache.prefs) {
-                data = onMerge(data, cache.prefs);
+            if (onMerge && data != cache.options) {
+                data = onMerge(data, cache.options);
                 saveSyncData(data);
             }
             onSync(data);
         }
-        else {
-            saveSyncData(cache.prefs);
-        }
+        else
+            saveSyncData(cache.options);
     });
 }
 
@@ -162,7 +160,7 @@ function saveSyncData(data) {
             if (!bookmark) {
                 syncId = null;
                 syncFolderId = null;
-                saveSyncData(cache.prefs);
+                saveSyncData(cache.options);
             }
         });
     }
@@ -222,13 +220,15 @@ function detachSyncListeners() {
 }
 
 function onBookmarkUpdate(id, properties) {
-    if (localStorage[syncName + '_sync'] == 1 && id == syncId && !saveSyncDataWasCalled) {
+    if (localStorage[syncName + '_sync'] == 1 &&
+    id == syncId &&
+    !saveSyncDataWasCalled)
         sync();
-    }
 }
 
 function onBookmarkCreate(id, bookmark) {
-    if (localStorage[syncName + '_sync'] == 1 && bookmark.parentId == syncFolderId && !saveSyncDataWasCalled) {
+    if (localStorage[syncName + '_sync'] == 1 &&
+    bookmark.parentId == syncFolderId &&
+    !saveSyncDataWasCalled)
         sync();
-    }
 }

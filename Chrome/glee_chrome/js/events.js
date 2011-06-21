@@ -35,15 +35,13 @@ Glee.Events = {
         //  Up / Down Arrow keys: Begin scrolling
         else if (e.keyCode === 40 || e.keyCode === 38) {
             // if meta / ctrl key, straight way scroll to top / bottom
-            if (e.metaKey || e.ctrlKey)
-            {
+            if (e.metaKey || e.ctrlKey) {
                 if (e.keyCode === 38)
                     window.scrollTo(window.pageXOffset, 0);
                 else
                     window.scrollTo(window.pageXOffset, document.height);
 
                 Glee.selectTopElement();
-
                 return true;
             }
 
@@ -58,7 +56,6 @@ Glee.Events = {
                 return true;
 
             Glee.Browser.openTabManager();
-
             return true;
         }
 
@@ -72,9 +69,8 @@ Glee.Events = {
         }
 
         //  Backspace takes user back in history if gleeBox is empty
-        else if (e.keyCode === 8 && Glee.isEmpty()) {
+        else if (e.keyCode === 8 && Glee.isEmpty())
             window.history.back();
-        }
     },
 
     /**
@@ -228,10 +224,10 @@ Glee.Events = {
             return false;
         }
 
-        var len = Glee.scrapers.length;
+        var len = Glee.options.scrapers.length;
         for (var i = 0; i < len; i++) {
-            if (Glee.scrapers[i].command === value) {
-                Glee.initScraper(Glee.scrapers[i]);
+            if (Glee.options.scrapers[i].command === value) {
+                Glee.initScraper(Glee.options.scrapers[i]);
                 return true;
             }
         }

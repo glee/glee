@@ -16,8 +16,7 @@ function createBookmark(name, url, parentId, callback) {
 
         chrome.bookmarks.create(properties, callback);
     }
-    if (!parentId)
-    {
+    if (!parentId) {
         getRootBookmark(function(bookmark) {
             makeCreateBookmarkRequest(bookmark.id);
         });

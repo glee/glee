@@ -8,10 +8,7 @@
     <script type="text/javascript" src="js/libs/utils.js"></script>
     <script type="text/javascript" src="js/libs/smoothscroller.js"></script>
     <script type="text/javascript" src="js/options.js"></script>
-
     <script type="text/javascript" src="js/chrome/options.js"></script>
-    <script type="text/javascript" src="js/chrome/db.js"></script>
-    <script type="text/javascript" src="js/chrome/defaults.js"></script>
 </head>
 <body>
     <div id="wrap">
@@ -21,7 +18,7 @@
                 <li><a href="#basics">Basics</a></li>
                 <li><a href="#appearance">Appearance</a></li>
                 <li><a href="#scrapers">Scrapers</a></li>
-                <li><a href="#ESP">ESP Visions</a></li>
+                <li><a href="#ESP_Visions">ESP Visions</a></li>
                 <li><a href="#backup">Backup and Sync</a></li>
                 <li class='menu-separator'></li>
                 <li><a href="#tabmanager">Tab Manager</a></li>
@@ -36,7 +33,7 @@
                     <h3>Search Engine</h3>
                     <div>
                         <span class="option-field">
-                            <input id="search_engine" name="search_engine" type="text" size=60><br/>
+                            <input id="searchEngine" name="searchEngine" type="text" size=60><br/>
                             <a href="#" onclick='javascript:changeSearchEngine("google");return false;'>
                                 Google
                             </a>&nbsp;&nbsp;
@@ -56,11 +53,11 @@
                     <h3>Command Engine</h3>
                     <div>
                         <span class="option-field">
-                            <input name="command_engine" type="radio" value="yubnub" onclick="$('#quix_url').hide();">
+                            <input name="commandEngine" type="radio" value="yubnub" onclick="$('#quixUrl').hide();">
                             Yubnub&nbsp;
-                            <input name="command_engine" type="radio" value="quix" onclick="$('#quix_url').show();">
+                            <input name="commandEngine" type="radio" value="quix" onclick="$('#quixUrl').show();">
                              Quix&nbsp;&nbsp;
-                            <input style="display:none" id="quix_url" name="quix_url" type="text" size=36>
+                            <input style="display:none" id="quixUrl" name="quixUrl" type="text" size=36>
                         </span>
                     </div>
                 </section>
@@ -69,7 +66,7 @@
                     <div>
                         <div>
                             <label>
-                                <input name="bookmark_search" type="checkbox" />
+                                <input name="searchBookmarks" type="checkbox" />
                                 <span class="option-field">
                                     Search Bookmarks
                                 </span>
@@ -78,7 +75,7 @@
 
                         <div>
                             <label>
-                                <input name="scroll_animation" type="checkbox" />
+                                <input name="scrollingSpeed" type="checkbox" />
                                 <span class="option-field">
                                     Animate Scrolling between Elements
                                 </span>
@@ -87,7 +84,7 @@
 
                         <div>
                             <label>
-                                <input name="outside_scrolling_status" type="checkbox" />
+                                <input name="outsideScrolling" type="checkbox" />
                                 <span class="option-field">
                                     Enable Smooth Scrolling outside gleeBox
                                 </span>
@@ -105,8 +102,8 @@
                                 </span>
                             </label>
                             <span class="option-value">
-                                <input name="shortcut_key" size="5" type="text" />
-                                <span name="shortcut_key_span" style="display:none"></span>
+                                <input name="shortcutKey" size="5" type="text" />
+                                <span name="shortcutKey_span" style="display:none"></span>
                                 <a href="#" onclick='javascript:setDefaultShortcutKey();' class='button'>
                                     Revert to Default
                                 </a>
@@ -120,8 +117,8 @@
                                 </span>
                             </label>
                             <span class="option-value">
-                                <input name="scrolling_key" value="ws" type="radio" />&nbsp;w / s&nbsp;&nbsp;
-                                <input name="scrolling_key" value="jk" type="radio" />&nbsp;j / k
+                                <input name="scrollingKey" value="ws" type="radio" />&nbsp;w / s&nbsp;&nbsp;
+                                <input name="scrollingKey" value="jk" type="radio" />&nbsp;j / k
                             </span>
                         </div>
                     </div>
@@ -150,7 +147,7 @@
                     <div>
                         <label>
                             <div class="option-field">
-                                <input name="tab_shortcut_status" type="checkbox" />
+                                <input name="tabManager" type="checkbox" />
                                 Enable Tab Manager
                             </div>
                         </label>
@@ -160,8 +157,8 @@
                     <h3>Launch Key</h3>
                     <div>
                         <span class="option-field">
-                            <input name="tab_shortcut_key" size="5" type="text" />
-                            <span name="tab_shortcut_key_span" style="display:none"></span>
+                            <input name="tabManagerShortcutKey" size="5" type="text" />
+                            <span name="tabManagerShortcutKey" style="display:none"></span>
 
                             <a class='button' href="#" onclick='javascript:setDefaultTabShortcutKey();'>
                                 Revert to Default
@@ -175,9 +172,9 @@
                 <section>
                     <h3>Size</h3>
                     <div>
-                        <input name="size" type="radio" value="0"> Small <br>
-                        <input name="size" type="radio" value="1"> Medium <br>
-                        <input name="size" type="radio" value="2"> Large
+                        <input name="size" type="radio" value="small"> Small <br>
+                        <input name="size" type="radio" value="medium"> Medium <br>
+                        <input name="size" type="radio" value="large"> Large
                     </div>
                 </section>
                 <section>
@@ -207,42 +204,6 @@
                     <h3>Scrapers</h3>
                     <div>
                         <ul id="scraper-commands">
-                            <li class="default-scraper">
-                                <span class="scraper-prefix">?</span>
-                                <span class="default-scraper-name">?</span>
-                                <div class='separator'></div>
-                                <div class='scraper-sel'>
-                                    Input Elements
-                                    <span class='inbuilt'>In-built</span>
-                                </div>
-                            </li>
-                            <li class="default-scraper">
-                                <span class="scraper-prefix">?</span>
-                                <span class="default-scraper-name">img</span>
-                                <div class='separator'></div>
-                                <div class='scraper-sel'>
-                                    Linked Images
-                                    <span class='inbuilt'>In-built</span>
-                                </div>
-                            </li>
-                            <li class="default-scraper">
-                                <span class="scraper-prefix">?</span>
-                                <span class="default-scraper-name">h</span>
-                                <div class='separator'></div>
-                                <div class='scraper-sel'>
-                                    H1, H2 and H3 elements
-                                    <span class='inbuilt'>In-built</span>
-                                </div>
-                            </li>
-                            <li class="default-scraper">
-                                <span class="scraper-prefix">?</span>
-                                <span class="default-scraper-name">a</span>
-                                <div class='separator'></div>
-                                <div class='scraper-sel'>
-                                    Links
-                                    <span class='inbuilt'>In-built</span>
-                                </div>
-                            </li>
                             <li id="addScraper">
                                 <form onsubmit="addItem('scraper', null, null, true);return false;">
                                     <span class='scraper-prefix'>?</span>
@@ -256,13 +217,13 @@
                     </div>
                 </section>
             </div>
-            <div id="ESP" class='page'>
+            <div id="ESP_Visions" class='page'>
                 <h2>ESP Visions</h2>
                 <section>
                     <h3>Status</h3>
                     <div>
                         <label>
-                            <input name="esp_status" type="checkbox" />
+                            <input id='esp' name="esp" type="checkbox" />
                             <span class='option-field'>
                                 Enable ESP
                             </span>

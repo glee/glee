@@ -227,7 +227,6 @@ var Utils = {
     },
 
     editElement: function($el, someOptions) {
-        console.log('editElement');
         // default options
         var options = {
             editFieldClass: 'editing-field',

@@ -1,20 +1,105 @@
-var prefs = {};
+var options = {};
 var textfieldTimer = null;
 var scroller;
+var bg_window;
+
+$(document).ready(function() {
+    getOptions(initOptions);
+});
+
+// Restores select box state to saved value from DB
+function initOptions(response) {
+    options = response;
+    console.log(options);
+    for (var option in options) {
+
+        if (option === 'upScrollingKey' ||
+        option === 'downScrollingKey') {
+            var $scrollKey = $('[name=scrollingKey]');
+            if (options.upScrollingKey == 75)
+                $scrollKey.get(1).checked = true;
+            else
+                $scrollKey.get(0).checked = true;
+        }
+
+        else if (option === 'commandEngine') {
+            $('#quixUrl').show();
+            $('[value=' + options[option] +']').prop('checked', true);
+        }
+
+        else if (option === 'shortcutKey') {
+
+        }
+
+        else if (option === 'tabManagerShortcutKey') {
+
+        }
+
+        else if (option === 'disabledUrls') {
+            var len = options[option].length;
+            for (var i = 0; i < len; i++) {
+                addItem('domain', options[option][i]);
+            }
+            continue;
+        }
+
+        else if (option === 'scrapers') {
+            var len = options.scrapers.length;
+            // last element is a string only containing a ,
+            for (var i = 0; i < len; i++)
+                addItem('scraper', options.scrapers[i].command, options.scrapers[i].selector);
+            continue;
+        }
+
+        else if (option === 'espVisions') {
+            var len = options.espVisions.length;
+            for (var i = 0; i < len; i++)
+                addItem('esp', options.espVisions[i].url, options.espVisions[i].selector);
+            continue;
+        }
+
+        else {
+            var $el = $('[name=' + option + ']');
+            var el = $el.get(0);
+            if ($el.length === 0)
+                continue;
+
+            if (el.type === 'radio') {
+                var radio = $el.filter('[value=' + options[option] +']');
+                if (radio.length != 0) {}
+                    radio.prop('checked', true);
+            }
+
+            else if (el.type === 'checkbox') {
+                if (options[option] == true)
+                    $el.prop('checked', true);
+            }
+
+            else if (el.type === 'text') {
+                if (options[option] != undefined)
+                    el.value = options[option];
+            }
+        }
+    }
+    if (setSyncUI)
+        setSyncUI();
+    attachListeners();
+    bg_window = getBackgroundPage();
+}
 
 function addURL(value) {
-    prefs.disabledUrls.push(value);
-    saveOption('disabledUrls', prefs.disabledUrls);
+    options.disabledUrls.push(value);
+    saveOption('disabledUrls', options.disabledUrls);
 }
 
 function addScraper(value) {
-    prefs.scrapers.push(value);
-    saveOption('scrapers', prefs.scrapers);
+    options.scrapers.push(value);
+    saveOption('scrapers', options.scrapers);
 }
 
 function addESP(value) {
-    prefs.espModifiers.push(value);
-    saveOption('espModifiers', prefs.espModifiers);
+    options.espVisions.push(value);
+    saveOption('espVisions', options.espVisions);
 }
 
 function addItem(type, value1, value2, shouldSave) {
@@ -175,20 +260,20 @@ function removeItem(e, type) {
     {
         case 'domain':
             listOfItems = document.getElementById('domains');
-            prefs.disabledUrls.splice(i, 1);
-            saveOption('disabledUrls', prefs.disabledUrls);
+            options.disabledUrls.splice(i, 1);
+            saveOption('disabledUrls', options.disabledUrls);
             break;
 
         case 'scraper':
             listOfItems = document.getElementById('scraper-commands');
-            prefs.scrapers.splice(i, 1);
-            saveOption('scrapers', prefs.scrapers);
+            options.scrapers.splice(i, 1);
+            saveOption('scrapers', options.scrapers);
             break;
 
         case 'esp':
             listOfItems = document.getElementById('esp-modifiers');
-            prefs.espModifiers.splice(i, 1);
-            saveOption('espModifiers', prefs.espModifiers);
+            options.espVisions.splice(i, 1);
+            saveOption('espVisions', options.espVisions);
     }
 
     var el = document.getElementById(type + i);
@@ -253,7 +338,12 @@ function validateEspModifier(name, selector)
 function exportSettings() {
     var text = 'Copy the contents of this text field, and save them to a textfile:';
     showBackupPopup(text, 'export');
-    $('#settingsText').text(translateForExport(prefs));
+    try {
+        $('#settingsText').text(JSON.stringify(options));
+    }
+    catch(e) {
+        console.log(e);
+    }
 }
 
 function importSettings() {
@@ -276,12 +366,11 @@ function importDevPack() {
 function importAndApply() {
     try {
         var jsonString = $('#settingsText').get(0).value;
-        var tempPref = translateForImport(JSON.parse(jsonString));
+        var tempPref = JSON.parse(jsonString);
         // merge
-        // tempPref = mergeSettings(tempPref, prefs);
         clearSettings();
         initSettings(tempPref);
-        prefs = tempPref;
+        options = tempPref;
         saveAllOptions();
         $('#backupInfo').text('Settings successfully imported!');
         hideBackupPopup();
@@ -298,11 +387,11 @@ function applyDevPack() {
         var jsonString = $('#settingsText').get(0).value;
         var tempPref = translateForImport(JSON.parse(jsonString));
         // merge
-        tempPref = mergeSettings(tempPref, prefs);
-        prefs.scrapers = tempPref.scrapers;
-        prefs.espModifiers = tempPref.espModifiers;
+        tempPref = mergeSettings(tempPref, options);
+        options.scrapers = tempPref.scrapers;
+        options.espVisions = tempPref.espVisions;
         clearSettings();
-        initSettings(prefs);
+        initSettings(options);
         saveAllOptions();
         $('#backupInfo').text('Developer Pack successfully imported!');
         hideBackupPopup();
@@ -333,19 +422,19 @@ function mergeSettings(a, b) {
     }
 
     // merging ESP visions
-    var a_len = a.espModifiers.length;
-    var b_len = b.espModifiers.length;
+    var a_len = a.espVisions.length;
+    var b_len = b.espVisions.length;
     for (var i = 0; i < b_len; i++) {
         var found = false;
         for (var j = 0; j < a_len; j++) {
-            if (b.espModifiers[i].url === a.espModifiers[j].url) {
+            if (b.espVisions[i].url === a.espVisions[j].url) {
                 found = true;
                 break;
             }
         }
 
         if (!found)
-            a.espModifiers.push(b.espModifiers[i]);
+            a.espVisions.push(b.espVisions[i]);
     }
 
     return a;
@@ -669,9 +758,9 @@ function editScraper($scraper) {
         Utils.endEditing($scraperSel);
 
         var id = $scraper.attr('id').slice(7);
-        prefs.scrapers[id].command = $scraperName.text();
-        prefs.scrapers[id].selector = $scraperSel.text();
-        saveOption('scrapers', prefs.scrapers);
+        options.scrapers[id].command = $scraperName.text();
+        options.scrapers[id].selector = $scraperSel.text();
+        saveOption('scrapers', options.scrapers);
         $scraper.removeClass('selected');
 
         $(document).unbind('mousedown', onEditingComplete);
@@ -702,8 +791,8 @@ function editDomain($domain) {
 
         var id = $domain.attr('id').slice(6);
 
-        prefs.disabledUrls[id] = $domainName.text();
-        saveOption('disabledUrls', prefs.disabledUrls);
+        options.disabledUrls[id] = $domainName.text();
+        saveOption('disabledUrls', options.disabledUrls);
 
         $domain.removeClass('selected');
 
@@ -738,10 +827,10 @@ function editESP($esp) {
 
         var id = $esp.attr('id').slice(3);
 
-        prefs.espModifiers[id].url = $espURL.text();
-        prefs.espModifiers[id].selector = $espSel.text();
+        options.espVisions[id].url = $espURL.text();
+        options.espVisions[id].selector = $espSel.text();
 
-        saveOption('espModifiers', prefs.espModifiers);
+        saveOption('espVisions', options.espVisions);
 
         $esp.removeClass('selected');
 
@@ -763,4 +852,25 @@ function setDefaultShortcutKey() {
 function setDefaultTabShortcutKey() {
     $('[name=tab_shortcut_key]').attr('value', '.').keyup();
     $('[name=tab_shortcut_key_span]').text(190);
+}
+
+function saveOption(name, value) {
+    value = translateOptionValue(name, value);
+    options[name] = value;
+    localStorage[name] = value;
+    propagate();
+}
+
+function saveAllOptions() {
+    for (option in options)
+        localStorage[option] = options[option];
+    propagate();
+}
+
+function translateOptionValue(name, value) {
+    switch (name) {
+        case 'shortcutKey': return document.getElementsByName('shortcutKey_span')[0].innerText; break;
+        case 'tabManagerShortcutKey': return document.getElementsByName('tabManagerShortcutKey_span')[0].innerText; break;
+    }
+    return value;
 }
