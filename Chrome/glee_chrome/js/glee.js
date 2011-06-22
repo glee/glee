@@ -838,14 +838,14 @@ var Glee = {
                     if (target.id === 'gleeSearchField')
                         return true;
 
-                    if (e.keyCode == Glee.options.shortcutKey ||
-                        (e.keyCode == Glee.options.tabManagerShortcutKey && Glee.options.tabManager)) {
+                    if (e.keyCode === Glee.options.shortcutKey ||
+                        (e.keyCode === Glee.options.tabManagerShortcutKey && Glee.options.tabManager)) {
 
                         if (e.metaKey || e.ctrlKey || e.shiftKey)
                             return true;
                         e.preventDefault();
 
-                        if (e.keyCode == Glee.options.shortcutKey)
+                        if (e.keyCode === Glee.options.shortcutKey)
                             Glee.open();
                         else if (Glee.Browser.openTabManager)
                             Glee.Browser.openTabManager();
