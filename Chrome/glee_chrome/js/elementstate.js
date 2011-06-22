@@ -90,7 +90,7 @@ ElementState.prototype.initLink = function() {
     // if it contains an image
     if (img.length != 0) {
         var value = this.$el.attr('title') || img.attr('title');
-        if (value != '')
+        if (value)
             Glee.description(value, true);
         else
             Glee.description('Linked Image');
@@ -100,7 +100,7 @@ ElementState.prototype.initLink = function() {
         var title = this.$el.attr('title');
         var value = this.text;
 
-        if (title != '' && title != value)
+        if (title && title != value)
             value += ' -- ' + title;
 
         Glee.description(value, true);
