@@ -11,7 +11,7 @@
 
     "content_scripts": [
     {
-        "matches":["http://*/*", "https://*/*"],
+        "matches":["<all_urls>"],
 
         "js": [
             "js/injectcss.js"
@@ -21,13 +21,13 @@
         "all_frames": true
     },
     {
-        "matches": [ "http://*/*", "https://*/*" ],
+        "matches": ["<all_urls>"],
 
         "css": [
             "css/glee.css",
             "css/themes.css",
             "css/jquery.autocomplete.css",
-            "css/chrome/listmanager.css"
+            "css/listmanager.css"
         ],
 
         "js": [
@@ -44,7 +44,7 @@
             "js/libs/smoothscroller.js",
             "js/logger.js",
             "js/chrome/pagecmds.js",
-            "js/chrome/listmanager.js"
+            "js/listmanager.js"
         ],
 
         "run_at": "document_start"
