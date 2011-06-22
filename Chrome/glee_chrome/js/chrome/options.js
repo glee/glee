@@ -1,6 +1,7 @@
 IS_CHROME = true;
 // Chrome specific methods for options page
 var sync;
+var bg_window;
 
 // propagate change in preferences to all currently open tabs
 // updates preference cache in background.html
@@ -11,20 +12,19 @@ function propagate() {
         for (var i = 0; i < w_len; i++) {
             var t_len = windows[i].tabs.length;
             for (var j = 0; j < t_len; j++) {
-                chrome.tabs.sendRequest(windows[i].tabs[j].id,
-                    {value: 'applyOptions', options:options},
+                chrome.tabs.sendRequest(windows[i].tabs[j].id, {
+                        value: 'applyOptions',
+                        options: options
+                    },
                     function(response) {}
                 );
             }
         }
     });
-    // update background.html cache
     bg_window.cache.options = options;
-
     // if sync is enabled, also save data in bookmark
-    if (localStorage['gleebox_sync'] == 1) {
+    if (localStorage['gleebox_sync'] == 1)
         bg_window.saveSyncData(options);
-    }
 }
 
 function getBackgroundPage() {

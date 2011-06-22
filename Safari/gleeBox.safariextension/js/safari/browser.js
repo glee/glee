@@ -41,7 +41,10 @@ Glee.Browser = {
     },
 
     setOption: function(option, value) {
-        safari.self.tab.dispatchMessage('updateOption', { option: option, value: value });
+        safari.self.tab.dispatchMessage('setOptionUsingShorthand', {
+            option: option,
+            value: value
+        });
         Glee.empty();
         setTimeout(function() {
             Glee.$searchField.keyup();

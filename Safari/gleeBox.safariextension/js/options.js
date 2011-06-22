@@ -1,7 +1,6 @@
 var options = {};
 var textfieldTimer = null;
 var scroller;
-var bg_window;
 
 $(document).ready(function() {
     getOptions(initOptions);
@@ -23,7 +22,8 @@ function initOptions(response) {
         }
 
         else if (option === 'commandEngine') {
-            $('#quixUrl').show();
+            if (options[option] === 'quix')
+                $('#quixUrl').show();
             $('[value=' + options[option] +']').prop('checked', true);
         }
 
@@ -369,12 +369,14 @@ function importDevPack() {
 function importAndApply() {
     try {
         var jsonString = $('#settingsText').get(0).value;
-        var tempPref = JSON.parse(jsonString);
-        // merge
+        var newOptions = JSON.parse(jsonString);
+
         clearSettings();
-        initSettings(tempPref);
-        options = tempPref;
+        initSettings(newOptions);
+
+        options = newOptions;
         saveAllOptions();
+
         $('#backupInfo').text('Settings successfully imported!');
         hideBackupPopup();
     }
@@ -388,13 +390,15 @@ function importAndApply() {
 function applyDevPack() {
     try {
         var jsonString = $('#settingsText').get(0).value;
-        var tempPref = translateForImport(JSON.parse(jsonString));
+        var newOptions = translateForImport(JSON.parse(jsonString));
         // merge
-        tempPref = mergeSettings(tempPref, options);
-        options.scrapers = tempPref.scrapers;
-        options.espVisions = tempPref.espVisions;
+        newOptions = mergeSettings(newOptions, options);
+        options.scrapers = newOptions.scrapers;
+        options.espVisions = newOptions.espVisions;
+
         clearSettings();
         initSettings(options);
+
         saveAllOptions();
         $('#backupInfo').text('Developer Pack successfully imported!');
         hideBackupPopup();
@@ -545,7 +549,7 @@ function attachListeners() {
         if (e.type === 'keyup' && e.keyCode === 9)
             return true;
 
-        if (e.target.name === 'scrolling_key') {
+        if (e.target.name === 'scrollingKey') {
             changeScrollingKey(e.target.value);
             return true;
         }
@@ -555,12 +559,11 @@ function attachListeners() {
 
     // checkbox
     $('input[type=checkbox]').bind('change', function(e) {
-        saveOption(e.target.name, translateOptionValue(e.target.name, e.target.value));
+        saveOption(e.target.name, e.target.value == 'on' ? true : false);
     });
 
     // textfields
-    $('input[type=text]:not(#add_domain, #add-scraper-name, #add-scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e)
-    {
+    $('input[type=text]:not(#add_domain, #add-scraper-name, #add-scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e) {
         if (e.keyCode === 9)
             return true;
 
@@ -603,10 +606,8 @@ function changeSearchEngine(engine) {
         case 'duckduckgo': value = 'http://duckduckgo.com/'; break;
     }
 
-    var ui = $('#search_engine');
-
-    ui.attr('value', value)
-    .keyup();
+    $('#searchEngine').attr('value', value);
+    saveOption('searchEngine', value);
 }
 
 function changeScrollingKey(keyset) {
@@ -849,6 +850,13 @@ function setDefaultTabShortcutKey() {
     saveOption('tabManagerShortcutKey', 190);
 }
 
+function translateOptionValue(name, value) {
+    switch (name) {
+        case 'shortcutKey': return $('[name=shortcutKeyCode]').text(); break;
+        case 'tabManagerShortcutKey': return $('[name=tabManagerShortcutKeyCode]').text(); break;
+    }
+    return value;
+}
 function saveOption(name, value) {
     value = translateOptionValue(name, value);
     options[name] = value;
@@ -860,12 +868,4 @@ function saveAllOptions() {
     for (option in options)
         localStorage[option] = options[option];
     propagate();
-}
-
-function translateOptionValue(name, value) {
-    switch (name) {
-        case 'shortcutKey': return $('[name=shortcutKeyCode]').text(); break;
-        case 'tabManagerShortcutKey': return $('[name=tabManagerShortcutKeyCode]').text(); break;
-    }
-    return value;
 }

@@ -69,7 +69,12 @@ Glee.Browser.openURLInNewTab = function(url, selected) {
 }
 
 Glee.Browser.setOption = function(option, value) {
-    chrome.extension.sendRequest({value: 'updateOption', option: option, optionValue: value}, function(response) {
+    chrome.extension.sendRequest({
+        value: 'setOptionUsingShorthand',
+        option: option,
+        optionValue: value
+    },
+    function(response) {
         Glee.empty();
         setTimeout(function() {
             Glee.$searchField.keyup();
@@ -117,9 +122,8 @@ chrome.extension.onRequest.addListener(
             else
                 Glee.options.status = false;
         }
-        else if (request.value === 'updateOptions') {
-            Glee.Browser.updateOptions(request);
-        }
+        else if (request.value === 'applyOptions')
+            Glee.applyOptions(request.options);
         else if (request.value === 'updateCommandCache')
             Glee.updateCommandCache(request.commands);
 

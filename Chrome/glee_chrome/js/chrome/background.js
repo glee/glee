@@ -192,12 +192,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             sendResponse(cache.options);
             break;
 
-        case 'updateOption':
+        case 'setOptionUsingShorthand':
             updateOption(request.option, request.optionValue);
             sendResponse({});
             break;
 
-        case 'updateOptions':
+        case 'updateOptionsInCache':
             cache.options = request.options;
             sendResponse({});
             break;

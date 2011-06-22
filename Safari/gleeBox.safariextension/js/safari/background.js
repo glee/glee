@@ -7,7 +7,6 @@ function init() {
 }
 
 function checkVersion() {
-    upgrade(2.2);
     if (localStorage['gleebox_version'] != CURRENT_VERSION) {
         // Upgrade data model for 2.2
         if (parseFloat(localStorage['gleebox_version']) < 2.2)
@@ -118,11 +117,17 @@ function respondToMessage(e) {
     else if (e.name === 'getOptions')
         e.target.page.dispatchMessage('applyOptions', cache.options);
 
-    else if (e.name === 'updateOption')
-        updateOption(e.message.option, e.message.value);
+    else if (e.name === 'getOptionsFromOptionsPage')
+        e.target.page.dispatchMessage('applyOptionsToOptionsPage', cache.options);
 
-    else if (e.name == 'propagateOptions')
-        sendRequestToAllTabs({value: 'updateOptions', data: cache.options});
+    else if (e.name === 'setOptionUsingShorthand')
+        setOptionUsingShorthand(e.message.option, e.message.value);
+
+    else if (e.name === 'updateOptionsInCache')
+        cache.options = e.message;
+
+    else if (e.name === 'propagateOptions')
+        sendRequestToAllTabs({value: 'applyOptions', data: cache.options});
 }
 
 function sendRequestToAllTabs(req) {

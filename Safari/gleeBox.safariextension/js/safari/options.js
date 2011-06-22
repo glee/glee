@@ -1,7 +1,7 @@
 IS_CHROME = false;
 // Safari specific methods for options page
 function respondToMessage(e) {
-    if (e.name === 'applyOptions')
+    if (e.name === 'applyOptionsToOptionsPage')
         initOptions(e.message);
 }
 
@@ -9,9 +9,10 @@ function respondToMessage(e) {
 safari.self.addEventListener('message', respondToMessage, false);
 
 function propagate() {
+    safari.self.tab.dispatchMessage('updateOptionsInCache', options);
     safari.self.tab.dispatchMessage('propagateOptions');
 }
 
 function getOptions(callback) {
-    safari.self.tab.dispatchMessage('getOptions');
+    safari.self.tab.dispatchMessage('getOptionsFromOptionsPage');
 }

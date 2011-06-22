@@ -32,7 +32,6 @@ Glee.ListManager = {
         });
     },
 
-
     closeBox: function(returnFocus, callback) {
         this.box.fadeOut(150, function() {
             Glee.ListManager.box.html('');
