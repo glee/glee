@@ -1,6 +1,5 @@
-// safari specific methods for options page
-var IS_CHROME = false;
-
+IS_CHROME = false;
+// Safari specific methods for options page
 function respondToMessage(e) {
     if (e.name === 'applyOptions')
         initOptions(e.message);

@@ -1,6 +1,5 @@
+IS_CHROME = true;
 // Chrome specific methods for options page
-
-var IS_CHROME = true;
 var sync;
 
 // propagate change in preferences to all currently open tabs

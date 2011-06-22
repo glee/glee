@@ -8,11 +8,12 @@ var KeyCombo = {
                 KeyCombo.lastValue = el.value;
                 if (e.keyCode == 8)
                     e.preventDefault();
-                if (KeyCombo.filterKeyCode(e.keyCode))
-                {
+
+                if (KeyCombo.filterKeyCode(e.keyCode)) {
                     codeEl.innerText = e.keyCode;
                     el.value = '';
                 }
+
                 if (e.keyCode == 27)
                     el.blur();
             },

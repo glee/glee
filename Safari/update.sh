@@ -73,10 +73,11 @@ do
     fi
 done
 
-# echo "\nRemoving options.html from Safari..."
-# cd $safari_dir
-# rm -rfv options.html
-#
-# echo "\nCopying over options.html from Chrome..."
-# cd $current_dir
-# cp -rv $chrome_dir"options.html" $safari_dir
+# todo: automatically replace /chrome/options.js with /safari/options.js
+echo "\nRemoving options.html from Safari..."
+cd $safari_dir
+rm -rfv options.html
+
+echo "\nCopying over options.html from Chrome..."
+cd $current_dir
+cp -rv $chrome_dir"options.html" $safari_dir

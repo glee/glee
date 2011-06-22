@@ -28,11 +28,13 @@ function initOptions(response) {
         }
 
         else if (option === 'shortcutKey') {
-
+            var $shortcutKeyCode = $('[name=shortcutKeyCode]').text(options[option]);
+            KeyCombo.init($('[name=shortcutKey]').get(0), $shortcutKeyCode.get(0));
         }
 
         else if (option === 'tabManagerShortcutKey') {
-
+            var $shortcutKeyCode = $('[name=tabManagerShortcutKeyCode]').text(options[option]);
+            KeyCombo.init($('[name=tabManagerShortcutKey]').get(0), $shortcutKeyCode.get(0));
         }
 
         else if (option === 'disabledUrls') {
@@ -81,10 +83,11 @@ function initOptions(response) {
             }
         }
     }
-    if (setSyncUI)
+    if (IS_CHROME) {
         setSyncUI();
+        bg_window = getBackgroundPage();
+    }
     attachListeners();
-    bg_window = getBackgroundPage();
 }
 
 function addURL(value) {
@@ -552,10 +555,7 @@ function attachListeners() {
 
     // checkbox
     $('input[type=checkbox]').bind('change', function(e) {
-        if (IS_CHROME)
-            saveOption(e.target.name, (e.target.value) ? 1 : 0);
-        else
-            saveOption(e.target.name, translateOptionValue(e.target.name, e.target.value));
+        saveOption(e.target.name, translateOptionValue(e.target.name, e.target.value));
     });
 
     // textfields
@@ -622,15 +622,8 @@ function changeScrollingKey(keyset) {
         down = 'J'.charCodeAt(0);
     }
 
-    if (IS_CHROME) {
-        saveOption('up_scrolling_key', up);
-        saveOption('down_scrolling_key', down);
-    }
-
-    else {
-        saveOption('upScrollingKey', up);
-        saveOption('downScrollingKey', down);
-    }
+    saveOption('upScrollingKey', up);
+    saveOption('downScrollingKey', down);
 }
 
 function attachFilteringListeners() {
@@ -845,13 +838,15 @@ function editESP($esp) {
 }
 
 function setDefaultShortcutKey() {
-    $('[name=shortcut_key]').attr('value', 'g').keyup();
-    $('[name=shortcut_key_span]').text(71);
+    $('[name=shortcutKey]').attr('value', 'g').keyup();
+    $('[name=shortcutKeyCode]').text(71);
+    saveOption('shortcutKey', 71);
 }
 
 function setDefaultTabShortcutKey() {
-    $('[name=tab_shortcut_key]').attr('value', '.').keyup();
-    $('[name=tab_shortcut_key_span]').text(190);
+    $('[name=tabManagerShortcutKey]').attr('value', '.').keyup();
+    $('[name=tabManagerShortcutKeyCode]').text(190);
+    saveOption('tabManagerShortcutKey', 190);
 }
 
 function saveOption(name, value) {
@@ -869,8 +864,8 @@ function saveAllOptions() {
 
 function translateOptionValue(name, value) {
     switch (name) {
-        case 'shortcutKey': return document.getElementsByName('shortcutKey_span')[0].innerText; break;
-        case 'tabManagerShortcutKey': return document.getElementsByName('tabManagerShortcutKey_span')[0].innerText; break;
+        case 'shortcutKey': return $('[name=shortcutKeyCode]').text(); break;
+        case 'tabManagerShortcutKey': return $('[name=tabManagerShortcutKeyCode]').text(); break;
     }
     return value;
 }
