@@ -38,6 +38,8 @@ Glee.Browser = {
             Glee.Browser.onSendRequestCompletion(e.message);
         else if (e.name === 'applyOptions')
             Glee.applyOptions(e.message);
+        else if (e.name === 'onGetTabsCompletion')
+            Glee.Browser.onGetTabsCompletion(e.message);
     },
 
     setOption: function(option, value) {
@@ -61,9 +63,31 @@ Glee.Browser = {
         safari.self.tab.dispatchMessage('updateCommandCache', Glee.cache.commands);
     },
 
-    // stub methods
     openTabManager: function() {
-        // do nothing
+        Glee.setState('Displays a vertical list of currently open tabs.', 'msg');
+        Glee.Browser.getTabs();
+    },
+
+    getTabs: function() {
+        safari.self.tab.dispatchMessage('getTabs');
+    },
+
+    onGetTabsCompletion: function(tabs) {
+        Glee.closeWithoutBlur();
+        Glee.ListManager.openBox(tabs, function(action, item) {
+            if (action === 'open')
+                Glee.Browser.moveToTab(item);
+            else if (action === 'remove')
+                Glee.Browser.removeTab(item);
+        });
+    },
+
+    removeTab: function(tab) {
+        safari.self.tab.dispatchMessage('removeTab', tab.id);
+    },
+
+    moveToTab: function(tab) {
+        safari.self.tab.dispatchMessage('moveToTab', tab.id);
     },
 
     getBookmarklet: function() {

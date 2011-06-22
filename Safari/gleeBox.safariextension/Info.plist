@@ -39,6 +39,7 @@
 				<string>js/elementstate.js</string>
 				<string>js/libs/utils.js</string>
 				<string>js/pagecmds.js</string>
+				<string>js/listmanager.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
@@ -46,6 +47,7 @@
 			<string>css/glee.css</string>
 			<string>css/themes.css</string>
 			<string>css/jquery.autocomplete.css</string>
+			<string>css/listmanager.css</string>
 		</array>
 	</dict>
 	<key>Description</key>

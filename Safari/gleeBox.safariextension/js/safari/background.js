@@ -58,9 +58,10 @@ function upgrade(version) {
                 localStorage[option] = cache.options[option];
         }
 
+        localStorage.tabManager = cache.options.tabManager;
+        localStorage.tabManagerShortcutKey = cache.options.tabManagerShortcutKey;
+
         localStorage.sync = false;
-        localStorage.tabManager = false;
-        localStorage.tabManagerShortcutKey = 0;
         localStorage.status = true;
         localStorage.hyper = false;
 
@@ -77,6 +78,29 @@ function respondToMessage(e) {
         var activeWindow = safari.application.activeBrowserWindow;
         var newTab = activeWindow.openTab();
         newTab.url = e.message;
+    }
+
+    else if (e.name === 'getTabs') {
+        var tabs = safari.application.activeBrowserWindow.tabs;
+        var len = tabs.length;
+        var response = [];
+        for (var i = 0; i < len; i++) {
+            response.push({
+                id: i,
+                title: tabs[i].title
+            });
+        }
+        e.target.page.dispatchMessage('onGetTabsCompletion', response);
+    }
+
+    else if (e.name === 'removeTab') {
+        var tabs = safari.application.activeBrowserWindow.tabs;
+        tabs[e.message].close();
+    }
+
+    else if (e.name === 'moveToTab') {
+        var tabs = safari.application.activeBrowserWindow.tabs;
+        tabs[e.message].activate();
     }
 
     else if (e.name === 'openPageIfNotExist') {

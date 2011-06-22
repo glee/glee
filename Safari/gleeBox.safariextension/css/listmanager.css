@@ -1,0 +1,211 @@
+/** gleeBox List Manager **/
+
+#gleeListManager {
+    display: none;
+    line-height: 20px !important;
+    left: 25% !important;
+    margin: 0;
+    padding: 2px !important;
+    top: 15% !important;
+    overflow: auto;
+    position: fixed;
+    width: 50%;
+    z-index: 2147483647 !important;
+    opacity: 1;
+    height: 400px;
+    font-size: 15px !important;
+    border-radius:7px !important;
+}
+
+#gleeListSearchField {
+    line-height: 20px !important;
+    margin: 0 !important;
+    padding: 5px !important;
+    border: none !important;
+    color: inherit !important;
+    outline: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    background-color: transparent !important;
+    width: 97% !important;
+}
+
+#gleeList {
+    padding: 0 !important;
+    width: auto !important;
+    margin: 0 !important;
+    font-size: inherit !important;
+    color: inherit !important;
+    text-align: left !important;
+    font-family: inherit !important;
+}
+
+#gleeListManager a.gleeListItem, a.gleeListItem:visited, a.gleeListItem:active, a.gleeListItem:hover {
+    margin: 0px !important;
+    padding: 5px !important;
+    border: none;
+    border-radius: 2px !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    float: left !important;
+    outline: none !important;
+    width: 98% !important;
+    font-weight: inherit !important;
+    cursor: normal !important;
+}
+
+/** Theme Specific **/
+
+#gleeListManager {
+    background-color: rgba(51, 51, 51, 0.75) !important;
+}
+
+#gleeListManager a.gleeListItemHover.gleeListItem {
+    background-color: #ededed !important;
+    color: #454545 !important;
+    outline: none !important;
+}
+
+#gleeListManager.GleeThemeRuby {
+    background-color: rgba(83, 0, 0, 0.75) !important;
+}
+
+#gleeListManager.GleeThemeRuby a.gleeListItemHover.gleeListItem {
+    background-color: #e8c1cd !important;
+    color: #580d2b !important;
+}
+
+#gleeListManager.GleeThemeWhite {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+#gleeListManager.GleeThemeWhite a.gleeListItemHover.gleeListItem {
+    background-color: #c5c9d1 !important;
+    color: #1b1b1b !important;
+}
+
+#gleeListManager.GleeThemeGreener {
+    background-color: rgba(46, 92, 79, 0.85) !important;
+}
+
+#gleeListManager.GleeThemeGreener a.gleeListItemHover.gleeListItem {
+    background-color: #4ad051 !important;
+    color: #093b21 !important;
+}
+
+#gleeListManager.GleeThemeConsole {
+    background-color: rgba(17, 17, 17, 0.75) !important;
+}
+
+#gleeListManager.GleeThemeConsole a.gleeListItemHover.gleeListItem {
+    background-color: #005f81 !important;
+    color: #ffffff !important;
+}
+
+#gleeListManager.GleeThemeGlee {
+    background-color: rgba(235, 18, 87, 0.85) !important;
+}
+
+#gleeListManager.GleeThemeGlee a.gleeListItemHover.gleeListItem {
+    background-color: #eb1257 !important;
+    color: #ffffff !important;
+}
+
+/** Styled scrollbars **/
+
+#gleeListManager::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+}
+
+#gleeListManager::-webkit-scrollbar-button:start:decrement,
+#gleeListManager::-webkit-scrollbar-button:end:increment {
+    display: none;
+}
+
+#gleeListManager::-webkit-scrollbar-button:start:increment,
+#gleeListManager::-webkit-scrollbar-button:end:decrement {
+    display: none;
+}
+
+#gleeListManager::-webkit-scrollbar-button:vertical {
+}
+
+#gleeListManager::-webkit-scrollbar-button:start:decrement {
+}
+
+#gleeListManager::-webkit-scrollbar-button:end:increment {
+}
+
+#gleeListManager::-webkit-scrollbar-track-piece {
+    border-radius:7px;
+    background-color: #ededed;
+}
+
+#gleeListManager::-webkit-scrollbar-thumb:vertical {
+    height: 100px;
+    border-radius:7px;
+    background-color: #454545;
+}
+#gleeListManager::-webkit-scrollbar-corner:vertical, #gleeListManager::-webkit-scrollbar-resizer:vertical {
+    background-color: #ededed;
+}
+
+/** apply theme-specific styling to scrollbar **/
+
+/* Greener */
+#gleeListManager.GleeThemeGreener::-webkit-scrollbar-track-piece {
+    background-color: #4ad051;
+}
+
+#gleeListManager.GleeThemeGreener::-webkit-scrollbar-thumb:vertical {
+    background-color: #093b21;
+}
+
+#gleeListManager.GleeThemeGreener::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeGreener::-webkit-scrollbar-resizer:vertical {
+    background-color: #4ad051;
+}
+
+/* Ruby */
+#gleeListManager.GleeThemeRuby::-webkit-scrollbar-track-piece {
+    background-color: #e8c1cd;
+}
+
+#gleeListManager.GleeThemeRuby::-webkit-scrollbar-thumb:vertical {
+    background-color: #580d2b;
+}
+
+#gleeListManager.GleeThemeRuby::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeRuby::-webkit-scrollbar-resizer:vertical {
+    background-color: #e8c1cd;
+}
+
+/* White */
+#gleeListManager.GleeThemeWhite::-webkit-scrollbar-track-piece {
+    background-color: #c5c9d1;
+}
+
+#gleeListManager.GleeThemeWhite::-webkit-scrollbar-thumb:vertical {
+    background-color: #1b1b1b;
+}
+
+#gleeListManager.GleeThemeWhite::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeWhite::-webkit-scrollbar-resizer:vertical {
+    background-color: #c5c9d1;
+}
+
+/* Console */
+#gleeListManager.GleeThemeConsole::-webkit-scrollbar-track-piece {
+    background-color: #005f81;
+    border: 1px solid #333;
+}
+
+#gleeListManager.GleeThemeConsole::-webkit-scrollbar-thumb:vertical {
+    background-color: #ffffff;
+    border: 1px solid #111;
+}
+
+#gleeListManager.GleeThemeConsole::-webkit-scrollbar-corner:vertical, #gleeListManager.GleeThemeConsole::-webkit-scrollbar-resizer:vertical {
+    background-color: #005f81;
+}
+/** end of scrollbar styling */
