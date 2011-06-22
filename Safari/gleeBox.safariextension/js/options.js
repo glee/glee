@@ -321,9 +321,6 @@ function validateScraper(name, selector)
     // check that command name/selector should not be blank
     if (name === '' || selector === '')
         return false;
-    // check that command name does not conflict with the default scraper command names
-    if (name === 'h' || name === '?' || name === 'img' || name === 'a')
-        return false;
     if (name.indexOf('`') != -1 || selector.indexOf('`') != -1)
         return false;
     return true;

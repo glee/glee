@@ -9,7 +9,6 @@ function init() {
 }
 
 function checkVersion() {
-            upgrade(2.2);
     if (localStorage['gleebox_version'] != CURRENT_VERSION) {
         // Upgrade data model for 2.2
         if (parseFloat(localStorage['gleebox_version']) < 2.2)
