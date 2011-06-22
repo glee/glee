@@ -19,7 +19,7 @@
                 <li><a href="#appearance">Appearance</a></li>
                 <li><a href="#scrapers">Scrapers</a></li>
                 <li><a href="#ESP_Visions">ESP Visions</a></li>
-                <li><a href="#backup">Backup and Sync</a></li>
+                <li><a href="#backup">Backup</a></li>
                 <li class='menu-separator'></li>
                 <li><a href="#tabmanager">Tab Manager</a></li>
                 <li class='menu-separator'></li>
@@ -104,9 +104,9 @@
                             <span class="option-value">
                                 <input name="shortcutKey" size="5" type="text" />
                                 <span name="shortcutKeyCode" style="display:none"></span>
-                                <a href="#" onclick='javascript:setDefaultShortcutKey();' class='button'>
+                                <button onclick='javascript:setDefaultShortcutKey();'>
                                     Revert to Default
-                                </a>
+                                </button>
                             </span>
                         </div>
 
@@ -128,11 +128,10 @@
                     <div>
                         <span class="option-field">
                             <ul style='margin-left: -5px;' id="domains">
-                                <li style='margin-left: 5px;'>chrome.google.com/extensions</li>
                                 <li id="addDomainLI">
                                     <form onsubmit="addItem('domain', null, null, true);return false;">
                                         <input id="add_domain" type="text" size=50 placeholder="Page URL"/>&nbsp;
-                                        <input type="submit" value="Add" class="button"/>
+                                        <input type="submit" value="Add" />
                                     </form>
                                 </li>
                             </ul>
@@ -160,9 +159,9 @@
                             <input name="tabManagerShortcutKey" size="5" type="text" />
                             <span name="tabManagerShortcutKeyCode" style="display:none"></span>
 
-                            <a class='button' href="#" onclick='javascript:setDefaultTabShortcutKey();'>
+                            <button onclick='javascript:setDefaultTabShortcutKey();'>
                                 Revert to Default
-                            </a>
+                            </button>
                         </span>
                     </div>
                 </section>
@@ -210,7 +209,7 @@
                                     <input id="add-scraper-name" type="text" placeholder="Name" />
                                     <div class='separator'></div>
                                     <input id="add-scraper-selector" class='selector' type="text" placeholder="jQuery Selector" />
-                                    <input type="submit" value="Add" class="button"/>
+                                    <input type="submit" value="Add"/>
                                 </form>
                             </li>
                         </ul>
@@ -247,7 +246,7 @@
                                     <input id="add-esp-url" type="text" placeholder="Page URL" />
                                     <div class='separator'></div>
                                     <input id="add-esp-selector" type="text" class='selector' placeholder="jQuery Selector" />
-                                    <input type="submit" value="Add" class="button"/>
+                                    <input type="submit" value="Add"/>
                                 </form>
                             </li>
                         </ul>
@@ -255,30 +254,19 @@
                 </section>
             </div>
             <div id="backup" class='page'>
-                <h2>Backup and Sync</h2>
+                <h2>Backup</h2>
                 <section>
                     <h3>Backup</h3>
                     <div>
-                        <input type="button" class="button" value="Export..." onclick= "exportSettings();" />
-                        <input type="button" class="button" value="Import..." onclick= "importSettings();" />
+                        <input type="button" value="Export..." onclick= "exportSettings();" />
+                        <input type="button" value="Import..." onclick= "importSettings();" />
                     </div>
                 </section>
 
                 <section>
                     <h3>Developer Pack</h3>
                     <div>
-                        <input type="button" class="button" value="Import Developer Pack..." onclick= "importDevPack();"/>
-                    </div>
-                </section>
-
-                <section>
-                    <h3>Sync</h3>
-                    <div>
-                        Sync your Scrapers and ESP Visions across multiple computers. <br>
-                        Requires <a href='http://www.google.com/support/chrome/bin/answer.py&answer=185277'>
-                            Bookmark Sync</a>.
-                        <br><br>
-                        <input id="sync-button" type="button" class="button" value="Enable Sync" onclick= "toggleSyncing();"/>
+                        <input type="button" value="Import Developer Pack..." onclick= "importDevPack();"/>
                     </div>
                 </section>
             </div>

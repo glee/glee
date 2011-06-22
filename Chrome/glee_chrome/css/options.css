@@ -146,7 +146,6 @@ ul {
 
 .close-button {
     -webkit-transition: .15s opacity;
-    display: block;
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAOVBMVEX///8FBQUGBgYDAwMDAwMDAwMGBgYGBgYFBQUAAAAFBQUAAAAEBAQDAwMDAwMDAwMDAwMDAwMAAABMcPQTAAAAE3RSTlMACwsPERIzNzk9PUZGSUxNT1dZm90FQAAAAFlJREFUGFedjEsOwCAIRFWoUvx7/8NWTLHdtrMgeS/DGPMvA+UeY3NLMLnXeAtMxIC9sNUKcOCc2SkvQ/Rig5m83w+yJ4Lg4cLOUmA1o8re3Dm1Etc7bP6YC1LBAmMNPdFwAAAAAElFTkSuQmCC") no-repeat;
     height: 16px;
     width: 20px;
@@ -234,10 +233,6 @@ section > div:only-of-type {
     -webkit-box-flex: 1;
 }
 
-#addDomainLi {
-    margin-top: 10px;
-}
-
 /** Common to ESP and Scrapers **/
 
 .separator {
@@ -251,7 +246,7 @@ section > div:only-of-type {
 #scrapers li
 {
     float: left;
-    padding: 5px;
+    padding: 3px;
     margin: 0;
     clear: both;
 }
@@ -297,10 +292,11 @@ section > div:only-of-type {
 
 .domain {
     overflow: auto;
-    padding: 3px 5px;
+    padding: 2px 3px;
 }
 
 .domain-name {
+    float: left;
     width: 400px;
 }
 
@@ -403,8 +399,7 @@ textarea
 
 button,
 input[type=button],
-input[type=submit],
-a.button
+input[type=submit]
 {
     font-size: 13px;
     font-style: normal;
@@ -433,8 +428,7 @@ a.button
 
 button:hover,
 input[type='button']:hover,
-input[type='submit']:hover,
-a.button:hover
+input[type='submit']:hover
 {
     -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
     background: #E9E9E9;
@@ -453,8 +447,7 @@ a.button:hover
 
 button:active,
 input[type='button']:active,
-input[type='submit']:active,
-a.button:active
+input[type='submit']:active
 {
     -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2);
     background: #dcdcdc;

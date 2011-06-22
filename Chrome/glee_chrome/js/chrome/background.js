@@ -9,6 +9,7 @@ function init() {
 }
 
 function checkVersion() {
+            upgrade(2.2);
     if (localStorage['gleebox_version'] != CURRENT_VERSION) {
         // Upgrade data model for 2.2
         if (parseFloat(localStorage['gleebox_version']) < 2.2)
@@ -90,13 +91,42 @@ function upgrade(version) {
             localStorage['espVisions'] = JSON.stringify(options['espModifiers']);
 
             // scrapers
+            // add the default scrapers first, since now they are removable
+            var defaultScrapers = [{
+                command: '?',
+                nullMessage: 'Could not find any input elements on the page.',
+                selector: 'input:enabled:not(#gleeSearchField),textarea',
+                cssStyle: 'GleeReaped'
+            },
+            {
+                command: 'img',
+                nullMessage: 'Could not find any linked images on the page.',
+                selector: 'a > img',
+                cssStyle: 'GleeReaped'
+            },
+            {
+                command: 'h',
+                nullMessage: 'Could not find any headings on the page.',
+                selector: 'h1,h2,h3',
+                cssStyle: 'GleeReaped'
+            },
+            {
+                command: 'a',
+                nullMessage: 'No links found on the page',
+                selector: 'a',
+                cssStyle: 'GleeReaped'
+            }];
+
+            var len = defaultScrapers.length;
+            for (var i = 0; i < len; i++)
+                options.scrapers.unshift(defaultScrapers[i]);
             localStorage['scrapers'] = JSON.stringify(options['scrapers']);
 
             loadOptionsIntoCache();
-            console.log(cache.options);
             if (localStorage['gleebox_sync'] == 1)
                 saveSyncData(cache.options);
 
+            console.log(cache.options);
             // todo: clear DB
         });
     }

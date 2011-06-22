@@ -239,7 +239,8 @@ function addItem(type, value1, value2, shouldSave) {
     var closeButton = $('<a>', {
         'class': 'close-button',
         type: 'button',
-        href: '#'
+        href: '#',
+        tabIndex: -1
     })
 
     .bind('click keydown', function(e) {
@@ -372,7 +373,7 @@ function importAndApply() {
         var newOptions = JSON.parse(jsonString);
 
         clearSettings();
-        initSettings(newOptions);
+        initOptions(newOptions);
 
         options = newOptions;
         saveAllOptions();
@@ -382,6 +383,7 @@ function importAndApply() {
     }
 
     catch (e) {
+        console.log(e);
         $('#backupInfo').text('The import format is incorrect!');
         $('#settingsText').get(0).focus();
     }
@@ -397,7 +399,7 @@ function applyDevPack() {
         options.espVisions = newOptions.espVisions;
 
         clearSettings();
-        initSettings(options);
+        initOptions(options);
 
         saveAllOptions();
         $('#backupInfo').text('Developer Pack successfully imported!');
@@ -405,6 +407,7 @@ function applyDevPack() {
     }
 
     catch (e) {
+        console.log(e);
         $('#backupInfo').text('The import format is incorrect!');
         $('#settingsText').get(0).focus();
     }
@@ -488,18 +491,18 @@ function initBackupPopup() {
     $('<textarea id="settingsText"></textarea>').appendTo(popup);
 
     // import settings button
-    var importBtn = $('<input type="button" class="button" value="Import Settings" id="importButton" />')
+    var importBtn = $('<input type="button" value="Import Settings" id="importButton" />')
     .appendTo(popup)
     .click(importAndApply);
 
     // import dev pack button
-    var importDevPackBtn = $('<input type="button" class="button" value="Import Scrapers & Visions" id="importDevPackButton" />')
+    var importDevPackBtn = $('<input type="button" value="Import Scrapers & Visions" id="importDevPackButton" />')
     .appendTo(popup)
     .click(applyDevPack);
 
     // copy to clipboard button (displayed in export)
     if (copyToClipboard != undefined) {
-        $('<input type="button" class="button" value="Copy to Clipboard" id="exportButton" />')
+        $('<input type="button" value="Copy to Clipboard" id="exportButton" />')
         .appendTo(popup)
         .click(function(e) {
             copyToClipboard($('#settingsText')[0].value);
