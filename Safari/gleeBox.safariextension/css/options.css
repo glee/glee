@@ -144,7 +144,7 @@ ul {
     float: left;
 }
 
-.close-button {
+.closeButton {
     -webkit-transition: .15s opacity;
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAOVBMVEX///8FBQUGBgYDAwMDAwMDAwMGBgYGBgYFBQUAAAAFBQUAAAAEBAQDAwMDAwMDAwMDAwMDAwMAAABMcPQTAAAAE3RSTlMACwsPERIzNzk9PUZGSUxNT1dZm90FQAAAAFlJREFUGFedjEsOwCAIRFWoUvx7/8NWTLHdtrMgeS/DGPMvA+UeY3NLMLnXeAtMxIC9sNUKcOCc2SkvQ/Rig5m83w+yJ4Lg4cLOUmA1o8re3Dm1Etc7bP6YC1LBAmMNPdFwAAAAAElFTkSuQmCC") no-repeat;
     height: 16px;
@@ -155,24 +155,24 @@ ul {
     opacity: 0;
 }
 
-.close-button:hover {
+.closeButton:hover {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAQlBMVEX///////////97e3t5eXlqampoaGhnZ2dgYGBcXFwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuQipPAAAAFnRSTlMAIDZPUFtdXmVpgIiMlqivtri60NLWYRh4wAAAAGlJREFUGNONTkkSgCAMs4gs0gBu//+qZRyq40VzSdvJ0mH4AzL0IBniEUhJYI41e6K4L9lcipAZLmwVtns8EkrBSJrqkJjvXUyF59negri1A09au1eMlhNcr10kjyZJ1tpml2Stfb3+gRPyMAOM6OD34wAAAABJRU5ErkJggg==");
 }
 
-.close-button:active {
+.closeButton:active {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEUAAAD///8AAAAAAADI23cLAAAABHRSTlMAAD7MYITzfAAAADJJREFUCNdjCAUCBgQR9oB7KkP4D/2rDGH/9k9lCNn/T5QhRP8HjABxwRIQJSDFqAYAAIjXHQebFIiyAAAAAElFTkSuQmCC");
 }
 
-.domain:hover .close-button,
-.scraper:hover .close-button,
-.esp:hover .close-button,
-.selected .close-button {
+.disabledUrl:hover .closeButton,
+.scraper:hover .closeButton,
+.espVision:hover .closeButton,
+.selected .closeButton {
     opacity: 1;
 }
 
-.domain:hover,
+.disabledUrl:hover,
 .scraper:hover,
-.esp:hover,
+.espVision:hover,
 .selected {
     background-color: #eee;
 }
@@ -203,17 +203,17 @@ li.option:first-of-type {
     margin-top: 0px;
 }
 
-.option-field {
+.option {
     vertical-align: top;
     min-width: 220px;
     display: inline-block;
 }
 
-.option-value {
+.optionValue {
     display: inline-block;
 }
 
-.option-value ul {
+.optionValue ul {
     display: inline;
 }
 
@@ -242,30 +242,28 @@ section > div:only-of-type {
     height: 10px;
 }
 
-#esp-modifiers li,
-#scrapers li
-{
+#scrapers ul li,
+#visions ul li {
     float: left;
     padding: 3px;
     margin: 0;
     clear: both;
 }
 
-#esp-modifiers .button,
-#scrapers .button {
+#scrapers ul .button,
+#visions ul .button {
     margin-left: 5px;
 }
 
-#esp-modifiers input,
-#scrapers input {
+#scrapers ul li input,
+#visions ul li input {
     float: left;
 }
 
-.esp-sel,
-.scraper-sel,
-#add-esp-selector,
-#add-scraper-selector
-{
+.espSelector,
+.scraperSelector,
+#addEspSelector,
+#addScraperSelector {
     font-size: 12px;
     font-family: Menlo, Monaco, 'Lucida Console', monospace;
     float: left;
@@ -274,50 +272,49 @@ section > div:only-of-type {
     white-space: nowrap;
 }
 
-.esp-sel {
+.espSelector {
     width: 250px;
 }
 
-#add-esp-selector {
+#addEspSelector {
     width: 200px;
 }
 
-.scraper-sel {
+.scraperSelector {
     width: 340px;
 }
 
-#add-scraper-selector {
+#addScraperSelector {
     width: 290px;
 }
 
-.domain {
+.disabledUrl {
     overflow: auto;
     padding: 2px 3px;
 }
 
-.domain-name {
+.disabledUrlValue {
     float: left;
     width: 400px;
 }
 
 /** ESP **/
 
-#esp-search-field,
-.esp-url,
-#add-esp-url
-{
+#espSearch,
+.espUrl,
+#addEspUrl {
     float: left;
     color: #333;
     width: 200px;
 }
 
-.esp-url {
+.espUrl {
     text-overflow: ellipsis !important;
     overflow: hidden !important;
     white-space: nowrap !important;
 }
 
-#esp-search-field {
+#espSearch {
     margin-bottom: 10px;
 }
 
@@ -329,7 +326,7 @@ section > div:only-of-type {
 
 /** ? prepended before scrapers **/
 
-.scraper-prefix {
+.scraperPrefix {
     color: #333;
     float: left;
     margin-right: 2px;
@@ -337,10 +334,9 @@ section > div:only-of-type {
 
 /** Scraper Names **/
 
-#scraper-search-field,
-.default-scraper-name,
-.scraper-name,
-#add-scraper-name
+#scraperSearch,
+.scraperName,
+#addScraperName
 {
     float: left;
     color: #333;

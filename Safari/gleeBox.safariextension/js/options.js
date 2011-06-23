@@ -39,9 +39,8 @@ function initOptions(response) {
 
         else if (option === 'disabledUrls') {
             var len = options[option].length;
-            for (var i = 0; i < len; i++) {
-                addItem('domain', options[option][i]);
-            }
+            for (var i = 0; i < len; i++)
+                addItem('disabledUrl', [options[option][i]]);
             continue;
         }
 
@@ -49,14 +48,14 @@ function initOptions(response) {
             var len = options.scrapers.length;
             // last element is a string only containing a ,
             for (var i = 0; i < len; i++)
-                addItem('scraper', options.scrapers[i].command, options.scrapers[i].selector);
+                addItem('scraper', [options.scrapers[i].command, options.scrapers[i].selector]);
             continue;
         }
 
         else if (option === 'espVisions') {
             var len = options.espVisions.length;
             for (var i = 0; i < len; i++)
-                addItem('esp', options.espVisions[i].url, options.espVisions[i].selector);
+                addItem('espVision', [options.espVisions[i].url, options.espVisions[i].selector]);
             continue;
         }
 
@@ -90,7 +89,7 @@ function initOptions(response) {
     attachListeners();
 }
 
-function addURL(value) {
+function addDisabledUrl(value) {
     options.disabledUrls.push(value);
     saveOption('disabledUrls', options.disabledUrls);
 }
@@ -100,80 +99,66 @@ function addScraper(value) {
     saveOption('scrapers', options.scrapers);
 }
 
-function addESP(value) {
+function addEspVision(value) {
     options.espVisions.push(value);
     saveOption('espVisions', options.espVisions);
 }
 
-function addItem(type, value1, value2, shouldSave) {
-    var listOfItems;
-    var lastEl;
+function addItem(type, values, save) {
     var content;
-    var no = $('li.' + type).length;
+    var index = $('li.' + type).length;
 
     var container = $('<li>', {
-       id: type + no,
+       id: type + index,
        'class': type,
        tabIndex: 0
     });
 
     switch (type) {
-        case 'domain':
+        case 'disabledUrl':
+            var disabledUrl = $('#addDisabledUrl').get(0);
 
-            var domainName = document.getElementById('add_domain');
-
-            if (!value1) {
-                value1 = domainName.value;
-                domainName.value = '';
+            if (!values) {
+                values = [disabledUrl.value];
+                disabledUrl.value = '';
             }
 
-            if (validateURL(value1)) {
-                listOfItems = document.getElementById('domains');
-                lastEl = document.getElementById('addDomainLI');
-
+            if (validateDisabledUrl(values[0])) {
                 content = $('<span>', {
-                    'class': 'domain-name',
-                    html: value1
+                    'class': 'disabledUrlValue',
+                    html: values[0]
                 });
-
                 container.append(content);
 
-                if (shouldSave)
-                    addURL(value1);
+                if (save)
+                    addDisabledUrl(values[0]);
             }
-
             else
                 return false;
 
             break;
 
         case 'scraper':
-            var scraperName = document.getElementById('add-scraper-name');
-            var scraperSel = document.getElementById('add-scraper-selector');
-
-            if (!value1) {
-                value1 = scraperName.value;
-                value2 = scraperSel.value;
+            var scraperName = $('#addScraperName').get(0);
+            var scraperSelector = $('#addScraperSelector').get(0);
+            if (!values) {
+                values = [scraperName.value, scraperSelector.value];
                 scraperName.value = '';
-                scraperSel.value = '';
+                scraperSelector.value = '';
             }
 
-            if (validateScraper(value1, value2))
-            {
-                listOfItems = document.getElementById('scraper-commands');
-                lastEl = document.getElementById('addScraper');
-
+            if (validateScraper(values)) {
                 var contentName = $('<span>', {
-                    'class': 'scraper-name',
-                    html: value1
+                    'class': 'scraperName',
+                    html: values[0]
                 });
 
                 var contentSelector = $('<span>', {
-                    'class': 'scraper-sel selector',
-                    html: value2
+                    'class': 'scraperSelector selector',
+                    html: values[1]
                 });
 
-                var prefix = $("<span class='scraper-prefix'>?</span>");
+                var prefix = $("<span class='scraperPrefix'>?</span>");
 
                 var separator = $('<div>', {
                     'class': 'separator'
@@ -184,39 +169,38 @@ function addItem(type, value1, value2, shouldSave) {
                 .append(separator)
                 .append(contentSelector);
 
-                if (shouldSave) {
-                    addScraper({ command: value1, selector: value2, cssStyle: 'GleeReaped', nullMessage: 'Could not find any elements' });
-                }
+                if (save)
+                    addScraper({
+                        command: values[0],
+                        selector: values[1],
+                        cssStyle: 'GleeReaped',
+                        nullMessage: 'Could not find any elements'
+                    });
             }
-
             else
                 return false;
 
             break;
 
-        case 'esp':
-            var espUrl = document.getElementById('add-esp-url');
-            var espSel = document.getElementById('add-esp-selector');
+        case 'espVision':
+            var espUrl = $('#addEspUrl').get(0);
+            var espSelector = $('#addEspSelector').get(0);
 
-            if (!value1) {
-                value1 = espUrl.value;
-                value2 = espSel.value;
+            if (!values) {
+                values = [espUrl.value, espSelector.value];
                 espUrl.value = '';
-                espSel.value = '';
+                espSelector.value = '';
             }
 
-            if (validateEspModifier(value1, value2)) {
-                listOfItems = document.getElementById('esp-modifiers');
-                lastEl = document.getElementById('addEspModifier');
-
+            if (validateEsp(values)) {
                 var contentName = $('<span>', {
-                    'class': 'esp-url',
-                    html: value1
+                    'class': 'espUrl',
+                    html: values[0]
                 });
 
                 var contentSelector = $('<span>', {
-                    'class': 'esp-sel selector',
-                    html: value2
+                    'class': 'espSelector selector',
+                    html: values[1]
                 });
 
                 var separator = $('<div>', {
@@ -227,17 +211,18 @@ function addItem(type, value1, value2, shouldSave) {
                 .append(separator)
                 .append(contentSelector);
 
-                if (shouldSave) {
-                    addESP({url: value1, selector: value2});
-                }
+                if (save)
+                    addEspVision({
+                        url: values[0],
+                        selector: values[1]
+                    });
             }
-
             else
                 return false;
     }
 
     var closeButton = $('<a>', {
-        'class': 'close-button',
+        'class': 'closeButton',
         type: 'button',
         href: '#',
         tabIndex: -1
@@ -250,49 +235,32 @@ function addItem(type, value1, value2, shouldSave) {
     })
     .appendTo(container);
 
-    if (lastEl != undefined)
-        listOfItems.insertBefore(container.get(0), lastEl);
-    else
-        listOfItems.insertBefore(container.get(0), null);
+    $('#add' + type.capitalize()).before(container);
 }
 
 function removeItem(e, type) {
-    var listOfItems;
-    var i = e.target.parentNode.id.substr(type.length);
+    var id = $(e.target).parent().attr('id');
+    if (id === undefined)
+        return;
 
-    switch (type)
-    {
-        case 'domain':
-            listOfItems = document.getElementById('domains');
-            options.disabledUrls.splice(i, 1);
-            saveOption('disabledUrls', options.disabledUrls);
-            break;
+    var index = id.substr(type.length);
+    var pluralType = type + 's';
 
-        case 'scraper':
-            listOfItems = document.getElementById('scraper-commands');
-            options.scrapers.splice(i, 1);
-            saveOption('scrapers', options.scrapers);
-            break;
+    // remove the entry and save options
+    options[pluralType].splice(index, 1);
+    saveOption(pluralType, options[pluralType]);
 
-        case 'esp':
-            listOfItems = document.getElementById('esp-modifiers');
-            options.espVisions.splice(i, 1);
-            saveOption('espVisions', options.espVisions);
-    }
-
-    var el = document.getElementById(type + i);
-    listOfItems.removeChild(el);
+    // update the UI
+    $('#' + type + i).remove();
     updateItemIndexes(type);
-
-    return 0;
 }
 
 function updateItemIndexes(type) {
-    var li = $('li.' + type);
-    var len = li.length;
-    for (var i = 0; i < len; i++) {
-        li[i].id = type + i;
-    }
+    var listOfItems = $('li.' + type);
+    var len = listOfItems.length;
+
+    for (var i = 0; i < len; i++)
+        listOfItems.get(i).id = type + i;
 }
 
 function filter(text) {
@@ -309,27 +277,25 @@ function filter(text) {
 
 // Validation Methods
 
-function validateURL(url)
-{
-    if (url == 'Page URL' || url == '')
+function validateDisabledUrl(url) {
+    if (url === 'Page URL' || url === '')
         return false;
     return true;
 }
 
-function validateScraper(name, selector)
-{
-    // check that command name/selector should not be blank
-    if (name === '' || selector === '')
+function validateScraper(values) {
+    var name = values[0];
+    var selector = values[1];
+
+    if (name === '' || name === '')
         return false;
     if (name.indexOf('`') != -1 || selector.indexOf('`') != -1)
         return false;
     return true;
 }
 
-function validateEspModifier(name, selector)
-{
-    // check that name/selector should not be blank
-    if (name === '' || selector === '')
+function validateEsp(values) {
+    if (values[0] === '' || values[1] === '')
         return false;
     return true;
 }
@@ -535,9 +501,7 @@ function hideBackupPopup() {
 }
 
 function clearSettings() {
-    // clearing disabled urls
-    var parent = document.getElementById('domains');
-    $('li.domain').remove();
+    $('li.disabledUrl').remove();
     $('li.scraper').remove();
     $('li.esp').remove();
 }
@@ -562,7 +526,13 @@ function attachListeners() {
     });
 
     // textfields
-    $('input[type=text]:not(#add_domain, #add-scraper-name, #add-scraper-selector, #add-esp-url, #add-esp-selector, #esp-search-field, #scraper-search-field)').keyup(function(e) {
+    $('input[type=text]:not(#addDisabledUrlValue,\
+        #addScraperName,\
+        #addScraperSelector,\
+        #addEspUrl,\
+        #addEspSelector,\
+        #espSearch,\
+        #scraperSearch)').keyup(function(e) {
         if (e.keyCode === 9)
             return true;
 
@@ -579,7 +549,7 @@ function attachListeners() {
     attachFilteringListeners();
 
     // attach listeners for editing
-    $('.scraper, .esp, .domain').live('click keydown', function(e) {
+    $('.scraper, .espVision, .disabledUrl').live('click keydown', function(e) {
         var $this = $(this);
 
         if ($this.hasClass('selected')) return true;
@@ -589,9 +559,9 @@ function attachListeners() {
         if ($this.hasClass('scraper'))
             editScraper($(this));
         else if ($this.hasClass('esp'))
-            editESP($(this));
-        else if ($this.hasClass('domain'))
-            editDomain($(this));
+            editEspVision($(this));
+        else if ($this.hasClass('disabledUrl'))
+            editDisabledUrl($(this));
     });
 }
 
@@ -628,7 +598,7 @@ function changeScrollingKey(keyset) {
 
 function attachFilteringListeners() {
     // scraper
-    $('#scraper-search-field')
+    $('#scraperSearch')
 
     .bind('search keyup', function(e) {
         filterScraper(e.target.value);
@@ -642,7 +612,7 @@ function attachFilteringListeners() {
     });
 
     // esp
-    $('#esp-search-field')
+    $('#espSearch')
 
     .bind('search keyup', function(e) {
         filterESP(e.target.value);
@@ -657,28 +627,28 @@ function attachFilteringListeners() {
 }
 
 function filterESP(value) {
-    var espDivs = $('.esp');
-    var urls = $('.esp-url');
-    var len = espDivs.length;
+    var $visions = $('.espVision');
+    var $urls = $('.espUrl');
+
+    var len = $visions.length;
     for (var i = 0; i < len; i++) {
-        var $div = $(espDivs[i]);
-        if (urls[i].innerHTML.indexOf(value) == -1)
-            $div.hide();
+        if ($urls.get(i).innerHTML.indexOf(value) === -1)
+            $visions.get(i).hide();
         else
-            $div.show();
+            $visions.get(i).show();
     }
 }
 
 function filterScraper(value) {
-    var scraperDivs = $('.scraper, .default-scraper');
-    var names = $('.scraper-name, .default-scraper-name');
-    var len = scraperDivs.length;
+    var $scrapers = $('.scraper');
+    var $names = $('.scraperName');
+
+    var len = $scrapers.length;
     for (var i = 0; i < len; i++) {
-        var $div = $(scraperDivs[i]);
-        if (names[i].innerHTML.indexOf(value) == -1)
-            $div.hide();
+        if ($names.get(i).innerHTML.indexOf(value) === -1)
+            $scrapers.get(i).hide();
         else
-            $div.show();
+            $scrapers.get(i).show();
     }
 }
 
@@ -733,8 +703,8 @@ window.addEventListener('keydown', function(e) {
 function editScraper($scraper) {
     $scraper.addClass('selected');
 
-    var $scraperName = $scraper.find('.scraper-name');
-    var $scraperSel = $scraper.find('.scraper-sel');
+    var $scraperName = $scraper.find('.scraperName');
+    var $scraperSel = $scraper.find('.scraperSelector');
 
     Utils.editElement($scraperSel, {editFieldClass: 'gleebox-editing-field'});
     Utils.editElement($scraperName, {editFieldClass: 'gleebox-editing-field'});
@@ -766,11 +736,11 @@ function editScraper($scraper) {
     $(document).bind('mousedown', onEditingComplete);
 }
 
-function editDomain($domain) {
-    $domain.addClass('selected');
+function editDisabledUrl($disabledUrl) {
+    $disabledUrl.addClass('selected');
 
-    var $domainName = $domain.find('.domain-name');
-    Utils.editElement($domainName, {editFieldClass: 'gleebox-editing-field'});
+    var $disabledUrlValue = $disabledUrl.find('.disabledUrlValue');
+    Utils.editElement($disabledUrlValue, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
         var el = e.target;
@@ -780,30 +750,30 @@ function editDomain($domain) {
         if (e.type === 'mousedown' && el.className === 'gleebox-editing-field')
             return true;
 
-        Utils.endEditing($domainName);
+        Utils.endEditing($disabledUrlValue);
 
-        var id = $domain.attr('id').slice(6);
+        var id = $disabledUrl.attr('id').slice(6);
 
-        options.disabledUrls[id] = $domainName.text();
+        options.disabledUrls[id] = $disabledUrlValue.text();
         saveOption('disabledUrls', options.disabledUrls);
 
-        $domain.removeClass('selected');
+        $disabledUrl.removeClass('selected');
 
         $(document).unbind('mousedown', onEditingComplete);
         $(document).unbind('keydown', onEditingComplete);
 
-        $domain.focus();
+        $disabledUrl.focus();
     }
 
     $(document).bind('keydown', onEditingComplete);
     $(document).bind('mousedown', onEditingComplete);
 }
 
-function editESP($esp) {
+function editEspVision($esp) {
     $esp.addClass('selected');
 
-    var $espURL = $esp.find('.esp-url');
-    var $espSel = $esp.find('.esp-sel');
+    var $espURL = $esp.find('.espUrl');
+    var $espSel = $esp.find('.espSelector');
     Utils.editElement($espSel, {editFieldClass: 'gleebox-editing-field'});
     Utils.editElement($espURL, {editFieldClass: 'gleebox-editing-field'});
 
