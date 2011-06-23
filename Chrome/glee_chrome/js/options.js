@@ -116,7 +116,7 @@ function addItem(type, values, save) {
 
     switch (type) {
         case 'disabledUrl':
-            var disabledUrl = $('#addDisabledUrl').get(0);
+            var disabledUrl = $('#addDisabledUrlValue').get(0);
 
             if (!values) {
                 values = [disabledUrl.value];
@@ -236,6 +236,7 @@ function addItem(type, values, save) {
     .appendTo(container);
 
     $('#add' + type.capitalize()).before(container);
+    incrementCount(type);
 }
 
 function removeItem(e, type) {
@@ -251,8 +252,9 @@ function removeItem(e, type) {
     saveOption(pluralType, options[pluralType]);
 
     // update the UI
-    $('#' + type + i).remove();
+    $('#' + type + index).remove();
     updateItemIndexes(type);
+    decrementCount(type);
 }
 
 function updateItemIndexes(type) {
@@ -503,7 +505,7 @@ function hideBackupPopup() {
 function clearSettings() {
     $('li.disabledUrl').remove();
     $('li.scraper').remove();
-    $('li.esp').remove();
+    $('li.espVision').remove();
 }
 
 function attachListeners() {
@@ -558,7 +560,7 @@ function attachListeners() {
 
         if ($this.hasClass('scraper'))
             editScraper($(this));
-        else if ($this.hasClass('esp'))
+        else if ($this.hasClass('espVision'))
             editEspVision($(this));
         else if ($this.hasClass('disabledUrl'))
             editDisabledUrl($(this));
@@ -633,9 +635,9 @@ function filterESP(value) {
     var len = $visions.length;
     for (var i = 0; i < len; i++) {
         if ($urls.get(i).innerHTML.indexOf(value) === -1)
-            $visions.get(i).hide();
+            $($visions.get(i)).hide();
         else
-            $visions.get(i).show();
+            $($visions.get(i)).show();
     }
 }
 
@@ -646,9 +648,9 @@ function filterScraper(value) {
     var len = $scrapers.length;
     for (var i = 0; i < len; i++) {
         if ($names.get(i).innerHTML.indexOf(value) === -1)
-            $scrapers.get(i).hide();
+            $($scrapers.get(i)).hide();
         else
-            $scrapers.get(i).show();
+            $($scrapers.get(i)).show();
     }
 }
 
@@ -720,9 +722,10 @@ function editScraper($scraper) {
         Utils.endEditing($scraperName);
         Utils.endEditing($scraperSel);
 
-        var id = $scraper.attr('id').slice(7);
-        options.scrapers[id].command = $scraperName.text();
-        options.scrapers[id].selector = $scraperSel.text();
+        var index = $scraper.attr('id').slice(7);
+        options.scrapers[index].command = $scraperName.text();
+        options.scrapers[index].selector = $scraperSel.text();
+
         saveOption('scrapers', options.scrapers);
         $scraper.removeClass('selected');
 
@@ -752,9 +755,9 @@ function editDisabledUrl($disabledUrl) {
 
         Utils.endEditing($disabledUrlValue);
 
-        var id = $disabledUrl.attr('id').slice(6);
+        var index = $disabledUrl.attr('id').slice(11);
 
-        options.disabledUrls[id] = $disabledUrlValue.text();
+        options.disabledUrls[index] = $disabledUrlValue.text();
         saveOption('disabledUrls', options.disabledUrls);
 
         $disabledUrl.removeClass('selected');
@@ -773,8 +776,8 @@ function editEspVision($esp) {
     $esp.addClass('selected');
 
     var $espURL = $esp.find('.espUrl');
-    var $espSel = $esp.find('.espSelector');
-    Utils.editElement($espSel, {editFieldClass: 'gleebox-editing-field'});
+    var $espSelector = $esp.find('.espSelector');
+    Utils.editElement($espSelector, {editFieldClass: 'gleebox-editing-field'});
     Utils.editElement($espURL, {editFieldClass: 'gleebox-editing-field'});
 
     function onEditingComplete(e) {
@@ -786,12 +789,12 @@ function editEspVision($esp) {
             return true;
 
         Utils.endEditing($espURL);
-        Utils.endEditing($espSel);
+        Utils.endEditing($espSelector);
 
-        var id = $esp.attr('id').slice(3);
+        var index = $esp.attr('id').slice(9);
 
-        options.espVisions[id].url = $espURL.text();
-        options.espVisions[id].selector = $espSel.text();
+        options.espVisions[index].url = $espURL.text();
+        options.espVisions[index].selector = $espSelector.text();
 
         saveOption('espVisions', options.espVisions);
 
@@ -837,4 +840,14 @@ function saveAllOptions() {
     for (option in options)
         localStorage[option] = options[option];
     propagate();
+}
+
+function incrementCount(type) {
+    var $countEl = $('#' + type + 'Count');
+    $countEl.text(parseInt($countEl.text()) + 1);
+}
+
+function decrementCount(type) {
+    var $countEl = $('#' + type + 'Count');
+    $countEl.text(parseInt($countEl.text()) - 1);
 }

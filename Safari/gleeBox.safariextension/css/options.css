@@ -288,6 +288,11 @@ section > div:only-of-type {
     width: 290px;
 }
 
+.count {
+    margin-left: 2px;
+    color: #888;
+}
+
 .disabledUrl {
     overflow: auto;
     padding: 2px 3px;
