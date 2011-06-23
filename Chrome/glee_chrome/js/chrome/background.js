@@ -6,6 +6,7 @@ function init() {
     loadOptionsIntoCache();
     initSync();
     initCommandCache();
+    console.log(cache.options);
 }
 
 function checkVersion() {
@@ -39,55 +40,53 @@ function upgrade(version) {
     //
     if (version === 2.2) {
         console.log('Updating data model for version 2.2...');
-
         DB.loadAllPrefs(function(options) {
+            cache.options = {};
             // search engine
-            localStorage['searchEngine'] = options['search_engine'];
+            cache.options.searchEngine = options.search_engine;
 
             // command engine
-            localStorage['commandEngine'] = options['command_engine'];
-            localStorage['quixUrl'] = options['quix_url'];
+            cache.options.commandEngine = options.command_engine;
+            cache.options.quixUrl = options.quix_url;
 
             // default behavior
-            localStorage['searchBookmarks'] = options['bookmark_search'] == 1 ? true : false;
-            localStorage['scrollingSpeed'] = options['scroll_animation'];
-            localStorage['outsideScrolling'] = options['outside_scrolling_status'] ? true : false;
+            cache.options.searchBookmarks = options.bookmark_search == 1 ? true : false;
+            cache.options.scrollingSpeed = options.scroll_animation;
+            cache.options.outsideScrolling = options.outside_scrolling_status ? true : false;
 
             // shortcuts
-            localStorage['shortcutKey'] = options['shortcut_key'];
-            localStorage['downScrollingKey'] = options['down_scrolling_key'];
-            localStorage['upScrollingKey'] = options['up_scrolling_key'];
+            cache.options.shortcutKey = options.shortcut_key;
+            cache.options.downScrollingKey = options.down_scrolling_key;
+            cache.options.upScrollingKey = options.up_scrolling_key;
 
             // sync
-            localStorage['sync'] = options['sync'] == 1 ? true : false;
+            cache.options.sync = options.sync == 1 ? true : false;
 
             // tab manager
-            localStorage['tabManager'] = options['tab_shortcut_status'] == 1 ? true : false;
-            localStorage['tabManagerShortcutKey'] = options['tab_shortcut_key'];
+            cache.options.tabManager = options.tab_shortcut_status == 1 ? true : false;
+            cache.options.tabManagerShortcutKey = options.tab_shortcut_key;
 
-            // hidden options
-            localStorage['status'] = options['status'] == 1 ? true : false;
-            localStorage['hyper'] = options['hyper'] == 1 ? true : false;
+            cache.options.hyper = options.hyprt == 1 ? true : false;
 
             // appearance
 
             // size
-            if (options['size'] == 0)
-                localStorage['size'] = 'small';
-            else if (options['size'] == 1)
-                localStorage['size'] = 'medium';
+            if (options.size == 0)
+                cache.options.size = 'small';
+            else if (options.size == 1)
+                cache.options.size = 'medium';
             else
-                localStorage['size'] = 'large';
+                cache.options.size = 'large';
 
             // theme
-            localStorage['theme'] = options['theme'];
+            cache.options.theme = options.theme;
 
             // disabled urls
-            localStorage['disabledUrls'] = JSON.stringify(options['disabledUrls']);
+            cache.options.disabledUrls = options.disabledUrls;
 
             // esp visions
-            localStorage['esp'] = options['esp_status'] == 1 ? true : false;
-            localStorage['espVisions'] = JSON.stringify(options['espModifiers']);
+            cache.options.esp = options.esp_status == 1 ? true : false;
+            cache.options.espVisions = options.espModifiers;
 
             // scrapers
             // add the default scrapers first, since now they are removable
@@ -119,13 +118,11 @@ function upgrade(version) {
             var len = defaultScrapers.length;
             for (var i = 0; i < len; i++)
                 options.scrapers.unshift(defaultScrapers[i]);
-            localStorage['scrapers'] = JSON.stringify(options['scrapers']);
+            cache.options.scrapers = options.scrapers;
 
-            loadOptionsIntoCache();
+            updateOptionsInDataStore();
             if (localStorage['gleebox_sync'] == 1)
                 saveSyncData(cache.options);
-
-            console.log(cache.options);
             // todo: clear DB
         });
     }

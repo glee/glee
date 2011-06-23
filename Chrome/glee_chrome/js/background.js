@@ -206,47 +206,54 @@ function updateOptionsLocally(options) {
 }
 
 function mergeOptionsLocally(options) {
-    // costly! but called only when syncing is first enabled
+    // Adds esp visions, scrapers, and disabled urls not already present into the options
+    // and overwrites all other existing options
     if (options != cache.options) {
-        // disabled urls
-        var len = options.disabledUrls.length;
-        var len2 = cache.options.disabledUrls.length;
-        var found;
-        for (var i = 0; i < len; i++) {
-            found = false;
-            for (var j = 0; j < len2; j++) {
-                if (cache.options.disabledUrls[j] == options.disabledUrls[i]) {
-                    found = true; break;
+        for (option in options) {
+            if (option === 'disabledUrls') {
+                var len = options.disabledUrls.length;
+                var len2 = cache.options.disabledUrls.length;
+                var found;
+                for (var i = 0; i < len; i++) {
+                    found = false;
+                    for (var j = 0; j < len2; j++) {
+                        if (cache.options.disabledUrls[j] == options.disabledUrls[i])
+                            found = true; break;
+                    }
+                    if (!found)
+                        cache.options.disabledUrls.push(options.disabledUrls[i]);
                 }
             }
-            if (!found)
-                cache.options.disabledUrls.push(options.disabledUrls[i]);
-        }
-
-        // scrapers
-        len = options.scrapers.length;
-        len2 = cache.options.scrapers.length;
-        for (var i = 0; i < len; i++) {
-            found = false;
-            for (var j = 0; j < len2; j++) {
-                if (cache.options.scrapers[j] == options.scrapers[i])
-                    found = true; break;
+            else if (option === 'scrapers') {
+                var len = options.scrapers.length;
+                var len2 = cache.options.scrapers.length;
+                var found;
+                for (var i = 0; i < len; i++) {
+                    found = false;
+                    for (var j = 0; j < len2; j++) {
+                        if (cache.options.scrapers[j] == options.scrapers[i])
+                            found = true; break;
+                    }
+                    if (!found)
+                        cache.options.scrapers.push(options.scrapers[i]);
+                }
             }
-            if (!found)
-                cache.options.scrapers.push(options.scrapers[i]);
-        }
-
-        // esp visions
-        len = options.espVisions.length;
-        len2 = cache.options.espVisions.length;
-        for (var i = 0; i < len; i++) {
-            found = false;
-            for (var j = 0; j < len2; j++) {
-                if (cache.options.espVisions[j] == options.espVisions[i])
-                    found = true; break;
+            else if (option === 'espVisions') {
+                var len = options.espVisions.length;
+                var len2 = cache.options.espVisions.length;
+                var found;
+                for (var i = 0; i < len; i++) {
+                    found = false;
+                    for (var j = 0; j < len2; j++) {
+                        if (cache.options.espVisions[j] == options.espVisions[i])
+                            found = true; break;
+                    }
+                    if (!found)
+                        cache.options.espVisions.push(options.espVisions[i]);
+                }
             }
-            if (!found)
-                cache.options.espVisions.push(options.espVisions[i]);
+            else
+                cache.options[option] = options[option];
         }
     }
     updateOptionsInDataStore();

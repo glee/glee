@@ -311,12 +311,11 @@ var Glee = {
     // response returned by background.html
     applyOptions: function(options) {
         for (var option in options) {
-            if (!isNaN(options[option]))
+            if (parseInt(options[option]))
                 Glee.options[option] = parseInt(options[option]);
             else
                 Glee.options[option] = options[option];
         }
-
         // check domain if status is true
         if (!Glee.shouldRunOnCurrentUrl())
             Glee.status = false;

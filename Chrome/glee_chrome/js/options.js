@@ -72,7 +72,7 @@ function initOptions(response) {
             }
 
             else if (el.type === 'checkbox') {
-                if (options[option] == true)
+                if (options[option] != false)
                     $el.prop('checked', true);
             }
 
@@ -524,7 +524,21 @@ function attachListeners() {
 
     // checkbox
     $('input[type=checkbox]').bind('change', function(e) {
-        saveOption(e.target.name, e.target.value == 'on' ? true : false);
+        var value;
+        if (e.target.checked) {
+            if (e.target.value != 'on')
+                value = e.target.value;
+            else
+                value = true;
+        }
+        else {
+            var falseValue = e.target.getAttribute('data-falseValue');
+            if (falseValue)
+                value = falseValue;
+            else
+                value = false;
+        }
+        saveOption(e.target.name, value);
     });
 
     // textfields
