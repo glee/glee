@@ -27,15 +27,53 @@ function upgrade(version) {
                 case 'searchEngine': oldOption = 'searchEngineUrl'; break;
                 case 'outsideScrolling': oldOption = 'outsideScrollingStatus'; break;
             }
-            if (safari.extension.settings[oldOption]) {
-                console.log(oldOption);
-                if (option === 'disabledUrls' ||
-                    option === 'scrapers'     ||
-                    option === 'espVisions')
-                    localStorage[option] = JSON.parse(safari.extension.settings[oldOption]);
-                else
-                    localStorage[option] = safari.extension.settings[oldOption];
+            if (option === 'scrapers') {
+                // copy the default scrapers
+                var defaultScrapers = [
+                   {
+                       command: '?',
+                       nullMessage: 'Could not find any input elements on the page.',
+                       selector: 'input:enabled:not(#gleeSearchField),textarea',
+                       cssStyle: 'GleeReaped'
+                   },
+                   {
+                       command: 'img',
+                       nullMessage: 'Could not find any linked images on the page.',
+                       selector: 'a > img',
+                       cssStyle: 'GleeReaped'
+                   },
+                   {
+                       command: 'h',
+                       nullMessage: 'Could not find any headings on the page.',
+                       selector: 'h1,h2,h3',
+                       cssStyle: 'GleeReaped'
+                   },
+                   {
+                       command: 'a',
+                       nullMessage: 'No links found on the page',
+                       selector: 'a',
+                       cssStyle: 'GleeReaped'
+                   }];
+                   try {
+                       var scrapers = JSON.parse(safari.extension.settings[oldOption]);
+                   }
+                   catch(e) {
+                       scrapers = [];
+                       console.log(e);
+                   }
+                   var len = defaultScrapers.length;
+                   for (var i = 0; i < len; i++)
+                       scrapers.push(defaultScrapers[i]);
+
+                   try {
+                       localStorage[option] = JSON.stringify(scrapers);
+                   }
+                   catch(e) {
+                       console.log(e);
+                   }
             }
+            else if (safari.extension.settings[oldOption])
+                localStorage[option] = safari.extension.settings[oldOption];
             else
                 localStorage[option] = cache.options[option];
         }

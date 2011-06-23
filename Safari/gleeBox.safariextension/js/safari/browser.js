@@ -84,6 +84,16 @@ Glee.Browser = {
 
     removeTab: function(tab) {
         safari.self.tab.dispatchMessage('removeTab', tab.id);
+        // todo: this is a poor, out of place hack since we are accessing Glee.ListManager's logically private members
+        // we need to build the functionality to register additional callbacks for user actions with Glee.ListManager
+
+        // We are decrementing the id of the remaining tabs by 1 so that any forthcoming action
+        // from the user takes place on the right tab
+        //
+        // All this mess since Safari API doesn't assign an ID to each tab. Chrome API +1
+        var len = Glee.ListManager.items.length;
+        for (var i = 0; i < len; i++)
+            Glee.ListManager.items.id -= 1;
     },
 
     moveToTab: function(tab) {
