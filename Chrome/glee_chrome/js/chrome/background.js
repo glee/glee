@@ -4,8 +4,8 @@ var screenshotId = 0;
 function init() {
     checkVersion();
     loadOptionsIntoCache();
-    initCommandCache();
     initSync();
+    initCommandCache();
 }
 
 function checkVersion() {

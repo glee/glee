@@ -14,7 +14,6 @@ var cache = {
        downScrollingKey: 83,
        tabManager: true,
        tabManagerShortcutKey: 190,
-       status: true,
        hyper: false,
        size: 'medium',
        theme: 'GleeThemeDefault',
@@ -176,9 +175,6 @@ function loadOptionsIntoCache() {
             }
             else if (dataStoreValue === 'true' || dataStoreValue === 'false')
                 cache.options[option] = (dataStoreValue === 'true');
-            // if it can be parsed as int, save it as int. Useful for keyCodes
-            else if (!isNaN(dataStoreValue))
-                cache.options[option] = parseInt(dataStoreValue);
             else
                 cache.options[option] = dataStoreValue;
         }

@@ -32,9 +32,9 @@ var Glee = {
         windowBottomDiff: null
     },
 
+    status: true,
+
     options: {
-        // should gleeBox run?
-        status: true,
         // Keydown code of shortcut key to launch gleeBox
         shortcutKey: 71,
         // Keydown code of shortcut key to launch tab manager
@@ -247,7 +247,7 @@ var Glee = {
     init: function() {
         // Chrome hack: disable status while options are received
         if (IS_CHROME)
-            Glee.options.status = false;
+            Glee.status = false;
 
         // get options from cache in background.html
         Glee.Browser.getOptions();
@@ -310,14 +310,18 @@ var Glee = {
 
     // response returned by background.html
     applyOptions: function(options) {
-        console.log(options);
-        Glee.options = options;
+        for (var option in options) {
+            if (!isNaN(options[option]))
+                Glee.options[option] = parseInt(options[option]);
+            else
+                Glee.options[option] = options[option];
+        }
 
         // check domain if status is true
         if (!Glee.shouldRunOnCurrentUrl())
-            Glee.options.status = false;
+            Glee.status = false;
         else
-            Glee.options.status = true;
+            Glee.status = true;
 
         Glee.applyTheme();
         if (Glee.ListManager)
@@ -333,7 +337,7 @@ var Glee = {
         }
 
         // Hyper mode
-        if (Glee.options.status && Glee.options.hyper)
+        if (Glee.status && Glee.options.hyper)
             Glee.getHyperized();
 
         if (Glee.options.outsideScrolling)
@@ -833,7 +837,7 @@ var Glee = {
         // attach the window Listener
         $(window).bind('keydown', function(e) {
             var target = e.target || e.srcElement;
-            if (Glee.options.status && Glee.options.status != 0) {
+            if (Glee.status) {
                 if (!Utils.elementCanReceiveUserInput(target) || e.altKey) {
                     if (target.id === 'gleeSearchField')
                         return true;

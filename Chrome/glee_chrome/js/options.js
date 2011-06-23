@@ -553,7 +553,6 @@ function attachListeners() {
             changeScrollingKey(e.target.value);
             return true;
         }
-
         saveOption(e.target.name, e.target.value);
     });
 
