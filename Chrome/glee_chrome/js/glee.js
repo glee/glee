@@ -813,10 +813,10 @@ var Glee = {
         this.$searchField.setOptions({
             data: Glee.cache.commands
         });
-        this.Browser.updateBackgroundCommandCache();
+        this.Browser.setBackgroundCommandCache();
     },
 
-    updateCommandCache: function(commands) {
+    setCommandCache: function(commands) {
         this.cache.commands = commands;
 
         try {

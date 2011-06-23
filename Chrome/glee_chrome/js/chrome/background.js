@@ -2,29 +2,11 @@ var CURRENT_VERSION = '2.2';
 var screenshotId = 0;
 
 function init() {
-    checkVersion();
     loadOptionsIntoCache();
-    initSync();
     initCommandCache();
+    initSync();
+    checkVersion();
     console.log(cache.options);
-}
-
-function checkVersion() {
-    if (localStorage['gleebox_version'] != CURRENT_VERSION) {
-        // Upgrade data model for 2.2
-        if (parseFloat(localStorage['gleebox_version']) < 2.2)
-            upgrade(2.2);
-        // only show update notification for X.X releases
-        if (parseFloat(localStorage['gleebox_version']) < parseFloat(CURRENT_VERSION))
-            showUpdateNotification();
-
-        updateVersionString();
-    }
-}
-
-function updateVersionString() {
-    console.log('Updating to version ' + CURRENT_VERSION);
-    localStorage['gleebox_version'] = CURRENT_VERSION;
 }
 
 function showUpdateNotification() {
@@ -208,10 +190,10 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             sendResponse({commands: cache.commands});
             break;
 
-        case 'updateCommandCache':
+        case 'setCommandCache':
             cache.commands = request.commands;
             localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
-            sendRequestToAllTabs({value: 'updateCommandCache', commands: cache.commands});
+            sendRequestToAllTabs({value: 'setCommandCache', commands: cache.commands});
             break;
 
         case 'getOptions':
@@ -219,12 +201,17 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             break;
 
         case 'setOptionUsingShorthand':
-            updateOption(request.option, request.optionValue);
+            setOptionUsingShorthand(request.option, request.optionValue);
             sendResponse({});
             break;
 
-        case 'updateOptionsInCache':
-            cache.options = request.options;
+        case 'saveOptionsToCache':
+            saveOptionsToCache(request.options);
+            sendResponse({});
+            break;
+
+        case 'saveOptionsToCacheAndDataStore':
+            saveOptionsToCacheAndDataStore(request.options);
             sendResponse({});
             break;
 

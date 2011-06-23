@@ -843,10 +843,10 @@ function translateOptionValue(name, value) {
     }
     return value;
 }
+
 function saveOption(name, value) {
     value = translateOptionValue(name, value);
     options[name] = value;
-    localStorage[name] = value;
     propagate();
 }
 

@@ -3,9 +3,9 @@ IS_CHROME = true;
 var sync;
 var bg_window;
 
-// propagate change in preferences to all currently open tabs
-// updates preference cache in background.html
-// also, if sync is enabled, save data in bookmark as well
+// apply options to all currently open tabs
+// save new options to background.html cache and data store
+// also, if sync is enabled, save options to bookmark
 function propagate() {
     chrome.windows.getAll({populate: true}, function(windows) {
         var w_len = windows.length;
@@ -21,7 +21,9 @@ function propagate() {
             }
         }
     });
-    bg_window.cache.options = options;
+
+    bg_window.saveOptionsToCacheAndDataStore();
+
     // if sync is enabled, also save data in bookmark
     if (localStorage['gleebox_sync'] == 1)
         bg_window.saveSyncData(options);

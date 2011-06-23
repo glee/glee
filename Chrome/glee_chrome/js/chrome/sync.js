@@ -16,11 +16,11 @@
 var syncName = 'gleebox';
 
 // method to be called when sync occurs. Updated JSON data returned from the bookmark is passed to this method
-var onSync = updateOptionsLocally;
+var onSync = saveOptionsToCacheAndDataStore;
 
 // method to be called when data is to be merged. It's called when sync is enabled. Should return updated JSON data.
 // If set to null, onSync is called.
-var onMerge = mergeOptionsLocally;
+var onMerge = mergeOptionsAndSave;
 
 // API: Call the following methods to manage sync.
 

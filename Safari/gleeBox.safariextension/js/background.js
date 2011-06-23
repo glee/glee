@@ -60,22 +60,34 @@ var cache = {
     }
 };
 
+function checkVersion() {
+    if (localStorage['gleebox_version'] != CURRENT_VERSION) {
+        if (!localStorage['gleebox_version'])
+            saveOptionsToDataStore();
+        // Upgrade data model for 2.2
+        else if (parseFloat(localStorage['gleebox_version']) < 2.2)
+            upgrade(2.2);
+
+        // only show update notification for X.X releases
+        if (parseFloat(localStorage['gleebox_version']) < parseFloat(CURRENT_VERSION))
+            showUpdateNotification();
+
+        updateVersionString();
+    }
+}
+
+function updateVersionString() {
+    console.log('Updating to version ' + CURRENT_VERSION);
+    localStorage['gleebox_version'] = CURRENT_VERSION;
+}
+
 function setOptionUsingShorthand(option, value) {
     // this transformation needs to be performed as values in db are stored this way
     switch (value) {
-        case 'off':
-        case 'small':
-        case 'top': value = 0; break;
-
-        case 'on':
-        case 'medium':
-        case 'med':
-        case 'middle':
-        case 'mid': value = 1; break;
-
-        case 'large':
-        case 'bottom': value = 2; break;
-
+        case 'off': value = false; break;
+        case 'on': value = true; break;
+        case 'med': value = 'medium'; break;
+        case 'mid': value = 'middle'; break;
         case 'default': value = 'GleeThemeDefault'; break;
         case 'white': value = 'GleeThemeWhite'; break;
         case 'console': value = 'GleeThemeConsole'; break;
@@ -87,31 +99,32 @@ function setOptionUsingShorthand(option, value) {
     switch (option) {
         case 'scroll':
             option = 'scrollingSpeed';
+            if (value)
+                value = 500;
+            else
+                value = 0;
             cache.options[option] = value;
-            saveOption(option, value);
             break;
 
         case 'bsearch':
             option = 'searchBookmarks';
             cache.options[option] = value;
-            saveOption(option, value);
             break;
 
         case 'esp':
             option = 'esp';
             cache.options[option] = value;
-            saveOption(option, value);
             break;
 
         case 'theme':
         case 'hyper':
         case 'size':
             cache.options[option] = value;
-            saveOption(option, value);
             break;
 
         case 'vision':
         case 'visions+':
+            option = 'espVisions';
             var len = cache.options.espVisions.length;
             for (var i = 0; i < len; i++) {
                 // if an esp vision already exists for url, modify it
@@ -127,6 +140,7 @@ function setOptionUsingShorthand(option, value) {
             break;
 
         case 'scrapers+':
+            option = 'scrapers';
             var len = cache.options.scrapers.length;
             for (var i = 0; i < len; i++) {
                 if (cache.options.scrapers[i].command == value.command) {
@@ -141,22 +155,33 @@ function setOptionUsingShorthand(option, value) {
               nullMessage: 'Could not find any matching elements on the page.'
             });
             break;
+        default:
+            return false;
     }
 
-    // send request to update options in all tabs
-    sendRequestToAllTabs({value: 'updateOptions', options:cache.options});
+    saveOptionToDataStore(option, value);
+    // send request to apply the new options in all tabs
+    sendRequestToAllTabs({value: 'applyOptions', options: cache.options});
 
     // if sync is enabled, update data
     if (saveSyncData != undefined && localStorage['gleebox_sync'] == 1)
         saveSyncData(cache.options);
 }
 
-function saveOption(option) {
-    localStorage[option.name] = option.value;
-}
-
-function getOption(optionName) {
-    return {name: optionName, value: localStorage[optionName]};
+function saveOptionToDataStore(option, value) {
+    if (option === 'disabledUrls' ||
+    option === 'scrapers' ||
+    option === 'espVisions') {
+        try {
+            localStorage[option] = JSON.stringify(value);
+        }
+        catch(e) {
+            console.log(e);
+            return;
+        }
+    }
+    else
+        localStorage[option] = value;
 }
 
 function loadOptionsIntoCache() {
@@ -183,7 +208,11 @@ function loadOptionsIntoCache() {
     }
 }
 
-function updateOptionsInDataStore() {
+function saveOptionsToCache(options) {
+    cache.options = options;
+}
+
+function saveOptionsToDataStore() {
     for (option in cache.options) {
         if (option === 'disabledUrls' ||
         option === 'espVisions' ||
@@ -200,12 +229,12 @@ function updateOptionsInDataStore() {
     }
 }
 
-function updateOptionsLocally(options) {
-    cache.options = options;
-    updateOptionsInDataStore();
+function saveOptionsToCacheAndDataStore(options) {
+    saveOptionsToCache(options);
+    saveOptionsToDataStore();
 }
 
-function mergeOptionsLocally(options) {
+function mergeOptionsAndSave(options) {
     // Adds esp visions, scrapers, and disabled urls not already present into the options
     // and overwrites all other existing options
     if (options != cache.options) {
@@ -256,10 +285,13 @@ function mergeOptionsLocally(options) {
                 cache.options[option] = options[option];
         }
     }
-    updateOptionsInDataStore();
+    saveOptionsToDataStore();
     return cache.options;
 }
 
 function initCommandCache() {
-    cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
+    if (localStorage['gleebox_commands_cache'])
+        cache.commands = JSON.parse(localStorage['gleebox_commands_cache']);
+    else
+        localStorage['gleebox_commands_cache'] = '';
 }

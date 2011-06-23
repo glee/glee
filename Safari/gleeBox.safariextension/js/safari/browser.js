@@ -16,7 +16,7 @@ Glee.Browser = {
     },
 
     sendRequest: function(url, method, callback) {
-        safari.self.tab.dispatchMessage('sendRequest', { url: url, method: method });
+        safari.self.tab.dispatchMessage('sendRequest', {url: url, method: method});
         Glee.Browser.onSendRequestCompletion = callback;
     },
 
@@ -32,8 +32,8 @@ Glee.Browser = {
     },
 
     respondToMessage: function(e) {
-        if (e.name === 'receiveCommandCache')
-            Glee.updateCommandCache(e.message);
+        if (e.name === 'getCommandCache')
+            Glee.setCommandCache(e.message);
         else if (e.name === 'onSendRequestCompletion')
             Glee.Browser.onSendRequestCompletion(e.message);
         else if (e.name === 'applyOptions')
@@ -58,9 +58,9 @@ Glee.Browser = {
         safari.self.tab.dispatchMessage('getCommandCache');
     },
 
-    // update command cache in background.html
-    updateBackgroundCommandCache: function() {
-        safari.self.tab.dispatchMessage('updateCommandCache', Glee.cache.commands);
+    // set command cache in background.html
+    setBackgroundCommandCache: function() {
+        safari.self.tab.dispatchMessage('setCommandCache', Glee.cache.commands);
     },
 
     openTabManager: function() {

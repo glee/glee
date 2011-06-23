@@ -1,27 +1,9 @@
 var CURRENT_VERSION = '2.2';
 
 function init() {
-    checkVersion();
     loadOptionsIntoCache();
     initCommandCache();
-}
-
-function checkVersion() {
-    if (localStorage['gleebox_version'] != CURRENT_VERSION) {
-        // Upgrade data model for 2.2
-        if (parseFloat(localStorage['gleebox_version']) < 2.2)
-            upgrade(2.2);
-        // only show update notification for X.X releases
-        if (parseFloat(localStorage['gleebox_version']) < parseFloat(CURRENT_VERSION))
-            showUpdateNotification();
-
-        updateVersionString();
-    }
-}
-
-function updateVersionString() {
-    console.log('Updating to version ' + CURRENT_VERSION);
-    localStorage['gleebox_version'] = CURRENT_VERSION;
+    checkVersion();
 }
 
 function showUpdateNotification() {
@@ -130,12 +112,12 @@ function respondToMessage(e) {
     }
 
     else if (e.name === 'getCommandCache')
-        e.target.page.dispatchMessage('receiveCommandCache', cache.commands);
+        e.target.page.dispatchMessage('getCommandCache', cache.commands);
 
-    else if (e.name === 'updateCommandCache') {
+    else if (e.name === 'setCommandCache') {
         cache.commands = e.message;
         localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
-        sendRequestToAllTabs({ value: 'updateCommandCache', data: cache.commands });
+        sendRequestToAllTabs({ value: 'setCommandCache', data: cache.commands });
     }
 
     else if (e.name === 'getOptions')
@@ -147,8 +129,11 @@ function respondToMessage(e) {
     else if (e.name === 'setOptionUsingShorthand')
         setOptionUsingShorthand(e.message.option, e.message.value);
 
-    else if (e.name === 'updateOptionsInCache')
-        cache.options = e.message;
+    else if (e.name === 'saveOptionsToCache')
+        saveOptionsToCache(e.message);
+
+    else if (e.name === 'saveOptionsToCacheAndDataStore')
+        saveOptionsToCacheAndDataStore(e.message);
 
     else if (e.name === 'propagateOptions')
         sendRequestToAllTabs({value: 'applyOptions', data: cache.options});

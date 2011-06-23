@@ -113,7 +113,7 @@ Glee.Browser.moveToTab = function(tab) {
     chrome.extension.sendRequest({ value: 'moveToTab', id: tab.id }, function() {});
 };
 
-// adding a listener to respond to requests from background.html to update the status/settings
+// adding a listener to respond to requests from background.html
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
         if (request.value === 'initStatus') {
@@ -124,8 +124,8 @@ chrome.extension.onRequest.addListener(
         }
         else if (request.value === 'applyOptions')
             Glee.applyOptions(request.options);
-        else if (request.value === 'updateCommandCache')
-            Glee.updateCommandCache(request.commands);
+        else if (request.value === 'setCommandCache')
+            Glee.setCommandCache(request.commands);
 
         sendResponse({});
 });
@@ -133,13 +133,13 @@ chrome.extension.onRequest.addListener(
 // get command cache from background.js
 Glee.Browser.initCommandCache = function() {
     chrome.extension.sendRequest({ value: 'getCommandCache' }, function(response) {
-        Glee.updateCommandCache(response.commands);
+        Glee.setCommandCache(response.commands);
     });
 };
 
-// update command cache in background.js
-Glee.Browser.updateBackgroundCommandCache = function() {
-    chrome.extension.sendRequest({ value: 'updateCommandCache', commands: Glee.cache.commands }, function() {
+// set command cache in background.js
+Glee.Browser.setBackgroundCommandCache = function() {
+    chrome.extension.sendRequest({ value: 'setCommandCache', commands: Glee.cache.commands }, function() {
     });
 };
 

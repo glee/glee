@@ -9,7 +9,7 @@ function respondToMessage(e) {
 safari.self.addEventListener('message', respondToMessage, false);
 
 function propagate() {
-    safari.self.tab.dispatchMessage('updateOptionsInCache', options);
+    safari.self.tab.dispatchMessage('saveOptionsToCacheAndDataStore', options);
     safari.self.tab.dispatchMessage('propagateOptions');
 }
 
