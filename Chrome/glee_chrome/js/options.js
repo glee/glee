@@ -231,6 +231,7 @@ function addItem(type, values, save) {
     .bind('click keydown', function(e) {
         if (e.type === 'keydown' && e.keyCode != 13) return true;
         e.preventDefault();
+        e.stopPropagation();
         removeItem(e, type);
     })
     .appendTo(container);
