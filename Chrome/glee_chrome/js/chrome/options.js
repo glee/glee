@@ -22,7 +22,7 @@ function propagate() {
         }
     });
 
-    bg_window.saveOptionsToCacheAndDataStore();
+    bg_window.saveOptionsToCacheAndDataStore(options);
 
     // if sync is enabled, also save data in bookmark
     if (localStorage['gleebox_sync'] == 1)
