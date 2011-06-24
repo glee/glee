@@ -326,14 +326,7 @@ var Glee = {
         if (Glee.ListManager)
             Glee.ListManager.applyTheme();
 
-        // Size
-        try {
-            Glee.$searchField.removeClass('gleeSmallSize gleeMediumSize gleeLargeSize');
-            Glee.$searchField.addClass('glee' + Glee.options.size.capitalize() + 'Size');
-        }
-        catch (e) {
-            console.log(e);
-        }
+        Glee.applySize();
 
         // Hyper mode
         if (Glee.status && Glee.options.hyper)
@@ -418,6 +411,19 @@ var Glee = {
             this.$searchField.removeClass(Glee.defaults.themes.join(' '));
         }
         catch (e) {} // just to prevent errors popping up in safari. TODO: find why they come up
+    },
+
+    applySize: function() {
+        try {
+            var sizeClass = 'glee' + Glee.options.size.capitalize() + 'Size';
+            this.$searchField.removeClass('gleeSmallSize gleeMediumSize gleeLargeSize');
+            this.$searchBox.removeClass('gleeSmallSize gleeMediumSize gleeLargeSize');
+            this.$searchField.addClass(sizeClass);
+            this.$searchBox.addClass(sizeClass);
+        }
+        catch (e) {
+            console.log(e);
+        }
     },
 
     isVisible: function() {

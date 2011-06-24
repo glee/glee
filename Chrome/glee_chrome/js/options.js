@@ -676,7 +676,7 @@ $(document).ready(function() {
     $('#basics').show();
 
     // Click event for tab menu items
-    $('ul.menu li').click(function()
+    $('ul.menu li:not(.menu-separator)').click(function()
     {
         $('ul.menu li').removeClass('tabActive');
         $(this).addClass('tabActive');
