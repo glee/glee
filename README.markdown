@@ -10,22 +10,27 @@ Installation
 
 gleeBox is available as a Chrome, Safari and Firefox extension. 
 
-**Production version**
+**Production**
 
-Chrome: [https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji](https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji)
+* Chrome: [https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji](https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji)
 
-Safari: [http://thegleebox.com/safari/gleeBox.safariextz](http://thegleebox.com/safari/gleeBox.safariextz)
+* Safari: [http://thegleebox.com/safari/gleeBox.safariextz](http://thegleebox.com/safari/gleeBox.safariextz)
 
-Firefox ***(outdated)***: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191)
+* Firefox ***(outdated)***: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191)  
 
+**Development** *(if you like living on the edge)*
 
-**Development Version** *(if you like living on the edge)*
+* Chrome: Load `Chrome/glee_chrome` as unpacked extension (in Developer mode).
 
-Chrome: Load `Chrome/glee_chrome` as unpacked extension (in Developer mode).
+* Safari: Add `Safari/gleeBox.safariextension` as a new extension in the Extension Builder.
 
-Safari: Add `Safari/gleeBox.safariextension` as a new extension in the Extension Builder.
+Development
+-----------
 
-Firefox *(Currently not under development. Help us out!)*: Drag `FF/gleebox.xpi` to Firefox to install.
+Want to help out? Bravo! Before you start, check out these wikis:  
+
+* [How to develop](https://github.com/glee/glee/wiki/How-to-develop)
+* [Code Styling](https://github.com/glee/glee/wiki/Code-Styling-Rules)
 
 Usage
 ------
