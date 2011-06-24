@@ -239,46 +239,55 @@ function mergeOptionsAndSave(options) {
     // and overwrites all other existing options
     if (options != cache.options) {
         for (option in options) {
-            if (option === 'disabledUrls') {
+            if (option == 'disabledUrls') {
                 var len = options.disabledUrls.length;
                 var len2 = cache.options.disabledUrls.length;
                 var found;
                 for (var i = 0; i < len; i++) {
                     found = false;
                     for (var j = 0; j < len2; j++) {
-                        if (cache.options.disabledUrls[j] == options.disabledUrls[i])
-                            found = true; break;
+                        if (cache.options.disabledUrls[j] == options.disabledUrls[i]) {
+                            found = true;
+                            break;
+                        }
                     }
-                    if (!found)
+                    if (!found) {
                         cache.options.disabledUrls.push(options.disabledUrls[i]);
+                    }
                 }
             }
-            else if (option === 'scrapers') {
+            else if (option == 'scrapers') {
                 var len = options.scrapers.length;
                 var len2 = cache.options.scrapers.length;
                 var found;
                 for (var i = 0; i < len; i++) {
                     found = false;
                     for (var j = 0; j < len2; j++) {
-                        if (cache.options.scrapers[j] == options.scrapers[i])
-                            found = true; break;
+                        if (cache.options.scrapers[j].command == options.scrapers[i].command) {
+                            found = true;
+                            break;
+                        }
                     }
-                    if (!found)
+                    if (!found) {
                         cache.options.scrapers.push(options.scrapers[i]);
+                    }
                 }
             }
-            else if (option === 'espVisions') {
+            else if (option == 'espVisions') {
                 var len = options.espVisions.length;
                 var len2 = cache.options.espVisions.length;
                 var found;
                 for (var i = 0; i < len; i++) {
                     found = false;
                     for (var j = 0; j < len2; j++) {
-                        if (cache.options.espVisions[j] == options.espVisions[i])
-                            found = true; break;
+                        if (cache.options.espVisions[j].url == options.espVisions[i].url) {
+                            found = true;
+                            break;
+                        }
                     }
-                    if (!found)
+                    if (!found) {
                         cache.options.espVisions.push(options.espVisions[i]);
+                    }
                 }
             }
             else

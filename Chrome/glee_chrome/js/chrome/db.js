@@ -7,8 +7,7 @@ var DB = {
             return glee_db;
         if (window.openDatabase) {
             glee_db = openDatabase('gleebox', '1.0', 'gleeBox Local Database', 200000);
-            if (!glee_db)
-            {
+            if (!glee_db) {
                 console.log('Failed to open gleeBox DB');
                 return false;
             }
@@ -404,6 +403,29 @@ var DB = {
                     console.log(D);
                 });
             });
+        }
+    },
+
+    clear: function() {
+        // since there doesn't seem to be a way to drop a database
+        // let's just drop all tables
+        var A = DB.open();
+        if (A) {
+            DB.dropTable(A, 'preferences');
+            DB.dropTable(A, 'disabledUrls');
+            DB.dropTable(A, 'scrapers');
+            DB.dropTable(A, 'esp');
+        }
+    },
+
+    dropTable: function(A, name) {
+        if (A) {
+            A.transaction(function(B) {
+                B.executeSql('DROP TABLE ' + name,
+                [],
+                function(C,D) {},
+                function(C,D) { console.log(D); }
+            )});
         }
     }
 };

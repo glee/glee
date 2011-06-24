@@ -4,6 +4,7 @@ function init() {
     loadOptionsIntoCache();
     initCommandCache();
     checkVersion();
+    console.log(cache.options);
 }
 
 function showUpdateNotification() {
@@ -86,8 +87,8 @@ function upgrade(version) {
         localStorage.hyper = false;
 
         loadOptionsIntoCache();
-        console.log(cache.options);
-        // TODO: clear settings
+
+        safari.extension.settings.clear();
     }
 }
 

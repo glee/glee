@@ -24,88 +24,85 @@ function upgrade(version) {
         console.log('Updating data model for version 2.2...');
         DB.loadAllPrefs(function(options) {
             cache.options = {};
-            // search engine
-            cache.options.searchEngine = options.search_engine;
+            for (var option in options) {
+                if (options[option] == undefined)
+                    continue;
+                var newOption = option;
+                switch(option) {
+                    case 'search_engine': newOption = 'searchEngine'; break;
+                    case 'command_engine': newOption = 'commandEngine'; break;
+                    case 'quix_url': newOption = 'quixUrl'; break;
+                    case 'bookmark_search': newOption = 'searchBookmarks'; break;
+                    case 'scroll_animation': newOption = 'scrollingSpeed'; break;
+                    case 'outside_scrolling_status': newOption = 'outsideScrolling'; break;
+                    case 'shortcut_key': newOption = 'shortcutKey'; break;
+                    case 'down_scrolling_key': newOption = 'downScrollingKey'; break;
+                    case 'up_scrolling_key': newOption = 'upScrollingKey'; break;
+                    case 'tab_shortcut_status': newOption = 'tabManager'; break;
+                    case 'tab_shortcut_key': newOption = 'tabManagerShortcutKey'; break;
+                    case 'esp_status': newOption = 'esp'; break;
+                    case 'espModifiers': newOption = 'espVisions'; break;
+                }
+                if (newOption === 'sync' ||
+                newOption === 'hyper' ||
+                newOption === 'searchBookmarks' ||
+                newOption === 'outsideScrolling' ||
+                newOption === 'esp' ||
+                newOption === 'tabManager') {
+                    cache.options[newOption] = options[option] == 1 ? true : false;
+                }
+                else if (newOption === 'size') {
+                    if (options.size == 0)
+                        cache.options.size = 'small';
+                    else if (options.size == 1)
+                        cache.options.size = 'medium';
+                    else
+                        cache.options.size = 'large';
+                }
+                else if (newOption === 'scrapers') {
+                    // add the default scrapers first, since now they are removable
+                    var defaultScrapers = [{
+                        command: '?',
+                        nullMessage: 'Could not find any input elements on the page.',
+                        selector: 'input:enabled:not(#gleeSearchField),textarea',
+                        cssStyle: 'GleeReaped'
+                    },
+                    {
+                        command: 'img',
+                        nullMessage: 'Could not find any linked images on the page.',
+                        selector: 'a > img',
+                        cssStyle: 'GleeReaped'
+                    },
+                    {
+                        command: 'h',
+                        nullMessage: 'Could not find any headings on the page.',
+                        selector: 'h1,h2,h3',
+                        cssStyle: 'GleeReaped'
+                    },
+                    {
+                        command: 'a',
+                        nullMessage: 'No links found on the page',
+                        selector: 'a',
+                        cssStyle: 'GleeReaped'
+                    }];
 
-            // command engine
-            cache.options.commandEngine = options.command_engine;
-            cache.options.quixUrl = options.quix_url;
+                    var len = defaultScrapers.length;
 
-            // default behavior
-            cache.options.searchBookmarks = options.bookmark_search == 1 ? true : false;
-            cache.options.scrollingSpeed = options.scroll_animation;
-            cache.options.outsideScrolling = options.outside_scrolling_status ? true : false;
+                    for (var i = 0; i < len; i++)
+                        options.scrapers.unshift(defaultScrapers[i]);
+                    cache.options.scrapers = options.scrapers;
+                }
+                else {
+                    cache.options[newOption] = options[option];
+                }
+            }
 
-            // shortcuts
-            cache.options.shortcutKey = options.shortcut_key;
-            cache.options.downScrollingKey = options.down_scrolling_key;
-            cache.options.upScrollingKey = options.up_scrolling_key;
+            saveOptionsToDataStore();
 
-            // sync
-            cache.options.sync = options.sync == 1 ? true : false;
-
-            // tab manager
-            cache.options.tabManager = options.tab_shortcut_status == 1 ? true : false;
-            cache.options.tabManagerShortcutKey = options.tab_shortcut_key;
-
-            cache.options.hyper = options.hyprt == 1 ? true : false;
-
-            // appearance
-
-            // size
-            if (options.size == 0)
-                cache.options.size = 'small';
-            else if (options.size == 1)
-                cache.options.size = 'medium';
-            else
-                cache.options.size = 'large';
-
-            // theme
-            cache.options.theme = options.theme;
-
-            // disabled urls
-            cache.options.disabledUrls = options.disabledUrls;
-
-            // esp visions
-            cache.options.esp = options.esp_status == 1 ? true : false;
-            cache.options.espVisions = options.espModifiers;
-
-            // scrapers
-            // add the default scrapers first, since now they are removable
-            var defaultScrapers = [{
-                command: '?',
-                nullMessage: 'Could not find any input elements on the page.',
-                selector: 'input:enabled:not(#gleeSearchField),textarea',
-                cssStyle: 'GleeReaped'
-            },
-            {
-                command: 'img',
-                nullMessage: 'Could not find any linked images on the page.',
-                selector: 'a > img',
-                cssStyle: 'GleeReaped'
-            },
-            {
-                command: 'h',
-                nullMessage: 'Could not find any headings on the page.',
-                selector: 'h1,h2,h3',
-                cssStyle: 'GleeReaped'
-            },
-            {
-                command: 'a',
-                nullMessage: 'No links found on the page',
-                selector: 'a',
-                cssStyle: 'GleeReaped'
-            }];
-
-            var len = defaultScrapers.length;
-            for (var i = 0; i < len; i++)
-                options.scrapers.unshift(defaultScrapers[i]);
-            cache.options.scrapers = options.scrapers;
-
-            updateOptionsInDataStore();
             if (localStorage['gleebox_sync'] == 1)
                 saveSyncData(cache.options);
-            // todo: clear DB
+
+            DB.clear();
         });
     }
 }
