@@ -155,7 +155,7 @@ function respondToMessage(e) {
     else if (e.name === 'setCommandCache') {
         cache.commands = e.message;
         localStorage['gleebox_commands_cache'] = JSON.stringify(cache.commands);
-        sendRequestToAllTabs({ value: 'setCommandCache', data: cache.commands });
+        sendRequestToAllTabs({value: 'setCommandCache', commands: cache.commands});
     }
 
     else if (e.name === 'getOptions')
@@ -174,14 +174,22 @@ function respondToMessage(e) {
         saveOptionsToCacheAndDataStore(e.message);
 
     else if (e.name === 'propagateOptions')
-        sendRequestToAllTabs({value: 'applyOptions', data: cache.options});
+        sendRequestToAllTabs({value: 'applyOptions', options: cache.options});
 }
 
-function sendRequestToAllTabs(req) {
+function sendRequestToAllTabs(request) {
+    var value, message;
+    for (data in request) {
+        if (data === 'value')
+            value = request[data];
+        else
+            message = request[data];
+    }
+
     var w_len = safari.application.browserWindows.length;
     for (var i = 0; i < w_len; i++) {
         var t_len = safari.application.browserWindows[i].tabs.length;
         for (var j = 0; j < t_len; j++)
-            safari.application.browserWindows[i].tabs[j].page.dispatchMessage(req.value, req.data);
+            safari.application.browserWindows[i].tabs[j].page.dispatchMessage(value, message);
     }
 }
