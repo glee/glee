@@ -402,7 +402,7 @@ function importAndApply() {
 function applyDevPack() {
     try {
         var jsonString = $('#settingsText').get(0).value;
-        var newOptions = translateForImport(JSON.parse(jsonString));
+        var newOptions = JSON.parse(jsonString);
         // merge
         newOptions = mergeSettings(newOptions, options);
         options.scrapers = newOptions.scrapers;
