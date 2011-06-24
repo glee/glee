@@ -1,12 +1,14 @@
-IS_CHROME = true;
 // Chrome specific methods for options page
+IS_CHROME = true;
 var sync;
 var bg_window;
 
-// apply options to all currently open tabs
-// save new options to background.html cache and data store
-// also, if sync is enabled, save options to bookmark
-function propagate() {
+/**
+ * Saves options to the cache and localStorage in background.html.
+ * If sync is enabled, also updates the data in the cloud
+ * Also applies the new options to all currently open tabs
+ */
+function propagateOptions() {
     chrome.windows.getAll({populate: true}, function(windows) {
         var w_len = windows.length;
         for (var i = 0; i < w_len; i++) {
@@ -29,23 +31,41 @@ function propagate() {
         bg_window.saveSyncData(options);
 }
 
+/**
+ * Get refrence to background page
+ */
 function getBackgroundPage() {
     return chrome.extension.getBackgroundPage();
 }
 
+/**
+ * Get options from background.html
+ */
 function getOptions(callback) {
     chrome.extension.sendRequest({value: 'getOptions'}, callback);
 }
 
-// Sync
+/**
+ * Toggle Sync. If enabled, also updates the options
+ */
 function toggleSyncing() {
     if (localStorage['gleebox_sync'] == 1)
         bg_window.disableSync();
-    else
+    else {
         bg_window.enableSync(true);
+        // refresh options
+        setTimeout(function() {
+            clearOptions();
+            initOptions(bg_window.cache.options);
+            propagateOptions();
+        }, 100);
+    }
     setSyncUI();
 }
 
+/**
+ * Update the Sync Option UI based on current value of sync
+ */
 function setSyncUI() {
     if (localStorage['gleebox_sync'] == 1)
         $('#sync-button').attr('value', 'Disable Sync');
@@ -53,6 +73,10 @@ function setSyncUI() {
         $('#sync-button').attr('value', 'Enable Sync');
 }
 
+/**
+ * Send request to background.html to copy text to clipboard
+ * @param {String} text Text to copy
+ */
 function copyToClipboard(text) {
     chrome.extension.sendRequest({value: 'copyToClipboard', text: text}, function() {});
 }

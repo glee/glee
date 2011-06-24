@@ -6,7 +6,10 @@ $(document).ready(function() {
     getOptions(initOptions);
 });
 
-// Restores select box state to saved value from DB
+/**
+ * Initializes Options UI
+ * @param {Object} response Options to apply
+ */
 function initOptions(response) {
     options = response;
     console.log(options);
@@ -89,21 +92,39 @@ function initOptions(response) {
     attachListeners();
 }
 
+/**
+ * Save disabled URL to options
+ * @param {String} Disabled URL to add
+ */
 function addDisabledUrl(value) {
     options.disabledUrls.push(value);
     saveOption('disabledUrls', options.disabledUrls);
 }
 
+/**
+ * Save Scraper to options
+ * @param {Object} value Scraper object to add. e.g.: {command:'?', selector:'input'}
+ */
 function addScraper(value) {
     options.scrapers.push(value);
     saveOption('scrapers', options.scrapers);
 }
 
+/**
+ * Save Esp Vision to options
+ * @param {Object} value Esp Vision object to add. e.g.: {url:'http://google.com', selector:'a'}
+ */
 function addEspVision(value) {
     options.espVisions.push(value);
     saveOption('espVisions', options.espVisions);
 }
 
+/**
+ * Add item (disabled URL, scraper or esp vision) to UI and save it to options
+ * @param {String} type Type of item to add. Valid values are: disabledUrl, espVision and scraper
+ * @param {Array} values Array containing the values for the item
+ * @param {Boolean} save If set to true, item is also saved to options. Else, it is only added to UI
+ */
 function addItem(type, values, save) {
     var content;
     var index = $('li.' + type).length;
@@ -192,7 +213,7 @@ function addItem(type, values, save) {
                 espSelector.value = '';
             }
 
-            if (validateEsp(values)) {
+            if (validateEspVision(values)) {
                 var contentName = $('<span>', {
                     'class': 'espUrl',
                     html: values[0]
@@ -240,6 +261,11 @@ function addItem(type, values, save) {
     incrementCount(type);
 }
 
+/**
+ * Delete item from UI and options
+ * @param {Event} e The event object of click
+ * @param {String} type Type of item. Valid values are disabledUrl, scraper and espVision
+ */
 function removeItem(e, type) {
     var id = $(e.target).parent().attr('id');
     if (id === undefined)
@@ -258,6 +284,10 @@ function removeItem(e, type) {
     decrementCount(type);
 }
 
+/**
+ * Reset the ID's of items of a particular type. Usually called when an item is deleted
+ * @param {String} type Type of item. Valid values are disabledUrl, scraper and espVision
+ */
 function updateItemIndexes(type) {
     var listOfItems = $('li.' + type);
     var len = listOfItems.length;
@@ -266,26 +296,22 @@ function updateItemIndexes(type) {
         listOfItems.get(i).id = type + i;
 }
 
-function filter(text) {
-    var index1 = 0;
-    var index2 = 0;
-    while (index1 != -1 || index2 != -1) {
-        text = text.replace('&lt;', '<').replace('&gt;', '>');
-        index1 = text.indexOf('&lt;');
-        index2 = text.indexOf('&gt;');
-    }
-
-    return text;
-}
-
-// Validation Methods
-
+/**
+ * Check if the disabled URL is valid
+ * @param {String} url URL to check
+ * @returns {Boolean} Returns true if the disabled URL is valid
+ */
 function validateDisabledUrl(url) {
     if (url === 'Page URL' || url === '')
         return false;
     return true;
 }
 
+/**
+ * Check if the scraper is valid
+ * @param {Array} values Array containing scraper command and selector, in that order
+ * @returns {Boolean} Returns true if the scraper is valid
+ */
 function validateScraper(values) {
     var name = values[0];
     var selector = values[1];
@@ -297,14 +323,20 @@ function validateScraper(values) {
     return true;
 }
 
-function validateEsp(values) {
+/**
+ * Check if the Esp Vision is valid
+ * @param {Array} values Array containing esp vision URL and selector, in that order
+ * @returns {Boolean} Returns true if the esp vision is valid
+ */
+function validateEspVision(values) {
     if (values[0] === '' || values[1] === '')
         return false;
     return true;
 }
 
-// Backup Methods
-
+/**
+ * Show the Export Popup
+ */
 function exportSettings() {
     var text = 'Copy the contents of this text field, and save them to a textfile:';
     showBackupPopup(text, 'export');
@@ -316,33 +348,42 @@ function exportSettings() {
     }
 }
 
+/**
+ * Show the Import Popup
+ */
 function importSettings() {
     var text = 'Paste previously exported settings here. This will overwrite all your current settings.';
     showBackupPopup(text, 'import');
     $('#settingsText').text('');
 }
 
+/**
+ * Show the Apply Dev Pack Popup
+ */
 function devPackCallback(data) {
     var text = 'A collection of our favorite scrapers and visions.';
     showBackupPopup(text, 'importDevPack');
     $('#settingsText').text(data);
 }
 
+/**
+ * Send GET request for the Dev Pack
+ */
 function importDevPack() {
     $.get('http://thegleebox.com/app/devpack.txt', devPackCallback);
 }
 
-// called when import button is clicked
+/**
+ * Parse and apply options from Import Popup
+ */
 function importAndApply() {
     try {
         var jsonString = $('#settingsText').get(0).value;
         var newOptions = JSON.parse(jsonString);
 
-        clearSettings();
+        clearOptions();
         initOptions(newOptions);
-
-        options = newOptions;
-        saveAllOptions();
+        propagateOptions();
 
         $('#backupInfo').text('Settings successfully imported!');
         hideBackupPopup();
@@ -355,6 +396,9 @@ function importAndApply() {
     }
 }
 
+/**
+ * Parse and apply options from Dev Pack Popup
+ */
 function applyDevPack() {
     try {
         var jsonString = $('#settingsText').get(0).value;
@@ -364,10 +408,10 @@ function applyDevPack() {
         options.scrapers = newOptions.scrapers;
         options.espVisions = newOptions.espVisions;
 
-        clearSettings();
+        clearOptions();
         initOptions(options);
+        propagateOptions();
 
-        saveAllOptions();
         $('#backupInfo').text('Developer Pack successfully imported!');
         hideBackupPopup();
     }
@@ -379,6 +423,9 @@ function applyDevPack() {
     }
 }
 
+/**
+ * Merge options. Called during import
+ */
 function mergeSettings(a, b) {
     // for conflicting scrapers/visions, a takes priority
     // merging scrapers
@@ -416,22 +463,27 @@ function mergeSettings(a, b) {
     return a;
 }
 
-function showBackupPopup(infoText, func) {
+/**
+ * Show popup
+ * @param {String} infoText Description text for the popup
+ * @param {String} type Type of popup. Valid values are 'import', 'export' and 'importDevPack'
+ */
+function showBackupPopup(infoText, type) {
     var popup = $('#popup');
     if (popup.length === 0)
         initBackupPopup();
 
-    if (func === 'import') {
+    if (type === 'import') {
         $('#importButton').show();
         $('#exportButton').hide();
         $('#importDevPackButton').hide();
     }
-    else if (func === 'export') {
+    else if (type === 'export') {
         $('#importButton').hide();
         $('#exportButton').show();
         $('#importDevPackButton').hide();
     }
-    else if (func === 'importDevPack') {
+    else if (type === 'importDevPack') {
         $('#importDevPackButton').show();
         $('#importButton').hide();
         $('#exportButton').hide();
@@ -440,14 +492,16 @@ function showBackupPopup(infoText, func) {
     $('#backupInfo').html(infoText);
     $('#popup').fadeIn(200);
 
-    setTimeout(function()
-    {
+    setTimeout(function() {
         var field = $('#settingsText').get(0);
         Utils.selectAllText(field);
         field.focus();
     }, 0);
 }
 
+/**
+ * Initialize popup. Creates all the required UI elements
+ */
 function initBackupPopup() {
     var popup = $('<div/>', {
         id: 'popup'
@@ -466,8 +520,8 @@ function initBackupPopup() {
     .appendTo(popup)
     .click(applyDevPack);
 
-    // copy to clipboard button (displayed in export)
-    if (copyToClipboard != undefined) {
+    // copy to clipboard button (displayed in export). Only for Chrome
+    if (IS_CHROME) {
         $('<input type="button" value="Copy to Clipboard" id="exportButton" />')
         .appendTo(popup)
         .click(function(e) {
@@ -499,16 +553,29 @@ function initBackupPopup() {
     });
 }
 
+/**
+ * Hide popup
+ */
 function hideBackupPopup() {
     $('#popup').fadeOut(200);
 }
 
-function clearSettings() {
+/**
+ * Remove all the disabled urls, scrapers and esp visions and reset their count
+ */
+function clearOptions() {
     $('li.disabledUrl').remove();
     $('li.scraper').remove();
     $('li.espVision').remove();
+    setCount('disabledUrl', 0);
+    setCount('scraper', 0);
+    setCount('espVision', 0);
 }
 
+/**
+ * Attach listeners to UI controls
+ * Used to save options when a control's value changes
+ */
 function attachListeners() {
     // radio
     // for some reason, change event does not fire when using keyboard
@@ -582,6 +649,10 @@ function attachListeners() {
     });
 }
 
+/**
+ * Change search engine
+ * @param {String} engine Search Engine URL to change to
+ */
 function changeSearchEngine(engine) {
     var value = 'http://www.google.com/search?q=';
 
@@ -596,15 +667,19 @@ function changeSearchEngine(engine) {
     saveOption('searchEngine', value);
 }
 
-function changeScrollingKey(keyset) {
+/**
+ * Change up / down scrolling key pair
+ * @param {String} keypair The keypair to change to. Valid ones are 'ws' and 'jk'
+ */
+function changeScrollingKey(keypair) {
     var up;
     var down;
-    if (keyset === 'ws') {
+    if (keypair === 'ws') {
         up = 87;
         down = 83;
     }
 
-    else if (keyset === 'jk') {
+    else if (keypair === 'jk') {
         up = 'K'.charCodeAt(0);
         down = 'J'.charCodeAt(0);
     }
@@ -613,6 +688,9 @@ function changeScrollingKey(keyset) {
     saveOption('downScrollingKey', down);
 }
 
+/**
+ * Attach listeners to search fields for scrapers and esp visions
+ */
 function attachFilteringListeners() {
     // scraper
     $('#scraperSearch')
@@ -643,6 +721,10 @@ function attachFilteringListeners() {
     });
 }
 
+/**
+ * Filter esp visions to only show those whose url contains a given string
+ * @param {String} value String against which esp urls should be compared
+ */
 function filterESP(value) {
     var $visions = $('.espVision');
     var $urls = $('.espUrl');
@@ -656,6 +738,10 @@ function filterESP(value) {
     }
 }
 
+/**
+ * Filter scrapers to only show those whose command contains a given string
+ * @param {String} value String against which scraper commands should be compared
+ */
 function filterScraper(value) {
     var $scrapers = $('.scraper');
     var $names = $('.scraperName');
@@ -669,15 +755,16 @@ function filterScraper(value) {
     }
 }
 
-// Initialize tabs
+/**
+ * Initialize tabs
+ */
 $(document).ready(function() {
     $('ul.menu li:first').addClass('tabActive').show();
     $('#options > div').hide();
     $('#basics').show();
 
     // Click event for tab menu items
-    $('ul.menu li:not(.menu-separator)').click(function()
-    {
+    $('ul.menu li:not(.menu-separator)').click(function() {
         $('ul.menu li').removeClass('tabActive');
         $(this).addClass('tabActive');
         $('#options > div').hide();
@@ -689,7 +776,9 @@ $(document).ready(function() {
     });
 });
 
-// smooth scrolling using arrow keys
+/**
+ * Add smooth scrolling using arrow keys
+ */
 window.addEventListener('keydown', function(e) {
     if ((e.keyCode === 38 || e.keyCode === 40) &&
     !Utils.elementCanReceiveUserInput(e.target)) {
@@ -715,8 +804,10 @@ window.addEventListener('keydown', function(e) {
     }
 });
 
-/// edit methods
-
+/**
+ * Edit a scraper. Replaces the scraper command and selector with textareas and saves options on completion
+ * @param {jQuery} $scraper The scraper's li.scraper element
+ */
 function editScraper($scraper) {
     $scraper.addClass('selected');
 
@@ -754,6 +845,10 @@ function editScraper($scraper) {
     $(document).bind('mousedown', onEditingComplete);
 }
 
+/**
+ * Edit a disabled URL. Replaces the URL with textarea and saves options on completion
+ * @param {jQuery} $disabledUrl The urls's li.disabledUrl element
+ */
 function editDisabledUrl($disabledUrl) {
     $disabledUrl.addClass('selected');
 
@@ -787,6 +882,10 @@ function editDisabledUrl($disabledUrl) {
     $(document).bind('mousedown', onEditingComplete);
 }
 
+/**
+ * Edit an Esp Vision. Replaces the vision url and selector with textareas and saves options on completion
+ * @param {jQuery} $esp The esp vision's li.espVision element
+ */
 function editEspVision($esp) {
     $esp.addClass('selected');
 
@@ -825,18 +924,27 @@ function editEspVision($esp) {
     $(document).bind('mousedown', onEditingComplete);
 }
 
+/**
+ * Revert shortcut key to default i.e. 'g'
+ */
 function setDefaultShortcutKey() {
     $('[name=shortcutKey]').attr('value', 'g').keyup();
     $('[name=shortcutKeyCode]').text(71);
     saveOption('shortcutKey', 71);
 }
 
+/**
+ * Revert tab manager shortcut key to default i.e. '.'
+ */
 function setDefaultTabShortcutKey() {
     $('[name=tabManagerShortcutKey]').attr('value', '.').keyup();
     $('[name=tabManagerShortcutKeyCode]').text(190);
     saveOption('tabManagerShortcutKey', 190);
 }
 
+/**
+ * Modify the value for given option name. Used mostly for keycodes
+ */
 function translateOptionValue(name, value) {
     switch (name) {
         case 'shortcutKey': return $('[name=shortcutKeyCode]').text(); break;
@@ -845,24 +953,40 @@ function translateOptionValue(name, value) {
     return value;
 }
 
+/**
+ * Saves option to background.html cache and localStorage. Also propagates changes to all open tabs
+ * @param {String} name Name of option
+ * @param {Object} value Value of option. Maybe of any type.
+ */
 function saveOption(name, value) {
     value = translateOptionValue(name, value);
     options[name] = value;
-    propagate();
+    propagateOptions();
 }
 
-function saveAllOptions() {
-    for (option in options)
-        localStorage[option] = options[option];
-    propagate();
-}
-
+/**
+ * Increment count in UI of a type of items
+ * @param {String} type Type of item. 'disabledUrl', 'espVision' or 'scraper'
+ */
 function incrementCount(type) {
     var $countEl = $('#' + type + 'Count');
     $countEl.text(parseInt($countEl.text()) + 1);
 }
 
+/**
+ * Decrement count in UI of a type of items
+ * @param {String} type Type of item. 'disabledUrl', 'espVision' or 'scraper'
+ */
 function decrementCount(type) {
     var $countEl = $('#' + type + 'Count');
     $countEl.text(parseInt($countEl.text()) - 1);
+}
+
+/**
+ * Set count in UI of a type of items
+ * @param {String} type Type of item. 'disabledUrl', 'espVision' or 'scraper'
+ * @param {Integer} count Count to set
+ */
+function setCount(type, count) {
+    $('#' + type + 'Count').text(count);
 }
