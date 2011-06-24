@@ -273,16 +273,19 @@ Glee.Events = {
 
         for (var i = 0; i < len; i++) {
             if (trimVal === Glee.commands[i].name &&
-                Glee[Glee.commands[i].method] != undefined)
-            {
+                Glee[Glee.commands[i].method] != undefined) {
                 Glee.setState(Glee.commands[i].description, 'msg');
                 Glee.URL = Glee.commands[i];
                 break;
             }
         }
-        // If it is not a valid page command, try to find closest matching bookmarklet
-        if (!Glee.URL)
-            Glee.Browser.getBookmarklet(trimVal);
+        if(!Glee.URL) {
+            // If it is not a valid page command, try to find closest matching bookmarklet. Only for Chrome
+            if (IS_CHROME)
+                Glee.Browser.getBookmarklet(trimVal);
+            else
+                Glee.setState('Command not found', 'msg');
+        }
     },
 
     /**

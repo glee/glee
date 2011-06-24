@@ -3,7 +3,7 @@
 # execute to bring the Glee Safari version up-to-date with the Chrome version.
 # this script replaces the common Javascript and CSS in Safari with those from the Chrome version.
 
-# execute in /Safari
+# IMPORTANT: execute only from '/Safari'
 
 chrome_dir="../Chrome/glee_chrome/"
 safari_dir="gleeBox.safariextension/"
