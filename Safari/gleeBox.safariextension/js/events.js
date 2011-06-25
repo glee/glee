@@ -300,7 +300,8 @@ Glee.Events = {
 
         if (Glee.inspectMode) {
             Glee.inspectMode = false;
-            result = SelectorGenerator.generate(Glee.selectedElement);
+            var generator = new SelectorGenerator(null, ['GleeHL']);
+            result = generator.generate(Glee.selectedElement);
             var value = '*' + result;
             Glee.value(value);
             Glee.lastQuery = value;

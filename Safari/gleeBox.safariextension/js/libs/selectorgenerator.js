@@ -13,8 +13,12 @@
  * @param {String} [level] Specificity level at which to generate CSS selector.
  * Valid values are low, high and medium. Default is medium
  */
-var SelectorGenerator = function(level) {
+var SelectorGenerator = function(level, excludedClasses) {
     this.specificityLevel = level ? level : 'medium';
+    if (excludedClasses)
+        this.excludedClasses = excludedClasses;
+    else
+        this.excludedClasses = [];
 
     var self = this;
 
@@ -24,7 +28,7 @@ var SelectorGenerator = function(level) {
      * @return {String} CSS selector
      * @public
      */
-    this.generate = function(el) {
+     this.generate = function(el) {
         if (!el)
             return null;
 
@@ -52,10 +56,12 @@ var SelectorGenerator = function(level) {
         var elClass = el.attr('class');
 
         if (elClass != undefined) {
+            var len = self.excludedClasses.length;
+            for (var i = 0; i < len; i++)
+                elClass = elClass.replace(excludedClasses[i], '');
             elClass = $.trim(elClass);
 
-            if (elClass.length != 0)
-            {
+            if (elClass.length != 0) {
                 var classes = elClass.split(' ');
                 var len = classes.length;
 
@@ -100,11 +106,13 @@ var SelectorGenerator = function(level) {
         var elClass = el.attr('class');
 
         if (elClass != undefined) {
+            var len = self.excludedClasses.length;
+            for (var i = 0; i < len; i++)
+                elClass = elClass.replace(self.excludedClasses[i], '');
             elClass = $.trim(elClass);
         }
-        else {
+        else
             elClass = '';
-        }
 
         var elTag = el.prop('tagName');
         elTag = elTag ? elTag.toLowerCase : '';
@@ -113,18 +121,15 @@ var SelectorGenerator = function(level) {
         if (level < 1) {
             selector = inspectAtHighSpecificity(el.parent(), level + 1) + ' ' + elTag;
 
-            if (elClass.length != 0) {
+            if (elClass.length != 0)
                 selector += '.' + elClass;
-            }
         }
         else {
             selector = elTag;
 
-            if (elClass.length != 0) {
+            if (elClass.length != 0)
                 selector += '.' + elClass;
-            }
         }
-
         return selector;
     };
 
