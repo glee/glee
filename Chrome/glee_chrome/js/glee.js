@@ -37,6 +37,8 @@ var Glee = {
     options: {
         // Keydown code of shortcut key to launch gleeBox
         shortcutKey: 71,
+        // Disable using the shortcut key without pressing alt. (Not scrolling shortcuts.)
+        requireAlt: false,
         // Keydown code of shortcut key to launch tab manager
         tabManagerShortcutKey: 190,
         // Size of gleeBox (small, medium, large)
@@ -843,7 +845,7 @@ var Glee = {
         $(window).bind('keydown', function(e) {
             var target = e.target || e.srcElement;
             if (Glee.status) {
-                if (!Utils.elementCanReceiveUserInput(target) || e.altKey) {
+                if (!Glee.options.requireAlt && !Utils.elementCanReceiveUserInput(target) || e.altKey) {
                     if (target.id === 'gleeSearchField')
                         return true;
 
