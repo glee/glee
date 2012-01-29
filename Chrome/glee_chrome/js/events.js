@@ -365,7 +365,7 @@ Glee.Events = {
             var d = '' + document.location;
             u = u + '&t=' + (document.title ? encodeURIComponent(document.title) : '')
             + '&s=' + Glee.options.quixUrl
-            + '&v=080'
+            + '&v=081'
             + '&u=' + (document.location ? encodeURIComponent(document.location) : '');
 
             if (executeInNewTab) {
