@@ -1,6 +1,6 @@
 {
   "name": "gleeBox",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Keyboard glee for your web",
   "background_page": "background.html",
   "options_page": "options.html",

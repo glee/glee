@@ -1,4 +1,4 @@
-var CURRENT_VERSION = '2.2.1';
+var CURRENT_VERSION = '2.2.2';
 var screenshotId = 0;
 
 function init() {

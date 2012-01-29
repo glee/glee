@@ -58,21 +58,22 @@ var cache = {
   }
 };
 
-   function checkVersion() {
-    if (localStorage['gleebox_version'] != CURRENT_VERSION) {
-      if (!localStorage['gleebox_version'])
+function checkVersion() {
+  if (localStorage['gleebox_version'] != CURRENT_VERSION) {
+    if (!localStorage['gleebox_version'])
       saveOptionsToDataStore();
-      // Upgrade data model for 2.2
-      else if (parseFloat(localStorage['gleebox_version']) < 2.2)
+    
+    // Upgrade data model for 2.2
+    else if (parseFloat(localStorage['gleebox_version']) < 2.2)
       upgrade(2.2);
 
-      // only show update notification for X.X releases
-      if (parseFloat(localStorage['gleebox_version']) < parseFloat(CURRENT_VERSION))
+    // only show update notification for X.X releases
+    if (parseFloat(localStorage['gleebox_version']) < parseFloat(CURRENT_VERSION))
       showUpdateNotification();
 
-      updateVersionString();
-    }
+    updateVersionString();
   }
+}
 
 function updateVersionString() {
   console.log('Updating to version ' + CURRENT_VERSION);
@@ -214,9 +215,9 @@ function saveOptionsToCache(options) {
 
 function saveOptionsToDataStore() {
   for (option in cache.options) {
-    if (option === 'disabledUrls' ||
-          option === 'espVisions' ||
-          option === 'scrapers') {
+    if (option === 'disabledUrls' 
+        || option === 'espVisions' 
+        || option === 'scrapers') {
       try {
         localStorage[option] = JSON.stringify(cache.options[option]);
       }
@@ -290,8 +291,9 @@ function mergeOptionsAndSave(options) {
           }
         }
       }
-      else
+      else {
         cache.options[option] = options[option];
+      }
     }
   }
   saveOptionsToDataStore();
