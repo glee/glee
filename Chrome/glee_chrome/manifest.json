@@ -1,61 +1,60 @@
 {
-    "name": "gleeBox",
-    "version": "2.2.1",
-    "description": "Keyboard glee for your web",
-    "background_page": "background.html",
-    "options_page": "options.html",
+  "name": "gleeBox",
+  "version": "2.2.1",
+  "description": "Keyboard glee for your web",
+  "background_page": "background.html",
+  "options_page": "options.html",
 
-    "icons": {
-        "128": "images/icon_128.png"
-    },
+  "icons": {
+    "128": "images/icon_128.png"
+  },
 
-    "content_scripts": [
-    {
-        "matches":["<all_urls>"],
+  "content_scripts": [{
+    "matches":["<all_urls>"],
 
-        "js": [
-            "js/injectcss.js"
-        ],
+    "js": [
+      "js/injectcss.js"
+    ],
 
-        "run_at": "document_end",
-        "all_frames": true
-    },
-    {
-        "matches": ["<all_urls>"],
+    "run_at": "document_end",
+    "all_frames": true
+  },
+  {
+    "matches": ["<all_urls>"],
 
-        "css": [
-            "css/glee.css",
-            "css/themes.css",
-            "css/jquery.autocomplete.css",
-            "css/listmanager.css"
-        ],
+    "css": [
+      "css/glee.css",
+      "css/themes.css",
+      "css/jquery.autocomplete.css",
+      "css/listmanager.css"
+    ],
 
-        "js": [
-            "js/libs/jquery.js",
-            "js/libs/jquery.autocomplete.js",
-            "js/glee.js",
-            "js/chrome/browser.js",
-            "js/events.js",
-            "js/pagecmds.js",
-            "js/libs/utils.js",
-            "js/linkreaper.js",
-            "js/elementstate.js",
-            "js/libs/selectorgenerator.js",
-            "js/libs/smoothscroller.js",
-            "js/logger.js",
-            "js/chrome/pagecmds.js",
-            "js/listmanager.js"
-        ],
+    "js": [
+      "js/libs/jquery.js",
+      "js/libs/jquery.autocomplete.js",
+      "js/glee.js",
+      "js/chrome/browser.js",
+      "js/events.js",
+      "js/pagecmds.js",
+      "js/libs/utils.js",
+      "js/linkreaper.js",
+      "js/elementstate.js",
+      "js/libs/selectorgenerator.js",
+      "js/libs/smoothscroller.js",
+      "js/logger.js",
+      "js/chrome/pagecmds.js",
+      "js/listmanager.js"
+    ],
 
-        "run_at": "document_start"
-    }],
+    "run_at": "document_start"
+  }],
 
-    "permissions": [
-        "tabs",
-        "http://api.bit.ly/",
-        "http://thegleebox.com/*",
-        "bookmarks",
-        "unlimitedStorage",
-        "notifications"
-    ]
+  "permissions": [
+    "tabs",
+    "http://api.bit.ly/",
+    "http://thegleebox.com/*",
+    "bookmarks",
+    "unlimitedStorage",
+    "notifications"
+  ]
 }

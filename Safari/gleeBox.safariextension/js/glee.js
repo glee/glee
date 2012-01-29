@@ -867,7 +867,7 @@ var Glee = {
 
     // select the top most visible element (if any elements are highlighted)
     selectTopElement: function() {
-        if (Glee.isEspRunning && Glee.selectedElement) {
+        if ((Glee.isEspRunning || Glee.isScraper()) && Glee.selectedElement) {
             LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
             LinkReaper.unHighlight(Glee.selectedElement);
             Glee.selectedElement = LinkReaper.getFirst();

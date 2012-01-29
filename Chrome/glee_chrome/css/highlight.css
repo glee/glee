@@ -1,29 +1,29 @@
 /** Highlighting css
-    Used only for debugging and editing purposes
-    Minimize and include this in injectcss.js
-**/
+      Used only for debugging and editing purposes
+      Minimize and include this in injectcss.js
+  */
 
 .GleeReaped {
-    background-color: #f9f2a5 !important;
-    outline: 1px dotted #818181 !important;
+  background-color: #f9f2a5 !important;
+  outline: 1px dotted #818181 !important;
 }
 
 .GleeHL {
-    -webkit-box-shadow: hsla(71, 89%, 70%, 1) -2px -2px 0px,
-                        hsla(71, 89%, 70%, 1)  2px -2px 0px,
-                        hsla(71, 100%, 45%, 1) -2px  2px 0px,
-                        hsla(71, 100%, 45%, 1)  2px  2px 0px,
-                        hsla(71, 100%, 80%, 1)  0px 0px 0px 3px,
-                        rgba(42, 35, 0, 0.8)  1px  1px 3px 3px !important;
-    border-radius: 3px !important;
-    color: #000 !important;
-    outline: none !important;
-    border: none !important;
-    background: -webkit-gradient(linear, left bottom, left top,
-                    color-stop(0, hsla(71, 100%, 47%, 1)),
-                    color-stop(1, hsla(71, 89%, 70%, 1))) !important;
+  -webkit-box-shadow: hsla(71, 89%, 70%, 1) -2px -2px 0px,
+                      hsla(71, 89%, 70%, 1)  2px -2px 0px,
+                      hsla(71, 100%, 45%, 1) -2px  2px 0px,
+                      hsla(71, 100%, 45%, 1)  2px  2px 0px,
+                      hsla(71, 100%, 80%, 1)  0px 0px 0px 3px,
+                      rgba(42, 35, 0, 0.8)  1px  1px 3px 3px !important;
+  border-radius: 3px !important;
+  color: #000 !important;
+  outline: none !important;
+  border: none !important;
+  background: -webkit-gradient(linear, left bottom, left top,
+                               color-stop(0, hsla(71, 100%, 47%, 1)),
+                               color-stop(1, hsla(71, 89%, 70%, 1))) !important;
 }
 
 .GleeHL a, a.GleeHL {
-    color: #000 !important;
+  color: #000 !important;
 }
