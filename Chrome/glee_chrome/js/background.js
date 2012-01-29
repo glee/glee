@@ -10,6 +10,7 @@ var cache = {
        scrollingSpeed: 500,
        outsideScrolling: false,
        shortcutKey: 71,
+       requireAlt: false,
        upScrollingKey: 87,
        downScrollingKey: 83,
        tabManager: true,
