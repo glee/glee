@@ -19,6 +19,8 @@ var Glee = {
 
     linkSearchTimer: 0,
 
+    backspaceToleranceTimer: 500,
+
     themes: [
       'GleeThemeDefault',
       'GleeThemeWhite',
@@ -114,6 +116,7 @@ var Glee = {
   // last query executed in jQuery mode
   lastjQuery: null,
   isSearching: false,
+  isDeleting: false,
   isEspRunning: false,
   isDOMSearchRequired: true,
   commandMode: false,
