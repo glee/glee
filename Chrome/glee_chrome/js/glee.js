@@ -18,7 +18,7 @@ var Glee = {
     cacheSize: 20,
 
     linkSearchTimer: 0,
-    
+
     backspaceToleranceTimer: 500,
 
     themes: [

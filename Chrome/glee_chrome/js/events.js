@@ -69,7 +69,7 @@ Glee.Events = {
       // if the user is not holding the backspace key or ragepressing it
       if (!Glee.isDeleting && Glee.isEmpty())
         window.history.back();
-      
+
       Glee.isDeleting = true;
     }
   },
@@ -118,7 +118,7 @@ Glee.Events = {
           if (Glee.options.bookmarkSearchStatus) {
             Glee.bookmarks = [];
           }
-          
+
           Glee.resetTimer();
           Glee.setSearchActivity(false);
           var command = value.substring(1);
@@ -164,7 +164,7 @@ Glee.Events = {
       // you're not pulled up to another position on the page
       Glee.selectTopElement();
     }
-    
+
     // Backspace key: set the deleting state to false
     if (e.keyCode === 8 && Glee.isEmpty()) {
       Glee.resetTimer();
@@ -172,7 +172,7 @@ Glee.Events = {
         Glee.isDeleting = false;
       }, Glee.defaults.backspaceToleranceTimer);
     }
-    
+
   },
 
   /**
