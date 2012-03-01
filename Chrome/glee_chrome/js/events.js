@@ -65,8 +65,12 @@ Glee.Events = {
     }
 
     //  Backspace takes user back in history if gleeBox is empty
-    else if (e.keyCode === 8 && Glee.isEmpty()) {
-      window.history.back();
+    else if (e.keyCode === 8) {
+      // if the user is not holding the backspace key or ragepressing it
+      if (!Glee.isDeleting && Glee.isEmpty())
+        window.history.back();
+      
+      Glee.isDeleting = true;
     }
   },
 
@@ -160,6 +164,15 @@ Glee.Events = {
       // you're not pulled up to another position on the page
       Glee.selectTopElement();
     }
+    
+    // Backspace key: set the deleting state to false
+    if (e.keyCode === 8 && Glee.isEmpty()) {
+      Glee.resetTimer();
+      Glee.timer = setTimeout(function() {
+        Glee.isDeleting = false;
+      }, Glee.defaults.backspaceToleranceTimer);
+    }
+    
   },
 
   /**
