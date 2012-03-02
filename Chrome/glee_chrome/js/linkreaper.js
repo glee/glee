@@ -1,7 +1,8 @@
 /* The LinkReaper Object */
 var LinkReaper = {
 
-  linkSelectionSelector: 'a, a > img, input[type=button], input[type=submit], button',
+  linkSelectionSelector: 
+    'a, a > img, input[type=button], input[type=submit], button',
   searchTerm: '',
   selectedLinks: [],
   traversePosition: 0,
@@ -9,11 +10,12 @@ var LinkReaper = {
   cachedLinks: [],
 
   /**
-    *  Returns all links on the page, except those containing images
+    * Returns all links on the page, except those containing images
     */
   reapAllLinks: function() {
     this.selectedLinks = $('a');
-    // get rid of the linked images and hidden links. we only want textual links
+    // Get rid of the linked images and hidden links. 
+    // We only want textual links
     var filterLinks = function(el) {
       return (($(el).find('img').length === 0) && Utils.isVisible(el));
     };
@@ -24,16 +26,18 @@ var LinkReaper = {
   },
 
   /**
-    *  Search links based on textual query
-    *  @param {String} term String to search for.
+    * Search links based on textual query
+    * @param {String} term String to search for.
     */
   reapLinks: function(term, override) {
     if ((term != '') && ((LinkReaper.searchTerm != term) || override)) {
-      // If this term is a specialization of the last term, restrict search to currently selected links
+      // If this term is a specialization of the last term, 
+      //  restrict search to currently selected links
       if (LinkReaper.searchTerm != '' &&
       (term.indexOf(LinkReaper.searchTerm) === 0)) {
         LinkReaper.resetHighlight(LinkReaper.selectedLinks);
-        LinkReaper.selectedLinks = $(LinkReaper.getMatches(term, LinkReaper.lastMatchedLinks));
+        LinkReaper.selectedLinks = $(LinkReaper.getMatches(term, 
+          LinkReaper.lastMatchedLinks));
       }
       // else start over
       else {
@@ -42,14 +46,15 @@ var LinkReaper = {
       }
       LinkReaper.selectedLinks.addClass('GleeReaped');
       LinkReaper.searchTerm = term;
-      LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
+      LinkReaper.selectedLinks = 
+        Utils.sortElementsByPosition(LinkReaper.selectedLinks);
       LinkReaper.traversePosition = 0;
     }
   },
 
   /**
-    *  Search elements based on selector
-    *  @param {String} CSS/jQuery selector
+    * Search elements based on selector
+    * @param {String} CSS/jQuery selector
     */
   reapSelector: function(selector) {
     this.selectedLinks = $(selector);
@@ -61,24 +66,26 @@ var LinkReaper = {
   },
 
   /**
-    *  Remove a link from currently selected links
-    *  @param {jQuery} $el Element to remove.
+    * Remove a link from currently selected links
+    * @param {jQuery} $el Element to remove.
     */
   unreapLink: function($el) {
     // TODO: What if there are multiple links with different names and same URL?
     var isNotEqual = function(element) {
       $element = $(element);
-      if ($element.attr('href') === $el.attr('href'))
-      return false;
-      else
-      return true;
+      if ($element.attr('href') === $el.attr('href')) {
+        return false;
+      }
+      else {
+        return true;
+      }
     };
     this.selectedLinks = this.selectedLinks.filter(isNotEqual);
     this.resetHighlight($el);
   },
 
   /**
-    *  Remove all links
+    * Remove all links
     */
   unreapAllLinks: function() {
     $(LinkReaper.selectedLinks).each(function() {
@@ -91,7 +98,7 @@ var LinkReaper = {
   },
 
   /**
-    *  Get the next element in list
+    * Get the next element in list
     */
   getNext: function() {
     if (this.selectedLinks.length == 0) {
@@ -114,7 +121,7 @@ var LinkReaper = {
   },
 
   /**
-    *  Get the previous element in list
+    * Get the previous element in list
     */
   getPrev: function() {
     if (this.selectedLinks.length === 0) {
@@ -137,7 +144,7 @@ var LinkReaper = {
   },
 
   /**
-    *  Get the first element in list
+    * Get the first element in list
     */
   getFirst: function() {
     if (this.selectedLinks.length == 0) {
@@ -150,11 +157,11 @@ var LinkReaper = {
   },
 
   /**
-    *  Get matching elements for text based query
-    *  @param {String} query The text query.
-    *  @param {Object} Last matched links.
+    * Get matching elements for text based query
+    * @param {String} query The text query.
+    * @param {Object} Last matched links.
     *
-    *  Modified version of code by Leo Spalteholz in KeySurf
+    * Modified version of code by Leo Spalteholz in KeySurf
     */
   getMatches: function(query, links) {
     // reset last match results
@@ -172,10 +179,12 @@ var LinkReaper = {
     // links that contain words that start with query not in current view
     var offscreenWordMatches = [];
 
-    // links that are labelled to be included at any level of match in current view
+    // links that are labelled to be included at any level of match 
+    // in current view
     var onscreenLabelMatches = [];
 
-    // links that are labelled to be included at any level of match not in current view
+    // links that are labelled to be included at any level of match not 
+    // in current view
     var offscreenLabelMatches = [];
 
     query = query.toLowerCase();
@@ -212,11 +221,14 @@ var LinkReaper = {
     });
 
     if (onscreenExactMatches.length != 0)
-      return onscreenExactMatches.concat(onscreenLabelMatches).concat(offscreenExactMatches);
+      return onscreenExactMatches.concat(onscreenLabelMatches)
+        .concat(offscreenExactMatches);
     else if (onscreenWordMatches.length != 0)
-      return onscreenWordMatches.concat(onscreenLabelMatches).concat(offscreenExactMatches).concat(offscreenWordMatches);
+      return onscreenWordMatches.concat(onscreenLabelMatches)
+        .concat(offscreenExactMatches).concat(offscreenWordMatches);
     else if (onscreenLabelMatches.length != 0)
-      return onscreenLabelMatches.concat(offscreenExactMatches).concat(offscreenWordMatches);
+      return onscreenLabelMatches.concat(offscreenExactMatches)
+        .concat(offscreenWordMatches);
     else if (offscreenExactMatches.length != 0)
       return offscreenExactMatches.concat(offscreenLabelMatches);
     else
@@ -224,8 +236,9 @@ var LinkReaper = {
   },
 
   /**
-    *  Get the text for an element for matching purposes. Maybe an anchor, image or button
-    *  @param {Element} el The element.
+    * Get the text for an element for matching purposes. 
+    *   Maybe an anchor, image or button
+    * @param {Element} el The element.
     */
   getText: function(el) {
     var tag = el.tagName.toLowerCase();
@@ -262,7 +275,8 @@ var LinkReaper = {
         LinkReaper.cachedLinks.push({
           el: this,
           text: text,
-          // HACK: for links / file paths, enable query through any part of string
+          // HACK: for links / file paths, 
+          //  enable query through any part of string
           allMatches: (text.indexOf('/') != -1)
         });
       }

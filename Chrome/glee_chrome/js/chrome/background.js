@@ -1,4 +1,4 @@
-var CURRENT_VERSION = '2.2.2';
+var CURRENT_VERSION = '2.2.3';
 var screenshotId = 0;
 
 function init() {
@@ -18,8 +18,9 @@ function showUpdateNotification() {
 
 function upgrade(version) {
   // with version 2.2, we are moving *everything* to localStorage
-  // that way, we can easily maintain Safari and Chrome support and implement future support for other browsers
-  //
+  //  that way, we can easily maintain Safari and Chrome support and 
+  //  implement future support for other browsers
+
   if (version === 2.2) {
     console.log('Updating data model for version 2.2...');
     DB.loadAllPrefs(function(options) {
@@ -250,7 +251,8 @@ function takeScreenshot() {
   // code from Samples (http://code.google.com/chrome/extensions/samples.html)
   chrome.tabs.captureVisibleTab(null, {format: 'png'}, function(img) {
     var screenshotUrl = img;
-    var viewTabUrl = [chrome.extension.getURL('screenshot.html'), '?id=', screenshotId++].join('');
+    var viewTabUrl = [chrome.extension.getURL('screenshot.html'), 
+      '?id=', screenshotId++].join('');
     // create a new page and display the image
     chrome.tabs.create({url: viewTabUrl}, function(tab) {
       var targetId = tab.id;

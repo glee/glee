@@ -1,7 +1,7 @@
 /**
   * Used to inject the highlighting css for gleeBox. 
-      The reason this is appended to the end of document is that it 
-      takes precedence over any CSS of the selected element
+  *   The reason this is appended to the end of document is that it 
+  *   takes precedence over any CSS of the selected element
   */
 
 var injectCSS = function(css, title) {

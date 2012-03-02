@@ -17,8 +17,12 @@ var Glee = {
     // autocomplete cache size
     cacheSize: 20,
 
+    // minimum time difference between consecutive keypresses to execute
+    //  a new link search
     linkSearchTimer: 0,
 
+    // minimum time difference between consecutive backspace presses
+    // to navigate to previous page (if gleebox is empty)
     backspaceToleranceTimer: 500,
 
     themes: [
@@ -109,7 +113,8 @@ var Glee = {
   },
   // smooth document scroller
   scroller: null,
-  // if any text is selected when gleeBox is activated, it acts as the default query for cmd engine
+  // if any text is selected when gleeBox is activated, 
+  //   it acts as the default query for cmd engine
   defaultQuery: null,
   // last query executed in gleeBox
   lastQuery: null,
@@ -180,18 +185,22 @@ var Glee = {
   {
     name: 'set',
     method: 'setOptionValue',
-    description: 'Set an option. For eg.: !set size=small will change the size of gleeBox to small. For more, execute !help',
+    description: 'Set an option. For eg.: !set size=small will change \
+      the size of gleeBox to small. For more, execute !help',
     statusText: 'Setting option...'
   },
   {
     name: 'share',
     method: 'sharePage',
-    description: 'Share this page. Enter service name as param, eg.: !share facebook. Several services are supported, run !help to see a listing'
+    description: 'Share this page. Enter service name as param, \
+      eg.: !share facebook. Several services are supported. \
+      Run !help to see a listing'
   },
   {
     name: 'inspect',
     method: 'inspectPage',
-    description: 'Inspect an element on the page. Enter text and press enter to search for elements and return their jQuery selector.'
+    description: 'Inspect an element on the page. Enter text and press enter \
+      to search for elements and return their jQuery selector.'
   },
   {
     name: 'v',
@@ -274,7 +283,8 @@ var Glee = {
   createBox: function() {
     // Creating DOM elements for gleeBox
     this.$searchField = $('<input type=\"text\" id=\"gleeSearchField\" value=\"\" />');
-    this.$subText = $('<div id=\"gleeSubText\">' + Glee.defaults.nullStateMessage + '</div>');
+    this.$subText = $('<div id=\"gleeSubText\">' + Glee.defaults.nullStateMessage + 
+      '</div>');
     this.$subURL = $('<div id=\"gleeSubURL\"></div>');
     this.$searchBox = $("<div id=\"gleeBox\" style='display:none'></div>");
     this.$searchActivity = $('<div id=\"gleeSearchActivity\"></div>');
@@ -416,7 +426,9 @@ var Glee = {
       this.$searchBox.removeClass(Glee.defaults.themes.join(' '));
       this.$searchField.removeClass(Glee.defaults.themes.join(' '));
     }
-    catch (e) {} // just to prevent errors popping up in safari. TODO: find why they come up
+    // just to prevent errors popping up in safari. 
+    // TODO: find why they come up
+    catch (e) {} 
   },
 
   applySize: function() {
@@ -525,7 +537,8 @@ var Glee = {
   initScraper: function(scraper) {
     this.nullMessage = scraper.nullMessage;
     this.cache.scraper = scraper;
-    LinkReaper.selectedLinks = Utils.sortElementsByPosition($.grep($(scraper.selector), Utils.isVisible));
+    LinkReaper.selectedLinks = Utils.sortElementsByPosition(
+      $.grep($(scraper.selector), Utils.isVisible));
     $(LinkReaper.selectedLinks).each(function() {
       $(this).addClass(scraper.cssStyle);
     });
@@ -537,7 +550,9 @@ var Glee = {
     // this.attachScraperListener(scraper);
   },
 
-  // attach a livequery listener, so that when a new element belonging to the current scraper/vision's selector gets inserted into the DOM, it gets added to the selected elements
+  // attach a livequery listener, so that when a new element belonging to the
+  // current scraper / vision's selector gets inserted into the DOM, 
+  // it gets added to the selected elements
   attachScraperListener: function(scraper) {
     $(scraper.selector).livequery(function() {
       $this = $(this);
@@ -545,7 +560,8 @@ var Glee = {
         return;
 
       LinkReaper.selectedLinks.push(this);
-      LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
+      LinkReaper.selectedLinks = 
+        Utils.sortElementsByPosition(LinkReaper.selectedLinks);
       $this.addClass(scraper.cssStyle);
       LinkReaper.traversePosition = 0;
     });
@@ -592,7 +608,8 @@ var Glee = {
         else if (this.options.searchBookmarks) {
           // emptying the bookmarks array
           this.bookmarks = [];
-          this.Browser.isBookmark(text); // check if the text matches a bookmark
+          // check if the text matches a bookmark
+          this.Browser.isBookmark(text);
           this.setURL('');
           return true;
         }
@@ -719,11 +736,13 @@ var Glee = {
 
     // if window bottom diff is not previously calculated, let's do that
     if (!Glee.defaults.windowBottomDiff) {
-      // since gleeBox top is at 78%, the diff will be 22%. It will include the gleeBox height
+      // since gleeBox top is at 78%, the diff will be 22%. 
+      // It will include the gleeBox height
       Glee.defaults.windowBottomDiff = (window.innerHeight * 0.22);
     }
 
-    var boxHeight = Glee.defaults.windowBottomDiff + (target.height() ? target.height() : 50);
+    var boxHeight = Glee.defaults.windowBottomDiff + 
+      (target.height() ? target.height() : 50);
 
     if (target.length != 0) {
       var targetOffsetTop = target.offset().top;
@@ -890,11 +909,13 @@ var Glee = {
   selectTopElement: function() {
     if ((Glee.isEspRunning || Glee.isScraper()) 
         && Glee.selectedElement) {
-      LinkReaper.selectedLinks = Utils.sortElementsByPosition(LinkReaper.selectedLinks);
+      LinkReaper.selectedLinks = 
+        Utils.sortElementsByPosition(LinkReaper.selectedLinks);
       LinkReaper.unHighlight(Glee.selectedElement);
       Glee.selectedElement = LinkReaper.getFirst();
 
-      // Only select the next element if it is visible, otherwise keep the previous element selected
+      // Only select the next element if it is visible, 
+      //  otherwise keep the previous element selected
       if (!Utils.isVisibleToUser(Glee.selectedElement)) {
         Glee.selectedElement = LinkReaper.getPrev();
       }
@@ -910,8 +931,8 @@ var Glee = {
   },
 
   /**
-    *  Check if the current URL belongs to the list of disabled URLs.
-    *  @return {boolean} If found, returns false.
+    * Check if the current URL belongs to the list of disabled URLs.
+    * @return {boolean} If found, returns false.
     */
   shouldRunOnCurrentUrl: function() {
     var len = Glee.options.disabledUrls.length;
