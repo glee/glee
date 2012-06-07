@@ -22,6 +22,7 @@
   background: -webkit-gradient(linear, left bottom, left top,
                                color-stop(0, hsla(71, 100%, 47%, 1)),
                                color-stop(1, hsla(71, 89%, 70%, 1))) !important;
+  -webkit-transition: 100ms;
 }
 
 .GleeHL a, a.GleeHL {
