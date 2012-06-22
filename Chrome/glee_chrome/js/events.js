@@ -448,6 +448,7 @@ Glee.Events = {
   */
   execute: function(e, value) {
     var executeInNewTab = e.shiftKey || e.ctrlKey || e.metaKey;
+    var executeInNewTabWithFocus = e.shiftKey && (e.ctrlKey || e.metaKey);
 
     if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
       Glee.Events.executeJQuerySelector(value.substring(1));
@@ -494,7 +495,7 @@ Glee.Events = {
           a_el.attr('target', '_self');
 
           // Simulating a click on the link
-          anythingOnClick = Utils.simulateClick(a_el.get(0), target);
+          anythingOnClick = Utils.simulateClick(a_el.get(0), target, executeInNewTabWithFocus);
 
           // If opening link on the same page, close gleeBox
           if (!target) {
@@ -546,7 +547,7 @@ Glee.Events = {
             || tag === 'button') {
           
           setTimeout(function() {
-            Utils.simulateClick(el, false);
+            Utils.simulateClick(el, false, false);
             Glee.blur();
           }, 0);
         }

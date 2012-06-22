@@ -151,16 +151,19 @@ var Utils = {
     /**
      *  Simulates a click on an element.
      *  @param {Element} el DOM element to simulate click on.
-     *  @param {boolean} Set to true if the link should be opened in a new tab.
+     *  @param {boolean} target Set to true if the link should be opened in a new tab.
+     *  @param {boolean} focus Set to true if the link should be opened in a new tab with focus. Overrides target.
      *  @return {Event} The Click event.
      */
-    simulateClick: function(el, target) {
+    simulateClick: function(el, target, focus) {
         var evt = document.createEvent('MouseEvents');
-        // on Mac, pass target as e.metaKey
+        var giveFocus = focus === true;
+        var newTab = giveFocus || target;
+        // on Mac, pass newTab as e.metaKey
         if (navigator.platform.indexOf('Mac') != -1)
-            evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, target, 0, null);
-        else // otherwise, pass target as e.ctrlKey
-            evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, target, false, false, false, 0, null);
+            evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, giveFocus, newTab, 0, null);
+        else // otherwise, pass newTab as e.ctrlKey
+            evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, newTab, false, giveFocus, false, 0, null);
         return el.dispatchEvent(evt);
     },
 
