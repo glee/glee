@@ -1,12 +1,25 @@
 {
+  "manifest_version": 2,
+
   "name": "gleeBox",
-  "version": "2.2.3",
+  "version": "2.3",
   "description": "Keyboard glee for your web",
-  "background_page": "background.html",
+
   "options_page": "options.html",
 
   "icons": {
     "128": "images/icon_128.png"
+  },
+
+  "background": {
+    "scripts": [
+      "js/background.js",
+      "js/chrome/background.js",
+      "js/chrome/db.js",
+      "js/chrome/bookmark.js",
+      "js/chrome/sync.js",
+      "js/logger.js"
+    ]
   },
 
   "content_scripts": [{
@@ -19,6 +32,7 @@
     "run_at": "document_end",
     "all_frames": true
   },
+
   {
     "matches": ["<all_urls>"],
 
