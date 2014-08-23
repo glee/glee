@@ -1,15 +1,36 @@
 <html>
+
 <head>
   <title>gleeBox Options</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
   <link rel="stylesheet" href="css/options.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
   <script type="text/javascript" src="js/libs/jquery.js"></script>
   <script type="text/javascript" src="js/libs/keycombo.js"></script>
   <script type="text/javascript" src="js/libs/utils.js"></script>
   <script type="text/javascript" src="js/libs/smoothscroller.js"></script>
-  <script type="text/javascript" src="js/options.js"></script>
+  <script type="text/javascript" src="js/libs/underscore.js"></script>
+  <script type="text/javascript" src="js/libs/backbone.js"></script>
+
+  <script type="text/javascript" src="js/options/backup.js"></script>
+  <script type="text/javascript" src="js/options/options.js"></script>
+
+  <script type="text/javascript" src="js/options/views/TextboxView.js"></script>
+  <script type="text/javascript" src="js/options/views/RadioButtonView.js"></script>
+  <script type="text/javascript" src="js/options/views/CheckboxView.js"></script>
+  <script type="text/javascript" src="js/options/views/AppearanceView.js"></script>
+  <script type="text/javascript" src="js/options/views/BasicsView.js"></script>
+  <script type="text/javascript" src="js/options/views/ScrapersView.js"></script>
+  <script type="text/javascript" src="js/options/views/ESPView.js"></script>
+  <script type="text/javascript" src="js/options/views/BackupView.js"></script>
+  <script type="text/javascript" src="js/options/views/TabManagerView.js"></script>
+
+  <script type="text/javascript" src="js/options/views/init.js"></script>
+
   <script type="text/javascript" src="js/chrome/options.js"></script>
 </head>
+
 <body>
   <div id="wrap">
     <div id="tabMenu">
@@ -26,25 +47,31 @@
         <li><a href="#about">About</a></li>
       </ul>
     </div>
+
     <div id="options">
       <div id="basics" class='page'>
         <h2>Basics</h2>
-        
+
         <section>
           <h3>Search Engine</h3>
           <div>
             <span class="option">
-              <input id="searchEngine" name="searchEngine" type="text" size=60><br/>
-              <a href="#" onclick='javascript:changeSearchEngine("google");return false;'>
+              <input id="search-engine" class='textbox' name="searchEngine" type="text" size=60>
+              <br>
+
+              <a href="#" class="search-engine" data-value="http://www.google.com/search?q=">
                 Google
               </a>&nbsp;&nbsp;
-              <a href="#" onclick='javascript:changeSearchEngine("gssl");return false;'>
+
+              <a href="#" class="search-engine" data-value="https://encrypted.google.com/search?q=">
                 Google SSL
               </a>&nbsp;&nbsp;
-              <a href="#" onclick='javascript:changeSearchEngine("bing");return false;'>
+
+              <a href="#" class="search-engine" data-value="http://www.bing.com/search?q=">
                 Bing
               </a>&nbsp;&nbsp;
-              <a href="#" onclick='javascript:changeSearchEngine("duckduckgo");return false;'>
+
+              <a href="#" class="search-engine" data-value="http://duckduckgo.com/">
                 DuckDuckGo
               </a>
             </span>
@@ -55,11 +82,13 @@
           <h3>Command Engine</h3>
           <div>
             <span class="option">
-              <input name="commandEngine" type="radio" value="yubnub" onclick="$('#quixUrl').hide();">
-              Yubnub&nbsp;
-              <input name="commandEngine" type="radio" value="quix" onclick="$('#quixUrl').show();">
-              Quix&nbsp;&nbsp;
-              <input style="display:none" id="quixUrl" name="quixUrl" type="text" size=36>
+              <input id="yubnub-engine" class="radio" name="commandEngine" type="radio" value="yubnub">
+              <label for="yubnub-engine">Yubnub&nbsp;</label>
+
+              <input id="quix-engine" class="radio" name="commandEngine" type="radio" value="quix">
+              <label for="quix-engine">Quix&nbsp;&nbsp;</label>
+
+              <input style="display: none" id="quix-engine-url" name="quixUrl" type="text" size=36>
             </span>
           </div>
         </section>
@@ -68,27 +97,23 @@
           <h3>Default Behavior</h3>
           <div>
             <div>
-              <label>
-                <input name="searchBookmarks" type="checkbox" />
-                <span class="option">
-                  Search Bookmarks
-                </span>
+              <input id="search-bookmarks" name="searchBookmarks" class="checkbox" data-true="true" data-false="false" type="checkbox" />
+              <label for="search-bookmarks" class="option">
+                Search Bookmarks
               </label>
             </div>
-            
+
             <div>
-              <label>
-                <input value="500" data-falseValue="0" name="scrollingSpeed" type="checkbox" />
-                <span class="option">
-                  Animate Scrolling between Elements
-                </span>
+              <input id="scrolling-speed" class="checkbox" data-true="500" data-false="0" name="scrollingSpeed" type="checkbox" />
+              <label for="scrolling-speed" class="option">
+                Animate Scrolling between Elements
               </label>
             </div>
 
             <div>
               <label>
-                <input name="outsideScrolling" type="checkbox" />
-                <span class="option">
+                <input id="outside-scrolling" class="checkbox" data-true="true" data-false="false" name="outsideScrolling" type="checkbox" />
+                <span for="outside-scrolling" class="option">
                   Enable Smooth Scrolling outside gleeBox
                 </span>
               </label>
@@ -100,67 +125,61 @@
           <h3>Shortcuts</h3>
           <div>
             <div>
-              <label>
-                <span class="option">
-                  gleeBox Launch Key:
-                </span>
-              </label>
+              <span class="option">
+                gleeBox Launch Key:
+              </span>
+
               <span class="optionValue">
-                <input name="shortcutKey" size="5" type="text" />
-                <span name="shortcutKeyCode" style="display:none">
-                </span>
-                <button onclick='javascript:setDefaultShortcutKey();'>
+                <input class="textbox shortcut-key" name="shortcutKey" size="5" type="text" />
+                <span class="shortcut-key-code" name="shortcutKeyCode"></span>
+
+                <button class="set-default-shortcut-key">
                   Revert to Default
                 </button>
               </span>
             </div>
 
             <div>
-              <label>
-                <span class="option">
-                  Smooth Scrolling Shortcut:
-                </span>
-              </label>
+              <span class="option">
+                Smooth Scrolling Shortcut:
+              </span>
+
               <span class="optionValue">
-                <input name="scrollingKey" value="ws" type="radio" />&nbsp;w / s&nbsp;&nbsp;
-                <input name="scrollingKey" value="jk" type="radio" />&nbsp;j / k
+                <input id="smooth-scrolling-ws" class="radio" name="scrollingKey" value="ws" type="radio" />
+                <label for="smooth-scrolling-ws">&nbsp;w / s&nbsp;&nbsp;</label>
+
+                <input id="smooth-scrolling-jk" class="radio" name="scrollingKey" value="jk" type="radio" />
+                <label for="smooth-scrolling-jk">&nbsp;j / k</label>
               </span>
             </div>
           </div>
         </section>
-        
+
         <section>
           <h3>Disabled URLs <span class='count'>(<span id='disabledUrlCount'>0</span>)</span></h3>
           <div>
             <span class="option">
               <ul style='margin-left: -5px;'>
                 <li id='addDisabledUrl'>
-                  <form onsubmit="addItem('disabledUrl', null, true); return false;">
-                    <input id="addDisabledUrlValue"
-                          type="text"
-                          size=50
-                          placeholder="Page URL" />
-                    &nbsp;
-                    <input type="submit" value="Add" />
-                  </form>
+                  <input id="addDisabledUrlValue" type="text" size=50 placeholder="Page URL" /> &nbsp;
+                  <input id="addDisabledUrlBtn" type="button" value="Add" />
                 </li>
               </ul>
             </span>
           </div>
         </section>
       </div>
-      
+
       <div id='tabmanager' class='page'>
         <h2>Tab Manager</h2>
+
         <section>
           <h3>Status</h3>
           <div>
-            <label>
-              <div class="option">
-                <input name="tabManager" type="checkbox" />
-                Enable Tab Manager
-              </div>
-            </label>
+            <div class="option">
+              <input id="tab-manager" class="checkbox" name="tabManager" type="checkbox" data-true="true" data-false="false" />
+              <label for="tab-manager">Enable Tab Manager</label>
+            </div>
           </div>
         </section>
 
@@ -168,11 +187,10 @@
           <h3>Launch Key</h3>
           <div>
             <span class="option">
-              <input name="tabManagerShortcutKey" size="5" type="text" />
-              <span name="tabManagerShortcutKeyCode" style="display:none"></span>
-              <button onclick='javascript:setDefaultTabShortcutKey();'>
-                Revert to Default
-              </button>
+              <input class="textbox shortcut-key" name="tabManagerShortcutKey" size="5" type="text" />
+              <span class="shortcut-key-code" name="tabManagerShortcutKeyCode"></span>
+
+              <button class="set-default-shortcut-key">Revert to Default</button>
             </span>
           </div>
         </section>
@@ -180,29 +198,55 @@
 
       <div id="appearance" class='page'>
         <h2>Appearance</h2>
+
         <section>
           <h3>Size</h3>
           <div>
-            <input name="size" type="radio" value="small"> Small <br>
-            <input name="size" type="radio" value="medium"> Medium <br>
-            <input name="size" type="radio" value="large"> Large
+            <input id="size-small" class="size" name="size" type="radio" value="small">
+            <label for="size-small">Small</label>
+            <br>
+
+            <input id="size-medium" class="size" name="size" type="radio" value="medium">
+            <label for="size-medium">Medium</label>
+            <br>
+
+            <input id="size-large" class="size" name="size" type="radio" value="large">
+            <label for="size-large">Large</label>
           </div>
         </section>
-        
+
         <section>
           <h3>Theme</h3>
           <div>
-            <input name="theme" value="GleeThemeDefault" type="radio"> Default <br>
-            <input name="theme" value="GleeThemeWhite"  type="radio"> White <br>
-            <input name="theme" value="GleeThemeConsole" type="radio"> Console <br>
-            <input name="theme" value="GleeThemeGreener" type="radio"> Greener <br>
-            <input name="theme" value="GleeThemeRuby" type="radio"> Ruby <br>
-            <input name="theme" value="GleeThemeGlee" type="radio"> New Directions
+            <input id="theme-default" class="theme" name="theme" value="GleeThemeDefault" type="radio">
+            <label for="theme-default">Default</label>
+            <br>
+
+            <input id="theme-white" class="theme" name="theme" value="GleeThemeWhite"  type="radio">
+            <label for="theme-white">White</label>
+            <br>
+
+            <input id="theme-console" class="theme" name="theme" value="GleeThemeConsole" type="radio">
+            <label for="theme-console">Console</label>
+            <br>
+
+            <input id="theme-greener" class="theme" name="theme" value="GleeThemeGreener" type="radio">
+            <label for="theme-greener">Greener</label>
+            <br>
+
+            <input id="theme-ruby" class="theme" name="theme" value="GleeThemeRuby" type="radio">
+            <label for="theme-ruby">Ruby</label>
+            <br>
+
+            <input id="theme-new-directions" class="theme" value="GleeThemeGlee" type="radio">
+            <label for="theme-new-directions">New Directions</label>
           </div>
         </section>
+
       </div>
 
       <div id="scrapers" class='page'>
+
         <h2>Scraper Commands</h2>
         <section>
           <h3>Search</h3>
@@ -211,23 +255,21 @@
             <input type='search' id='scraperSearch' placeholder='Search...' />
           </div>
         </section>
-        
+
         <section>
           <h3>Scrapers <span class='count'>(<span id='scraperCount'>0</span>)</span></h3>
           <div>
             <ul>
               <li id="addScraper">
-                <form onsubmit="addItem('scraper', null, true); return false;">
-                  <span class='scraperPrefix'>?</span>
-                  <input id="addScraperName" type="text" placeholder="Name" />
-                  <div class='separator'></div>
-                  <input id="addScraperSelector"
-                        class='selector'
-                        type="text"
-                        placeholder="jQuery Selector" />
-                  <div class='separator'></div>
-                  <input type="submit" value="Add"/>
-                </form>
+                <span class='scraperPrefix'>?</span>
+
+                <input id="addScraperName" type="text" placeholder="Name" />
+                <div class='separator'></div>
+
+                <input id="addScraperSelector" class='selector' type="text" placeholder="jQuery Selector" />
+                <div class='separator'></div>
+
+                <input id="addScraperBtn" type="button" value="Add" />
               </li>
             </ul>
           </div>
@@ -239,12 +281,8 @@
         <section>
           <h3>Status</h3>
           <div>
-            <label>
-              <input id='esp' name="esp" type="checkbox" />
-              <span class='option'>
-                Enable ESP
-              </span>
-            </label>
+            <input class="checkbox" id="esp" name="esp" type="checkbox" data-true="true" data-false="false" />
+            <label for="esp" class='option'>Enable ESP</label>
           </div>
         </section>
 
@@ -260,13 +298,13 @@
           <div>
             <ul>
               <li id="addEspVision">
-                <form onsubmit="addItem('espVision', null, true); return false;">
-                  <input id="addEspUrl" type="text" placeholder="Page URL" />
-                  <div class='separator'></div>
-                  <input id="addEspSelector" type="text" class='selector' placeholder="jQuery Selector" />
-                  <div class='separator'></div>
-                  <input type="submit" value="Add"/>
-                </form>
+                <input id="addEspUrl" type="text" placeholder="Page URL" />
+                <div class='separator'></div>
+
+                <input id="addEspSelector" type="text" class='selector' placeholder="jQuery Selector" />
+                <div class='separator'></div>
+
+                <input id="addEspBtn" type="submit" value="Add" />
               </li>
             </ul>
           </div>
@@ -278,15 +316,15 @@
         <section>
           <h3>Backup</h3>
           <div>
-            <input type="button" value="Export..." onclick= "exportSettings();" />
-            <input type="button" value="Import..." onclick= "importSettings();" />
+            <input class="export" type="button" value="Export..." />
+            <input class="import" type="button" value="Import..." />
           </div>
         </section>
 
         <section>
           <h3>Developer Pack</h3>
           <div>
-            <input type="button" value="Import Developer Pack..." onclick= "importDevPack();"/>
+            <input class="import-dev-pack" type="button" value="Import Developer Pack..." />
           </div>
         </section>
 
@@ -297,10 +335,11 @@
             Requires <a href='http://www.google.com/support/chrome/bin/answer.py&answer=185277'>
             Bookmark Sync</a>.
             <br><br>
-            <input id="sync-button" type="button" value="Enable Sync" onclick= "toggleSyncing();"/>
+            <input class="sync" type="button" value="Enable Sync" />
           </div>
         </section>
       </div>
+
       <div id="about" class='page'>
         <h2>About</h2>
         <section>
@@ -308,6 +347,7 @@
             gleeBox is developed by <a href="http://ankitahuja.com">Ankit Ahuja</a> and <a href="http://sameerahuja.com">Sameer Ahuja</a>.<br/> If you like gleeBox, please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10478979">donate</a>.<br/><br/>
             Report issues and feature requests on <a href="http://github.com/glee/glee/issues">Github</a>.<br/><br/>
             Other useful links:<br/>
+
             <a target='_blank' href="http://thegleebox.com/manual.html">User Manual</a><br/>
             <a target='_blank' href="http://tipjar.thegleebox.com">Tipjar - Tips 'n' Tricks</a><br/>
             <a target='_blank' href="http://twitter.com/thegleebox">Follow gleeBox on Twitter</a><br/>

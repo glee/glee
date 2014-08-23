@@ -65,10 +65,10 @@ h3 {
   float: left;
   height: 100%;
   background: #EEE;
-  background: -webkit-gradient(linear, right top, left bottom, 
+  background: -webkit-gradient(linear, right top, left bottom,
                               color-stop(0.4, rgba(240,240,240,0.5)),
                               color-stop(0.8, rgb(253,253,253)));
-  background: -webkit-linear-gradient(rgba(240, 240, 240, 0.5), #FDFDFD), 
+  background: -webkit-linear-gradient(rgba(240, 240, 240, 0.5), #FDFDFD),
               -webkit-linear-gradient(left, #FDFDFD, #FDFDFD 97%, #DDD);
   border-right: 1px solid;
   border-color: #C3C3C3;
@@ -562,4 +562,8 @@ input[name=shortcutKeyCharacter] {
   text-transform: uppercase;
   text-align: center;
   width: 2em;
+}
+
+.shortcut-key-code {
+  display: none;
 }

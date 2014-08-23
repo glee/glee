@@ -12,10 +12,9 @@ $(document).ready(function() {
 */
 function initOptions(response) {
   options = response;
-  console.log(options);
 
   for (var option in options) {
-    if (option === 'upScrollingKey' 
+    if (option === 'upScrollingKey'
     || option === 'downScrollingKey') {
       var $scrollKey = $('[name=scrollingKey]');
       if (options.upScrollingKey == 75)
@@ -25,8 +24,10 @@ function initOptions(response) {
     }
 
     else if (option === 'commandEngine') {
-      if (options[option] === 'quix')
-        $('#quixUrl').show();
+      if (options[option] === 'quix') {
+        $('#quix-engine-url').show();
+      }
+
       $('[value=' + options[option] +']').prop('checked', true);
     }
 
@@ -90,10 +91,12 @@ function initOptions(response) {
       }
     }
   }
+
   if (IS_CHROME) {
     setSyncUI();
     bg_window = getBackgroundPage();
   }
+
   attachListeners();
 }
 
@@ -340,45 +343,6 @@ function validateEspVision(values) {
 }
 
 /**
-  * Show the Export Popup
-  */
-function exportSettings() {
-  var text = 'Copy the contents of this text field, and save them to a textfile:';
-  showBackupPopup(text, 'export');
-  try {
-    $('#settingsText').text(JSON.stringify(options));
-  }
-  catch(e) {
-    console.log(e);
-  }
-}
-
-/**
-  * Show the Import Popup
-  */
-function importSettings() {
-  var text = 'Paste previously exported settings here. This will overwrite all your current settings.';
-  showBackupPopup(text, 'import');
-  $('#settingsText').text('');
-}
-
-/**
-  * Show the Apply Dev Pack Popup
-  */
-function devPackCallback(data) {
-  var text = 'A collection of our favorite scrapers and visions.';
-  showBackupPopup(text, 'importDevPack');
-  $('#settingsText').text(data);
-}
-
-/**
-  * Send GET request for the Dev Pack
-  */
-function importDevPack() {
-  $.get('http://thegleebox.com/app/devpack.txt', devPackCallback);
-}
-
-/**
   * Parse and apply options from Import Popup
   */
 function importAndApply() {
@@ -504,68 +468,6 @@ function showBackupPopup(infoText, type) {
 }
 
 /**
-  * Initialize popup. Creates all the required UI elements
-  */
-function initBackupPopup() {
-  var popup = $('<div/>', {
-    id: 'popup'
-  });
-
-  $('<div id="backupInfo"></div>').appendTo(popup);
-  $('<textarea id="settingsText"></textarea>').appendTo(popup);
-
-  // import settings button
-  var importBtn = $('<input type="button" value="Import Settings" id="importButton" />')
-  .appendTo(popup)
-  .click(importAndApply);
-
-  // import dev pack button
-  var importDevPackBtn = $('<input type="button" value="Import Scrapers & Visions" id="importDevPackButton" />')
-  .appendTo(popup)
-  .click(applyDevPack);
-
-  // copy to clipboard button (displayed in export). Only for Chrome
-  if (IS_CHROME) {
-    $('<input type="button" value="Copy to Clipboard" id="exportButton" />')
-    .appendTo(popup)
-    .click(function(e) {
-      copyToClipboard($('#settingsText')[0].value);
-    });
-  }
-
-  $('body').append(popup);
-
-  // add events
-  $(document).keyup(function(e) {
-    if (e.keyCode === 27) {
-      var backupPopup = $('#popup');
-      if (backupPopup.length != 0)
-      hideBackupPopup();
-    }
-  });
-
-  $(document).click(function(e) {
-    if (e.target.id === 'popup'
-        || e.target.id === 'settingsText'
-        || e.target.id === 'backupInfo'
-        || e.target.type === 'button') {
-      return true;
-    }
-
-    var backupPopup = $('#popup');
-    if (backupPopup.length != 0)
-      hideBackupPopup();
-  });
-}
-
-/**
-  * Hide popup
-  */
-function hideBackupPopup() {
-  $('#popup').fadeOut(200);
-}
-
-/**
   * Remove all the disabled urls, scrapers and esp visions and reset their count
   */
 function clearOptions() {
@@ -575,103 +477,6 @@ function clearOptions() {
   setCount('disabledUrl', 0);
   setCount('scraper', 0);
   setCount('espVision', 0);
-}
-
-/**
-  * Attach listeners to UI controls
-  * Used to save options when a control's value changes
-  */
-function attachListeners() {
-  // radio
-  // for some reason, change event does not fire when using keyboard
-  $('input[type=radio]').bind('change keyup', function(e) {
-    if (e.type === 'keyup' && e.keyCode === 9)
-      return true;
-
-    if (e.target.name === 'scrollingKey') {
-      changeScrollingKey(e.target.value);
-      return true;
-    }
-    saveOption(e.target.name, e.target.value);
-  });
-
-  // checkbox
-  $('input[type=checkbox]').bind('change', function(e) {
-    var value;
-    if (e.target.checked) {
-      if (e.target.value != 'on')
-        value = e.target.value;
-      else
-        value = true;
-    }
-    else {
-      var falseValue = e.target.getAttribute('data-falseValue');
-      if (falseValue)
-        value = falseValue;
-      else
-        value = false;
-    }
-    saveOption(e.target.name, value);
-  });
-
-  // textfields
-  $('input[type=text]:not(#addDisabledUrlValue,\
-    #addScraperName,\
-    #addScraperSelector,\
-    #addEspUrl,\
-    #addEspSelector,\
-    #espSearch,\
-    #scraperSearch)').keyup(function(e) {
-      if (e.keyCode === 9)
-        return true;
-
-      if (textfieldTimer) {
-        clearTimeout(textfieldTimer);
-        textfieldTimer = null;
-      }
-
-      textfieldTimer = setTimeout(function() {
-        saveOption(e.target.name, e.target.value);
-        }, 400);
-  });
-
-  attachFilteringListeners();
-
-  // attach listeners for editing
-  $('.scraper, .espVision, .disabledUrl').live('click keydown', function(e) {
-    var $this = $(this);
-
-    if ($this.hasClass('selected'))
-      return true;
-    if (e.type === 'keydown' && e.keyCode != 13)
-      return true;
-    e.preventDefault();
-
-    if ($this.hasClass('scraper'))
-      editScraper($(this));
-    else if ($this.hasClass('espVision'))
-      editEspVision($(this));
-    else if ($this.hasClass('disabledUrl'))
-      editDisabledUrl($(this));
-  });
-}
-
-/**
-  * Change search engine
-  * @param {String} engine Search Engine URL to change to
-  */
-function changeSearchEngine(engine) {
-  var value = 'http://www.google.com/search?q=';
-
-  switch (engine) {
-    case 'gssl' : value = 'https://encrypted.google.com/search?q='; break;
-    case 'bing' : value = 'http://www.bing.com/search?q='; break;
-    case 'yahoo': value = 'http://search.yahoo.com/search?p='; break;
-    case 'duckduckgo': value = 'http://duckduckgo.com/'; break;
-  }
-
-  $('#searchEngine').attr('value', value);
-  saveOption('searchEngine', value);
 }
 
 /**
@@ -693,39 +498,6 @@ function changeScrollingKey(keypair) {
 
   saveOption('upScrollingKey', up);
   saveOption('downScrollingKey', down);
-}
-
-/**
-  * Attach listeners to search fields for scrapers and esp visions
-  */
-function attachFilteringListeners() {
-  // scraper
-  $('#scraperSearch')
-
-  .bind('search keyup', function(e) {
-    filterScraper(e.target.value);
-  })
-
-  .keyup(function(e) {
-    if (e.keyCode === 27) {
-      $(this).val('');
-      filterScraper('');
-    }
-  });
-
-  // esp
-  $('#espSearch')
-
-  .bind('search keyup', function(e) {
-    filterESP(e.target.value);
-  })
-
-  .keyup(function(e) {
-    if (e.keyCode === 27) {
-      $(this).val('');
-      filterESP('');
-    }
-  });
 }
 
 /**
@@ -929,24 +701,6 @@ function editEspVision($esp) {
 
   $(document).bind('keydown', onEditingComplete);
   $(document).bind('mousedown', onEditingComplete);
-}
-
-/**
-  * Revert shortcut key to default i.e. 'g'
-  */
-function setDefaultShortcutKey() {
-  $('[name=shortcutKey]').attr('value', 'g').keyup();
-  $('[name=shortcutKeyCode]').text(71);
-  saveOption('shortcutKey', 71);
-}
-
-/**
-  * Revert tab manager shortcut key to default i.e. '.'
-  */
-function setDefaultTabShortcutKey() {
-  $('[name=tabManagerShortcutKey]').attr('value', '.').keyup();
-  $('[name=tabManagerShortcutKeyCode]').text(190);
-  saveOption('tabManagerShortcutKey', 190);
 }
 
 /**
