@@ -47,7 +47,7 @@ Glee.Events = {
     else if (e.keyCode == Glee.options.tabShortcutKey
             && Glee.value().length === 0
             && IS_CHROME) {
-      
+
       if (e.metaKey || e.ctrlKey || e.shiftKey)
         return true;
 
@@ -89,22 +89,22 @@ Glee.Events = {
       // if not empty
       if (value != '') {
         // determine if a DOM search is required
-        if (value.indexOf(Glee.lastQuery) != -1 
-            && Glee.lastQuery 
+        if (value.indexOf(Glee.lastQuery) != -1
+            && Glee.lastQuery
             && !Glee.selectedElement
             && !Glee.isSearching) {
-         Glee.isDOMSearchRequired = false; 
+         Glee.isDOMSearchRequired = false;
         }
         else {
           Glee.isDOMSearchRequired = true;
         }
-        
+
         Glee.isEspRunning = false;
         Glee.setSearchActivity(true);
 
         // Check if the query is not a command
         if (!Glee.isCommand()) {
-          Glee.Events.queryNonCommand(); 
+          Glee.Events.queryNonCommand();
         }
         // Command Mode
         else {
@@ -268,7 +268,7 @@ Glee.Events = {
     if (parts.length === 1 && Glee.defaultQuery) {
       c += ' ' + Glee.defaultQuery;
     }
-    
+
     Glee.description('Run ' + Glee.options.commandEngine + ' command (press enter to execute): ' + c, true);
     Glee.setURL(Glee.getCommandEngineSyntax(c));
   },
@@ -288,7 +288,7 @@ Glee.Events = {
     var len = Glee.commands.length;
 
     for (var i = 0; i < len; i++) {
-      if (trimVal === Glee.commands[i].name 
+      if (trimVal === Glee.commands[i].name
           && Glee[Glee.commands[i].method] != undefined) {
         Glee.setState(Glee.commands[i].description, 'msg');
         Glee.URL = Glee.commands[i];
@@ -375,27 +375,29 @@ Glee.Events = {
       if (executeInNewTab) {
         Glee.reset();
         Glee.Browser.openURL(u, true, false);
-      }
-      else {
+      } else {
         window.location = u;
         Glee.closeWithoutBlur();
       }
     }
+
     else {
       var d = '' + document.location;
       u = u + '&t=' + (document.title ? encodeURIComponent(document.title) : '')
           + '&s=' + Glee.options.quixUrl
-          + '&v=081'
+          + '&v=091'
           + '&u=' + (document.location ? encodeURIComponent(document.location) : '');
 
       if (executeInNewTab) {
         Glee.reset();
         Glee.Browser.openURL(u + '&mode=direct', true, false);
       }
+
       else if (d.substr(0, 4) != 'http') {
         window.location = u + '&mode=direct';
         Glee.closeWithoutBlur();
       }
+
       else {
         var heads = document.getElementsByTagName('head');
         if (heads.length == 0) {
@@ -431,7 +433,7 @@ Glee.Events = {
     if (Glee.selectedElement) {
       Glee.selectedElement.removeClass('GleeHL');
     }
-    
+
     LinkReaper.reapSelector(value);
     Glee.nullMessage = 'Nothing matched your selector';
     Glee.selectedElement = LinkReaper.getFirst();
@@ -541,19 +543,19 @@ Glee.Events = {
         var el = Glee.selectedElement[0];
         tag = el.tagName.toLowerCase();
 
-        if ((tag === 'input' 
+        if ((tag === 'input'
             && (el.type === 'button' || el.type === 'submit' || el.type === 'image'))
             || tag === 'button') {
-          
+
           setTimeout(function() {
             Utils.simulateClick(el, false);
             Glee.blur();
           }, 0);
         }
-        
+
         else if (tag === 'input' && (el.type === 'radio' || el.type === 'checkbox')) {
           if (!Glee.selectedElement.is(':checked')) {
-           el.checked = true; 
+           el.checked = true;
           }
           else if (el.type === 'checkbox') {
             el.checked = false;
@@ -605,11 +607,11 @@ Glee.Events = {
       // scroll using w / s
       if (e.keyCode === Glee.options.upScrollingKey
           || e.keyCode === Glee.options.downScrollingKey) {
-        
+
         if (e.metaKey || e.ctrlKey || e.shiftKey) {
           return true;
         }
-          
+
         e.preventDefault();
         e.stopPropagation();
 

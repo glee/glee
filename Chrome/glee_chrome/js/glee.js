@@ -113,7 +113,7 @@ var Glee = {
   },
   // smooth document scroller
   scroller: null,
-  // if any text is selected when gleeBox is activated, 
+  // if any text is selected when gleeBox is activated,
   //   it acts as the default query for cmd engine
   defaultQuery: null,
   // last query executed in gleeBox
@@ -283,7 +283,7 @@ var Glee = {
   createBox: function() {
     // Creating DOM elements for gleeBox
     this.$searchField = $('<input type=\"text\" id=\"gleeSearchField\" value=\"\" />');
-    this.$subText = $('<div id=\"gleeSubText\">' + Glee.defaults.nullStateMessage + 
+    this.$subText = $('<div id=\"gleeSubText\">' + Glee.defaults.nullStateMessage +
       '</div>');
     this.$subURL = $('<div id=\"gleeSubURL\"></div>');
     this.$searchBox = $("<div id=\"gleeBox\" style='display:none'></div>");
@@ -335,9 +335,9 @@ var Glee = {
       Glee.status = false;
     else
       Glee.status = true;
-    
+
     Glee.applyTheme();
-    
+
     if (Glee.ListManager)
       Glee.ListManager.applyTheme();
 
@@ -426,9 +426,9 @@ var Glee = {
       this.$searchBox.removeClass(Glee.defaults.themes.join(' '));
       this.$searchField.removeClass(Glee.defaults.themes.join(' '));
     }
-    // just to prevent errors popping up in safari. 
+    // just to prevent errors popping up in safari.
     // TODO: find why they come up
-    catch (e) {} 
+    catch (e) {}
   },
 
   applySize: function() {
@@ -551,7 +551,7 @@ var Glee = {
   },
 
   // attach a livequery listener, so that when a new element belonging to the
-  // current scraper / vision's selector gets inserted into the DOM, 
+  // current scraper / vision's selector gets inserted into the DOM,
   // it gets added to the selected elements
   attachScraperListener: function(scraper) {
     $(scraper.selector).livequery(function() {
@@ -560,7 +560,7 @@ var Glee = {
         return;
 
       LinkReaper.selectedLinks.push(this);
-      LinkReaper.selectedLinks = 
+      LinkReaper.selectedLinks =
         Utils.sortElementsByPosition(LinkReaper.selectedLinks);
       $this.addClass(scraper.cssStyle);
       LinkReaper.traversePosition = 0;
@@ -633,8 +633,8 @@ var Glee = {
 
     // set state for bookmarklet. value is the bookmarklet returned
     else if (type === 'bookmarklet') {
-      this.description('Closest matching bookmarklet: ' 
-                        + value.title 
+      this.description('Closest matching bookmarklet: '
+                        + value.title
                         + ' (press enter to execute)', true);
       this.setURL(value, '');
     }
@@ -713,10 +713,10 @@ var Glee = {
   fireEsp: function() {
     if (!Glee.options.esp)
       return false;
-    
+
     Glee.isEspRunning = true;
     var selStr = Glee.getEspSelector();
-    
+
     if (selStr) {
       // Temporary scraper object
       var tempScraper = {
@@ -736,20 +736,20 @@ var Glee = {
 
     // if window bottom diff is not previously calculated, let's do that
     if (!Glee.defaults.windowBottomDiff) {
-      // since gleeBox top is at 78%, the diff will be 22%. 
+      // since gleeBox top is at 78%, the diff will be 22%.
       // It will include the gleeBox height
       Glee.defaults.windowBottomDiff = (window.innerHeight * 0.22);
     }
 
-    var boxHeight = Glee.defaults.windowBottomDiff + 
+    var boxHeight = Glee.defaults.windowBottomDiff +
       (target.height() ? target.height() : 50);
 
     if (target.length != 0) {
       var targetOffsetTop = target.offset().top;
 
       // if the element is above / below the current visible view, scroll
-      if ((targetOffsetTop > window.pageYOffset 
-            && (targetOffsetTop - window.pageYOffset) > (window.innerHeight - boxHeight)) 
+      if ((targetOffsetTop > window.pageYOffset
+            && (targetOffsetTop - window.pageYOffset) > (window.innerHeight - boxHeight))
           || targetOffsetTop < window.pageYOffset) {
         scroll = true;
       }
@@ -827,10 +827,11 @@ var Glee = {
   },
 
   getCommandEngineSyntax: function(c) {
-    if (Glee.options.commandEngine === 'yubnub')
+    if (Glee.options.commandEngine === 'yubnub') {
       return 'http://yubnub.org/parser/parse?command=' + c;
-    else
-      return 'http://quixapp.com/go/?c=' + encodeURIComponent(c);
+    } else {
+      return 'https://quixapp.com/go/?c=' + encodeURIComponent(c);
+    }
   },
 
   // add command to recently executed commands cache
@@ -891,7 +892,7 @@ var Glee = {
 
             if (e.metaKey || e.ctrlKey || e.shiftKey)
               return true;
-            
+
             e.preventDefault();
 
             if (e.keyCode === Glee.options.shortcutKey)
@@ -907,14 +908,14 @@ var Glee = {
 
   // select the top most visible element (if any elements are highlighted)
   selectTopElement: function() {
-    if ((Glee.isEspRunning || Glee.isScraper()) 
+    if ((Glee.isEspRunning || Glee.isScraper())
         && Glee.selectedElement) {
-      LinkReaper.selectedLinks = 
+      LinkReaper.selectedLinks =
         Utils.sortElementsByPosition(LinkReaper.selectedLinks);
       LinkReaper.unHighlight(Glee.selectedElement);
       Glee.selectedElement = LinkReaper.getFirst();
 
-      // Only select the next element if it is visible, 
+      // Only select the next element if it is visible,
       //  otherwise keep the previous element selected
       if (!Utils.isVisibleToUser(Glee.selectedElement)) {
         Glee.selectedElement = LinkReaper.getPrev();
