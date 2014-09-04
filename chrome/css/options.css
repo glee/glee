@@ -548,15 +548,6 @@ select:enabled:active {
   color: #444;
 }
 
-/* CHECKBOX, RADIO */
-input[type=checkbox],
-input[type=radio] {
-  margin-left: 0;
-  margin-right: 0;
-  position: relative;
-  top: 1px;
-}
-
 /* custom inputs */
 input[name=shortcutKeyCharacter] {
   text-transform: uppercase;
