@@ -449,7 +449,6 @@ Glee.Events = {
   *  @param {String} Query to execute.
   */
   execute: function(e, value) {
-   
     var executeInNewTab = e.shiftKey || e.ctrlKey || e.metaKey;
     var saveLink = e.altKey;
     if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
@@ -484,6 +483,7 @@ Glee.Events = {
       else {
         a_el = Glee.selectedElement.find('a');
       }
+      
       if (saveLink)
       {
         a_el.attr('download', Glee.selectedElement.text());  
