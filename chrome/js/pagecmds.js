@@ -286,3 +286,10 @@ Glee.setOptionValue = function() {
 
   Glee.Browser.setOption(option, value);
 };
+
+Glee.disableUrl = function(){
+  var url = location.href.replace('http://', '');
+  Glee.options.disabledUrls.push(url);
+  Glee.Browser.setOption('disabledUrls', Glee.options.disabledUrls);
+  Glee.close();
+}

@@ -7,7 +7,7 @@
   *
   */
 var Glee = {
-
+  
   defaults: {
     nullStateMessage: '',
 
@@ -246,6 +246,11 @@ var Glee = {
     name: 'developer',
     method: 'viewDeveloperDashboard',
     description: 'Open Chrome Web Store Developer Dashboard'
+  },
+  {
+    name: 'disable',
+    method: 'disableUrl',
+    description: 'Disable glee at this URL'
   }
   ],
 

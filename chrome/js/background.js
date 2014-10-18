@@ -96,6 +96,10 @@ function setOptionUsingShorthand(option, value) {
   }
 
   switch (option) {
+    case 'disabledUrls':
+      cache.options.disabledUrls = value;
+      break;
+
     case 'scroll':
       option = 'scrollingSpeed';
       if (value)
