@@ -300,5 +300,6 @@ Glee.enableUrl = function(){
   if (index != -1){
     Glee.options.disabledUrls.splice(index, 1);
     Glee.Browser.setOption('disabledUrls', Glee.options.disabledUrls);
+    Glee.open();
   }
 }

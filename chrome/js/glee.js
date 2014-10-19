@@ -914,7 +914,6 @@ var Glee = {
       }else if (e.keyCode === Glee.options.tabManagerShortcutKey && e.altKey && e.ctrlKey){
         e.preventDefault();
         Glee.enableUrl();
-        Glee.open();
       }
       return true;
     });
