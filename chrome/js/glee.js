@@ -251,6 +251,11 @@ var Glee = {
     name: 'disable',
     method: 'disableUrl',
     description: 'Disable glee at this URL'
+  },
+  {
+    name: 'enable',
+    method: 'enableUrl',
+    description: 'Reenable glee at this URL'
   }
   ],
 
@@ -906,6 +911,10 @@ var Glee = {
               Glee.Browser.openTabManager();
           }
         }
+      }else if (e.keyCode === Glee.options.tabManagerShortcutKey && e.altKey && e.ctrlKey){
+        e.preventDefault();
+        Glee.enableUrl();
+        Glee.open();
       }
       return true;
     });

@@ -293,3 +293,12 @@ Glee.disableUrl = function(){
   Glee.Browser.setOption('disabledUrls', Glee.options.disabledUrls);
   Glee.close();
 }
+
+Glee.enableUrl = function(){
+  var url = location.href.replace('http://', '');
+  var index = Glee.options.disabledUrls.indexOf(url);
+  if (index != -1){
+    Glee.options.disabledUrls.splice(index, 1);
+    Glee.Browser.setOption('disabledUrls', Glee.options.disabledUrls);
+  }
+}
