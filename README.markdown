@@ -3,7 +3,7 @@ gleeBox
 
 gleeBox takes a keyboard-centric approach to navigating the web and provides alternatives to actions that are traditionally performed via the mouse. It is mostly meant for keyboard and command line lovers.
 
-Screencasts and more at [http://thegleebox.com](http://thegleebox.com).
+Screencasts and more at [https://glee.github.io/](https://glee.github.io/).
 
 Installation
 -------------
@@ -14,9 +14,9 @@ gleeBox is available as a Chrome, Safari and Firefox extension.
 
 * Chrome: [https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji](https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji)
 
-* Safari: [http://thegleebox.com/safari/gleeBox.safariextz](http://thegleebox.com/safari/gleeBox.safariextz)
+* Safari **deprecated**: [http://thegleebox.com/safari/gleeBox.safariextz](http://thegleebox.com/safari/gleeBox.safariextz) (deprecated)
 
-* Firefox ***(outdated)***: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191)  
+* Firefox **deprecated**: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191)  
 
 **Development** *(if you like living on the edge)*
 
@@ -35,7 +35,7 @@ Want to help out? Bravo! Before you start, check out these wikis:
 Usage
 ------
 
-To learn how to use gleeBox, read the [user manual](http://thegleebox.com/manual.html "gleeBox User Manual"). Also, find tips and commands shared by users on [TipJar](http://tipjar.thegleebox.com).
+To learn how to use gleeBox, read the [user manual](https://glee.github.io/manual.html "gleeBox User Manual"). 
 
 License
 -------
