@@ -14,9 +14,7 @@ gleeBox is available as a Chrome, Safari and Firefox extension.
 
 * Chrome: [https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji](https://chrome.google.com/extensions/detail/miinkdcjglbkbanpkghnkgkgbamdkgji)
 
-* Safari **deprecated**: [http://thegleebox.com/safari/gleeBox.safariextz](http://thegleebox.com/safari/gleeBox.safariextz) (deprecated)
-
-* Firefox **deprecated**: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191)  
+* Firefox **(deprecated)**: [https://addons.mozilla.org/en-US/firefox/addon/59191](https://addons.mozilla.org/en-US/firefox/addon/59191)  
 
 **Development** *(if you like living on the edge)*
 
