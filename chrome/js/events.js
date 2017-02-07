@@ -450,7 +450,7 @@ Glee.Events = {
   */
   execute: function(e, value) {
     var executeInNewTab = e.shiftKey || e.ctrlKey || e.metaKey;
-
+    var saveLink = e.altKey;
     if (Glee.isJQueryCmd() && value != Glee.lastjQuery) {
       Glee.Events.executeJQuerySelector(value.substring(1));
       return true;
@@ -483,7 +483,12 @@ Glee.Events = {
       else {
         a_el = Glee.selectedElement.find('a');
       }
-
+      
+      if (saveLink)
+      {
+        a_el.attr('download', Glee.selectedElement.text());  
+      }
+      
       // If an anchor is found, execute it
       if (a_el) {
         if (a_el.length != 0) {

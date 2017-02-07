@@ -195,7 +195,6 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
       break;
 
     case 'getOptions':
-      loadOptionsIntoCache();
       sendResponse(cache.options);
       break;
 
